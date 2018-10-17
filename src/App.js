@@ -29,7 +29,7 @@ API: {
 
 const oauth = {
     // Domain name
-    domain : 'https://vastusclienteuserpool.auth.us-east-1.amazoncognito.com', 
+    domain : 'vastusclienteuserpool.auth.us-east-1.amazoncognito.com',
 
     // Authorized scopes
     scope : ['birthdate', 'gender', 'email', 'profile', 'openid','aws.cognito.signin.user.admin'], 
@@ -88,7 +88,7 @@ Amplify.configure({
         // OPTIONAL - Manually set the authentication flow type. Default is 'USER_SRP_AUTH'
         authenticationFlowType: 'USER_PASSWORD_AUTH',
         
-        // oauth: oauth
+        oauth: oauth
     }
 });
 
@@ -175,6 +175,7 @@ class App extends Component {
       `query Test {
             queryClients {
                 items {
+                    id
                     name
                 }
             }
@@ -184,7 +185,7 @@ class App extends Component {
           <div>
               <h3>All events</h3>
               <ul>
-                  {events.map(event => <li key={event.id}>{event.title} ({event.id})</li>)}
+                  {events.map(event => <li key={event.id}>{event.name} ({event.id})</li>)}
               </ul>
           </div>
       );
@@ -212,5 +213,5 @@ class App extends Component {
   }
 }
 
-export default withAuthenticator(App, true);
+// export default withAuthenticator(App, true);
  
