@@ -1,19 +1,19 @@
 import React, { Component } from 'react';
-// import './App.css';
+import './App.css';
 // import Tabs from './screens/tabs.js';
-import Amplify, { Auth } from 'aws-amplify';
+import Amplify, { Auth, Analytics } from 'aws-amplify';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
 // import SearchBarProp from "./screens/searchBar";
 // //import gql from 'graphql-tag';
-import aws_exports from './aws-exports';
+// import aws_exports from './aws-exports';
 
 window.LOG_LEVEL='DEBUG';
 
-var AWS = require('aws-sdk');
+// var AWS = require('aws-sdk');
 
-AWS.config.update({region: 'us-east-1'});
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+// AWS.config.update({region: 'us-east-1'});
+// AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 Amplify.configure({
     Auth: {
@@ -85,30 +85,51 @@ class App extends Component {
     }
 
   render() {
-      return (
-          <form className="ui form">
-              <div className="field">
-                  <label>Username</label>
-                  <input type="text" name="username" placeholder="Username"/>
-              </div>
-              <div className="field">
-                  <label>Email</label>
-                  <input type="text" name="email" placeholder="Email"/>
-              </div>
-              <div className="field">
-                  <label>Gender</label>
-                  <input type="text" name="gender" placeholder="Gender"/>
-              </div>
-              <div className="field">
-                  <label>Birthdate</label>
-                  <input type="text" name="birthdate" placeholder="MM/DD/YYYY"/>
-              </div>
-
-              <button className="ui button" onClick = {this.vastusSignUp.bind(this)} > Sign Up </button>
-          </form>
-      );
+        return (
+            <div>
+                 <div className="field">
+                     <label>Username</label>
+                     <input type="text" name="username" placeholder="Username"/>
+                 </div>
+                 <div className="field">
+                     <label>Email</label>
+                     <input type="text" name="email" placeholder="Email"/>
+                 </div>
+                 <div className="field">
+                     <label>Gender</label>
+                     <input type="text" name="gender" placeholder="Gender"/>
+                 </div>
+                 <div className="field">
+                     <label>Birthdate</label>
+                     <input type="text" name="birthdate" placeholder="MM/DD/YYYY"/>
+                 </div>
+                 <button onClick={this.vastusSignUp.bind(this)}>Sign Up</button>
+            </div>
+        );
+      // return (
+      //     <form className="ui form">
+      //         <div className="field">
+      //             <label>Username</label>
+      //             <input type="text" name="username" placeholder="Username"/>
+      //         </div>
+      //         <div className="field">
+      //             <label>Email</label>
+      //             <input type="text" name="email" placeholder="Email"/>
+      //         </div>
+      //         <div className="field">
+      //             <label>Gender</label>
+      //             <input type="text" name="gender" placeholder="Gender"/>
+      //         </div>
+      //         <div className="field">
+      //             <label>Birthdate</label>
+      //             <input type="text" name="birthdate" placeholder="MM/DD/YYYY"/>
+      //         </div>
+      //         <button onClick={this.vastusSignUp.bind(this)}>Sign Up</button>
+      //     </form>
+      // );
   }
 }
+// <button className="ui button" onClick = {this.vastusSignUp} > Sign Up </button>
 export default App;
 
  // let myAppConfig = {
