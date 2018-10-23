@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import './App.css';
 // import Tabs from './screens/tabs.js';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
+import { inspect } from 'util'
+import Semantic, { Input } from 'semantic-ui-react';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
 // import SearchBarProp from "./screens/searchBar";
@@ -42,11 +44,21 @@ Amplify.configure({
 
 class App extends Component {
     // This is the function that is called when the sign up button is pressed
+    authState = {
+        username: "",
+        password: "",
+        confirmPassword: "",
+        name: "",
+        gender: "",
+        birthday: "",
+        email: ""
+    };
 
     // TODO Retrieve info from da fields
     vastusSignIn() {
+        // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
-        Auth.signIn("KB", "Comedian1985!").then(function (data) {
+        Auth.signIn(this.authState.username, this.authState.password).then(function (data) {
             console.log("Successfully signed in!");
         }.catch(function (error) {
             console.log("There was an error!");
@@ -56,18 +68,20 @@ class App extends Component {
     }
 
     // TODO Retrieve information from the fields
-    vastusSignUp(username, password, name, gender, birthday, email) {
+    vastusSignUp() {
+        // TODO Check to see if the input fields are put  in correctly
+        // TODO Check to see that password is with confirm password correctly
         console.log("Starting Auth.signup!");
         // The guy before you told us to try to do a JS promise (but it didn't help)
         const attributes = {
-            name: name,
-            gender: gender,
-            birthdate: birthday,
-            email: email,
+            name: this.authState.name,
+            gender: this.authState.gender,
+            birthdate: this.authState.birthday,
+            email: this.authState.email,
         };
         const params = {
-            username: username,
-            password: password,
+            username: this.authState.username,
+            password: this.authState.password,
             attributes: attributes,
             validationData: []
         };
@@ -92,8 +106,9 @@ class App extends Component {
     }
 
     // TODO Make dependent on user
-    vastusConfirmSignUp(username, code) {
-        Auth.confirmSignUp(username, code).then(function (data) {
+    vastusConfirmSignUp(code) {
+        // TODO Check to see if the input fields are put  in correctly
+        Auth.confirmSignUp(this.authState.username, code).then(function (data) {
             console.log("Successfully confirmed the sign up");
             console.log(data);
         }).catch(function(error) {
@@ -102,8 +117,9 @@ class App extends Component {
         });
     }
 
-    vastusForgotPassword(username) {
-        Auth.forgotPassword(username).then(function(data) {
+    vastusForgotPassword() {
+        // TODO Check to see if the input fields are put  in correctly
+        Auth.forgotPassword(this.authState.username).then(function(data) {
             console.log("Successfully forgot the password! :)");
             console.log(data);
         }).catch(function(error) {
@@ -112,8 +128,9 @@ class App extends Component {
         });
     }
 
-    vastusForgetPasswordSubmit(username, code, newPassword) {
-        Auth.forgotPasswordSubmit("KB", code, newPassword).then(function(data) {
+    vastusForgetPasswordSubmit(code, newPassword) {
+        // TODO Check to see if the input fields are put  in correctly
+        Auth.forgotPasswordSubmit(this.authState.username, code, newPassword).then(function(data) {
             console.log("Successfully made a new password");
             console.log(data);
         }).catch(function(error) {
@@ -122,24 +139,51 @@ class App extends Component {
         });
     }
 
+    changeStateText(key, value) {
+        // TODO Sanitize this input
+        // TODO Check to see if this will, in fact, work.!
+        this.authState[key] = value.target.value;
+        console.log("New " + key + " is equal to " + value.target.value);
+    }
+
+    // changeBirthdayText(value) {
+    //     // TODO Sanitize this input
+    //     const valueString = value.target.value;
+    //     this.authState.birthday = valueString;
+    //     console.log("New birthday is " + valueString);
+    //     // console.log("value JSON = " + inspect(value.target.value));
+    // }
+
     render() {
         return (
             <div>
                 <div className="field">
                     <label>Username</label>
-                    <input type="text" name="username" placeholder="Username"/>
+                    <Input type="text" name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
                 </div>
                 <div className="field">
-                    <label>Email</label>
-                    <input type="text" name="email" placeholder="Email"/>
+                    <label>Password</label>
+                    <Input type="text" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>
+                </div>
+                <div className="field">
+                    <label>Confirm Password</label>
+                    <Input type="text" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
+                </div>
+                <div className="field">
+                    <label>Name</label>
+                    <Input type="text" name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
                 </div>
                 <div className="field">
                     <label>Gender</label>
-                    <input type="text" name="gender" placeholder="Gender"/>
+                    <Input type="text" name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
                 </div>
                 <div className="field">
                     <label>Birthdate</label>
-                    <input type="text" name="birthdate" placeholder="MM/DD/YYYY"/>
+                    <Input type="text" name="birthdate" placeholder="YYYY-MM-DD" onChange={value => this.changeStateText("birthday", value)}/>
+                </div>
+                <div className="field">
+                    <label>Email</label>
+                    <Input type="text" name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
                 </div>
                 <button className="ui button" onClick = {this.vastusSignUp.bind(this)} > Sign Up </button>
                 <button className="ui button" onClick = {this.vastusSignIn.bind(this)} > Sign In </button>
@@ -149,4 +193,3 @@ class App extends Component {
 }
 
 export default App;
-
