@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import './App.css';
 // import Tabs from './screens/tabs.js';
+import { connect } from 'react-redux';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
-import { inspect } from 'util'
+import { inspect } from 'util';
 import Semantic, { Input } from 'semantic-ui-react';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
@@ -54,16 +55,21 @@ class App extends Component {
         email: ""
     };
 
+    state = {
+        user: {},
+        isLoading: true
+    }
+
     // TODO Retrieve info from da fields
     vastusSignIn() {
         // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
         Auth.signIn(this.authState.username, this.authState.password).then(function (data) {
             console.log("Successfully signed in!");
-        }.catch(function (error) {
+        }).catch(function (error) {
             console.log("There was an error!");
             alert(error);
-        }));
+        });
         console.log("We got past the sign in call!");
     }
 
@@ -142,19 +148,43 @@ class App extends Component {
     changeStateText(key, value) {
         // TODO Sanitize this input
         // TODO Check to see if this will, in fact, work.!
+        inspect(value);
         this.authState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
     }
-
-    // changeBirthdayText(value) {
-    //     // TODO Sanitize this input
-    //     const valueString = value.target.value;
-    //     this.authState.birthday = valueString;
-    //     console.log("New birthday is " + valueString);
-    //     // console.log("value JSON = " + inspect(value.target.value));
-    // }
+    async componentDidMount() {
+        // StatusBar.setHidden(true);
+        try {
+            const user = await Auth.currentAuthenticatedUser();
+            this.setState({ user, isLoading: false })
+        } catch (err) {
+            this.setState({ isLoading: false })
+        }
+    }
+    async componentWillReceiveProps(nextProps) {
+        try {
+            const user = await Auth.currentAuthenticatedUser();
+            this.setState({ user })
+        } catch (err) {
+            this.setState({ user: {} })
+        }
+    }
 
     render() {
+        if (this.state.isLoading) return null;
+        let loggedIn = false;
+        if (this.state.user.username) {
+            loggedIn = true
+        }
+        if (loggedIn) {
+            // The actual App
+            return (
+                <div>
+                    <button className="ui button" /> Ur actually logged in <button/>
+                </div>
+            );
+        }
+        // The login page
         return (
             <div>
                 <div className="field">
@@ -192,4 +222,8 @@ class App extends Component {
     }
 }
 
-export default App;
+const mapStateToProps = state => ({
+    auth: state.auth
+});
+
+export default connect(mapStateToProps)(App)
