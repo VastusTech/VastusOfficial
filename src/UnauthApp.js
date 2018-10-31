@@ -8,10 +8,19 @@ class UnauthApp extends Component {
     // This defines the passed function for use
     authenticate = (user) => {};
 
+    constructor(props) {
+        super(props);
+        this.authenticate = this.props.authenticate.bind(this);
+    }
+
+    authenticateApp(user) {
+        this.authenticate(user);
+    }
+
     async componentDidMount() {
         // StatusBar.setHidden(true);
         try {
-            alert(JSON.stringify(this.props));
+            //alert(JSON.stringify(this.props));
             const user = await Auth.currentAuthenticatedUser();
             this.setState({ user, isLoading: false })
         } catch (err) {
@@ -20,20 +29,14 @@ class UnauthApp extends Component {
     }
 
     async componentWillReceiveProps(nextProps) {
-        try {
-            alert(JSON.stringify(nextProps));
-            alert(JSON.stringify(this.props));
-            const user = await Auth.currentAuthenticatedUser();
-            this.setState({ user })
-        } catch (err) {
-            this.setState({ user: {} })
-        }
-    }
-
-    constructor(props) {
-        super(props);
-        this.authenticate = this.authenticate.bind(this);
-        alert(JSON.stringify(this.props));
+        //try {
+            //alert(JSON.stringify(nextProps));
+            //alert(JSON.stringify(this.props));
+            //const user = await Auth.currentAuthenticatedUser();
+            //this.setState({ user })
+        // } catch (err) {
+        //     this.setState({ user: {} })
+        // }
     }
 
     render() {
@@ -41,7 +44,7 @@ class UnauthApp extends Component {
         // Always starts at the sign in page
         // Would states be used here?
         return (
-            <SignInPage authenticate={this.authenticate}/>
+            <SignInPage authenticate={this.authenticateApp.bind(this)}/>
         );
     }
 }

@@ -54,7 +54,13 @@ class App extends Component {
     };
 
     authenticate(user) {
-        this.setState({ user });
+        if (user) {
+            // alert("setting the state to " + JSON.stringify(user));
+            this.setState({user});
+        }
+        else {
+            alert("received null user");
+        }
     }
 
     async componentDidMount() {
@@ -93,7 +99,7 @@ class App extends Component {
         else {
             return (
                 <div>
-                    <UnauthApp ass={'ass'} authenticate={this.authenticate}/>
+                    <UnauthApp authenticate={this.authenticate.bind(this)}/>
                 </div>
             );
         }

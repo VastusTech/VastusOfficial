@@ -12,6 +12,12 @@ class SignInPage extends Component {
     // This defines the passed function for use
     authenticate = (user) => {};
 
+    constructor(props) {
+        super(props);
+        this.authenticate = this.props.authenticate.bind(this);
+    }
+
+
     authState = {
         username: "",
         password: "",
@@ -20,15 +26,14 @@ class SignInPage extends Component {
     state = {
         user: {},
         isLoading: true
-    }
+    };
 
     // TODO Retrieve info from da fields
     vastusSignIn() {
         // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
-        Auth.signIn(this.authState.username, this.authState.password).then(function (data) {
+        Auth.signIn(this.authState.username, this.authState.password).then((data) => {
             console.log("Successfully signed in!");
-            // alert(JSON.stringify(data));
             this.authenticate(data);
         }).catch(function (error) {
             console.log("There was an error!");
@@ -63,11 +68,6 @@ class SignInPage extends Component {
         }
     }
 
-    constructor(props) {
-        super(props);
-        this.authenticate = this.authenticate.bind(this);
-        alert(JSON.stringify(this.props));
-    }
 
     render() {
         // The login page
