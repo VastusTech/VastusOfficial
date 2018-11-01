@@ -53,6 +53,7 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClient(curUserName), function(data) {
         curUserID = data.id;
+        alert(curUserID);
         //curChalWins = data.challengesWon;
     });
 });
@@ -103,7 +104,7 @@ var AWS = require("aws-sdk");
 AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
-
+/*
 var docClient = new AWS.DynamoDB.DocumentClient();
 
 var table = "Movies";
@@ -122,9 +123,9 @@ var params = {
         }
     }
 };
-
+*/
 console.log("Adding a new item...");
-
+/*
 docClient.put(params, function(err, data) {
     if (err) {
         console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
@@ -132,7 +133,7 @@ docClient.put(params, function(err, data) {
         console.log("Added item:", JSON.stringify(data, null, 2));
     }
 });
-
+*/
 var lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
 
 

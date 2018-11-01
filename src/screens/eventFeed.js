@@ -78,7 +78,7 @@ function getUser(n, query, callback) {
 
 callQueryBetter(getChallenges, function (data) {
     if (data != null) {
-        MAX_FEED_ITEMS = data.length - 1;
+        MAX_FEED_ITEMS = data.length;
         alert(MAX_FEED_ITEMS);
     }
 
