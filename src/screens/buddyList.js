@@ -1,16 +1,10 @@
-import React from 'react'
-import {Item, Button, Card, Modal, Checkbox} from 'semantic-ui-react'
-import proPic from './BlakeProfilePic.jpg';
-import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
-import {withAuthenticator } from 'aws-amplify-react';
-import * as AWS from "aws-sdk";
+import React, {Component} from 'react'
+import _ from 'lodash'
+import {Grid, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
+import addToFeed from './addToFeed'
+import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
-import BuddyListProp from "./buddyList";
-import TrophyCaseProp from "./trophyCase";
-
-AWS.config.update({region: 'us-east-1'});
-AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-    {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+import proPic from "./BlakeProfilePic.jpg";
 
 setupAWS();
 
@@ -50,7 +44,7 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClient(curUserName), function(data) {
         curName = data.name;
-        curChalWins = data.challengesWon;
+        //alert(JSON.stringify(data));
     });
 });
 
@@ -91,33 +85,33 @@ function getClient(userName) {
     return userQuery;
 }
 
-const ProfileProp = () => (
-    <Card>
-        <Card.Content>
-            <Card.Header textAlign={'center'}>{curName}</Card.Header>
-        </Card.Content>
-    <Item>
-    <Item.Image size='medium' src={proPic} circular/>
+export default class BuddyListProp extends Component {
+    render() {
+        function rows()
+        {
+            return _.times(10, i => (
+                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
+                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{curName}</span></div>}>
+                        <Modal.Content image>
+                            <Item>
+                                <Item.Image size='medium' src={proPic} circular/>
+                                <Item.Content>
+                                    <Item.Header as='a'><div>{}</div></Item.Header>
+                                    <Item.Description>
+                                        <div>{}</div>
+                                    </Item.Description>
+                                    <Item.Extra>Friends: <div>{}</div></Item.Extra>
+                                    <Item.Extra>Event Wins: <div>{}</div></Item.Extra>
+                                </Item.Content>
+                            </Item>
+                        </Modal.Content>
+                    </Modal>
+                </Grid.Row>
+            ));
+        }
 
-    <Item.Content>
-    <Item.Description>
-        <div>{}</div>
-        </Item.Description>
-    <Item.Extra>
-        <Modal size='mini' trigger={<Button basic color='purple'>Friend List</Button>}>
-            <Modal.Content image>
-                <BuddyListProp/>
-            </Modal.Content>
-        </Modal>
-    </Item.Extra>
-        <Item.Extra>Event Wins: <div>{curChalWins}</div></Item.Extra>
-    </Item.Content>
-    </Item>
-        <div> <Checkbox toggle labelPosition='right' />Set Profile to Private</div>
-        <div className="ui one column stackable center aligned page grid">
-            <TrophyCaseProp/>
-        </div>
-    </Card>
-);
-
-export default ProfileProp
+        return (
+            <Grid>{rows()}</Grid>
+        );
+    }
+}
