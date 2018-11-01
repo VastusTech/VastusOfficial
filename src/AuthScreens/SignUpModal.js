@@ -48,7 +48,7 @@ class SignUpModal extends Component {
             successHandler(data);
         }).catch((err) => {
             console.log("Sign up has failed :(");
-            console.log(err);
+            alert(err);
             failureHandler(err);
         });
     }
@@ -62,7 +62,7 @@ class SignUpModal extends Component {
             successHandler(data);
         }).catch((error) => {
             console.log("Confirm sign up has failed :(");
-            console.log(error);
+            alert(error);
             failureHandler(error);
         });
     }
@@ -76,7 +76,7 @@ class SignUpModal extends Component {
     }
 
     handleCreateButton() {
-        // alert("Setting state with isConfirming is true");
+        alert("Setting state with isConfirming is true");
         this.vastusSignUp((user) => {
             this.setState({isConfirming: true})
         }, (error) => {
@@ -118,15 +118,19 @@ class SignUpModal extends Component {
         if (this.state.isConfirming) {
             return(
                 <div>
-                    <Modal size='tiny'>
+                    <Modal trigger={<Button fluid color='red' inverted> Sign Up </Button>} size='tiny'>
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
                         {errorMessage(this.state.error)}
                         <Modal.Actions>
-                            <Form>
-                                <label>Confirmation Code</label>
-                                <Form.Input type="text" name="confirmationCode" placeholder="XXXXXX" onChange={value => this.changeStateText("confirmationCode", value)}/>
-                            </Form>
-                            <Button color='blue'>Confirm Your Account</Button>
+                            <div>
+                                <Form>
+                                    <label>Confirmation Code</label>
+                                    <Form.Input type="text" name="confirmationCode" placeholder=" XXXXXX " onChange={value => this.changeStateText("confirmationCode", value)}/>
+                                </Form>
+                            </div>
+                            <div>
+                                <Button onClick={this.handleConfirmButton.bind(this)} color='blue'>Confirm Your Account</Button>
+                            </div>
                         </Modal.Actions>
                     </Modal>
                 </div>
