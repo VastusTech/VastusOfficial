@@ -7,11 +7,11 @@ import SearchBarProp from "./screens/searchBar";
 import setupAWS from "./screens/appConfig";
 import EventFeedProp from "./screens/eventFeed";
 import {Card} from "semantic-ui-react";
+import Lambda from './Lambda';
 
 setupAWS();
 
 class AuthApp extends Component {
-
     uploadFile = (evt) => {
         const file = evt.target.files[0];
         const name = file.name;
