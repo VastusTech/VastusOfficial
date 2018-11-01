@@ -17,7 +17,6 @@ class SignInPage extends Component {
         this.authenticate = this.props.authenticate.bind(this);
     }
 
-
     authState = {
         username: "",
         password: "",
@@ -68,7 +67,6 @@ class SignInPage extends Component {
         }
     }
 
-
     render() {
         // The login page
         return (
@@ -103,10 +101,10 @@ class SignInPage extends Component {
                         <Message>
                             <Grid style={{ height: '25%'}}>
                                 <Grid.Column width={8} style={{ paddingRight: '10px'}}>
-                                    <SignUpModal />
+                                    <SignUpModal authenticate={this.authenticate.bind(this)}/>
                                 </Grid.Column>
                                 <Grid.Column width={8} style={{ paddingLeft: '10px'}}>
-                                    <ForgotPasswordModal />
+                                    <ForgotPasswordModal authenticate={this.authenticate.bind(this)}/>
                                 </Grid.Column>
                             </Grid>
                         </Message>
