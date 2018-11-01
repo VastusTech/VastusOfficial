@@ -13,10 +13,6 @@ class UnauthApp extends Component {
         this.authenticate = this.props.authenticate.bind(this);
     }
 
-    authenticateApp(user) {
-        this.authenticate(user);
-    }
-
     async componentDidMount() {
         // StatusBar.setHidden(true);
         try {
@@ -44,7 +40,7 @@ class UnauthApp extends Component {
         // Always starts at the sign in page
         // Would states be used here?
         return (
-            <SignInPage authenticate={this.authenticateApp.bind(this)}/>
+            <SignInPage authenticate={this.authenticate.bind(this)}/>
         );
     }
 }
