@@ -5,14 +5,14 @@
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-  color: gray;
+  color: #800400;
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #007926;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: #ff0000;
 }
 
 .App-title {
@@ -24,34 +24,37 @@
 }
 
 .ui.inverted.segment{
-    color: rebeccapurple;
+  color: #59ab1a;
 }
 
 .m1{
-    color: red;
+  color: red;
 }
 
 body {
-    align-content: center;
-    color: #6600cc;
+  align-content: center;
+  color: #8b6a8c;
 }
+
+/*Section Behind menu and search bar*/
 #root{
-  background-color: #f2e6ff;
-  font-family: Papyrus, fantasy;
+  background-color: #999999;
   font-weight: 7000;
-  --link-color: #28004d;
-  --button-background-color: #a3a3c2;
+  --link-color: #000c90;
+
+  /*Sign Out Button*/
+  --button-background-color: rgba(37, 36, 37, 0.73);
 }
 
 .Section__sectionHeader___2fwDQ{
-  color: #6600cc;
+  color: #73006e;
   font-size: 20px;
 }
 .Form__formSection___2Xr76{
-  background-color: #cc99ff;
+  background-color: #893c00;
 }
 .Input__inputLabel___2YLi4{
-  color: #f3e6ff;
+  color: #b3b400;
 
 }
 @keyframes App-logo-spin {

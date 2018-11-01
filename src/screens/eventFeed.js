@@ -8,7 +8,7 @@ import proPic from "./BlakeProfilePic.jpg";
 
 
 //var i;
-const MAX_FEED_ITEMS = 2;
+var MAX_FEED_ITEMS = 0;
 
 
 setupAWS();
@@ -77,6 +77,11 @@ function getUser(n, query, callback) {
 }
 
 callQueryBetter(getChallenges, function (data) {
+    if (data != null) {
+        MAX_FEED_ITEMS = data.length - 1;
+        alert(MAX_FEED_ITEMS);
+    }
+
     for (var i = 0; i < MAX_FEED_ITEMS; i++) {
         /*
         const newPost = addToFeed(data[i].time, null, data[i].goal, data[i].title, null);//getChallenges.items[i], null, null);
