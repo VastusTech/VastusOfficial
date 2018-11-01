@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { Search, Grid, Header, Segment } from 'semantic-ui-react'
+import EventFeedProp from "./eventFeed";
 
 const source = _.times(5, () => ({
     title: "Vastus Technologies",
@@ -35,7 +36,7 @@ export default class SearchBarProp extends Component {
     }
 
     render() {
-        const { isLoading, value, results } = this.state
+        const { isLoading, value, results } = this.state;
 
         return (
             <Grid>

@@ -1,50 +1,113 @@
 import React, { Component } from 'react';
-// import Semantic, { Accordion }  from 'semantic-ui-react';
+import './App.css';
+import Tabs from './screens/tabs.js';
+import Amplify, { API, Auth, graphqlOperation, Analytics } from 'aws-amplify';
+import * as AWS from "aws-sdk";
+import { SignIn, SignUp, withAuthenticator, Connect } from 'aws-amplify-react'; //
+import SearchBarProp from "./screens/searchBar";
+import setupAWS from "./screens/appConfig";
+import EventFeedProp from "./screens/eventFeed";
+import {Card} from "semantic-ui-react";
+
+setupAWS();
+
+var lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
+
+var Payload = {
+    fromID: "admin",
+    action: "CREATE",
+    itemType: "Client",
+    createClientRequest: {
+        name: "ay",
+        gender: "ay",
+        birthday: "2018-10-05",
+        email: "ay",
+        username: "ay"
+    }
+};
+
+var pullParams = { FunctionName : 'VastusDatabaseLambdaFunction',
+    Payload : JSON.stringify(Payload)
+};
+
+// (async () => {
+//     alert("ay lmao");
+//     // Define the query string
+//     const getDatabaseObject = `query TestGetDatabaseObjects {
+//         queryDatabaseObjects(item_type: "Client") {
+//             items {
+//                 id
+//                 name
+//                 username
+//             }
+//         }
+//     }`;
+//     alert("ay lmao pt. 2");
+//     // Send the request to graph QL
+//     const allEvents = await API.graphql(graphqlOperation(getDatabaseObject));
+//     alert(JSON.stringify(allEvents));
+// })();
+
+// lambda.invoke(pullParams, function(error, data) {
+//     if (error) {
+//         prompt(error);
+//     } else {
+//         prompt(data.Payload);
+//     }
+// });
 
 class AuthApp extends Component {
+
+    uploadFile = (evt) => {
+        const file = evt.target.files[0];
+        const name = file.name;
+
+        Storage.put(name, file).then(() => {
+            this.setState({ file: name });
+        })
+    };
+
+    componentDidMount() {
+        Analytics.record('Amplify_CLI');
+    }
+
     render() {
-        return(
-            <div class='accordion ui'>
-                <div class='active title'>
-                    <i aria-hidden='true' class='dropdown icon' />
-                    What is a dog?
-                </div>
-                <div class='content active'>
-                    <p>
-                        A dog is a type of domesticated animal. Known for its loyalty and faithfulness, it can be
-                        found as a welcome guest in many households across the world.
-                    </p>
-                </div>
-                <div class='title'>
-                    <i aria-hidden='true' class='dropdown icon' />
-                    What kinds of dogs are there?
-                </div>
-                <div class='content'>
-                    <p>
-                        There are many breeds of dogs. Each breed varies in size and temperament. Owners often select
-                        a breed of dog that they find to be compatible with their own lifestyle and desires from a
-                        companion.
-                    </p>
-                </div>
-                <div class='title'>
-                    <i aria-hidden='true' class='dropdown icon' />
-                    How do you acquire a dog?
-                </div>
-                <div class='content'>
-                    <p>
-                        Three common ways for a prospective owner to acquire a dog is from pet shops, private owners,
-                        or shelters.
-                    </p>
-                    <p>
-                        A pet shop may be the most convenient way to buy a dog. Buying a dog from a private owner
-                        allows you to assess the pedigree and upbringing of your dog before choosing to take it home.
-                        Lastly, finding your dog from a shelter, helps give a good home to a dog who may not find one
-                        so readily.
-                    </p>
-                </div>
+        // We define the query in a const string
+        const getDatabaseObject =
+            `query Test {
+            queryClients {
+                items {
+                    name
+                }
+            }
+        }`;
+        const ListView = ({ events }) => (
+            <div>
+                <h3>All events</h3>
+                <ul>
+                    {events.map(event => <li key={event.id}>{event.title} ({event.id})</li>)}
+                </ul>
+            </div>
+        );
+
+        // Then we use GraphQL Connect to perform the query and display it in a ListView object
+        // The error shows up in the data: { queryDatabaseObject }, saying that queryDatabaseObject returns undefined
+        return (
+            <div className="App">
+                <Connect query={graphqlOperation(getDatabaseObject)}>
+                    {({ data: { queryDatabaseObjects } }) =>
+                        <div> {
+                            queryDatabaseObjects ? (<ListView events={queryDatabaseObjects ?
+                                queryDatabaseObjects.items : queryDatabaseObjects } />) : (<h3></h3>)
+                        } </div>
+                    }
+                </Connect>
+                <SearchBarProp/>
+                <Tabs/>
             </div>
         );
     }
 }
+//Goes in the return for render
 
-export default AuthApp;
+export default withAuthenticator(AuthApp, true);
