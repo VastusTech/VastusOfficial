@@ -23,20 +23,27 @@ class SignInPage extends Component {
     };
 
     state = {
+        error: null,
         user: {},
-        isLoading: true
+        isLoading: true,
+        signUpModalOpen: false,
+        forgotPasswordModalOpen: false
     };
 
     // TODO Retrieve info from da fields
-    vastusSignIn() {
+    vastusSignIn(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
         Auth.signIn(this.authState.username, this.authState.password).then((data) => {
             console.log("Successfully signed in!");
-            this.authenticate(data);
+            successHandler(data);
         }).catch(function (error) {
             console.log("There was an error!");
-            alert(error);
+            if (error.message) {
+                error = error.message;
+            }
+            console.log(error);
+            failureHandler(error);
         });
         console.log("We got past the sign in call!");
     }
@@ -49,6 +56,28 @@ class SignInPage extends Component {
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
+    handleLogInButtonPress() {
+        this.vastusSignIn((user) => {
+            this.setState({user: user});
+            this.authenticate(user);
+        }, (error) => {
+            this.setState({error: error})
+        });
+    }
+
+    openSignUpModal() {
+        this.setState({signUpModalOpen: true})
+    }
+    closeSignUpModal() {
+        this.setState({signUpModalOpen: false})
+    }
+    openForgotPasswordModal() {
+        this.setState({forgotPasswordModalOpen: true})
+    }
+    closeForgotPasswordModal() {
+        this.setState({forgotPasswordModalOpen: false})
+    }
+
     async componentDidMount() {
         // StatusBar.setHidden(true);
         try {
@@ -58,16 +87,26 @@ class SignInPage extends Component {
             this.setState({ isLoading: false })
         }
     }
-    async componentWillReceiveProps(nextProps) {
-        try {
-            const user = await Auth.currentAuthenticatedUser();
-            this.setState({ user })
-        } catch (err) {
-            this.setState({ user: {} })
-        }
-    }
+    // async componentWillReceiveProps(nextProps) {
+    //     try {
+    //         const user = await Auth.currentAuthenticatedUser();
+    //         this.setState({ user })
+    //     } catch (err) {
+    //         this.setState({ user: {} })
+    //     }
+    // }
 
     render() {
+        function errorMessage(error) {
+            if (error) {
+                return (
+                    <Message color='red'>
+                        <h1>Error!</h1>
+                        <p>{error}</p>
+                    </Message>
+                );
+            }
+        }
         // The login page
         return (
             <div className='login-form'>
@@ -76,7 +115,7 @@ class SignInPage extends Component {
       You can do same with CSS, the main idea is that all the elements up to the `Grid`
       below must have a height of 100%.
     */}
-
+                {errorMessage(this.state.error)}
                 <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Header as='h2' color='teal' textAlign='center'>
@@ -93,7 +132,7 @@ class SignInPage extends Component {
                                     type='password'
                                     onChange={value => this.changeStateText("password", value)}
                                 />
-                                <Button color='teal' fluid size='large' onClick={this.vastusSignIn.bind(this)}>
+                                <Button color='teal' fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
                                     Login
                                 </Button>
                             </Segment>
@@ -101,10 +140,20 @@ class SignInPage extends Component {
                         <Message>
                             <Grid style={{ height: '25%'}}>
                                 <Grid.Column width={8} style={{ paddingRight: '10px'}}>
-                                    <SignUpModal authenticate={this.authenticate.bind(this)}/>
+                                    <SignUpModal
+                                        open={this.state.signUpModalOpen}
+                                        onOpen={this.openSignUpModal.bind(this)}
+                                        onClose={this.closeSignUpModal.bind(this)}
+                                        authenticate={this.authenticate.bind(this)}
+                                    />
                                 </Grid.Column>
                                 <Grid.Column width={8} style={{ paddingLeft: '10px'}}>
-                                    <ForgotPasswordModal authenticate={this.authenticate.bind(this)}/>
+                                    <ForgotPasswordModal
+                                        open={this.state.forgotPasswordModalOpen}
+                                        onOpen={this.openForgotPasswordModal.bind(this)}
+                                        onClose={this.closeForgotPasswordModal.bind(this)}
+                                        authenticate={this.authenticate.bind(this)}
+                                    />
                                 </Grid.Column>
                             </Grid>
                         </Message>

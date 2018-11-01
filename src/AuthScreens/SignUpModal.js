@@ -29,6 +29,11 @@ class SignUpModal extends Component {
         // TODO Check to see if the input fields are put  in correctly
         // TODO Check to see that password is with confirm password correctly
         console.log("Starting Auth.signup!");
+        if (!this.authState.password.equals(this.authState.confirmPassword)) {
+            console.log("Sign up failed");
+            failureHandler("Password and confirm password do not match");
+            return;
+        }
 
         const attributes = {
             name: this.authState.name,
@@ -44,11 +49,10 @@ class SignUpModal extends Component {
         };
         Auth.signUp(params).then((data) => {
             console.log("Successfully signed up!");
-            // alert(JSON.stringify(data));
             successHandler(data);
         }).catch((err) => {
             console.log("Sign up has failed :(");
-            alert(err);
+            console.log(err);
             failureHandler(err);
         });
     }
@@ -62,7 +66,7 @@ class SignUpModal extends Component {
             successHandler(data);
         }).catch((error) => {
             console.log("Confirm sign up has failed :(");
-            alert(error);
+            console.log(error);
             failureHandler(error);
         });
     }
@@ -76,7 +80,7 @@ class SignUpModal extends Component {
     }
 
     handleCreateButton() {
-        alert("Setting state with isConfirming is true");
+        // alert("Setting state with isConfirming is true");
         this.vastusSignUp((user) => {
             this.setState({isConfirming: true})
         }, (error) => {
@@ -85,19 +89,18 @@ class SignUpModal extends Component {
     }
 
     async handleConfirmButton() {
-        alert("Setting state with isConfirming is false");
         this.vastusConfirmSignUp((user) => {
             this.setState({isConfirming: false});
             this.authenticate(user);
         }, (error) => {
             this.setState({isConfirming: true, error: error});
-            // alert(JSON.stringify(error));
         });
     }
 
     handleCancelButton() {
-        // TODO Have a confirmation
-        alert("Cancelling the operation");
+        // TODO Have a confirmation like are you sure ya wanna close?
+        this.setState({error: null});
+        this.props.onClose();
     }
 
     render() {
@@ -112,13 +115,12 @@ class SignUpModal extends Component {
                     </Modal.Description>
                 );
             }
-            return;
         }
 
         if (this.state.isConfirming) {
             return(
                 <div>
-                    <Modal trigger={<Button fluid color='red' inverted> Sign Up </Button>} size='tiny'>
+                    <Modal open={this.props.open} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
                         {errorMessage(this.state.error)}
                         <Modal.Actions>
@@ -138,7 +140,7 @@ class SignUpModal extends Component {
         }
         return(
             <div>
-                <Modal trigger={<Button fluid color='red' inverted> Sign Up </Button>} size='tiny'>
+                <Modal open={this.props.open} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
                     {errorMessage(this.state.error)}
                     <Modal.Actions>
@@ -173,12 +175,12 @@ class SignUpModal extends Component {
                             </div>
                             <Grid relaxed columns={4}>
                                 <Grid.Column>
-                                    <Button>Cancel</Button>
+                                    <Button negative onClick={this.handleCancelButton.bind(this)}>Cancel</Button>
                                 </Grid.Column>
                                 <Grid.Column/>
                                 <Grid.Column/>
                                 <Grid.Column>
-                                    <Button color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>
+                                    <Button positive color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>
                                 </Grid.Column>
                             </Grid>
                         </Form>
