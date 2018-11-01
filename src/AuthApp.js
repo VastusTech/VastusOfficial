@@ -110,4 +110,4 @@ class AuthApp extends Component {
 }
 //Goes in the return for render
 
-export default withAuthenticator(AuthApp, true);
+export default AuthApp;
