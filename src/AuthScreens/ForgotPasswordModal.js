@@ -33,7 +33,7 @@ class ForgotPasswordModal extends Component {
 
     vastusForgetPasswordSubmit(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
-        if (!this.authState.newPassword.equals(this.authState.confirmNewPassword)) {
+        if (this.authState.newPassword !== this.authState.confirmNewPassword) {
             console.log("Failed to make a new password :(");
             console.log("Passwords did not match");
             failureHandler("The Passwords do not match");

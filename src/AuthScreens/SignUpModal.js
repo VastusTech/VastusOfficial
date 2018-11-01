@@ -29,7 +29,7 @@ class SignUpModal extends Component {
         // TODO Check to see if the input fields are put  in correctly
         // TODO Check to see that password is with confirm password correctly
         console.log("Starting Auth.signup!");
-        if (!this.authState.password.equals(this.authState.confirmPassword)) {
+        if (this.authState.password !== this.authState.confirmPassword) {
             console.log("Sign up failed");
             failureHandler("Password and confirm password do not match");
             return;
@@ -53,6 +53,9 @@ class SignUpModal extends Component {
         }).catch((err) => {
             console.log("Sign up has failed :(");
             console.log(err);
+            if (err.message) {
+                err = err.message;
+            }
             failureHandler(err);
         });
     }
@@ -67,6 +70,9 @@ class SignUpModal extends Component {
         }).catch((error) => {
             console.log("Confirm sign up has failed :(");
             console.log(error);
+            if (error.message) {
+                error = error.message;
+            }
             failureHandler(error);
         });
     }
