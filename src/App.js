@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Tabs from './screens/tabs.js';
+// import Tabs from './screens/Tabs.js';
 import { connect } from 'react-redux';
 import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
