@@ -7,9 +7,6 @@ import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
 import Ql from "../GraphQL";
 
-//var i;
-const MAX_FEED_ITEMS = 10;
-
 setupAWS();
 
 //username of the current user

@@ -5,7 +5,7 @@ import addToFeed from './addToFeed'
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
-import Lambda from "/Users/blakehatch/WebstormProjects/vastusofficial/src/Lambda.js";
+import Lambda from "../Lambda.js";
 import * as AWS from "aws-sdk";
 
 AWS.config.update({region: 'REGION'});
