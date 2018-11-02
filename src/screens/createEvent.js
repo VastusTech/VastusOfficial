@@ -53,7 +53,7 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClient(curUserName), function(data) {
         curUserID = data.id;
-        alert(curUserID);
+        //alert(curUserID);
         //curChalWins = data.challengesWon;
     });
 });

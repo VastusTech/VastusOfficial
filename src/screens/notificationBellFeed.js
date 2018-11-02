@@ -5,9 +5,7 @@ import addToFeed from './addToFeed'
 import Amplify, { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
-
-//var i;
-const MAX_FEED_ITEMS = 10;
+import Ql from "../GraphQL";
 
 setupAWS();
 
@@ -16,6 +14,10 @@ var curUserName;
 
 //name of the current user
 var curName;
+
+var curFriendRequests = [];
+
+var friendRequestNames = [];
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -39,11 +41,29 @@ function callBetterCurUser(callback) {
     });
 }
 
+function getUser(n, query, callback) {
+    asyncCall(query, function (data) {
+        callback(data.data.getClient);
+    });
+}
+
 callBetterCurUser(function(data) {
     curUserName = data;
     //alert(getClient(curUserName));
-    callQueryBetter(getClient(curUserName), function(data) {
+    callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
+        if(data.friendRequests != null) {
+            for(var i = 0; i < data.friendRequests.length; i++) {
+                curFriendRequests[i] = data.friendRequests[i];
+                try{throw i}
+                catch(ii) {
+                    getUser(ii, getClientByID(curFriendRequests[ii]), function (data) {
+                        console.log(ii);
+                        friendRequestNames[ii] = data.name;
+                    });
+                }
+            }
+        }
     });
 });
 
@@ -69,9 +89,24 @@ function callQueryBetter(query, callback) {
     callback(allChallenges);*/
 }
 
-function getClient(userName) {
+function getClientByUsername(userName) {
     const userQuery = `query getUser {
         getClientByUsername(username: "` + userName + `") {
+            id
+            name
+            username
+            challengesWon
+            scheduledChallenges
+            friends
+            friendRequests
+            }
+        }`;
+    return userQuery;
+}
+
+function getClientByID(userID) {
+    const userQuery = `query getUser {
+        getClient(id: "` + userID + `") {
             id
             name
             username
@@ -87,11 +122,11 @@ function getClient(userName) {
 export default class ChallengeFeedProp extends Component {
 
     render() {
-        function rows(curName)
+        function rows()
         {
-            return _.times(MAX_FEED_ITEMS, i => (
+            return _.times(curFriendRequests.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal trigger={<Button basic color='purple'>{curName}</Button>}>
+                    <Modal trigger={<Button basic color='purple'>{friendRequestNames[i]}</Button>}>
                         <Modal.Header>Select a Photo</Modal.Header>
                         <Modal.Content image>
                             <Item>
@@ -112,7 +147,7 @@ export default class ChallengeFeedProp extends Component {
         }
 
         return (
-            <Grid>{rows(curName)}</Grid>
+            <Grid>{rows()}</Grid>
         );
     }
 }
