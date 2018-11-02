@@ -71,12 +71,17 @@ class App extends Component {
         // }, (error) => {
         //     alert(JSON.stringify(error))
         // })
-        Lambda.createChallenge("admin", "CL310987761", "2018-11-02T05:00:00+04:00_2018-11-02T06:30:00+04:00", "4", "100 Institute Road", "Cool Challenge!", "To be the very best!",
-            function(data) {
-                alert(JSON.stringify(data));
-            }, function(error) {
-                alert(JSON.stringify(error));
-            });
+        // Lambda.createChallenge("admin", "CL310987761", "2018-11-02T05:00:00+04:00_2018-11-02T06:30:00+04:00", "4", "100 Institute Road", "Cool Challenge!", "To be the very best!",
+        //     function(data) {
+        //         alert(JSON.stringify(data));
+        //     }, function(error) {
+        //         alert(JSON.stringify(error));
+        //     });
+        // QL.queryChallenges(["title", "goal", "time"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(JSON.stringify(error));
+        // });
     }
 
     authenticate(user) {

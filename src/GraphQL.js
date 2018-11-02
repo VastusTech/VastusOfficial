@@ -22,13 +22,17 @@ class GraphQL {
         this.execute(this.constructQuery("GetChallenge", "getChallenge", parameters, variableList),
             parameters, successHandler, failureHandler);
     }
-    // TODO Make it work for nested objects
-    // static queryChallenges(variableList, successHandler, failureHandler) {
-    //     this.execute(this.constructQuery("QueryChallenges", "queryChallenges", {}, variableList),
-    //         {}, successHandler, failureHandler);
-    // }
+    // TODO Eventually make this work better to allow for more intelligent queries
+    static queryChallenges(variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("QueryChallenges", "queryChallenges", {}, variableList, true),
+            {}, successHandler, failureHandler);
+    }
+    static queryClients(variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("QueryClients", "queryClients", {}, variableList, true),
+            {}, successHandler, failureHandler);
+    }
     // TODO This only supports input String! types. Reason to change?
-    static constructQuery(queryName, queryFunction, inputVariables, outputVariables) {
+    static constructQuery(queryName, queryFunction, inputVariables, outputVariables, ifList = false) {
         let query = '';
         var ifFirst = true;
         query += 'query ' + queryName;
@@ -56,8 +60,17 @@ class GraphQL {
             query += ')';
         }
         query += ' {\n';
+        if (ifList) {
+            query += '        items {\n';
+        }
         for (let i in outputVariables) {
+            if (ifList) {
+                query += '    ';
+            }
             query += '        ' + outputVariables[i] + '\n';
+        }
+        if (ifList) {
+            query += '        }\n        nextToken\n';
         }
         query += '    }\n}';
         return query;
