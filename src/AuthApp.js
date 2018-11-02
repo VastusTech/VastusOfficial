@@ -2,62 +2,16 @@ import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/tabs.js';
 import Amplify, { API, Auth, graphqlOperation, Analytics } from 'aws-amplify';
-import * as AWS from "aws-sdk";
 import { SignIn, SignUp, withAuthenticator, Connect } from 'aws-amplify-react'; //
 import SearchBarProp from "./screens/searchBar";
 import setupAWS from "./screens/appConfig";
 import EventFeedProp from "./screens/eventFeed";
 import {Card} from "semantic-ui-react";
+import Lambda from './Lambda';
 
 setupAWS();
 
-var lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
-
-var Payload = {
-    fromID: "admin",
-    action: "CREATE",
-    itemType: "Client",
-    createClientRequest: {
-        name: "ay",
-        gender: "ay",
-        birthday: "2018-10-05",
-        email: "ay",
-        username: "ay"
-    }
-};
-
-var pullParams = { FunctionName : 'VastusDatabaseLambdaFunction',
-    Payload : JSON.stringify(Payload)
-};
-
-// (async () => {
-//     alert("ay lmao");
-//     // Define the query string
-//     const getDatabaseObject = `query TestGetDatabaseObjects {
-//         queryDatabaseObjects(item_type: "Client") {
-//             items {
-//                 id
-//                 name
-//                 username
-//             }
-//         }
-//     }`;
-//     alert("ay lmao pt. 2");
-//     // Send the request to graph QL
-//     const allEvents = await API.graphql(graphqlOperation(getDatabaseObject));
-//     alert(JSON.stringify(allEvents));
-// })();
-
-// lambda.invoke(pullParams, function(error, data) {
-//     if (error) {
-//         prompt(error);
-//     } else {
-//         prompt(data.Payload);
-//     }
-// });
-
 class AuthApp extends Component {
-
     uploadFile = (evt) => {
         const file = evt.target.files[0];
         const name = file.name;

@@ -3,7 +3,7 @@ import PublicFeedProp from "./publicFeed";
 import ChallengeFeedProp from "./eventFeed";
 import NotificationFeedProp from "./notificationBellFeed";
 import NotificationBellProp from "./notificationBell";
-import ProfileProp from "./profile";
+import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./createEvent";
 import TrophyCaseProp from "./trophyCase";

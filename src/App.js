@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import './App.css';
 // import Tabs from './screens/tabs.js';
 import { connect } from 'react-redux';
-import Amplify, { Auth, Analytics } from 'aws-amplify';
+import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
 import Semantic, { Input } from 'semantic-ui-react';
+import Lambda from './Lambda';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
 // import SearchBarProp from "./screens/searchBar";
@@ -43,6 +44,10 @@ Amplify.configure({
         // OPTIONAL - Manually set the authentication flow type. Default is 'USER_SRP_AUTH'
         authenticationFlowType: 'USER_PASSWORD_AUTH',
         // oauth: oauth
+    },
+    Storage: {
+        bucket: 'vastusofficial',
+        region: 'us-east-1',
     }
 });
 
