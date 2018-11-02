@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox} from 'semantic-ui-react'
+import {Item, Button, Card, Modal, Checkbox, Message} from 'semantic-ui-react'
 import proPic from './BlakeProfilePic.jpg';
 import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
 import setupAWS from './appConfig';
@@ -12,69 +12,65 @@ import TrophyCaseProp from "./trophyCase";
 
 // setupAWS();
 
-class Profile extends Component {
-    state = {
-        isLoading: true,
-        username: "",
-        name: "",
-        challengeWins: [],
-    };
+var curUserName = "Blake";
+var curName = "Bah Lah Kay";
+var curChalWins = 1;
 
-    async asyncCallCurUser(callback) {
-        console.log('calling');
-        var result = await Auth.currentAuthenticatedUser()
-            .then(user => user.username)
-            .catch(err => console.log(err));
-        console.log(result);
-        callback(result);
-        // expected output: 'resolved'
-    }
+async function asyncCallCurUser(callback) {
+    console.log('calling');
+    var result = await Auth.currentAuthenticatedUser()
+        .then(user => user.username)
+        .catch(err => console.log(err));
+    console.log(result);
+    callback(result);
+    // expected output: 'resolved'
+}
 
-    callBetterCurUser(callback) {
-        asyncCallCurUser(function(data) {
-            /*
-            let usernameJSON = JSON.stringify(data);
-            alert(usernameJSON);
-            let username = JSON.parse(usernameJSON);
-            */
-            //alert(data);
-            callback(data);
-        });
-    }
-
-    // callBetterCurUser(function(data) {
-    //     curUserName = data;
-    //     //alert(getClient(curUserName));
-    //     callQueryBetter(getClient(curUserName), function(data) {
-    //         curName = data.name;
-    //         curChalWins = data.challengesWon;
-    //     });
-    // });
-
-    async asyncCall(query, callback) {
-        console.log('calling');
-        var result = await API.graphql(graphqlOperation(query));
-        console.log(result);
-        callback(result);
-        // expected output: 'resolved'
-    }
-
-    callQueryBetter(query, callback) {
-        asyncCall(query, function(data) {
-            let userJSON = JSON.stringify(data);
-            //alert(userJSON);
-            let user = JSON.parse(userJSON);
-            callback(user.data.getClientByUsername);
-        });
+function callBetterCurUser(callback) {
+    asyncCallCurUser(function(data) {
         /*
-        let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-        alert(allChallengesJSON);
-        let allChallenges = JSON.parse(allChallengesJSON);
-        callback(allChallenges);*/
-    }
+        let usernameJSON = JSON.stringify(data);
+        alert(usernameJSON);
+        let username = JSON.parse(usernameJSON);
+        */
+        //alert(data);
+        callback(data);
+    });
+}
 
-    getClient(userName) {
-        const userQuery = `query getUser {
+callBetterCurUser(function(data) {
+    curUserName = data;
+    //alert(getClient(curUserName));
+    callQueryBetter(getClient(curUserName), function(data) {
+        curName = data.name;
+        curChalWins = data.challengesWon;
+    });
+});
+
+async function asyncCall(query, callback) {
+    console.log('calling');
+    var result = await API.graphql(graphqlOperation(query));
+    console.log(result);
+    callback(result);
+    // expected output: 'resolved'
+}
+
+function callQueryBetter(query, callback) {
+    asyncCall(query, function(data) {
+        let userJSON = JSON.stringify(data);
+        //alert(userJSON);
+        let user = JSON.parse(userJSON);
+        callback(user.data.getClientByUsername);
+    });
+    /*
+    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
+    alert(allChallengesJSON);
+    let allChallenges = JSON.parse(allChallengesJSON);
+    callback(allChallenges);*/
+}
+
+function getClient(userName) {
+    const userQuery = `query getUser {
         getClientByUsername(username: "` + userName + `") {
             id
             name
@@ -85,10 +81,24 @@ class Profile extends Component {
             friendRequests
             }
         }`;
-        return userQuery;
-    }
+    return userQuery;
+}
+
+class Profile extends Component {
+    state = {
+        isLoading: true,
+        username: "",
+        name: "",
+        challengeWins: [],
+    };
+
 
     render() {
+        if (this.state.isLoading) {
+            return(
+                <Message>Loading...</Message>
+            );
+        }
         return(
             <Card>
                 <Card.Content>

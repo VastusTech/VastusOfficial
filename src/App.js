@@ -6,6 +6,7 @@ import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
 import Semantic, { Input } from 'semantic-ui-react';
 import Lambda from './Lambda';
+import QL from './GraphQL';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
 // import SearchBarProp from "./screens/searchBar";
@@ -57,6 +58,26 @@ class App extends Component {
         user: {},
         isLoading: true
     };
+
+    constructor(props) {
+        super(props);
+        // QL.getClient("CL310987761", ["id", "name", "email"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(error);
+        // });
+        // QL.queryChallenges(["id", "title", "goal"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(JSON.stringify(error))
+        // })
+        Lambda.createChallenge("admin", "CL310987761", "2018-11-02T05:00:00+04:00_2018-11-02T06:30:00+04:00", "4", "100 Institute Road", "Cool Challenge!", "To be the very best!",
+            function(data) {
+                alert(JSON.stringify(data));
+            }, function(error) {
+                alert(JSON.stringify(error));
+            });
+    }
 
     authenticate(user) {
         if (user) {
