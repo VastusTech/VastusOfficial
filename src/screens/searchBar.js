@@ -1,14 +1,65 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import { Search, Grid, Header, Segment } from 'semantic-ui-react'
+import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import EventFeedProp from "./eventFeed";
+import setupAWS from "./appConfig";
 
-const source = _.times(5, () => ({
-    title: "Vastus Technologies",
-    description: "We love fitness!!!",
+var numUsers = 0;
+var users = [];
+
+//function createNewSearch
+
+setupAWS();
+
+async function asyncCall(query, callback) {
+    console.log('calling');
+    var result = await API.graphql(graphqlOperation(query));
+    console.log(result);
+    callback(result);
+    // expected output: 'resolved'
+}
+
+function callQueryBetter(query, callback) {
+    asyncCall(query, function (data) {
+        let allChallengesJSON = JSON.stringify(data);
+        //alert(allChallengesJSON);
+        let allChallenges = JSON.parse(allChallengesJSON);
+        if (allChallenges.data.queryClients != null)
+            callback(allChallenges.data.queryClients.items);
+    });
+}
+
+const getClients =
+    `query getAllUsers {
+              queryClients {
+                items{
+                  id
+                  name
+                  username
+                  friends
+                  friendRequests
+                }
+              }
+            }`;
+
+callQueryBetter(getClients, function (data) {
+    if (data != null) {
+        numUsers = data.length;
+        alert(numUsers);
+    }
+
+    for (var i = 0; i < numUsers; i++) {
+        users[i] = data[i].name;
+    }
+});
+
+const source = _.times(numUsers, () => ({
+    title: "Blake",
+    description: "",
     image: "",
     price: "",
-}))
+}));
 
 export default class SearchBarProp extends Component {
     componentWillMount() {
