@@ -5,6 +5,7 @@ import addToFeed from './addToFeed'
 import Amplify, { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
+import Lambda from "../Lambda";
 import Ql from "../GraphQL";
 
 setupAWS();
@@ -15,9 +16,14 @@ var curUserName;
 //name of the current user
 var curName;
 
+//ID of the current user
+var curID;
+
 var curFriendRequests = [];
 
 var friendRequestNames = [];
+
+var friendRequestIDs = [];
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -52,6 +58,8 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
+        curID = data.id;
+        alert("Current user's ID: " + curID);
         if(data.friendRequests != null) {
             for(var i = 0; i < data.friendRequests.length; i++) {
                 curFriendRequests[i] = data.friendRequests[i];
@@ -60,6 +68,7 @@ callBetterCurUser(function(data) {
                     getUser(ii, getClientByID(curFriendRequests[ii]), function (data) {
                         console.log(ii);
                         friendRequestNames[ii] = data.name;
+                        friendRequestIDs[ii] = data.id;
                     });
                 }
             }
@@ -119,6 +128,22 @@ function getClientByID(userID) {
     return userQuery;
 }
 
+function denyFriendRequest(userID, requestID) {
+    Lambda.declineFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
+}
+
+function acceptFriendRequest(userID, requestID) {
+    Lambda.acceptFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
+}
+
+function handleBudRequestSuccess(success) {
+    alert(JSON.stringify(success));
+}
+
+function handleBudRequestFailure(failure) {
+    alert(failure);
+}
+
 export default class ChallengeFeedProp extends Component {
 
     render() {
@@ -132,7 +157,7 @@ export default class ChallengeFeedProp extends Component {
                             <Item>
                                 <Item.Image size='medium' src={proPic} circular/>
                                 <Item.Content>
-                                    <Item.Header as='a'><div>{}</div></Item.Header>
+                                    <Item.Header as='a'><div>{friendRequestNames[i]}</div></Item.Header>
                                     <Item.Extra>Friends: <div>{}</div></Item.Extra>
                                     <Item.Extra>Event Wins: <div>{}</div></Item.Extra>
                                 </Item.Content>
@@ -140,8 +165,10 @@ export default class ChallengeFeedProp extends Component {
                         </Modal.Content>
                     </Modal>
                     <div> has sent you a friend request</div>
-                    <Button basic color='purple'>Accept</Button>
-                    <Button basic>Deny</Button>
+                    <Button basic color='purple' onClick={() =>
+                    {acceptFriendRequest(curID, friendRequestIDs[i])}}>Accept</Button>
+                    <Button basic onClick={() =>
+                    {denyFriendRequest(curID, friendRequestIDs[i])}}>Deny</Button>
                 </Grid.Row>
             ));
         }

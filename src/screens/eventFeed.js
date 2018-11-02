@@ -107,6 +107,7 @@ const challengeTimes = [];
 const challengeTitles = [];
 const challengeGoals = [];
 const challengeOwner = [];
+const challengeID = [];
 //<AddPostButtonTestProp/>
 
 const getChallenges =
@@ -173,6 +174,7 @@ callQueryChallenge(getChallenges, function (data) {
         challengeTitles[i] = data[i].title;
         challengeGoals[i] = data[i].goal;
         challengeOwner[i] = data[i].owner;
+        challengeID[i] = data[i].id;
         console.log(challengeTitles[i]);
         console.log(challengeTimes[i]);
         console.log(challengeGoals[i]);
@@ -188,6 +190,10 @@ callQueryChallenge(getChallenges, function (data) {
         }
     }
 });
+
+function handleJoinChallenge(curID, challengeID) {
+    Lambda.joinChallenge(curID, curID, challengeID, handleBudRequestSuccess, handleBudRequestFailure())
+}
 
 function handleBudRequestSuccess(success) {
     alert(success);
@@ -216,8 +222,6 @@ export default class ChallengeFeedProp extends Component {
                         <Modal.Header>{challengeTitles[i]}</Modal.Header>
                         <Modal.Content image>
                             <div>
-
-
                                 <Modal trigger={<Button basic color='purple'>{curNames[i]}</Button>}>
                                     <Modal.Header>Select a Photo</Modal.Header>
                                     <Modal.Content image>
@@ -250,7 +254,8 @@ export default class ChallengeFeedProp extends Component {
                                 <p>{challengeGoals[i]}</p>
                             </Modal.Description>
                             <div className='join button'>
-                                <Button basic color='purple'>
+                                <Button basic color='purple' onClick={() =>
+                                {handleJoinChallenge(curID, challengeID[i])}}>
                                     Join
                                 </Button>
                             </div>

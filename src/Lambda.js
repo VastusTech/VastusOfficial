@@ -237,6 +237,7 @@ class Lambda {
             } else if (data.Payload) {
                 const payload = JSON.parse(data.Payload);
                 if (payload.errorMessage) {
+                    alert("Bad payload!: " + JSON.stringify(payload));
                     console.log(payload.errorMessage);
                     failureHandler(payload.errorMessage);
                 }

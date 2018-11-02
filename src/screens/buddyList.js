@@ -17,7 +17,9 @@ var curName;
 //Friend requests for the current user
 var curFriends = [];
 
-var friendRequestNames = [];
+var friendNames = [];
+
+var friendIDs = [];
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -41,6 +43,12 @@ function callBetterCurUser(callback) {
     });
 }
 
+function getUser(n, query, callback) {
+    asyncCall(query, function (data) {
+        callback(data.data.getClient);
+    });
+}
+
 callBetterCurUser(function(data) {
     curUserName = data;
     //alert(getClient(curUserName));
@@ -49,9 +57,16 @@ callBetterCurUser(function(data) {
         if (data.friends != null) {
             for (var i = 0; i < data.friends.length; i++) {
                 curFriends[i] = data.friends[i];
+                try{throw i}
+                catch(ii) {
+                    getUser(ii, getClientByID(curFriends[ii]), function (data) {
+                        console.log(ii);
+                        friendNames[ii] = data.name;
+                        friendIDs[ii] = data.id;
+                    });
+                }
             }
         }
-        //alert(JSON.stringify(data));
     });
 });
 
@@ -92,18 +107,33 @@ function getClientByUsername(userName) {
     return userQuery;
 }
 
+function getClientByID(userID) {
+    const userQuery = `query getUser {
+        getClient(id: "` + userID + `") {
+            id
+            name
+            username
+            challengesWon
+            scheduledChallenges
+            friends
+            friendRequests
+            }
+        }`;
+    return userQuery;
+}
+
 export default class BuddyListProp extends Component {
     render() {
         function rows()
         {
             return _.times(curFriends.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{curFriends[i]}</span></div>}>
+                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{friendNames[i]}</span></div>}>
                         <Modal.Content image>
                             <Item>
                                 <Item.Image size='medium' src={proPic} circular/>
                                 <Item.Content>
-                                    <Item.Header as='a'><div>{}</div></Item.Header>
+                                    <Item.Header as='a'><div>{friendNames[i]}</div></Item.Header>
                                     <Item.Description>
                                         <div>{}</div>
                                     </Item.Description>
