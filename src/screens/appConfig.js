@@ -10,7 +10,7 @@ function setupAWS() {
         // If we comment out, this line, then the GraphQL request is actually sent
         'aws_appsync_authenticationType': 'AMAZON_COGNITO_USER_POOLS',
 //     //'aws_appsync_apiKey': 'da2-2h7e6fjjkffypdg6peqjv7khxa'
-    }
+    };
 
 //Amplify.configure(aws_exports)
     Amplify.configure(myAppConfig);

@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
-import Tabs from './screens/tabs.js';
+import Tabs from './screens/Tabs.js';
 import Amplify, { API, Auth, graphqlOperation, Analytics } from 'aws-amplify';
 import { SignIn, SignUp, withAuthenticator, Connect } from 'aws-amplify-react'; //
 import SearchBarProp from "./screens/searchBar";
 import setupAWS from "./screens/appConfig";
+import QL from './GraphQL';
 import EventFeedProp from "./screens/eventFeed";
 import {Card} from "semantic-ui-react";
 import Lambda from './Lambda';
@@ -12,6 +13,31 @@ import Lambda from './Lambda';
 setupAWS();
 
 class AuthApp extends Component {
+    state = {
+        isLoading: true,
+        username: null,
+    };
+
+    constructor(props) {
+        super(props);
+        this.setUsername();
+    }
+
+    async setUsername() {
+        alert("Trying to set username");
+        const user = await Auth.currentAuthenticatedUser();
+        if (user.username) {
+            alert("Successfully set the username to: " + user.username);
+            this.setState({username: user.username, isLoading: false});
+        }
+        else {
+            // TODO This is an error and we should log out the user immediately
+            // TODO TODO OH Lordy WHAT TODO
+            alert("Real weird error here, boyz");
+        }
+    }
+
+    // TODO What's the point of this right now?
     uploadFile = (evt) => {
         const file = evt.target.files[0];
         const name = file.name;
@@ -57,7 +83,7 @@ class AuthApp extends Component {
                     }
                 </Connect>
                 <SearchBarProp/>
-                <Tabs/>
+                <Tabs username={this.state.username}/>
             </div>
         );
     }

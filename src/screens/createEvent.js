@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 //import './App.css';
-// import Tabs from './screens/tabs.js';
+// import Tabs from './screens/Tabs.js';
 import Amplify, { API, graphqlOperation, Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util'
 import Semantic, { Checkbox, Modal, Button, Input, Form, Container, Icon, TextArea } from 'semantic-ui-react';

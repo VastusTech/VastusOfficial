@@ -1,7 +1,7 @@
 import * as AWS from "aws-sdk";
 
 /// Configure AWS SDK for JavaScript
-AWS.config.update({region: 'REGION'});
+AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 // Prepare to call Lambda function
@@ -11,7 +11,6 @@ let lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
 const lambdaFunctionName = "VastusDatabaseLambdaFunction";
 
 class Lambda {
-
     // TODO This will be used for things like name or birthday
     static editClientAttribute(fromID, clientID, attributeName, attributeValue, successHandler, failureHandler) {
         this.invokeLambda({
@@ -28,6 +27,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static createChallenge(fromID, owner, time, capacity, address, title, goal, successHandler, failureHandler) {
+        alert("Called the first create challenge");
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
@@ -38,12 +38,12 @@ class Lambda {
                 capacity: capacity,
                 address: address,
                 title: title,
-                goal: goal,
-                // TODO Find a way to input optional params
+                goal: goal
             }
         }, successHandler, failureHandler);
     }
-    static createChallenge(fromID, owner, time, capacity, address, title, goal, description, difficulty, memberIDs, access, successHandler, failureHandler) {
+    static createChallengeOptional(fromID, owner, time, capacity, address, title, goal, description, difficulty, memberIDs, access, successHandler, failureHandler) {
+        alert("Called the second create challenge");
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
@@ -227,10 +227,12 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static invokeLambda(payload, successHandler, failureHandler) {
+        console.log("Sending lambda payload: " + JSON.stringify(payload));
+        failureHandler({error: "ay lmao"});
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
-        }, function(error, data) {
+        }, (error, data) => {
             if (error) {
                 console.log(error);
                 failureHandler(error);

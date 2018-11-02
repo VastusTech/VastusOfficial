@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
-// import Tabs from './screens/tabs.js';
+// import Tabs from './screens/Tabs.js';
 import { connect } from 'react-redux';
 import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
 import Semantic, { Input } from 'semantic-ui-react';
 import Lambda from './Lambda';
+import QL from './GraphQL';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
 // import aws_exports from './aws-exports';
 // import SearchBarProp from "./screens/searchBar";
@@ -57,6 +58,45 @@ class App extends Component {
         user: {},
         isLoading: true
     };
+
+    constructor(props) {
+        super(props);
+        // const variableComparisons = {
+        //     name: "beginsWith",
+        //     username: "beginsWith"
+        // };
+        // const variableValues = {
+        //     name: "bl",
+        //     username: "bl"
+        // };
+        // alert(variableComparisons["username"]);
+        // QL.queryClients(["id", "name", "username", "email"], QL.generateFilter("or", variableComparisons, variableValues), 100, null, (data) => {
+        //     alert("Success: " + JSON.stringify(data));
+        // }, (error) => {
+        //     alert("Failure: " + JSON.stringify(error));
+        // })
+        // QL.getClient("CL310987761", ["id", "name", "email"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(error);
+        // });
+        // QL.queryChallenges(["id", "title", "goal"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(JSON.stringify(error))
+        // })
+        // Lambda.createChallenge("admin", "CL310987761", "2018-11-02T05:00:00+04:00_2018-11-02T06:30:00+04:00", "4", "100 Institute Road", "Cool Challenge!", "To be the very best!",
+        //     function(data) {
+        //         alert(JSON.stringify(data));
+        //     }, function(error) {
+        //         alert(JSON.stringify(error));
+        //     });
+        // QL.queryChallenges(["title", "goal", "time"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(JSON.stringify(error));
+        // });
+    }
 
     authenticate(user) {
         if (user) {
