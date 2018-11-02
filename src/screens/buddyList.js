@@ -14,8 +14,10 @@ var curUserName;
 //name of the current user
 var curName;
 
-//Number of challenge wins for the current user
-var curChalWins;
+//Friend requests for the current user
+var curFriends = [];
+
+var friendRequestNames = [];
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -42,8 +44,13 @@ function callBetterCurUser(callback) {
 callBetterCurUser(function(data) {
     curUserName = data;
     //alert(getClient(curUserName));
-    callQueryBetter(getClient(curUserName), function(data) {
+    callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
+        if (data.friends != null) {
+            for (var i = 0; i < data.friends.length; i++) {
+                curFriends[i] = data.friends[i];
+            }
+        }
         //alert(JSON.stringify(data));
     });
 });
@@ -70,7 +77,7 @@ function callQueryBetter(query, callback) {
     callback(allChallenges);*/
 }
 
-function getClient(userName) {
+function getClientByUsername(userName) {
     const userQuery = `query getUser {
         getClientByUsername(username: "` + userName + `") {
             id
@@ -89,9 +96,9 @@ export default class BuddyListProp extends Component {
     render() {
         function rows()
         {
-            return _.times(10, i => (
+            return _.times(curFriends.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{curName}</span></div>}>
+                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{curFriends[i]}</span></div>}>
                         <Modal.Content image>
                             <Item>
                                 <Item.Image size='medium' src={proPic} circular/>
