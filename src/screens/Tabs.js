@@ -6,7 +6,7 @@ import NotificationBellProp from "./notificationBell";
 import ProfileProp from "./Profile";
 import React, { Component } from "react";
 import CreateEventProp from "./createEvent";
-import TrophyCaseProp from "./trophyCase";
+import TrophyCaseProp from "./TrophyCase";
 import NextWorkoutProp from "./nextWorkout";
 //import AddPostButtonTestProp from "./addPostTestButton"
 

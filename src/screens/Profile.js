@@ -4,89 +4,10 @@ import proPic from './BlakeProfilePic.jpg';
 import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
 import setupAWS from './appConfig';
 import BuddyListProp from "./buddyList";
-import TrophyCaseProp from "./trophyCase";
+import TrophyCaseProp from "./TrophyCase";
 import QL from '../GraphQL';
 
-// AWS.config.update({region: 'us-east-1'});
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
-
-// setupAWS();
-
-var curUserName = "Blake";
-var curName = "Bah Lah Kay";
-var curChalWins = 1;
-
-async function asyncCallCurUser(callback) {
-    console.log('calling');
-    var result = await Auth.currentAuthenticatedUser()
-        .then(user => user.username)
-        .catch(err => console.log(err));
-    console.log(result);
-    callback(result);
-    // expected output: 'resolved'
-}
-
-function callBetterCurUser(callback) {
-    asyncCallCurUser(function(data) {
-        /*
-        let usernameJSON = JSON.stringify(data);
-        alert(usernameJSON);
-        let username = JSON.parse(usernameJSON);
-        */
-        //alert(data);
-        callback(data);
-    });
-}
-
-callBetterCurUser(function(data) {
-    curUserName = data;
-    //alert(getClient(curUserName));
-    callQueryBetter(getClient(curUserName), function(data) {
-        curName = data.name;
-        curChalWins = data.challengesWon;
-    });
-});
-
-async function asyncCall(query, callback) {
-    console.log('calling');
-    var result = await API.graphql(graphqlOperation(query));
-    console.log(result);
-    callback(result);
-    // expected output: 'resolved'
-}
-
-function callQueryBetter(query, callback) {
-    asyncCall(query, function(data) {
-        let userJSON = JSON.stringify(data);
-        //alert(userJSON);
-        let user = JSON.parse(userJSON);
-        callback(user.data.getClientByUsername);
-    });
-    /*
-    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-    alert(allChallengesJSON);
-    let allChallenges = JSON.parse(allChallengesJSON);
-    callback(allChallenges);*/
-}
-
-function getClient(userName) {
-    const userQuery = `query getUser {
-        getClientByUsername(username: "` + userName + `") {
-            id
-            name
-            username
-            challengesWon
-            scheduledChallenges
-            friends
-            friendRequests
-            }
-        }`;
-    return userQuery;
-}
-
 class Profile extends Component {
-
     state = {
         isLoading: true,
         username: null,
@@ -102,13 +23,20 @@ class Profile extends Component {
 
     constructor(props) {
         super(props);
+        alert("Got into Profile constructor");
+        this.update();
+    }
+
+    update() {
         // TODO Change this if we want to actually be able to do something while it's loading
+        alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
         }
         // This can only run if we're already done loading
         this.state.username = this.props.username;
         // TODO Start loading the profile picture
+        alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
             alert("User came back with: " + JSON.stringify(data));
@@ -139,11 +67,8 @@ class Profile extends Component {
 
 
     render() {
-        // TODO Unecessary?
-        // if (this.state.username && this.state.profilePicture) {
-        //     this.state.isLoading = false;
-        // }
-
+        // Update every time setState is called
+        this.update();
         function errorMessage(error) {
             if (error) {
                 return (
@@ -155,10 +80,10 @@ class Profile extends Component {
             }
         }
 
-        function profilePicture() {
-            if (this.state.profilePicture) {
+        function profilePicture(profilePicture) {
+            if (profilePicture) {
                 return(
-                    <Item.Image size='medium' src={this.state.profilePicture} circular/>
+                    <Item.Image size='medium' src={profilePicture} circular/>
                 );
             }
             else {
@@ -177,10 +102,10 @@ class Profile extends Component {
             <Card>
                 {errorMessage(this.state.error)}
                 <Card.Content>
-                    <Card.Header textAlign={'center'}>{this.state.userClient.name}</Card.Header>
+                    <Card.Header textAlign={'center'}>{this.state.userInfo.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    {this.profilePicture()}
+                    {this.profilePicture(this.state.userInfo.profilePicture)}
                     <Item.Content>
                         <Item.Description>
                             <div>{}</div>
@@ -192,12 +117,12 @@ class Profile extends Component {
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>
-                        <Item.Extra>Event Wins: <div>{curChalWins}</div></Item.Extra>
+                        <Item.Extra>Event Wins: <div>{this.state.userInfo.challengesWon.size()}</div></Item.Extra>
                     </Item.Content>
                 </Item>
                 <div> <Checkbox toggle labelPosition='right' />Set Profile to Private</div>
                 <div className="ui one column stackable center aligned page grid">
-                    <TrophyCaseProp/>
+                    <TrophyCaseProp numTrophies={this.state.userInfo.challengesWon.size()}/>
                 </div>
             </Card>
         );

@@ -61,6 +61,20 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+        // const variableComparisons = {
+        //     name: "beginsWith",
+        //     username: "beginsWith"
+        // };
+        // const variableValues = {
+        //     name: "bl",
+        //     username: "bl"
+        // };
+        // alert(variableComparisons["username"]);
+        // QL.queryClients(["id", "name", "username", "email"], QL.generateFilter("or", variableComparisons, variableValues), 100, null, (data) => {
+        //     alert("Success: " + JSON.stringify(data));
+        // }, (error) => {
+        //     alert("Failure: " + JSON.stringify(error));
+        // })
         // QL.getClient("CL310987761", ["id", "name", "email"], (data) => {
         //     alert(JSON.stringify(data));
         // }, (error) => {

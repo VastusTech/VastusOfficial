@@ -197,7 +197,10 @@ function handleBudRequestFailure(failure) {
     alert(failure);
 }
 
-export default class ChallengeFeedProp extends Component {
+class ChallengeFeedProp extends Component {
+    state = {
+
+    };
 
     render() {
         function rows(challengeTitles, challengeTimes, challengeGoals, challengeOwner)
@@ -265,3 +268,5 @@ export default class ChallengeFeedProp extends Component {
         );
     }
 }
+
+export default ChallengeFeedProp;
