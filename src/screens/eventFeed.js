@@ -208,6 +208,11 @@ class ChallengeFeedProp extends Component {
 
     };
 
+    constructor(props) {
+        super(props);
+        this.setState({})
+    }
+
     render() {
         function rows(challengeTitles, challengeTimes, challengeGoals, challengeOwner)
         {

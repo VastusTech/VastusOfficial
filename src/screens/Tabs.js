@@ -1,14 +1,11 @@
 import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
-import PublicFeedProp from "./publicFeed";
 import ChallengeFeedProp from "./eventFeed";
 import NotificationFeedProp from "./notificationBellFeed";
 import NotificationBellProp from "./notificationBell";
 import ProfileProp from "./Profile";
 import React, { Component } from "react";
 import CreateEventProp from "./createEvent";
-import TrophyCaseProp from "./TrophyCase";
 import NextWorkoutProp from "./nextWorkout";
-//import AddPostButtonTestProp from "./addPostTestButton"
 
 class Tabs extends Component {
     state = {
@@ -21,11 +18,17 @@ class Tabs extends Component {
         if (this.props.username) {
             this.setState({isLoading: false, username: this.props.username});
         }
+        else {
+            this.setState({isLoading: true, username: null});
+        }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.username) {
-            this.setState({username: newProps.username});
+            this.setState({isLoading: false, username: newProps.username});
+        }
+        else {
+            this.setState({isLoading: true, username: null});
         }
     }
 
@@ -70,27 +73,9 @@ class Tabs extends Component {
         ];
 
         return(
-                <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={panes}/>
+            <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={panes}/>
         );
     }
 }
-
-/*
-    {menuItem: 'Events',
-        render: () => <Tab.Pane attached={false}>
-            <CreateEventProp/>
-            <div className="ui one column stackable center aligned page grid">
-                <Card>
-                    <Card.Content>
-                        <Card.Header textAlign={'center'}>Event Feed</Card.Header>
-                    </Card.Content>
-                    <Card.Content>
-                        <EventFeedProp/>
-                    </Card.Content>
-                </Card>
-            </div>
-        </Tab.Pane>
-    },
-*/
 
 export default Tabs;

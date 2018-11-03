@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
-import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal } from 'semantic-ui-react';
+import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader } from 'semantic-ui-react';
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import BlakePicture from '../screens/BlakeProfilePic.jpg';
 
 class SignInPage extends Component {
     // This is the function that is called when the sign up button is pressed
-
-    // This defines the passed function for use
-    authenticate = (user) => {};
-
     constructor(props) {
         super(props);
         this.authenticate = this.props.authenticate.bind(this);
@@ -34,15 +30,18 @@ class SignInPage extends Component {
     vastusSignIn(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
+        this.setState({isLoading: true});
         Auth.signIn(this.authState.username, this.authState.password).then((data) => {
             console.log("Successfully signed in!");
+            this.setState({isLoading: false});
             successHandler(data);
-        }).catch(function (error) {
+        }).catch((error) => {
             console.log("There was an error!");
             if (error.message) {
                 error = error.message;
             }
             console.log(error);
+            this.setState({isLoading: false});
             failureHandler(error);
         });
         console.log("We got past the sign in call!");
@@ -107,7 +106,17 @@ class SignInPage extends Component {
                 );
             }
         }
-        // The login page
+        function loadingProp(isLoading) {
+            if (isLoading) {
+                return (
+                    <Dimmer active inverted>
+                        <Loader/>
+                    </Dimmer>
+                );
+            }
+            return null;
+        }
+
         return (
             <div className='login-form'>
                 {/*
@@ -115,6 +124,7 @@ class SignInPage extends Component {
       You can do same with CSS, the main idea is that all the elements up to the `Grid`
       below must have a height of 100%.
     */}
+                {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
                 <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>

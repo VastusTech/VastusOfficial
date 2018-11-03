@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Semantic, { Modal, Button, Input, Image, Grid, Form, Message } from 'semantic-ui-react';
+import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
 
 class SignUpModal extends Component {
@@ -10,6 +10,7 @@ class SignUpModal extends Component {
 
     state = {
         error: null,
+        isLoading: false,
         isConfirming: false
     };
 
@@ -47,8 +48,11 @@ class SignUpModal extends Component {
             attributes: attributes,
             validationData: []
         };
+
+        this.setState({isLoading: true});
         Auth.signUp(params).then((data) => {
             console.log("Successfully signed up!");
+            this.setState({isLoading: false});
             successHandler(data);
         }).catch((err) => {
             console.log("Sign up has failed :(");
@@ -56,6 +60,7 @@ class SignUpModal extends Component {
             if (err.message) {
                 err = err.message;
             }
+            this.setState({isLoading: false});
             failureHandler(err);
         });
     }
@@ -63,9 +68,11 @@ class SignUpModal extends Component {
     // TODO Make dependent on user
     vastusConfirmSignUp(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
+        this.setState({isLoading: true});
         Auth.confirmSignUp(this.authState.username, this.authState.confirmationCode).then((data) => {
             console.log("Successfully confirmed the sign up");
             console.log(data);
+            this.setState({isLoading: false});
             successHandler(data);
         }).catch((error) => {
             console.log("Confirm sign up has failed :(");
@@ -73,6 +80,7 @@ class SignUpModal extends Component {
             if (error.message) {
                 error = error.message;
             }
+            this.setState({isLoading: false});
             failureHandler(error);
         });
     }
@@ -88,7 +96,7 @@ class SignUpModal extends Component {
     handleCreateButton() {
         // alert("Setting state with isConfirming is true");
         this.vastusSignUp((user) => {
-            this.setState({isConfirming: true})
+            this.setState({isConfirming: true, error: null})
         }, (error) => {
             this.setState({isConfirming: false, error: error})
         });
@@ -96,7 +104,7 @@ class SignUpModal extends Component {
 
     async handleConfirmButton() {
         this.vastusConfirmSignUp((user) => {
-            this.setState({isConfirming: false});
+            this.setState({isConfirming: false, error: null});
             this.authenticate(user);
         }, (error) => {
             this.setState({isConfirming: true, error: error});
@@ -122,11 +130,22 @@ class SignUpModal extends Component {
                 );
             }
         }
+        function loadingProp(isLoading) {
+            if (isLoading) {
+                return (
+                    <Dimmer active inverted>
+                        <Loader/>
+                    </Dimmer>
+                );
+            }
+            return null;
+        }
 
         if (this.state.isConfirming) {
             return(
                 <div>
                     <Modal open={this.props.open} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+                        {loadingProp(this.state.isLoading)}
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
                         {errorMessage(this.state.error)}
                         <Modal.Actions>
@@ -147,6 +166,7 @@ class SignUpModal extends Component {
         return(
             <div>
                 <Modal open={this.props.open} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+                    {loadingProp(this.state.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
                     {errorMessage(this.state.error)}
                     <Modal.Actions>

@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './App.css';
 // import Tabs from './screens/Tabs.js';
-import { connect } from 'react-redux';
+// import { connect } from 'react-redux';
 import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
-import { inspect } from 'util';
-import Semantic, { Input } from 'semantic-ui-react';
+// import { inspect } from 'util';
+// import Semantic, { Input } from 'semantic-ui-react';
 import Lambda from './Lambda';
 import QL from './GraphQL';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
@@ -151,8 +151,8 @@ class App extends Component {
     }
 }
 
-const mapStateToProps = state => ({
-    auth: state.auth
-});
+// const mapStateToProps = state => ({
+//     auth: state.auth
+// });
 
-export default connect(mapStateToProps)(App)
+export default App; //connect(mapStateToProps)(App)

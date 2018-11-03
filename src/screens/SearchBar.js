@@ -2,7 +2,6 @@ import _ from 'lodash'
 import React, { Component } from 'react'
 import {Search, Grid, Header, Segment, Icon, Label, Modal} from 'semantic-ui-react'
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
-import EventFeedProp from "./eventFeed";
 import setupAWS from "./appConfig";
 
 var numUsers = 0;
@@ -62,7 +61,7 @@ const source = _.times(1, () => ({
     price: "",
 }));
 
-export default class SearchBarProp extends Component {
+class SearchBarProp extends Component {
     componentWillMount() {
         this.resetComponent()
     }
@@ -108,3 +107,5 @@ export default class SearchBarProp extends Component {
         )
     }
 }
+
+export default SearchBarProp;
