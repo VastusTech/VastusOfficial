@@ -123,6 +123,7 @@ class CreateEventProp extends Component {
         dateTime: '',
         dateTimeEnd: '',
         datesRange: '',
+        timeFormat: 'AMPM',
         checked: false
     };
 

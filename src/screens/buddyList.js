@@ -5,6 +5,7 @@ import addToFeed from './addToFeed'
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
+import Lambda from '../Lambda';
 
 setupAWS();
 
@@ -13,6 +14,9 @@ var curUserName;
 
 //name of the current user
 var curName;
+
+//ID of the current user
+var curID;
 
 //Friend requests for the current user
 var curFriends = [];
@@ -54,6 +58,7 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
+        curID = data.id;
         if (data.friends != null) {
             for (var i = 0; i < data.friends.length; i++) {
                 curFriends[i] = data.friends[i];
@@ -122,13 +127,23 @@ function getClientByID(userID) {
     return userQuery;
 }
 
+function handleRemoveBuddySuccess(success) {
+    alert(success);
+}
+
+function handleRemoveBuddyFailure(failure) {
+    alert(failure);
+}
+
 export default class BuddyListProp extends Component {
+
     render() {
         function rows()
         {
             return _.times(curFriends.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{friendNames[i]}</span></div>}>
+                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/>
+                        <span>{friendNames[i]}</span></div>}>
                         <Modal.Content image>
                             <Item>
                                 <Item.Image size='medium' src={proPic} circular/>
@@ -143,6 +158,10 @@ export default class BuddyListProp extends Component {
                             </Item>
                         </Modal.Content>
                     </Modal>
+                    <Button basic color='purple'
+                            onClick={() =>
+                            {Lambda.removeFriend(curID, curID, friendIDs[i], handleRemoveBuddySuccess, handleRemoveBuddyFailure)}}>
+                        Remove Buddy</Button>
                 </Grid.Row>
             ));
         }

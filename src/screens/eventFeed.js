@@ -227,7 +227,6 @@ class ChallengeFeedProp extends Component {
                             <div>
 
 
-
                                 <Modal trigger={<Button basic color='purple'>{curNames[i]}</Button>}>
                                     <Modal.Header>Select a Photo</Modal.Header>
                                     <Modal.Content image>

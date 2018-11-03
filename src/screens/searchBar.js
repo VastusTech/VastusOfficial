@@ -1,6 +1,6 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import { Search, Grid, Header, Segment } from 'semantic-ui-react'
+import {Search, Grid, Header, Segment, Icon, Label, Modal} from 'semantic-ui-react'
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import EventFeedProp from "./eventFeed";
 import setupAWS from "./appConfig";
@@ -54,9 +54,10 @@ callQueryBetter(getClients, function (data) {
     }
 });
 
-const source = _.times(numUsers, () => ({
+const source = _.times(1, () => ({
     title: "Blake",
-    description: "",
+    description: (<Modal trigger = { <Icon name='eye' />}>
+    </Modal>),
     image: "",
     price: "",
 }));
