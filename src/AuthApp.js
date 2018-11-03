@@ -24,10 +24,10 @@ class AuthApp extends Component {
     }
 
     async setUsername() {
-        alert("Trying to set username");
+        //alert("Trying to set username");
         const user = await Auth.currentAuthenticatedUser();
         if (user.username) {
-            alert("Successfully set the username to: " + user.username);
+            //alert("Successfully set the username to: " + user.username);
             this.setState({username: user.username, isLoading: false});
         }
         else {

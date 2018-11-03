@@ -73,11 +73,7 @@ function callQueryBetter(query, callback) {
         let user = JSON.parse(userJSON);
         callback(user.data.getClientByUsername);
     });
-    /*
-    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-    alert(allChallengesJSON);
-    let allChallenges = JSON.parse(allChallengesJSON);
-    callback(allChallenges);*/
+
 }
 
 function getClient(userName) {
@@ -104,36 +100,9 @@ var AWS = require("aws-sdk");
 AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
-/*
-var docClient = new AWS.DynamoDB.DocumentClient();
 
-var table = "Movies";
-
-var year = 2015;
-var title = "The Big New Movie";
-
-var params = {
-    TableName:table,
-    Item:{
-        "year": year,
-        "title": title,
-        "info":{
-            "plot": "Nothing happens at all.",
-            "rating": 0
-        }
-    }
-};
-*/
 console.log("Adding a new item...");
-/*
-docClient.put(params, function(err, data) {
-    if (err) {
-        console.error("Unable to add item. Error JSON:", JSON.stringify(err, null, 2));
-    } else {
-        console.log("Added item:", JSON.stringify(data, null, 2));
-    }
-});
-*/
+
 var lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
 
 
@@ -148,6 +117,18 @@ function convertDateTimeToISO8601(dateAndTime) {
 
 class CreateEventProp extends Component {
 
+    state = {
+        date: '',
+        time: '',
+        dateTime: '',
+        dateTimeEnd: '',
+        datesRange: '',
+        timeFormat: 'AMPM',
+        checked: false
+    };
+
+    toggle = () => this.setState({ checked: !this.state.checked });
+
     challengeState = {
         title: "",
         date: "",
@@ -155,9 +136,11 @@ class CreateEventProp extends Component {
         time: "",
         capacity: "",
         goal: "",
-        description: ""
+        description: "",
+        access: "Public"
     };
 
+    /*
     dateStartState = {
         date: '',
         time: '',
@@ -185,6 +168,21 @@ class CreateEventProp extends Component {
             console.log("New date " + name + "equals: " + convertDateTimeToISO8601(value));
         }
     };
+    */
+
+    handleStartTimeChange = (event, {name, value}) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+            console.log(convertDateTimeToISO8601(value));
+        }
+    }
+
+    handleEndTimeChange = (event, {name, value}) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+            console.log(convertDateTimeToISO8601(value));
+        }
+    }
 
     changeStateText(key, value) {
         // TODO Sanitize this input
@@ -193,36 +191,22 @@ class CreateEventProp extends Component {
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
-    //handleSubmitNonLambda = () => alert(this.challengeState.title);
+    handleAccessSwitch = () => {
+        if(this.challengeState.access == 'Public') {
+            this.challengeState.access = 'Private';
+            //alert(this.challengeState.access);
+        }
+        else if (this.challengeState.access == 'Private') {
+            this.challengeState.access = 'Public';
+            //alert(this.challengeState.access);
+        }
+        else {
+            alert("Challenge access should be public or private");
+        }
+
+    };
 
     handleSubmit = () => {
-        alert("Handling the submission");
-        //ReactDOM.findDOMNode(root).querySelector('input')
-        // Using straight lambda to handle the submission
-        // let path = '/items';
-        // TODO WE MUST SET THE FROM ID TO BE THE CURRENT USER
-        // TODO also figure out who the owner is
-        let createPartyJSON = {
-            fromID: "TODO",
-            action: "CREATE",
-            itemType: "Party",
-            createPartyRequest: {
-                owner: "TODO",
-                time: "TODO",
-                capacity: "TODO",
-                address: "TODO",
-                title: "TODO",
-                // You can also set these optionally
-                // description: "TODO",
-                // memberIDs: [ "TODO", "TODO", "TODO" ],
-                // access: "TODO",
-            }
-        };
-
-        /*
-         */
-
-        //alert("Date + Time: " + convertDateTimeToISO8601(this.dateStartState.dateTime));
 
         let createChallengeJSON = {
             fromID: curUserID,
@@ -230,13 +214,15 @@ class CreateEventProp extends Component {
             itemType: "Challenge",
             createChallengeRequest: {
                 owner: curUserID,
-                time: convertDateTimeToISO8601(this.dateStartState.dateTime) +
+                time: convertDateTimeToISO8601(this.state.dateTime) +
                     "_" +
-                    convertDateTimeToISO8601(this.dateEndState.dateTime),
+                    convertDateTimeToISO8601(this.state.dateTimeEnd),
                 capacity: String(this.challengeState.capacity),
                 address: String(this.challengeState.location),
                 title: String(this.challengeState.title),
-                goal: String(this.challengeState.goal)
+                description: String(this.challengeState.description),
+                goal: String(this.challengeState.goal),
+                access: String(this.challengeState.access)
                 // You can also set these optionally
                 // description: "TODO",
                 // difficulty: "TODO",
@@ -276,7 +262,7 @@ render() {
         return (
             <Container style={{padding: 10}}>
                 <Modal trigger={<Button basic color='purple'>+ Create Challenge</Button>}>
-                    <Modal.Header>Edit</Modal.Header>
+                    <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group unstackable widths={2}>
@@ -289,19 +275,20 @@ render() {
                                     <Input type="text" name="location" placeholder="Address for challenge" onChange={value => this.changeStateText("location", value)}/>
                                 </div>
                                 <div className="field">
-                                    <label>Date and Time</label>
+                                    <label>Start Date and Time</label>
                                     <DateTimeInput
                                         name="dateTime"
                                         placeholder="Start"
-                                        value={this.dateStartState.dateTime}
+                                        value={this.state.dateTime}
                                         iconPosition="left"
                                         onChange={this.handleStartTimeChange} />
                                     </div>
-                                <div>
+                                <div className="field">
+                                    <label>End Date and Time</label>
                                     <DateTimeInput
-                                        name="dateTime"
+                                        name="dateTimeEnd"
                                         placeholder="End"
-                                        value={this.dateEndState.dateTime}
+                                        value={this.state.dateTimeEnd}
                                         iconPosition="left"
                                         onChange={this.handleEndTimeChange} />
                                 </div>
@@ -315,23 +302,18 @@ render() {
                                 </div>
                             </Form.Group>
                             <div className="Challenge Description">
-                                <label>Email</label>
+                                <label>Challenge Description</label>
                                 <TextArea type="text" name="description" placeholder="Describe challenge here... " onChange={value => this.changeStateText("description", value)}/>
                             </div>
                             <div className="Submit Button">
                                 <Button type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
                             </div>
                             <div className="Privacy Switch">
-                                <Checkbox toggle labelPosition='right' /> <div>Set Event to Private</div>
+                                <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
+                                <div>{this.challengeState.access}</div>
                             </div>
                         </Form>
                     </Modal.Content>
-                    <Modal.Actions>
-                        <Button icon labelPosition='left' onClick={this.deleteItem}>
-                            <Icon name='delete' />
-                            Delete Item
-                        </Button>
-                    </Modal.Actions>
                 </Modal>
             </Container>
         );

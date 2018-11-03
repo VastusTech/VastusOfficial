@@ -5,6 +5,7 @@ import addToFeed from './addToFeed'
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
+import Lambda from '../Lambda';
 
 setupAWS();
 
@@ -14,10 +15,15 @@ var curUserName;
 //name of the current user
 var curName;
 
+//ID of the current user
+var curID;
+
 //Friend requests for the current user
 var curFriends = [];
 
-var friendRequestNames = [];
+var friendNames = [];
+
+var friendIDs = [];
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -41,17 +47,31 @@ function callBetterCurUser(callback) {
     });
 }
 
+function getUser(n, query, callback) {
+    asyncCall(query, function (data) {
+        callback(data.data.getClient);
+    });
+}
+
 callBetterCurUser(function(data) {
     curUserName = data;
     //alert(getClient(curUserName));
     callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
+        curID = data.id;
         if (data.friends != null) {
             for (var i = 0; i < data.friends.length; i++) {
                 curFriends[i] = data.friends[i];
+                try{throw i}
+                catch(ii) {
+                    getUser(ii, getClientByID(curFriends[ii]), function (data) {
+                        console.log(ii);
+                        friendNames[ii] = data.name;
+                        friendIDs[ii] = data.id;
+                    });
+                }
             }
         }
-        //alert(JSON.stringify(data));
     });
 });
 
@@ -92,18 +112,43 @@ function getClientByUsername(userName) {
     return userQuery;
 }
 
+function getClientByID(userID) {
+    const userQuery = `query getUser {
+        getClient(id: "` + userID + `") {
+            id
+            name
+            username
+            challengesWon
+            scheduledChallenges
+            friends
+            friendRequests
+            }
+        }`;
+    return userQuery;
+}
+
+function handleRemoveBuddySuccess(success) {
+    alert(success);
+}
+
+function handleRemoveBuddyFailure(failure) {
+    alert(failure);
+}
+
 export default class BuddyListProp extends Component {
+
     render() {
         function rows()
         {
             return _.times(curFriends.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/> <span>{curFriends[i]}</span></div>}>
+                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/>
+                        <span>{friendNames[i]}</span></div>}>
                         <Modal.Content image>
                             <Item>
                                 <Item.Image size='medium' src={proPic} circular/>
                                 <Item.Content>
-                                    <Item.Header as='a'><div>{}</div></Item.Header>
+                                    <Item.Header as='a'><div>{friendNames[i]}</div></Item.Header>
                                     <Item.Description>
                                         <div>{}</div>
                                     </Item.Description>
@@ -113,6 +158,10 @@ export default class BuddyListProp extends Component {
                             </Item>
                         </Modal.Content>
                     </Modal>
+                    <Button basic color='purple'
+                            onClick={() =>
+                            {Lambda.removeFriend(curID, curID, friendIDs[i], handleRemoveBuddySuccess, handleRemoveBuddyFailure)}}>
+                        Remove Buddy</Button>
                 </Grid.Row>
             ));
         }

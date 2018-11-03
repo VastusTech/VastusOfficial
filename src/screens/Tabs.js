@@ -70,7 +70,7 @@ class Tabs extends Component {
         ];
 
         return(
-            <Tab menu={{inverted: true, secondary: true, pointing: true}} panes={panes}/>
+                <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={panes}/>
         );
     }
 }
