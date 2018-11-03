@@ -117,7 +117,15 @@ function convertDateTimeToISO8601(dateAndTime) {
 
 class CreateEventProp extends Component {
 
-    state = { checked: false };
+    state = {
+        date: '',
+        time: '',
+        dateTime: '',
+        dateTimeEnd: '',
+        datesRange: '',
+        checked: false
+    };
+
     toggle = () => this.setState({ checked: !this.state.checked });
 
     challengeState = {
@@ -131,6 +139,7 @@ class CreateEventProp extends Component {
         access: "Public"
     };
 
+    /*
     dateStartState = {
         date: '',
         time: '',
@@ -158,6 +167,21 @@ class CreateEventProp extends Component {
             console.log("New date " + name + "equals: " + convertDateTimeToISO8601(value));
         }
     };
+    */
+
+    handleStartTimeChange = (event, {name, value}) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+            console.log(convertDateTimeToISO8601(value));
+        }
+    }
+
+    handleEndTimeChange = (event, {name, value}) => {
+        if (this.state.hasOwnProperty(name)) {
+            this.setState({ [name]: value });
+            console.log(convertDateTimeToISO8601(value));
+        }
+    }
 
     changeStateText(key, value) {
         // TODO Sanitize this input
@@ -167,7 +191,7 @@ class CreateEventProp extends Component {
     }
 
     handleAccessSwitch = () => {
-        if((this.challengeState.access == 'Public')) {
+        if(this.challengeState.access == 'Public') {
             this.challengeState.access = 'Private';
             //alert(this.challengeState.access);
         }
@@ -189,9 +213,9 @@ class CreateEventProp extends Component {
             itemType: "Challenge",
             createChallengeRequest: {
                 owner: curUserID,
-                time: convertDateTimeToISO8601(this.dateStartState.dateTime) +
+                time: convertDateTimeToISO8601(this.state.dateTime) +
                     "_" +
-                    convertDateTimeToISO8601(this.dateEndState.dateTime),
+                    convertDateTimeToISO8601(this.state.dateTimeEnd),
                 capacity: String(this.challengeState.capacity),
                 address: String(this.challengeState.location),
                 title: String(this.challengeState.title),
@@ -237,7 +261,7 @@ render() {
         return (
             <Container style={{padding: 10}}>
                 <Modal trigger={<Button basic color='purple'>+ Create Challenge</Button>}>
-                    <Modal.Header>Edit</Modal.Header>
+                    <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group unstackable widths={2}>
@@ -250,19 +274,20 @@ render() {
                                     <Input type="text" name="location" placeholder="Address for challenge" onChange={value => this.changeStateText("location", value)}/>
                                 </div>
                                 <div className="field">
-                                    <label>Date and Time</label>
+                                    <label>Start Date and Time</label>
                                     <DateTimeInput
                                         name="dateTime"
                                         placeholder="Start"
-                                        value={this.dateStartState.dateTime}
+                                        value={this.state.dateTime}
                                         iconPosition="left"
                                         onChange={this.handleStartTimeChange} />
                                     </div>
-                                <div>
+                                <div className="field">
+                                    <label>End Date and Time</label>
                                     <DateTimeInput
-                                        name="dateTime"
+                                        name="dateTimeEnd"
                                         placeholder="End"
-                                        value={this.dateEndState.dateTime}
+                                        value={this.state.dateTimeEnd}
                                         iconPosition="left"
                                         onChange={this.handleEndTimeChange} />
                                 </div>
@@ -288,12 +313,6 @@ render() {
                             </div>
                         </Form>
                     </Modal.Content>
-                    <Modal.Actions>
-                        <Button icon labelPosition='left' onClick={this.deleteItem}>
-                            <Icon name='delete' />
-                            Delete Item
-                        </Button>
-                    </Modal.Actions>
                 </Modal>
             </Container>
         );
