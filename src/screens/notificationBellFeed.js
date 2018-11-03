@@ -59,7 +59,7 @@ callBetterCurUser(function(data) {
     callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
         curID = data.id;
-        alert("Current user's ID: " + curID);
+        //alert("Current user's ID: " + curID);
         if(data.friendRequests != null) {
             for(var i = 0; i < data.friendRequests.length; i++) {
                 curFriendRequests[i] = data.friendRequests[i];

@@ -72,7 +72,7 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryUser(getClientByUsername(curUserName), function(data) {
         curID = data.id;
-        alert("Current ID: " + curID);
+        //alert("Current ID: " + curID);
         curName = data.name;
         curChalWins = data.challengesWon;
     });
@@ -225,6 +225,9 @@ class ChallengeFeedProp extends Component {
                         <Modal.Header>{challengeTitles[i]}</Modal.Header>
                         <Modal.Content image>
                             <div>
+
+
+
                                 <Modal trigger={<Button basic color='purple'>{curNames[i]}</Button>}>
                                     <Modal.Header>Select a Photo</Modal.Header>
                                     <Modal.Content image>

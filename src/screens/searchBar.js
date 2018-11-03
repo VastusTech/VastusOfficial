@@ -46,7 +46,7 @@ const getClients =
 callQueryBetter(getClients, function (data) {
     if (data != null) {
         numUsers = data.length;
-        alert(numUsers);
+        //alert(numUsers);
     }
 
     for (var i = 0; i < numUsers; i++) {
