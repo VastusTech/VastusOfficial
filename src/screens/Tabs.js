@@ -23,6 +23,12 @@ class Tabs extends Component {
         }
     }
 
+    componentWillReceiveProps(newProps) {
+        if (newProps.username) {
+            this.setState({username: newProps.username});
+        }
+    }
+
     render() {
         const panes = [
             {

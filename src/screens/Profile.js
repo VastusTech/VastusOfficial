@@ -29,6 +29,9 @@ class Profile extends Component {
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
+        if (!this.state.isLoading) {
+            return;
+        }
         alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
@@ -65,10 +68,14 @@ class Profile extends Component {
         };
     }
 
+    componentWillReceiveProps(newProps) {
+        this.props = newProps;
+        this.update();
+    }
 
     render() {
         // Update every time setState is called
-        this.update();
+        // this.update();
         function errorMessage(error) {
             if (error) {
                 return (
@@ -93,6 +100,13 @@ class Profile extends Component {
             }
         }
 
+        function numChallengesWon(challengesWon) {
+            if (challengesWon && challengesWon.size()) {
+                return challengesWon.size();
+            }
+            return 0;
+        }
+
         if (this.state.isLoading) {
             return(
                 <Message>Loading...</Message>
@@ -105,7 +119,7 @@ class Profile extends Component {
                     <Card.Header textAlign={'center'}>{this.state.userInfo.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    {this.profilePicture(this.state.userInfo.profilePicture)}
+                    {profilePicture(this.state.userInfo.profilePicture)}
                     <Item.Content>
                         <Item.Description>
                             <div>{}</div>
@@ -117,12 +131,12 @@ class Profile extends Component {
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>
-                        <Item.Extra>Event Wins: <div>{this.state.userInfo.challengesWon.size()}</div></Item.Extra>
+                        <Item.Extra>Event Wins: <div>{numChallengesWon(this.state.userInfo.challengesWon)}</div></Item.Extra>
                     </Item.Content>
                 </Item>
                 <div> <Checkbox toggle labelPosition='right' />Set Profile to Private</div>
                 <div className="ui one column stackable center aligned page grid">
-                    <TrophyCaseProp numTrophies={this.state.userInfo.challengesWon.size()}/>
+                    <TrophyCaseProp numTrophies={numChallengesWon(this.state.userInfo.challengesWon)}/>
                 </div>
             </Card>
         );
