@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {Item, Button, Card, Modal, Checkbox} from 'semantic-ui-react'
+import {Item, Button, Card, Modal, Checkbox, Label, Reveal} from 'semantic-ui-react'
 import proPic from './BlakeProfilePic.jpg';
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import {withAuthenticator } from 'aws-amplify-react';
@@ -134,11 +134,14 @@ class ProfileProp extends Component {
                 </Card.Content>
                 <Item>
                     <Item.Image size='medium' src={proPic} circular/>
-
                     <Item.Content>
-                        <Item.Description>
-                            <div>{}</div>
-                        </Item.Description>
+                        <Item.Extra>
+                            <label htmlFor="proPicUpload" className="ui basic purple floated button">
+                                <i className='ui upload icon'></i>
+                                Upload New Profile Picture
+                            </label>
+                            <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
+                        </Item.Extra>
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Friend List</Button>}>
                                 <Modal.Content image>
@@ -163,6 +166,7 @@ class ProfileProp extends Component {
                               checked={this.state.checked}/>
                     <div>{this.profileState.access}</div>
                 </div>
+
             </Card>
         );
     }

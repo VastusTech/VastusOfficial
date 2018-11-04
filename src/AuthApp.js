@@ -82,8 +82,10 @@ class AuthApp extends Component {
                         } </div>
                     }
                 </Connect>
-                <SearchBarProp/>
-                <Tabs username={this.state.username}/>
+                <div class="ui center aligned">
+                    <SearchBarProp/>
+                    <Tabs username={this.state.username}/>
+                </div>
             </div>
         );
     }

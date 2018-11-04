@@ -112,7 +112,18 @@ function convertDateTimeToISO8601(dateAndTime) {
     var month = dateTimeString.substr(3, 2);
     var year = dateTimeString.substr(6, 4);
     var time = dateTimeString.substr(11, 5);
-    return year + "-" + month + "-" + day + "T" + time + ":00+00:00";
+    var hour = dateTimeString.substr(11, 2);
+    var minute = dateTimeString.substr(13, 3);
+    var amorpm = dateTimeString.substr(16, 3);
+    //alert(time + " vs. " + hour + minute);
+    if(amorpm.trim() === 'AM') {
+        //alert(amorpm + " vs. " + "AM");
+        return year + "-" + month + "-" + day + "T" + time + ":00+00:00";
+    }
+    else {
+        //alert(year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00");
+        return year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00";
+    }
 }
 
 class CreateEventProp extends Component {
@@ -137,7 +148,7 @@ class CreateEventProp extends Component {
         capacity: "",
         goal: "",
         description: "",
-        access: "Public"
+        access: "public"
     };
 
     /*
@@ -192,12 +203,12 @@ class CreateEventProp extends Component {
     }
 
     handleAccessSwitch = () => {
-        if(this.challengeState.access == 'Public') {
-            this.challengeState.access = 'Private';
+        if(this.challengeState.access == 'public') {
+            this.challengeState.access = 'private';
             //alert(this.challengeState.access);
         }
-        else if (this.challengeState.access == 'Private') {
-            this.challengeState.access = 'Public';
+        else if (this.challengeState.access == 'private') {
+            this.challengeState.access = 'public';
             //alert(this.challengeState.access);
         }
         else {
@@ -281,7 +292,8 @@ render() {
                                         placeholder="Start"
                                         value={this.state.dateTime}
                                         iconPosition="left"
-                                        onChange={this.handleStartTimeChange} />
+                                        onChange={this.handleStartTimeChange}
+                                        timeFormat={this.state.timeFormat} />
                                     </div>
                                 <div className="field">
                                     <label>End Date and Time</label>
@@ -290,7 +302,8 @@ render() {
                                         placeholder="End"
                                         value={this.state.dateTimeEnd}
                                         iconPosition="left"
-                                        onChange={this.handleEndTimeChange} />
+                                        onChange={this.handleEndTimeChange}
+                                        timeFormat={this.state.timeFormat}/>
                                 </div>
                                 <div className="field">
                                     <label>Capacity</label>

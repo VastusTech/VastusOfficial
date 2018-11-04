@@ -26,7 +26,9 @@ class Tabs extends Component {
     render() {
         const panes = [
             {
-                menuItem: 'Home', render: () => <Tab.Pane attached={false}>
+                menuItem: (<Menu.Item>
+                    <Label icon='home' />
+                </Menu.Item>), render: () => <Tab.Pane attached={false}>
                     <CreateEventProp/>
                     <div className="ui one column stackable center aligned page grid">
                         <ChallengeFeedProp/>
@@ -39,7 +41,9 @@ class Tabs extends Component {
                 </Tab.Pane>
             },
             {
-                menuItem: 'Profile', render: () => <Tab.Pane attached={false}>
+                menuItem: (<Menu.Item>
+                    <Label icon='user circle outline' />
+                </Menu.Item>), render: () => <Tab.Pane attached={false}>
                     <div className="ui one column stackable center aligned page grid">
                         <ProfileProp username={this.state.username}/>
                     </div>
