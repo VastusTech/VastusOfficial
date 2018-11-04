@@ -7,6 +7,7 @@ import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
 import Lambda from "../Lambda";
 import Ql from "../GraphQL";
+import ClientModal from "./ClientModal";
 
 setupAWS();
 
@@ -144,14 +145,27 @@ function handleBudRequestFailure(failure) {
     alert(failure);
 }
 
-export default class ChallengeFeedProp extends Component {
+class NotificationFeed extends Component {
+    state = {
+
+    };
+
+    componentDidMount() {
+
+    }
+
+    componentWillReceiveProps(newProps) {
+
+    }
 
     render() {
         function rows()
         {
             return _.times(curFriendRequests.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal trigger={<Button basic color='purple'>{friendRequestNames[i]}</Button>}>
+                    <Button basic color='purple'>{friendRequestNames[i]}</Button>
+                    <ClientModal />
+                    <Modal>
                         <Modal.Header>Select a Photo</Modal.Header>
                         <Modal.Content image>
                             <Item>
@@ -178,3 +192,5 @@ export default class ChallengeFeedProp extends Component {
         );
     }
 }
+
+export default NotificationFeed;

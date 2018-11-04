@@ -47,7 +47,7 @@ class GraphQL {
             parameterString += '            {\n                ';
             parameterString += variableName + ': {\n';
             parameterString += '                    ';
-            alert(variableComparisons.hasOwnProperty(variableName));
+            // alert(variableComparisons.hasOwnProperty(variableName));
             const comparison = variableComparisons[variableName];
             const valueName = variableName + comparison;
             const value = variableValues[variableName];
@@ -137,7 +137,10 @@ class GraphQL {
             successHandler(data.data[queryFunctionName]);
         }).catch((error) => {
             console.log("GraphQL operation failed...");
-            alert(error);
+            if (error.message) {
+                error = error.message;
+            }
+            alert(JSON.stringify(error));
             failureHandler(error);
         });
     }
