@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
+import Lambda from "../Lambda";
 
 class EventDescriptionModal extends Component {
     state = {
@@ -26,6 +27,7 @@ class EventDescriptionModal extends Component {
 
     handleJoinChallengeButton() {
         alert("Handling joining the challenge");
+
     }
 
     openClientModal() { this.setState({clientModalOpen: true}); }

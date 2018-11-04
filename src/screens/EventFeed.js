@@ -211,10 +211,11 @@ class EventFeed extends Component {
         challenges: [],
         clientNames: {}, // id to name
         challengeFeedLength: 10,
+        nextToken: null,
         calculations: {
             topVisible: false,
             bottomVisible: false
-        }
+        },
     };
 
     // constructor(props) {
@@ -228,8 +229,8 @@ class EventFeed extends Component {
     queryChallenges() {
         this.setState({isLoading: true});
         // alert("querying challenges");
-        QL.queryChallenges(["id", "title", "goal", "time", "owner"], null, this.state.challengeFeedLength,
-            null, (data) => {
+        QL.queryChallenges(["id", "title", "goal", "time", "owner"], null, 5,
+            this.nextToken, (data) => {
                 // TODO You can also use data.nextToken to get the next set of challenges
                 // alert("got challenges");
                 if (data.items) {
@@ -237,6 +238,7 @@ class EventFeed extends Component {
                     for (let i = 0; i < data.items.length; i++) {
                         this.state.challenges.push(data.items[i]);
                     }
+                    this.setState({nextToken: data.nextToken});
                     // alert("Challenges in the end is " + JSON.stringify(this.state.challenges));
                 }
                 else {
@@ -254,13 +256,26 @@ class EventFeed extends Component {
             });
     }
 
-    handleContextRef = contextRef => this.setState({ contextRef })
+    handleUpdate = (e, { calculations }) => {
+        this.setState({ calculations });
+        console.log(calculations.bottomVisible);
+        if(this.state.calculations.bottomVisible) {
+            this.state.challenges.push(this.nextToken);
+        }
+        //console.log(this.state.challenges);
 
-    handleUpdate = (e, { calculations }) => this.setState({ calculations })
+        /*
+        if(calculations.bottomVisible) {
+            alert("Call next token now that bottom is visible!");
+        }
+        */
+    };
 
     render() {
+        //const { calculations } = this.state;
+
         function rows(challenges) {
-            return _.times(6, i => (
+            return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                     <EventCard challenge={challenges[i]}/>
                 </Grid.Row>
