@@ -3,7 +3,7 @@ import React, { Component } from 'react'
 import {Search, Grid, Header, Segment, Icon, Label, Modal} from 'semantic-ui-react'
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import setupAWS from "./appConfig";
-
+/*
 var numUsers = 0;
 var users = [];
 
@@ -52,6 +52,7 @@ callQueryBetter(getClients, function (data) {
         users[i] = data[i].name;
     }
 });
+*/
 
 const source = _.times(1, () => ({
     title: "Blake",

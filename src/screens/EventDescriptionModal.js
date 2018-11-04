@@ -42,7 +42,7 @@ class EventDescriptionModal extends Component {
                     <div>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.challenge.owner}/>
                     </div>
-                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>Owner</Button>
+                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.challenge.owner}</Button>
                     <Modal.Description>
                         <Header>Info: </Header>
                         <p>{this.state.challenge.time}</p>

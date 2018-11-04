@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
+import {Grid, Visibility, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
 import addToFeed from './addToFeed'
 import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
@@ -210,7 +210,11 @@ class EventFeed extends Component {
         isLoading: true,
         challenges: [],
         clientNames: {}, // id to name
-        challengeFeedLength: 10
+        challengeFeedLength: 10,
+        calculations: {
+            topVisible: false,
+            bottomVisible: false
+        }
     };
 
     // constructor(props) {
@@ -250,28 +254,13 @@ class EventFeed extends Component {
             });
     }
 
-    // getClientName(id) {
-    //     if (this.state.clientNames[id]) {
-    //         return this.state.clientNames[id];
-    //     }
-    //     else {
-    //         QL.getClient(id, ["name"], (data) => {
-    //             this.setState({clientNames: {...this.state.clientNames, ...data}});
-    //         }, (error) => {
-    //             console.log("getting client name for id " + id + " failed");
-    //             if (error.message) {
-    //                 error = error.message;
-    //             }
-    //             console.log(error);
-    //             this.setState({error: error});
-    //         });
-    //         return "null";
-    //     }
-    // }
+    handleContextRef = contextRef => this.setState({ contextRef })
+
+    handleUpdate = (e, { calculations }) => this.setState({ calculations })
 
     render() {
         function rows(challenges) {
-            return _.times(challenges.length, i => (
+            return _.times(6, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                     <EventCard challenge={challenges[i]}/>
                 </Grid.Row>
@@ -279,7 +268,11 @@ class EventFeed extends Component {
         }
 
         return (
-            <Grid>{rows(this.state.challenges)}</Grid>
+            <Visibility onUpdate={this.handleUpdate}>
+                <Grid>
+                    {rows(this.state.challenges)}
+                </Grid>
+            </Visibility>
         );
     }
 }
