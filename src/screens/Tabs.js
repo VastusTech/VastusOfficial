@@ -1,5 +1,5 @@
 import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
-import ChallengeFeedProp from "./eventFeed";
+import EventFeed from "./EventFeed";
 import NotificationFeedProp from "./notificationBellFeed";
 import NotificationBellProp from "./notificationBell";
 import ProfileProp from "./Profile";
@@ -38,7 +38,7 @@ class Tabs extends Component {
                 menuItem: 'Home', render: () => <Tab.Pane attached={false}>
                     <CreateEventProp/>
                     <div className="ui one column stackable center aligned page grid">
-                        <ChallengeFeedProp/>
+                        <EventFeed/>
                         <Card>
                             <Card.Content>
                                 <NextWorkoutProp/>
