@@ -1,5 +1,7 @@
+/*
 import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
 import React, { Component } from "react";
+import ScheduledChallengesProp from "./ScheduledChallengeList";
 
 class ChallengeManagerProp extends Component {
     state = {
@@ -14,22 +16,27 @@ class ChallengeManagerProp extends Component {
         }
     }
 
-    render() {
+    /*
         const panes = [
             {
                 menuItem: 'Owned Challenges', render: () => <Tab.Pane attached={false}>
-                    <div>Owned Challenges Here</div>
+                    <OwnedChallengesProp/>
                 </Tab.Pane>
             },
             {
-                menuItem: 'Joined Challenges', render: () => <Tab.Pane attached={false}>
-                    <div>Joined Challenges Here</div>
+                menuItem: 'Scheduled Challenges', render: () => <Tab.Pane attached={false}>
+                    <div>Add Scheduled Challenge List with Query</div>
                 </Tab.Pane>
             },
         ];
-
+        */
+        /*
+        <Tab menu={{inverted: false, secondary: true, pointing: true}} panes={panes}/>
+         */
+        /*
+    render() {
         return(
-            <Tab menu={{inverted: false, secondary: true, pointing: true}} panes={panes}/>
+            <ScheduledChallengesProp>
         );
     }
 }
@@ -51,5 +58,6 @@ class ChallengeManagerProp extends Component {
         </Tab.Pane>
     },
 */
-
+/*
 export default ChallengeManagerProp;
+            */

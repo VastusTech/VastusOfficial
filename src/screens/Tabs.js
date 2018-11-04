@@ -39,13 +39,13 @@ class Tabs extends Component {
                     <Label icon='home' />
                 </Menu.Item>), render: () => <Tab.Pane attached={false}>
                     <CreateEventProp/>
+                    <Card>
+                        <Card.Content>
+                            <NextWorkoutProp/>
+                        </Card.Content>
+                    </Card>
                     <div className="ui one column stackable center aligned page grid">
                         <EventFeed/>
-                        <Card>
-                            <Card.Content>
-                                <NextWorkoutProp/>
-                            </Card.Content>
-                        </Card>
                     </div>
                 </Tab.Pane>
             },

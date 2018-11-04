@@ -54,11 +54,11 @@ class AuthApp extends Component {
         return (
             <div className="App">
                 <Grid>
-                    <Grid.Column floated='left'>
-                        <SearchBarProp/>
+                    <Grid.Column floated='left' width={2}>
+                        <SearchBarProp width={5}/>
                     </Grid.Column>
                     <Grid.Column floated='right' width={5}>
-                            <Button color='purple' onClick={this.handleLogOut.bind(this)} width={10}>Log Out</Button>
+                            <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                     </Grid.Column>
                 </Grid>
                     <Tabs username={this.state.username}/>
