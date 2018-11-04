@@ -27,7 +27,6 @@ class EventDescriptionModal extends Component {
 
     handleJoinChallengeButton() {
         alert("Handling joining the challenge");
-
     }
 
     openClientModal() { this.setState({clientModalOpen: true}); }

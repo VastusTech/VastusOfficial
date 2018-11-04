@@ -14,197 +14,6 @@ AWS.config.update({region: 'REGION'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
-//var i;
-// var MAX_FEED_ITEMS = 0;
-//
-// //Get the current user information
-// //username of the current user
-// var curUserName;
-//
-// //name of the current user
-// var curName;
-//
-// //Number of challenge wins for the current user
-// var curChalWins;
-//
-// //ID of the current user
-// var curID;
-//
-// //Get all of the owners of the challenges
-// setupAWS();
-//
-// async function asyncCallCurUser(callback) {
-//     console.log('calling');
-//     var result = await Auth.currentAuthenticatedUser()
-//         .then(user => user.username)
-//         .catch(err => console.log(err));
-//     console.log(result);
-//     callback(result);
-//     // expected output: 'resolved'
-// }
-//
-// function callBetterCurUser(callback) {
-//     asyncCallCurUser(function(data) {
-//         /*
-//         let usernameJSON = JSON.stringify(data);
-//         alert(usernameJSON);
-//         let username = JSON.parse(usernameJSON);
-//         */
-//         //alert(data);
-//         callback(data);
-//     });
-// }
-//
-// function callQueryUser(query, callback) {
-//     asyncCall(query, function(data) {
-//         let userJSON = JSON.stringify(data);
-//         //alert(userJSON);
-//         let user = JSON.parse(userJSON);
-//         callback(user.data.getClientByUsername);
-//     });
-//     /*
-//     let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-//     alert(allChallengesJSON);
-//     let allChallenges = JSON.parse(allChallengesJSON);
-//     callback(allChallenges);*/
-// }
-//
-// callBetterCurUser(function(data) {
-//     curUserName = data;
-//     //alert(getClient(curUserName));
-//     callQueryUser(getClientByUsername(curUserName), function(data) {
-//         curID = data.id;
-//         //alert("Current ID: " + curID);
-//         curName = data.name;
-//         curChalWins = data.challengesWon;
-//     });
-// });
-//
-// async function asyncCall(query, callback) {
-//     console.log('calling');
-//     var result = await API.graphql(graphqlOperation(query));
-//     console.log(result);
-//     callback(result);
-//     // expected output: 'resolved'
-// }
-//
-// function callQueryChallenge(query, callback) {
-//     asyncCall(query, function (data) {
-//         let allChallengesJSON = JSON.stringify(data);
-//         //alert(allChallengesJSON);
-//         let allChallenges = JSON.parse(allChallengesJSON);
-//         if (allChallenges.data.queryChallenges != null)
-//             callback(allChallenges.data.queryChallenges.items);
-//     });
-//     /*
-//     let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-//     alert(allChallengesJSON);
-//     let allChallenges = JSON.parse(allChallengesJSON);
-//     callback(allChallenges);*/
-// }
-//
-// const curIDs = [];
-// const curNames = [];
-// const challengeTimes = [];
-// const challengeTitles = [];
-// const challengeGoals = [];
-// const challengeOwner = [];
-// const challengeID = [];
-// //<AddPostButtonTestProp/>
-//
-// const getChallenges =
-//     `query TestChallenges{
-//                       queryChallenges{
-//                         items {
-//                           id
-//                           title
-//                           goal
-//                           time
-//                           owner
-//                         }
-//                       }
-//                     }`;
-//
-// function getClientByID(userID) {
-//     const userQuery = `query getUser {
-//         getClient(id: "` + userID + `") {
-//             id
-//             name
-//             username
-//             challengesWon
-//             scheduledChallenges
-//             friends
-//             friendRequests
-//             }
-//         }`;
-//     return userQuery;
-// }
-//
-// function getClientByUsername(userName) {
-//     const userQuery = `query getUser {
-//         getClientByUsername(username: "` + userName + `") {
-//             id
-//             name
-//             username
-//             challengesWon
-//             scheduledChallenges
-//             friends
-//             friendRequests
-//             }
-//         }`;
-//     return userQuery;
-// }
-//
-// function getUser(n, query, callback) {
-//     asyncCall(query, function (data) {
-//         callback(data.data.getClient);
-//     });
-// }
-//
-// callQueryChallenge(getChallenges, function (data) {
-//     if (data != null) {
-//         MAX_FEED_ITEMS = data.length;
-//         //alert(MAX_FEED_ITEMS);
-//     }
-//
-//     for (var i = 0; i < MAX_FEED_ITEMS; i++) {
-//         /*
-//         const newPost = addToFeed(data[i].time, null, data[i].goal, data[i].title, null);//getChallenges.items[i], null, null);
-//         events.unshift(newPost);
-//         */
-//         challengeTimes[i] = data[i].time;
-//         challengeTitles[i] = data[i].title;
-//         challengeGoals[i] = data[i].goal;
-//         challengeOwner[i] = data[i].owner;
-//         challengeID[i] = data[i].id;
-//         console.log(challengeTitles[i]);
-//         console.log(challengeTimes[i]);
-//         console.log(challengeGoals[i]);
-//         console.log("Owner" + i + " " + challengeOwner[i]);
-//
-//         try{throw i}
-//         catch(ii) {
-//             getUser(ii, getClientByID(challengeOwner[ii]), function (data) {
-//                 console.log(ii);
-//                 curNames[ii] = data.name;
-//                 curIDs[ii] = data.id;
-//             });
-//         }
-//     }
-// });
-//
-// function handleJoinChallenge(curID, challengeID) {
-//     Lambda.joinChallenge(curID, curID, challengeID, handleBudRequestSuccess, handleBudRequestFailure)
-// }
-//
-// function handleBudRequestSuccess(success) {
-//     alert(success);
-// }
-//
-// function handleBudRequestFailure(failure) {
-//     alert(failure);
-// }
-
 class EventFeed extends Component {
     state = {
         isLoading: true,
@@ -229,7 +38,9 @@ class EventFeed extends Component {
     queryChallenges() {
         this.setState({isLoading: true});
         // alert("querying challenges");
-        QL.queryChallenges(["id", "title", "goal", "time", "owner"], null, 5,
+
+        QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
+            {"access": "eq"}, {"access": "public"}), 5,
             this.nextToken, (data) => {
                 // TODO You can also use data.nextToken to get the next set of challenges
                 // alert("got challenges");
@@ -259,9 +70,9 @@ class EventFeed extends Component {
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
         console.log(calculations.bottomVisible);
-        if(this.state.calculations.bottomVisible) {
-            this.state.challenges.push(this.nextToken);
-        }
+        // if(this.state.calculations.bottomVisible) {
+        //     this.state.challenges.push(this.nextToken);
+        // }
         //console.log(this.state.challenges);
 
         /*
