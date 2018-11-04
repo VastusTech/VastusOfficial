@@ -7,6 +7,7 @@ import SearchBarProp from "./screens/SearchBar";
 
 class AuthApp extends Component {
     state = {
+        error: null,
         isLoading: true,
         username: null,
 
@@ -31,6 +32,20 @@ class AuthApp extends Component {
         }
     }
 
+    handleLogOut() {
+        this.setState({isLoading: true});
+        Auth.signOut().then((data) => {
+            console.log("Successfully signed out!");
+            console.log(data);
+            this.setState({isLoading: false, username: null});
+            this.props.signOut();
+        }).catch((error) => {
+            console.log("Sign out has failed :(");
+            console.log(error);
+            this.setState({error: error, isLoading: false});
+        });
+    }
+
     componentDidMount() {
         // Analytics.record('Amplify_CLI');
     }
@@ -43,7 +58,7 @@ class AuthApp extends Component {
                         <SearchBarProp/>
                     </Grid.Column>
                     <Grid.Column floated='right' width={5}>
-                            <Button color='purple' width={10}>Log Out</Button>
+                            <Button color='purple' onClick={this.handleLogOut.bind(this)} width={10}>Log Out</Button>
                     </Grid.Column>
                 </Grid>
                     <Tabs username={this.state.username}/>

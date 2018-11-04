@@ -108,6 +108,10 @@ class App extends Component {
         }
     }
 
+    signOut() {
+        this.setState({user: {}});
+    }
+
     async componentDidMount() {
         // StatusBar.setHidden(true);
         try {
@@ -137,7 +141,7 @@ class App extends Component {
             // The actual App
             return (
                 <div>
-                    <AuthApp />
+                    <AuthApp signOut={this.signOut.bind(this)}/>
                 </div>
             );
         }

@@ -48,12 +48,3 @@ class UnauthApp extends Component {
 
 export default UnauthApp;
 
-// vastusSignOut() {
-//     Auth.signOut().then(function(data) {
-//         console.log("Successfully signed out!");
-//         console.log(data);
-//     }).catch(function(error) {
-//         console.log("Sign out has failed :(");
-//         console.log(error);
-//     });
-// }
