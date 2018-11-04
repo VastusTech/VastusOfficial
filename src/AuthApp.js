@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
+import {Button, Grid} from "semantic-ui-react";
 import Amplify, { API, Auth, graphqlOperation, Analytics } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 
@@ -37,10 +38,15 @@ class AuthApp extends Component {
     render() {
         return (
             <div className="App">
-                <div class="ui center aligned">
-                    <SearchBarProp/>
+                <Grid>
+                    <Grid.Column floated='left'>
+                        <SearchBarProp/>
+                    </Grid.Column>
+                    <Grid.Column floated='right' width={5}>
+                            <Button color='purple' width={10}>Log Out</Button>
+                    </Grid.Column>
+                </Grid>
                     <Tabs username={this.state.username}/>
-                </div>
             </div>
         );
     }
