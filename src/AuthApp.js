@@ -37,8 +37,10 @@ class AuthApp extends Component {
     render() {
         return (
             <div className="App">
-                <SearchBarProp/>
-                <Tabs username={this.state.username}/>
+                <div class="ui center aligned">
+                    <SearchBarProp/>
+                    <Tabs username={this.state.username}/>
+                </div>
             </div>
         );
     }

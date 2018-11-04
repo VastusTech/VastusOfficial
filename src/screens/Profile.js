@@ -121,9 +121,13 @@ class Profile extends Component {
                 <Item>
                     {profilePicture(this.state.userInfo.profilePicture)}
                     <Item.Content>
-                        <Item.Description>
-                            <div>{}</div>
-                        </Item.Description>
+                        <Item.Extra>
+                            <label htmlFor="proPicUpload" className="ui basic purple floated button">
+                                <i className='ui upload icon'></i>
+                                Upload New Profile Picture
+                            </label>
+                            <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
+                        </Item.Extra>
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Friend List</Button>}>
                                 <Modal.Content image>
