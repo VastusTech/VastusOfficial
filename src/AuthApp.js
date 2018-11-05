@@ -2,9 +2,14 @@ import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
 import {Button, Grid} from "semantic-ui-react";
-import Amplify, { API, Auth, graphqlOperation, Analytics } from 'aws-amplify';
+import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 
+/*
+* Auth App
+*
+* This file contains the general outline of the app in a grid based format.
+ */
 class AuthApp extends Component {
     state = {
         error: null,
@@ -50,18 +55,24 @@ class AuthApp extends Component {
         // Analytics.record('Amplify_CLI');
     }
 
+    //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
         return (
             <div className="App">
                 <Grid>
+
                     <Grid.Column floated='left' width={2}>
                         <SearchBarProp width={5}/>
                     </Grid.Column>
+
                     <Grid.Column floated='right' width={5}>
                             <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                     </Grid.Column>
+
                 </Grid>
+
                     <Tabs username={this.state.username}/>
+
             </div>
         );
     }

@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-import Lambda from "../Lambda";
 
+/*
+* Event Description Modal
+*
+* This is the event description which displays more in depth information about a challenge, and allows the user
+* to join the challenge.
+ */
 class EventDescriptionModal extends Component {
     state = {
         isLoading: false,
@@ -36,6 +41,9 @@ class EventDescriptionModal extends Component {
         if (!this.state.challenge) {
             return null;
         }
+
+        //This modal displays the challenge information and at the bottom contains a button which allows the user
+        //to join a challenge.
         return(
             <Modal trigger={this.props.trigger}>
                 <Modal.Header>{this.state.challenge.title}</Modal.Header>

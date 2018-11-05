@@ -1,16 +1,17 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Message, Grid, Row} from 'semantic-ui-react'
-import _ from 'lodash'
-import proPic from './BlakeProfilePic.jpg';
-import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
-import setupAWS from './appConfig';
+import {Item, Button, Card, Modal, Checkbox, Message } from 'semantic-ui-react'
+import { Storage } from 'aws-amplify';
 import BuddyListProp from "./buddyList";
 import TrophyCaseProp from "./TrophyCase";
 import ChallengeManagerProp from "./ManageChallenges";
 import QL from '../GraphQL';
-import EventCard from "./EventCard";
-import Lambda from "../Lambda";
+import proPic from './BlakeProfilePic.jpg';
 
+/*
+* Profile
+*
+* This is the profile page which displays information about the current user.
+ */
 class Profile extends Component {
     state = {
         isLoading: true,
@@ -34,7 +35,7 @@ class Profile extends Component {
 
     constructor(props) {
         super(props);
-        alert("Got into Profile constructor");
+        //("Got into Profile constructor");
         this.update();
     }
 
@@ -43,17 +44,17 @@ class Profile extends Component {
         if (!this.state.isLoading) {
             return;
         }
-        alert(JSON.stringify(this.props));
+        //alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
         }
         // This can only run if we're already done loading
         this.state.username = this.props.username;
         // TODO Start loading the profile picture
-        alert("Starting to get user attributes for Profile.js in GraphQL");
+        //alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            alert("User came back with: " + JSON.stringify(data));
+            //alert("User came back with: " + JSON.stringify(data));
             this.setState(this.createUserInfo(data));
             // Now grab the profile picture
             Storage.get(data.profileImagePath).then((data) => {
@@ -87,14 +88,10 @@ class Profile extends Component {
 
     handleAccessSwitch = () => {
         if(this.state.userInfo.access == 'public') {
-            //this.setState({userInfo.access: 'private'});
             this.state.userInfo.access = 'private';
-            //alert(this.challengeState.access);
         }
         else if (this.state.userInfo.access == 'private') {
-            //this.setState.userInfo({access: 'public'});
             this.state.userInfo.access = 'public';
-            //alert(this.challengeState.access);
         }
         else {
             alert("Challenge access should be public or private");
@@ -136,33 +133,14 @@ class Profile extends Component {
             return 0;
         }
 
-        function handleRemoveChallengeSuccess(success) {
-            alert(success);
-        }
-
-        function handleRemoveChallengeFailure(failure) {
-            alert(failure);
-        }
-
-        function rows(challenges, curID) {
-            return _.times(challenges.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard challenge={challenges[i]}/>
-                    <div>
-                        <Button basic color='purple'
-                                onClick={() =>
-                                {Lambda.deleteChallenge(curID, challenges[i], handleRemoveChallengeSuccess, handleRemoveChallengeFailure)}}>
-                            Remove Challenge</Button>
-                    </div>
-                </Grid.Row>
-            ));
-        }
-
         if (this.state.isLoading) {
             return(
                 <Message>Loading...</Message>
             )
         }
+
+        //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
+        //and a switch to set the privacy for the user.
         return(
             <Card>
                 {errorMessage(this.state.error)}
@@ -170,7 +148,7 @@ class Profile extends Component {
                     <Card.Header textAlign={'center'}>{this.state.userInfo.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    {profilePicture(this.state.userInfo.profilePicture)}
+                    <Item.Image size='medium' src={proPic} circular/>
                     <Item.Content>
                         <Item.Extra>
                             <label htmlFor="proPicUpload" className="ui basic purple floated button">

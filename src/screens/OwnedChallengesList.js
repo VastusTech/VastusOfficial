@@ -1,16 +1,12 @@
 import React, { Component } from 'react'
 import _ from 'lodash';
-import {Grid, Image, Modal, Button, Header, Card, Label, Item, Message} from 'semantic-ui-react';
-import proPic from './BlakeProfilePic.jpg';
-import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
-import setupAWS from './appConfig';
-import BuddyListProp from "./buddyList";
-import TrophyCaseProp from "./TrophyCase";
+import {Grid, Button, Message} from 'semantic-ui-react';
+import { Storage } from 'aws-amplify';
 import EventCard from "./EventCard";
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
-//import ScheduledChallengesProp from "./ScheduledChallengeList";
 
+// TODO: Not currently able to be styled as the graphql is broken inside of this modal.
 class OwnedChallengesProp extends Component {
     state = {
         isLoading: true,

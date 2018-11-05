@@ -1,4 +1,4 @@
-import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
+import {Tab, Card, Label, Menu } from "semantic-ui-react";
 import EventFeed from "./EventFeed";
 import NotificationFeedProp from "./notificationBellFeed";
 import NotificationBellProp from "./notificationBell";
@@ -7,6 +7,11 @@ import React, { Component } from "react";
 import CreateEventProp from "./createEvent";
 import NextWorkoutProp from "./nextWorkout";
 
+/*
+* Tabs
+*
+* The app is currently split up into three sections: home, profile, and notifications.
+ */
 class Tabs extends Component {
     state = {
         isLoading: true,
@@ -33,6 +38,7 @@ class Tabs extends Component {
     }
 
     render() {
+        //This is the the list of the contents in each section of the app.
         const panes = [
             {
                 menuItem: (<Menu.Item>
@@ -76,6 +82,7 @@ class Tabs extends Component {
             },
         ];
 
+        //This displays the list of app sections in a tab format.
         return(
             <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={panes}/>
         );

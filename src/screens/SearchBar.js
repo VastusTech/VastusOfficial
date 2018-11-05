@@ -1,10 +1,8 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
-import {Search, Grid, Header, Segment, Icon, Label, Modal, Message } from 'semantic-ui-react'
-// import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
+import {Search, Grid, Message } from 'semantic-ui-react'
 import setupAWS from "./appConfig";
 import QL from '../GraphQL';
-// const util = require('util');
 
 setupAWS();
 

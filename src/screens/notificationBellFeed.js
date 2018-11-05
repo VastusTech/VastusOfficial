@@ -1,12 +1,10 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
-import addToFeed from './addToFeed'
-import Amplify, { API, Auth, graphqlOperation } from "aws-amplify";
+import {Grid, Image, Modal, Button, Item} from 'semantic-ui-react'
+import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
 import Lambda from "../Lambda";
-import Ql from "../GraphQL";
 import ClientModal from "./ClientModal";
 
 setupAWS();
@@ -38,12 +36,6 @@ async function asyncCallCurUser(callback) {
 
 function callBetterCurUser(callback) {
     asyncCallCurUser(function(data) {
-        /*
-        let usernameJSON = JSON.stringify(data);
-        alert(usernameJSON);
-        let username = JSON.parse(usernameJSON);
-        */
-        //alert(data);
         callback(data);
     });
 }
@@ -56,11 +48,9 @@ function getUser(n, query, callback) {
 
 callBetterCurUser(function(data) {
     curUserName = data;
-    //alert(getClient(curUserName));
     callQueryBetter(getClientByUsername(curUserName), function(data) {
         curName = data.name;
         curID = data.id;
-        //alert("Current user's ID: " + curID);
         if(data.friendRequests != null) {
             for(var i = 0; i < data.friendRequests.length; i++) {
                 curFriendRequests[i] = data.friendRequests[i];
@@ -82,7 +72,6 @@ async function asyncCall(query, callback) {
     var result = await API.graphql(graphqlOperation(query));
     console.log(result);
     callback(result);
-    // expected output: 'resolved'
 }
 
 function callQueryBetter(query, callback) {
@@ -92,11 +81,6 @@ function callQueryBetter(query, callback) {
         let user = JSON.parse(userJSON);
         callback(user.data.getClientByUsername);
     });
-    /*
-    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-    alert(allChallengesJSON);
-    let allChallenges = JSON.parse(allChallengesJSON);
-    callback(allChallenges);*/
 }
 
 function getClientByUsername(userName) {
@@ -145,19 +129,23 @@ function handleBudRequestFailure(failure) {
     alert(failure);
 }
 
+/*
+* Notification Feed
+*
+* This is a feed which contains all of the buddy (friend) requests that have been sent to the current user.
+ */
 class NotificationFeed extends Component {
     state = {
-
     };
 
     componentDidMount() {
-
     }
 
     componentWillReceiveProps(newProps) {
-
     }
 
+    //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
+    //To the right of the request is two buttons, one to accept and one to deny the current request.
     render() {
         function rows()
         {
@@ -178,7 +166,7 @@ class NotificationFeed extends Component {
                             </Item>
                         </Modal.Content>
                     </Modal>
-                    <div> has sent you a friend request</div>
+                    <div> has sent you a buddy request</div>
                     <Button basic color='purple' onClick={() =>
                     {acceptFriendRequest(curID, friendRequestIDs[i])}}>Accept</Button>
                     <Button basic onClick={() =>

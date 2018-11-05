@@ -1,116 +1,12 @@
-/*
-import React, {Component} from 'react'
-import _ from 'lodash'
-import {Grid, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
-import addToFeed from './addToFeed'
-import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
-import setupAWS from './appConfig';
-import proPic from "./BlakeProfilePic.jpg";
-import EventCard from "./EventCard";
-import Lambda from "../Lambda";
-import QL from "../GraphQL";
-import * as AWS from "aws-sdk";
-
-class ScheduledChallengesProp extends Component {
-    state = {
-        isLoading: true,
-        username: null,
-        userInfo: {
-            name: null,
-            birthday: null,
-            profileImagePath: null,
-            profilePicture: null,
-            challengesWon: null,
-            scheduledChallenges:[],
-            access: 'private'
-        },
-        error: null
-    };
-
-
-    constructor(props) {
-        super(props);
-        alert("Got into Challenge Schedule constructor");
-        this.update();
-    }
-
-    update() {
-        // TODO Change this if we want to actually be able to do something while it's loading
-        if (!this.state.isLoading) {
-            return;
-        }
-        alert(JSON.stringify(this.props));
-        if (!this.props.username) {
-            return;
-        }
-        // This can only run if we're already done loading
-        this.state.username = this.props.username;
-        // TODO Start loading the profile picture
-        alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
-            console.log("Successfully grabbed client by username for Profile.js");
-            alert("User came back with: " + JSON.stringify(data));
-            this.setState(this.createUserInfo(data));
-            // Now grab the profile picture
-            Storage.get(data.profileImagePath).then((data) => {
-                this.setState({profilePicture: data, isLoading: false});
-            }).catch((error) => {
-                this.setState({error: error});
-            });
-        }, (error) => {
-            console.log("Getting client by username failed for Profile.js");
-            if (error.message) {
-                error = error.message;
-            }
-            this.setState({error: error});
-        });
-    }
-
-    createUserInfo(client) {
-        return {
-            name: client.name,
-            birthday: client.birthday,
-            profileImagePath: client.profileImagePath,
-            challengesWon: client.challengesWon,
-            scheduledChallenges: client.scheduledChallenges
-        };
-    }
-
-    componentWillReceiveProps(newProps) {
-        this.props = newProps;
-        this.update();
-    }
-
-    render() {
-        function rows(challenges) {
-            return _.times(challenges.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard challenge={challenges[i]}/>
-                </Grid.Row>
-            ));
-        }
-
-        return (
-            <Grid>{rows(this.state.scheduledChallenges)}</Grid>
-        );
-    }
-}
-
-export default ScheduledChallengesProp;*/
-
 import React, { Component } from 'react'
 import _ from 'lodash';
-import {Grid, Image, Modal, Button, Header, Card, Label, Item, Message} from 'semantic-ui-react';
-import proPic from './BlakeProfilePic.jpg';
-import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
-import setupAWS from './appConfig';
-import BuddyListProp from "./buddyList";
-import TrophyCaseProp from "./TrophyCase";
+import {Grid, Button, Message} from 'semantic-ui-react';
+import { Storage } from 'aws-amplify';
 import EventCard from "./EventCard";
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
-//import ScheduledChallengesProp from "./ScheduledChallengeList";
 
+// TODO: Not currently able to be styled as the graphql is broken inside of this modal.
 class ScheduledChallengesProp extends Component {
     state = {
         isLoading: true,
@@ -222,7 +118,6 @@ class ScheduledChallengesProp extends Component {
                 </Grid.Row>
             ));
         }
-
         if (this.state.isLoading) {
             return(
                 <Message>Loading...</Message>

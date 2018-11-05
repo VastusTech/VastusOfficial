@@ -1,7 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Modal, Header, Button } from 'semantic-ui-react';
+import { Card } from 'semantic-ui-react';
 import EventDescriptionModal from './EventDescriptionModal';
 
+/*
+* Event Card
+*
+* This is the generic view for how a challenge shows up in any feeds or lists.
+* It is used as a modal trigger in the feed.
+ */
 class EventCard extends Component {
     state = {
         error: null,
@@ -29,7 +35,9 @@ class EventCard extends Component {
                 </Card>
             );
         }
+
         return(
+            // This is displays a few important pieces of information about the challenge for the feed view.
             <EventDescriptionModal challenge={this.state.challenge}
                 trigger={
                     <Card>

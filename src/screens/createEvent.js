@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
-//import './App.css';
-// import Tabs from './screens/Tabs.js';
-import Amplify, { API, graphqlOperation, Auth, Analytics } from 'aws-amplify';
-import { inspect } from 'util'
-import Semantic, { Checkbox, Modal, Button, Input, Form, Container, Icon, TextArea } from 'semantic-ui-react';
+import { API, graphqlOperation, Auth } from 'aws-amplify';
+import { Checkbox, Modal, Button, Input, Form, Container, TextArea } from 'semantic-ui-react';
 import {
     DateInput,
     TimeInput,
@@ -11,9 +8,6 @@ import {
     DatesRangeInput
 } from 'semantic-ui-calendar-react';
 import setupAWS from "./appConfig";
-// import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
-// import aws_exports from './aws-exports';
-// import SearchBarProp from "./screens/searchBar";
 
 setupAWS();
 
@@ -22,9 +16,6 @@ var curUserName;
 
 //name of the current user
 var curUserID;
-
-//Number of challenge wins for the current user
-//var curChalWins;
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -38,23 +29,14 @@ async function asyncCallCurUser(callback) {
 
 function callBetterCurUser(callback) {
     asyncCallCurUser(function(data) {
-        /*
-        let usernameJSON = JSON.stringify(data);
-        alert(usernameJSON);
-        let username = JSON.parse(usernameJSON);
-        */
-        //alert(data);
         callback(data);
     });
 }
 
 callBetterCurUser(function(data) {
     curUserName = data;
-    //alert(getClient(curUserName));
     callQueryBetter(getClient(curUserName), function(data) {
         curUserID = data.id;
-        //alert(curUserID);
-        //curChalWins = data.challengesWon;
     });
 });
 
@@ -63,13 +45,11 @@ async function asyncCall(query, callback) {
     var result = await API.graphql(graphqlOperation(query));
     console.log(result);
     callback(result);
-    // expected output: 'resolved'
 }
 
 function callQueryBetter(query, callback) {
     asyncCall(query, function(data) {
         let userJSON = JSON.stringify(data);
-        //alert(userJSON);
         let user = JSON.parse(userJSON);
         callback(user.data.getClientByUsername);
     });
@@ -115,17 +95,21 @@ function convertDateTimeToISO8601(dateAndTime) {
     var hour = dateTimeString.substr(11, 2);
     var minute = dateTimeString.substr(13, 3);
     var amorpm = dateTimeString.substr(16, 3);
-    //alert(time + " vs. " + hour + minute);
+
     if(amorpm.trim() === 'AM') {
-        //alert(amorpm + " vs. " + "AM");
         return year + "-" + month + "-" + day + "T" + time + ":00+00:00";
     }
     else {
-        //alert(year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00");
         return year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00";
     }
 }
 
+/*
+* Create Event Prop
+*
+* This is the modal for creating events. Every input is in the form of a normal text input.
+* Inputting the time and date utilizes the Semantic-ui Calendar React library which isn't vanilla Semantic.
+ */
 class CreateEventProp extends Component {
 
     state = {
@@ -150,36 +134,6 @@ class CreateEventProp extends Component {
         description: "",
         access: "public"
     };
-
-    /*
-    dateStartState = {
-        date: '',
-        time: '',
-        dateTime: '',
-        datesRange: ''
-    };
-
-    dateEndState = {
-        date: '',
-        time: '',
-        dateTime: '',
-        datesRange: ''
-    };
-
-    handleStartTimeChange = (event, {name, value}) => {
-        if (this.dateStartState.hasOwnProperty(name)) {
-            this.dateStartState[name] = value;
-            console.log("New date " + name + "equals: " + convertDateTimeToISO8601(value));
-        }
-    };
-
-    handleEndTimeChange = (event, {name, value}) => {
-        if (this.dateEndState.hasOwnProperty(name)) {
-            this.dateEndState[name] = value;
-            console.log("New date " + name + "equals: " + convertDateTimeToISO8601(value));
-        }
-    };
-    */
 
     handleStartTimeChange = (event, {name, value}) => {
         if (this.state.hasOwnProperty(name)) {
@@ -269,22 +223,27 @@ class CreateEventProp extends Component {
     });
 };
 
+//Inside of render is a modal containing each form input required to create a challenge.
 render() {
         return (
             <Container style={{padding: 10}}>
                 <Modal trigger={<Button basic color='purple'>+ Create Challenge</Button>}>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
+
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group unstackable widths={2}>
+
                                 <div className="field">
                                     <label>Title</label>
                                     <Input type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
                                 </div>
+
                                 <div className="field">
                                     <label>Location</label>
                                     <Input type="text" name="location" placeholder="Address for challenge" onChange={value => this.changeStateText("location", value)}/>
                                 </div>
+
                                 <div className="field">
                                     <label>Start Date and Time</label>
                                     <DateTimeInput
@@ -294,7 +253,8 @@ render() {
                                         iconPosition="left"
                                         onChange={this.handleStartTimeChange}
                                         timeFormat={this.state.timeFormat} />
-                                    </div>
+                                </div>
+
                                 <div className="field">
                                     <label>End Date and Time</label>
                                     <DateTimeInput
@@ -305,26 +265,33 @@ render() {
                                         onChange={this.handleEndTimeChange}
                                         timeFormat={this.state.timeFormat}/>
                                 </div>
+
                                 <div className="field">
                                     <label>Capacity</label>
                                     <Input type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
                                 </div>
+
                                 <div className="field">
                                     <label>Goal</label>
                                     <Input type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
                                 </div>
+
                             </Form.Group>
+
                             <div className="Challenge Description">
                                 <label>Challenge Description</label>
                                 <TextArea type="text" name="description" placeholder="Describe challenge here... " onChange={value => this.changeStateText("description", value)}/>
                             </div>
+
                             <div className="Submit Button">
                                 <Button type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
                             </div>
+
                             <div className="Privacy Switch">
                                 <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
                                 <div>{this.challengeState.access}</div>
                             </div>
+
                         </Form>
                     </Modal.Content>
                 </Modal>

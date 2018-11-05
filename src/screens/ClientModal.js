@@ -2,6 +2,12 @@ import React, { Component } from 'react';
 import { Modal, Button, Item, Dimmer, Loader, Message } from 'semantic-ui-react';
 import QL from '../GraphQL';
 
+
+/*
+* Client Modal
+*
+* This is the generic profile view for any user that the current logged in user clicks on.
+ */
 class ClientModal extends Component {
     state = {
         error: null,
@@ -62,6 +68,9 @@ class ClientModal extends Component {
             );
         }
         // <Item.Image size='medium' src={proPic} circular/> TODO
+
+        //This render function displays the user's information in a small profile page, and at the
+        //bottom there is an add buddy function, which sends out a buddy request (friend request).
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 {loadingProp(this.state.isLoading)}

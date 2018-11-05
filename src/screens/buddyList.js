@@ -1,8 +1,7 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Header, Card, Label, Item} from 'semantic-ui-react'
-import addToFeed from './addToFeed'
-import Amplify, { Auth, API, graphqlOperation } from "aws-amplify";
+import {Grid, Image, Modal, Button, Item} from 'semantic-ui-react'
+import { Auth, API, graphqlOperation } from "aws-amplify";
 import setupAWS from './appConfig';
 import proPic from "./BlakeProfilePic.jpg";
 import Lambda from '../Lambda';
@@ -37,12 +36,6 @@ async function asyncCallCurUser(callback) {
 
 function callBetterCurUser(callback) {
     asyncCallCurUser(function(data) {
-        /*
-        let usernameJSON = JSON.stringify(data);
-        alert(usernameJSON);
-        let username = JSON.parse(usernameJSON);
-        */
-        //alert(data);
         callback(data);
     });
 }
@@ -90,11 +83,6 @@ function callQueryBetter(query, callback) {
         let user = JSON.parse(userJSON);
         callback(user.data.getClientByUsername);
     });
-    /*
-    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-    alert(allChallengesJSON);
-    let allChallenges = JSON.parse(allChallengesJSON);
-    callback(allChallenges);*/
 }
 
 function getClientByUsername(userName) {
@@ -135,8 +123,17 @@ function handleRemoveBuddyFailure(failure) {
     alert(failure);
 }
 
+/*
+* Buddy List Prop
+*
+* This is essentially a friends list which consists of a button which allows you to un-friend someone.
+* To the left of the button is an image with the buddy's name displayed next to it, this is a modal that opens
+* a generic profile view.
+ */
 export default class BuddyListProp extends Component {
 
+    //This render is a loop which goes through the user's current friends and displays each one with the
+    //Button and modal with generic profile view.
     render() {
         function rows()
         {
