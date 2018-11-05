@@ -7,7 +7,7 @@ import React, { Component } from "react";
 import CreateEventProp from "./createEvent";
 import NextWorkoutProp from "./nextWorkout";
 
-/*
+/**
 * Tabs
 *
 * The app is currently split up into three sections: home, profile, and notifications.

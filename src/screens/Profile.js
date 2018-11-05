@@ -7,7 +7,7 @@ import ChallengeManagerProp from "./ManageChallenges";
 import QL from '../GraphQL';
 import proPic from './BlakeProfilePic.jpg';
 
-/*
+/**
 * Profile
 *
 * This is the profile page which displays information about the current user.

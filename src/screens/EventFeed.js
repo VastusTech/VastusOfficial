@@ -9,7 +9,7 @@ AWS.config.update({region: 'REGION'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
-/*
+/**
 * Event Feed
 *
 * This is the main feed in the home page, it currently displays all public challenges inside of the database for
@@ -97,7 +97,13 @@ class EventFeed extends Component {
 
     render() {
 
-        //This function takes in a list of challenges and displays them in a list of Event Card views.
+        /**
+         * Rows:
+         * This function takes in a list of challenges and displays them in a list of Event Card views.
+         *
+         * @param challenges
+         * @returns {Array|*}
+         */
         function rows(challenges) {
             return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
