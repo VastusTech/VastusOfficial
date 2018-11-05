@@ -20,12 +20,12 @@ class ChallengeManagerProp extends Component {
         const panes = [
             {
                 menuItem: 'Owned Challenges', render: () => <Tab.Pane attached={false}>
-                    <OwnedChallengesProp/>
+                    <OwnedChallengesProp username={this.props.username}/>
                 </Tab.Pane>
             },
             {
                 menuItem: 'Scheduled Challenges', render: () => <Tab.Pane attached={false}>
-                    <ScheduledChallengesProp/>
+                    <ScheduledChallengesProp username={this.props.username}/>
                 </Tab.Pane>
             },
         ];

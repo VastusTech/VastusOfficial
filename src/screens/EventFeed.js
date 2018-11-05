@@ -22,6 +22,7 @@ class EventFeed extends Component {
         clientNames: {}, // id to name
         challengeFeedLength: 10,
         nextToken: null,
+        ifFinished: false,
         calculations: {
             topVisible: false,
             bottomVisible: false
@@ -36,48 +37,18 @@ class EventFeed extends Component {
         this.setState({isLoading: true});
         // alert("querying challenges");
 
-        QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
-            {"access": "eq"}, {"access": "public"}), 5,
-            this.nextToken, (data) => {
-                if (data.items) {
-                    for (let i = 0; i < 6; i++) {
-                        this.state.challenges.push(data.items[i]);
-                    }
-                    this.setState({nextToken: data.nextToken});
-                }
-                else {
-                    // TODO Came up with no challenges
-                }
-                this.setState({isLoading: false});
-            }, (error) => {
-                console.log("Querying challenges failed!");
-                if (error.message) {
-                    error = error.message;
-                }
-                console.log(error);
-                alert(error);
-                this.setState({isLoading: false});
-            });
-    }
-
-    handleUpdate = (e, { calculations }) => {
-        this.setState({ calculations });
-        console.log(calculations.bottomVisible);
-
-        if(calculations.bottomVisible) {
-            console.log("Next Token: " + this.state.nextToken);
+        if (!this.state.ifFinished) {
             QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
-                {"access": "eq"}, {"access": "public"}), 5,
-                this.nextToken, (data) => {
-                    // TODO You can also use data.nextToken to get the next set of challenges
-                    // alert("got challenges");
+                {"access": "eq"}, {"access": "public"}), this.state.challengeFeedLength,
+                this.state.nextToken, (data) => {
                     if (data.items) {
-                        // alert("Length: " + data.items.length);
-                        for (let i = 0; i < 6; i++) {
-                            this.state.challenges.push(data.items[i]);
+                        for (let i = 0; i < data.items.length; i++) {
+                            this.setState({challenges: [...this.state.challenges, data.items[i]]});
                         }
                         this.setState({nextToken: data.nextToken});
-                        // alert("Challenges in the end is " + JSON.stringify(this.state.challenges));
+                        if (!data.nextToken) {
+                            this.setState({ifFinished: true});
+                        }
                     }
                     else {
                         // TODO Came up with no challenges
@@ -93,16 +64,27 @@ class EventFeed extends Component {
                     this.setState({isLoading: false});
                 });
         }
+    }
+
+    /**
+     *
+     * @param e
+     * @param calculations
+     */
+    handleUpdate = (e, { calculations }) => {
+        this.setState({ calculations });
+        // console.log(calculations.bottomVisible);
+        if(calculations.bottomVisible) {
+            console.log("Next Token: " + this.state.nextToken);
+            this.queryChallenges();
+        }
     };
 
     render() {
-
         /**
-         * Rows:
          * This function takes in a list of challenges and displays them in a list of Event Card views.
-         *
          * @param challenges
-         * @returns {Array|*}
+         * @returns {*}
          */
         function rows(challenges) {
             return _.times(challenges.length, i => (

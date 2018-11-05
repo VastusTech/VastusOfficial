@@ -25,10 +25,8 @@ class SignUpModal extends Component {
         confirmationCode: "",
     };
 
-    // TODO Retrieve information from the fields
     async vastusSignUp(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
-        // TODO Check to see that password is with confirm password correctly
         console.log("Starting Auth.signup!");
         if (this.authState.password !== this.authState.confirmPassword) {
             console.log("Sign up failed");
@@ -65,7 +63,6 @@ class SignUpModal extends Component {
         });
     }
 
-    // TODO Make dependent on user
     vastusConfirmSignUp(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
         this.setState({isLoading: true});
@@ -86,9 +83,6 @@ class SignUpModal extends Component {
     }
 
     changeStateText(key, value) {
-        // TODO Sanitize this input
-        // TODO Check to see if this will, in fact, work.!
-        // inspect(value);
         this.authState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
     }
