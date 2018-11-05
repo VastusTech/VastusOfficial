@@ -1,11 +1,11 @@
 import {Tab, Card, Label, Menu } from "semantic-ui-react";
 import EventFeed from "./EventFeed";
-import NotificationFeedProp from "./notificationBellFeed";
-import NotificationBellProp from "./notificationBell";
+import NotificationFeedProp from "./NotificationBellFeed";
+import NotificationBellProp from "./NotificationBell";
 import ProfileProp from "./Profile";
 import React, { Component } from "react";
-import CreateEventProp from "./createEvent";
-import NextWorkoutProp from "./nextWorkout";
+import CreateEventProp from "./CreateEvent";
+import NextWorkoutProp from "./NextWorkout";
 
 /*
 * Tabs

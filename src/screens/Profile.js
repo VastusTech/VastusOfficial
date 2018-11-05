@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import {Item, Button, Card, Modal, Checkbox, Message } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
-import BuddyListProp from "./buddyList";
+import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
 import ChallengeManagerProp from "./ManageChallenges";
 import QL from '../GraphQL';
-import proPic from './BlakeProfilePic.jpg';
+import proPic from '../img/roundProfile.png';
 
 /*
 * Profile
@@ -54,8 +54,8 @@ class Profile extends Component {
         //alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            //alert("User came back with: " + JSON.stringify(data));
-            this.setState(this.createUserInfo(data));
+            // alert("User came back with: " + JSON.stringify(data));
+            this.setState({userInfo: this.createUserInfo(data)});
             // Now grab the profile picture
             Storage.get(data.profileImagePath).then((data) => {
                 this.setState({profilePicture: data, isLoading: false});
@@ -100,8 +100,11 @@ class Profile extends Component {
     };
 
     render() {
-        // Update every time setState is called
-        // this.update();
+        /**
+         * This creates an error message from the given error string
+         * @param error A string containing the error message that was invoked
+         * @returns {*} Returns a Semantic-ui script for displaying the error
+         */
         function errorMessage(error) {
             if (error) {
                 return (
@@ -113,6 +116,11 @@ class Profile extends Component {
             }
         }
 
+        /**
+         *
+         * @param profilePicture Displays the
+         * @returns {*}
+         */
         function profilePicture(profilePicture) {
             if (profilePicture) {
                 return(
@@ -167,7 +175,7 @@ class Profile extends Component {
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Manage Challenges</Button>}>
                                 <Modal.Content image>
-                                    <ChallengeManagerProp/>
+                                    <ChallengeManagerProp username={this.props.username}/>
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>

@@ -7,7 +7,7 @@ import {
     DateTimeInput,
     DatesRangeInput
 } from 'semantic-ui-calendar-react';
-import setupAWS from "./appConfig";
+import setupAWS from "./AppConfig";
 
 setupAWS();
 

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
-import SignInPage from './AuthScreens/SignInPage';
+import SignInPage from './authscreens/SignInPage';
 
 class UnauthApp extends Component {
     // This defines the passed function for use

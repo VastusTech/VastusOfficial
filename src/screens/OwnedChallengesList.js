@@ -6,60 +6,48 @@ import EventCard from "./EventCard";
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
 
-// TODO: Not currently able to be styled as the graphql is broken inside of this modal.
-class OwnedChallengesProp extends Component {
+class OwnedChallengesList extends Component {
     state = {
         isLoading: true,
         checked: false,
         username: null,
-        userInfo: {
-            id: null,
-            name: null,
-            birthday: null,
-            profileImagePath: null,
-            profilePicture: null,
-            challengesWon: null,
-            scheduledChallenges:[],
-            ownedChallenges: [],
-            access: 'private'
-        },
+        challenges: [],
         error: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
-
     constructor(props) {
         super(props);
-        alert("Got into Owned Challenges constructor");
+        alert("Got into Scheduled Challenges constructor");
+        this.state.username = this.props.username;
         this.update();
     }
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
-        if (!this.state.isLoading) {
-            return;
-        }
+        // if (!this.state.isLoading) {
+        //     return;
+        // }
         alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
         }
         // This can only run if we're already done loading
-        this.state.username = this.props.username;
-        // TODO Start loading the profile picture
         alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
+        QL.getClientByUsername(this.state.username, ["ownedChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
             alert("User came back with: " + JSON.stringify(data));
-            this.setState(this.createUserInfo(data));
-            // Now grab the profile picture
-            Storage.get(data.profileImagePath).then((data) => {
-                this.setState({profilePicture: data, isLoading: false});
-            }).catch((error) => {
-                this.setState({error: error});
-            });
+            if (data.ownedChallenges) {
+                for (let i = 0; i < data.ownedChallenges.length; i++) {
+                    this.addChallengeFromGraphQL(data.ownedChallenges[i]);
+                }
+            }
+            else {
+                this.setState({isLoading: false});
+            }
         }, (error) => {
-            console.log("Getting client by username failed for Profile.js");
+            console.log("Getting client by username failed for ScheduledChallengeList.js");
             if (error.message) {
                 error = error.message;
             }
@@ -67,14 +55,18 @@ class OwnedChallengesProp extends Component {
         });
     }
 
-    createUserInfo(client) {
-        return {
-            name: client.name,
-            birthday: client.birthday,
-            profileImagePath: client.profileImagePath,
-            challengesWon: client.challengesWon,
-            scheduledChallenges: client.scheduledChallenges
-        };
+    addChallengeFromGraphQL(challengeID) {
+        QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner"], (data) => {
+            console.log("successfully got a challenge");
+            this.setState({challenges: [...this.state.challenges, data], isLoading: false});
+        }, (error) => {
+            console.log("Failed to get a challenge");
+            if (error.message) {
+                error = error.message
+            }
+            console.log(error);
+            this.setState({error: error});
+        });
     }
 
     componentWillReceiveProps(newProps) {
@@ -82,54 +74,32 @@ class OwnedChallengesProp extends Component {
         this.update();
     }
 
-    handleAccessSwitch = () => {
-        if(this.state.userInfo.access == 'public') {
-            //this.setState({userInfo.access: 'private'});
-            this.state.userInfo.access = 'private';
-            //alert(this.challengeState.access);
-        }
-        else if (this.state.userInfo.access == 'private') {
-            //this.setState.userInfo({access: 'public'});
-            this.state.userInfo.access = 'public';
-            //alert(this.challengeState.access);
-        }
-        else {
-            alert("Challenge access should be public or private");
-        }
-
-    };
+    handleLeaveButton(challenge) {
+        Lambda.leaveChallenge(this.state.userInfo.id, this.state.userInfo.id,
+            challenge, (data) => {
+                alert(JSON.stringify(data));
+            }, (error) => {
+                alert(JSON.stringify(error));
+            });
+    }
 
     render() {
-        function handleDeleteChallengeSuccess(success) {
-            alert(success);
-        }
-
-        function handleDeleteChallengeFailure(failure) {
-            alert(failure);
-        }
-
         function rows(challenges) {
             return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                     <EventCard challenge={challenges[i]}/>
-                    <Button baisc color='purple'>Edit Challenge</Button>
-                    <Button basic color='purple'
-                            onClick={Lambda.deleteChallenge(this.state.userInfo.id, this.state.userInfo.id,
-                                challenges[i], handleDeleteChallengeSuccess, handleDeleteChallengeFailure)}
-                    >Leave Challenge</Button>
                 </Grid.Row>
             ));
         }
-
         if (this.state.isLoading) {
             return(
                 <Message>Loading...</Message>
             )
         }
         return(
-            <Grid>{rows(this.state.userInfo.ownedChallenges)}</Grid>
+            <Grid>{rows(this.state.challenges)}</Grid>
         );
     }
 }
 
-export default OwnedChallengesProp;
+export default OwnedChallengesList;

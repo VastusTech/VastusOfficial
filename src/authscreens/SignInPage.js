@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader } from 'semantic-ui-react';
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import BlakePicture from '../screens/BlakeProfilePic.jpg';
+import Logo from '../img/vt_full_color.png';
 
 class SignInPage extends Component {
     // This is the function that is called when the sign up button is pressed
@@ -26,7 +26,6 @@ class SignInPage extends Component {
         forgotPasswordModalOpen: false
     };
 
-    // TODO Retrieve info from da fields
     vastusSignIn(successHandler, failureHandler) {
         // TODO Check to see if the input fields are put  in correctly
         console.log("Starting Auth.signin!");
@@ -48,9 +47,7 @@ class SignInPage extends Component {
     }
 
     changeStateText(key, value) {
-        // TODO Sanitize this input
-        // TODO Check to see if this will, in fact, work.!
-        inspect(value);
+        // inspect(value);
         this.authState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
     }
@@ -119,17 +116,12 @@ class SignInPage extends Component {
 
         return (
             <div className='login-form'>
-                {/*
-      Heads up! The styles below are necessary for the correct render of this example.
-      You can do same with CSS, the main idea is that all the elements up to the `Grid`
-      below must have a height of 100%.
-    */}
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
                 <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Header as='h2' color='teal' textAlign='center'>
-                            <Image src={BlakePicture} /> Log-in to your account
+                            <Image src={Logo} /> Log-in to your account
                         </Header>
                         <Form size='large'>
                             <Segment stacked>

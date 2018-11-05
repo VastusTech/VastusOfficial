@@ -1,10 +1,10 @@
 import React from 'react'
 import { Grid, Image } from 'semantic-ui-react'
-import proPic from './BlakeProfilePic.jpg';
+import proPic from '../img/BlakeProfilePic.jpg';
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
 import * as AWS from "aws-sdk";
-import setupAWS from "./appConfig";
+import setupAWS from "./AppConfig";
 
 AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
