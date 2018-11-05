@@ -6,6 +6,7 @@ import Amplify, { Storage, API, Auth, graphqlOperation} from 'aws-amplify';
 import setupAWS from './appConfig';
 import BuddyListProp from "./buddyList";
 import TrophyCaseProp from "./TrophyCase";
+import ChallengeManagerProp from "./ManageChallenges";
 import QL from '../GraphQL';
 import EventCard from "./EventCard";
 import Lambda from "../Lambda";
@@ -188,8 +189,7 @@ class Profile extends Component {
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Manage Challenges</Button>}>
                                 <Modal.Content image>
-                                    <Grid>{rows(this.state.userInfo.scheduledChallenges,
-                                        this.state.userInfo.id)}</Grid>
+                                    <ChallengeManagerProp/>
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>

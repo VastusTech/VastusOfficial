@@ -46,7 +46,7 @@ class EventFeed extends Component {
                 // alert("got challenges");
                 if (data.items) {
                     // alert("Length: " + data.items.length);
-                    for (let i = 0; i < data.items.length; i++) {
+                    for (let i = 0; i < 6; i++) {
                         this.state.challenges.push(data.items[i]);
                     }
                     this.setState({nextToken: data.nextToken});
@@ -74,6 +74,36 @@ class EventFeed extends Component {
         //     this.state.challenges.push(this.nextToken);
         // }
         //console.log(this.state.challenges);
+
+        if(calculations.bottomVisible) {
+            console.log("Next Token: " + this.state.nextToken);
+            QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
+                {"access": "eq"}, {"access": "public"}), 5,
+                this.nextToken, (data) => {
+                    // TODO You can also use data.nextToken to get the next set of challenges
+                    // alert("got challenges");
+                    if (data.items) {
+                        // alert("Length: " + data.items.length);
+                        for (let i = 0; i < 6; i++) {
+                            this.state.challenges.push(data.items[i]);
+                        }
+                        this.setState({nextToken: data.nextToken});
+                        // alert("Challenges in the end is " + JSON.stringify(this.state.challenges));
+                    }
+                    else {
+                        // TODO Came up with no challenges
+                    }
+                    this.setState({isLoading: false});
+                }, (error) => {
+                    console.log("Querying challenges failed!");
+                    if (error.message) {
+                        error = error.message;
+                    }
+                    console.log(error);
+                    alert(error);
+                    this.setState({isLoading: false});
+                });
+        }
 
         /*
         if(calculations.bottomVisible) {
