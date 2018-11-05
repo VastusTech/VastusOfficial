@@ -7,128 +7,25 @@ import proPic from "../img/BlakeProfilePic.jpg";
 import QL from "../GraphQL";
 import Lambda from "../Lambda";
 import ClientModal from "./ClientModal";
+import Notification from "./Notification";
 
 setupAWS();
 
-//username of the current user
-// var curUserName;
-//
-// //name of the current user
-// var curName;
-//
-// //ID of the current user
-// var curID;
-//
-// var curFriendRequests = [];
-//
-// var friendRequestNames = [];
-//
-// var friendRequestIDs = [];
-//
-// async function asyncCallCurUser(callback) {
-//     console.log('calling');
-//     var result = await Auth.currentAuthenticatedUser()
-//         .then(user => user.username)
-//         .catch(err => console.log(err));
-//     console.log(result);
-//     callback(result);
-//     // expected output: 'resolved'
+// function denyFriendRequest(userID, requestID) {
+//     Lambda.declineFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
 // }
 //
-// function callBetterCurUser(callback) {
-//     asyncCallCurUser(function(data) {
-//         callback(data);
-//     });
+// function acceptFriendRequest(userID, requestID) {
+//     Lambda.acceptFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
 // }
 //
-// function getUser(n, query, callback) {
-//     asyncCall(query, function (data) {
-//         callback(data.data.getClient);
-//     });
+// function handleBudRequestSuccess(success) {
+//     alert(JSON.stringify(success));
 // }
 //
-// callBetterCurUser(function(data) {
-//     curUserName = data;
-//     callQueryBetter(getClientByUsername(curUserName), function(data) {
-//         curName = data.name;
-//         curID = data.id;
-//         if(data.friendRequests != null) {
-//             for(var i = 0; i < data.friendRequests.length; i++) {
-//                 curFriendRequests[i] = data.friendRequests[i];
-//                 try{throw i}
-//                 catch(ii) {
-//                     getUser(ii, getClientByID(curFriendRequests[ii]), function (data) {
-//                         console.log(ii);
-//                         friendRequestNames[ii] = data.name;
-//                         friendRequestIDs[ii] = data.id;
-//                     });
-//                 }
-//             }
-//         }
-//     });
-// });
-//
-// async function asyncCall(query, callback) {
-//     console.log('calling');
-//     var result = await API.graphql(graphqlOperation(query));
-//     console.log(result);
-//     callback(result);
+// function handleBudRequestFailure(failure) {
+//     alert(failure);
 // }
-//
-// function callQueryBetter(query, callback) {
-//     asyncCall(query, function(data) {
-//         let userJSON = JSON.stringify(data);
-//         //alert(allChallengesJSON);
-//         let user = JSON.parse(userJSON);
-//         callback(user.data.getClientByUsername);
-//     });
-// }
-//
-// function getClientByUsername(userName) {
-//     const userQuery = `query getUser {
-//         getClientByUsername(username: "` + userName + `") {
-//             id
-//             name
-//             username
-//             challengesWon
-//             scheduledChallenges
-//             friends
-//             friendRequests
-//             }
-//         }`;
-//     return userQuery;
-// }
-//
-// function getClientByID(userID) {
-//     const userQuery = `query getUser {
-//         getClient(id: "` + userID + `") {
-//             id
-//             name
-//             username
-//             challengesWon
-//             scheduledChallenges
-//             friends
-//             friendRequests
-//             }
-//         }`;
-//     return userQuery;
-// }
-
-function denyFriendRequest(userID, requestID) {
-    Lambda.declineFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
-}
-
-function acceptFriendRequest(userID, requestID) {
-    Lambda.acceptFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)
-}
-
-function handleBudRequestSuccess(success) {
-    alert(JSON.stringify(success));
-}
-
-function handleBudRequestFailure(failure) {
-    alert(failure);
-}
 
 /*
 * Notification Feed
@@ -143,14 +40,20 @@ class NotificationFeed extends Component {
         friendRequests: [],
     };
 
-    componentDidMount() {
+    constructor(props) {
+        super(props);
+        this.state.username = props.username;
         this.update();
     }
 
+
+    componentDidMount() {
+
+    }
+
     componentWillReceiveProps(newProps) {
-        if (this.props.username) {
-            this.setState({username: this.props.username});
-        }
+        this.setState({username: newProps.username});
+        this.update();
     }
 
     update() {
@@ -160,9 +63,7 @@ class NotificationFeed extends Component {
         this.setState({isLoading: true});
         QL.getClientByUsername(this.state.username, ["friendRequests"], (data) => {
             if (data.friendRequests) {
-                for (let i = 0; i < data.friendRequests.length; i++) {
-                    this.addFriendRequest(data.friendRequests[i]);
-                }
+                this.setState({friendRequests: data.friendRequests, isLoading: false});
             }
             else {
                 this.setState({isLoading: false});
@@ -172,40 +73,19 @@ class NotificationFeed extends Component {
         });
     }
 
-    addFriendRequest(friendRequestID) {
-        QL.getClient(friendRequestID, ["name"], (data) => {
-            this.setState({friendRequests: [...this.state.friendRequests, data], isLoading: false});
-        }, (error) => {
-            alert(error);
-        })
-    }
-
-    handleAcceptFriendRequestButton(friendRequestID) {
-
-    }
-
-    handleDeclineFriendRequestButton(friendRequestID) {
-
-    }
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
     render() {
-        function rows(friendRequests, acceptHandler, denyHandler)
+        function rows(friendRequests)
         {
             return _.times(friendRequests.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Button basic color='purple'>{friendRequests[i].name}</Button>
-                    {/*<ClientModal open={}/>*/}
-                    <div> has sent you a buddy request</div>
-                    <Button basic color='purple' onClick={acceptHandler}>Accept</Button>
-                    <Button basic onClick={denyHandler}>Deny</Button>
-                </Grid.Row>
+                <Notification friendRequestID={friendRequests[i]}/>
             ));
         }
 
         return(
-            <Grid>{rows(this.state.friendRequests, this.handleAcceptFriendRequestButton, this.handleDeclineFriendRequestButton)}</Grid>
+            <Grid>{rows(this.state.friendRequests)}</Grid>
         );
     }
 }

@@ -19,7 +19,7 @@ class ScheduledChallengesList extends Component {
 
     constructor(props) {
         super(props);
-        alert("Got into Scheduled Challenges constructor");
+        // alert("Got into Scheduled Challenges constructor");
         this.state.username = this.props.username;
         this.update();
     }
@@ -29,15 +29,15 @@ class ScheduledChallengesList extends Component {
         // if (!this.state.isLoading) {
         //     return;
         // }
-        alert(JSON.stringify(this.props));
+        // alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
         }
         // This can only run if we're already done loading
-        alert("Starting to get user attributes for Profile.js in GraphQL");
+        // alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            alert("User came back with: " + JSON.stringify(data));
+            // alert("User came back with: " + JSON.stringify(data));
             for (let i = 0; i < data.scheduledChallenges.length; i++) {
                 this.addChallengeFromGraphQL(data.scheduledChallenges[i]);
             }
@@ -65,7 +65,7 @@ class ScheduledChallengesList extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.props = newProps;
+        // this.props = newProps;
         this.update();
     }
 

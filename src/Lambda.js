@@ -76,6 +76,20 @@ class Lambda {
             ]
         }, successHandler, failureHandler);
     }
+    static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
+        this.invokeLambda({
+            fromID: fromID,
+            action: "UPDATESET",
+            itemType: "Challenge",
+            identifiers: [
+                challengeID
+            ],
+            attributeName: "winner",
+            attributeValues: {
+                winnerID
+            },
+        }, successHandler, failureHandler);
+    }
     static leaveChallenge(fromID, clientID, challengeID, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,

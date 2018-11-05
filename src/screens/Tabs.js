@@ -66,7 +66,7 @@ class Tabs extends Component {
             },
             {
                 menuItem: (<Menu.Item>
-                    <NotificationBellProp/>
+                    <NotificationBellProp />
                 </Menu.Item>), render: () => <Tab.Pane attached={false}>
                     <div className="ui one column stackable center aligned page grid">
                         <Card>
@@ -74,7 +74,7 @@ class Tabs extends Component {
                                 <Card.Header textAlign={'center'}>Notification Feed</Card.Header>
                             </Card.Content>
                             <Card.Content>
-                                <NotificationFeedProp/>
+                                <NotificationFeedProp username={this.state.username}/>
                             </Card.Content>
                         </Card>
                     </div>
