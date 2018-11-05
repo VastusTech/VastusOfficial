@@ -5,7 +5,7 @@ import {Button, Grid} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 
-/*
+/**
 * Auth App
 *
 * This file contains the general outline of the app in a grid based format.

@@ -20,7 +20,7 @@ class EventFeed extends Component {
         isLoading: true,
         challenges: [],
         clientNames: {}, // id to name
-        challengeFeedLength: 1,
+        challengeFeedLength: 10,
         nextToken: null,
         ifFinished: false,
         calculations: {
@@ -33,9 +33,6 @@ class EventFeed extends Component {
         this.queryChallenges();
     }
 
-    /**
-     *
-     */
     queryChallenges() {
         this.setState({isLoading: true});
         // alert("querying challenges");
