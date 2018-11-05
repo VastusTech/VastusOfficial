@@ -6,6 +6,8 @@ import TrophyCaseProp from "./TrophyCase";
 import ChallengeManagerProp from "./ManageChallenges";
 import QL from '../GraphQL';
 import proPic from '../img/roundProfile.png';
+import ScheduledChallengesList from "./ScheduledChallengeList";
+import OwnedChallengesList from "./OwnedChallengesList";
 
 /**
 * Profile
@@ -19,6 +21,7 @@ class Profile extends Component {
         username: null,
         userInfo: {
             id: null,
+            username: null,
             name: null,
             birthday: null,
             profileImagePath: null,
@@ -52,9 +55,9 @@ class Profile extends Component {
         this.state.username = this.props.username;
         // TODO Start loading the profile picture
         //alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["name", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
+        QL.getClientByUsername(this.state.username, ["name", "id", "username", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            // alert("User came back with: " + JSON.stringify(data));
+            alert("User came back with: " + JSON.stringify(data));
             this.setState({userInfo: this.createUserInfo(data)});
             // Now grab the profile picture
             Storage.get(data.profileImagePath).then((data) => {
@@ -74,6 +77,7 @@ class Profile extends Component {
     createUserInfo(client) {
         return {
             name: client.name,
+            username: client.username,
             birthday: client.birthday,
             profileImagePath: client.profileImagePath,
             challengesWon: client.challengesWon,
@@ -173,12 +177,20 @@ class Profile extends Component {
                             </Modal>
                         </Item.Extra>
                         <Item.Extra>
-                            <Modal size='mini' trigger={<Button basic color='purple'>Manage Challenges</Button>}>
-                                <Modal.Content image>
-                                    <ChallengeManagerProp username={this.props.username}/>
+                            <Modal size='mini' trigger={<Button basic color='purple'>Scheduled Challenges</Button>}>
+                                <Modal.Content>
+                                    <ScheduledChallengesList username={this.state.userInfo.username}/>
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>
+                        <Item.Extra>
+                            <Modal size='mini' trigger={<Button basic color='purple'>Owned Challenges</Button>}>
+                                <Modal.Content>
+                                    <OwnedChallengesList username={this.state.userInfo.username}/>
+                                </Modal.Content>
+                            </Modal>
+                        </Item.Extra>
+
                         <Item.Extra>Event Wins: <div>{numChallengesWon(this.state.userInfo.challengesWon)}</div></Item.Extra>
                     </Item.Content>
                 </Item>
