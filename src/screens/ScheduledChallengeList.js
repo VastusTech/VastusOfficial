@@ -11,6 +11,7 @@ class ScheduledChallengesList extends Component {
         isLoading: true,
         checked: false,
         username: null,
+        userID: null,
         challenges: [],
         error: null
     };
@@ -35,9 +36,10 @@ class ScheduledChallengesList extends Component {
         }
         // This can only run if we're already done loading
         // alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["scheduledChallenges"], (data) => {
+        QL.getClientByUsername(this.state.username, ["id", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
             // alert("User came back with: " + JSON.stringify(data));
+            this.setState({userID: data.id});
             for (let i = 0; i < data.scheduledChallenges.length; i++) {
                 this.addChallengeFromGraphQL(data.scheduledChallenges[i]);
             }
@@ -79,10 +81,10 @@ class ScheduledChallengesList extends Component {
     }
 
     render() {
-        function rows(challenges) {
+        function rows(userID, challenges) {
             return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard challenge={challenges[i]}/>
+                    <EventCard userID={userID} challenge={challenges[i]}/>
                 </Grid.Row>
             ));
         }
@@ -92,7 +94,7 @@ class ScheduledChallengesList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.challenges)}</Grid>
+            <Grid>{rows(this.state.userID, this.state.challenges)}</Grid>
         );
     }
 }
