@@ -13,25 +13,30 @@ class EventDescriptionModal extends Component {
     state = {
         isLoading: false,
         id: null,
+        isOwned: null,
+        isJoined: null,
         challenge: null,
         clientModalOpen: false,
     };
 
     componentDidMount() {
-        if (this.props.challenge && this.props.id) {
-            this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id});
+        if (this.props.challenge) {
+            //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
+                isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
         }
         else {
-            this.setState({isLoading: true, challenge: null, id: null})
+            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null})
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge && this.props.id) {
+        if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
             this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
         }
     }
 
+    /*
     handleDeleteChallengeButton() {
         alert("Handling deleting the challenge");
         Lambda.deleteChallenge(this.state.id, this.state.challenge, (data) => {
@@ -58,6 +63,7 @@ class EventDescriptionModal extends Component {
             alert(JSON.stringify(error));
         })
     }
+    */
 
     openClientModal() { this.setState({clientModalOpen: true}); }
     closeClientModal() { this.setState({clientModalOpen: false}); }
@@ -69,27 +75,39 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined) {
-            if(isOwned) {
-                return () => (
-                    <Button basic color='purple' onClick={this.handleDeleteChallengeButton.bind(this)}>
+        function createCorrectButton(isOwned, isJoined, userID, challengeID) {
+            if(isOwned === true) {
+                return (
+                    <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                        alert(JSON.stringify(data));
+                    }, (error) => {
+                        alert(JSON.stringify(error));
+                    })}}>
                         Delete
                     </Button>
-                );
+                )
             }
-            else if((isOwned === false) && isJoined) {
-                return () => (
-                <Button basic color='purple' onClick={this.handleLeaveChallengeButton.bind(this)}>
+            else if((isOwned === false) && isJoined === true) {
+                return (
+                <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                    alert(JSON.stringify(data));
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                })}}>
                     Leave
                 </Button>
-                );
+                )
             }
             else if((isOwned === false) && (isJoined === false)) {
-                return () => (
-                <Button basic color='purple' onClick={this.handleJoinChallengeButton.bind(this)}>
+                return (
+                <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                    alert(JSON.stringify(data));
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                })}}>
                     Join
                 </Button>
-                );
+                )
             }
         }
 
@@ -107,7 +125,7 @@ class EventDescriptionModal extends Component {
                         <p>{this.state.challenge.goal}</p>
                     </Modal.Description>
                     <div className='button'>
-                        {createCorrectButton(false, true)}
+                        {createCorrectButton(this.state.isOwned, this.state.isJoined, this.state.id, this.state.challenge.id)}
                     </div>
                 </Modal.Content>
             </Modal>

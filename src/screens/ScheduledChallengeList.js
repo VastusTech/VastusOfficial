@@ -38,7 +38,7 @@ class ScheduledChallengesList extends Component {
         // alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["id", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            // alert("User came back with: " + JSON.stringify(data));
+            //alert("User came back with: " + JSON.stringify(data));
             this.setState({userID: data.id});
             for (let i = 0; i < data.scheduledChallenges.length; i++) {
                 this.addChallengeFromGraphQL(data.scheduledChallenges[i]);
