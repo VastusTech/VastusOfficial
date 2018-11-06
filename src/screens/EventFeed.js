@@ -18,6 +18,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials(
 class EventFeed extends Component {
     state = {
         isLoading: true,
+        userID: null,
         challenges: [],
         clientNames: {}, // id to name
         challengeFeedLength: 10,
@@ -33,11 +34,15 @@ class EventFeed extends Component {
         this.queryChallenges();
     }
 
+    componentWillReceiveProps(newProps) {
+        this.setState({userID: newProps.userID});
+    }
+
     queryChallenges() {
         this.setState({isLoading: true});
 
         if (!this.state.ifFinished) {
-            QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
+            QL.queryChallenges(["id", "title", "goal", "time", "owner", "members"], QL.generateFilter("and",
                 {"access": "eq"}, {"access": "public"}), this.state.challengeFeedLength,
                 this.state.nextToken, (data) => {
                     if (data.items) {

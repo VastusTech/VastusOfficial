@@ -53,7 +53,7 @@ class ScheduledChallengesList extends Component {
     }
 
     addChallengeFromGraphQL(challengeID) {
-        QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner"], (data) => {
+        QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a challenge");
             this.setState({challenges: [...this.state.challenges, data], isLoading: false});
         }, (error) => {

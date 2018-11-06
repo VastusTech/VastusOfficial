@@ -13,16 +13,21 @@ class EventCard extends Component {
         error: null,
         isLoading: true,
         challenge: null,
-        ifOwned: false
+        ifOwned: false,
+        ifJoined: false,
     };
 
     componentDidMount() {
         if (this.props.challenge) {
             let ifOwned = false;
+            let ifJoined = false;
             if (this.props.userID === this.props.challenge.owner) {
                 ifOwned = true;
             }
-            this.setState({isLoading: false, challenge: this.props.challenge, ifOwned});
+            if (this.props.challenge.members && this.props.challenge.members.includes(this.props.userID)) {
+                ifJoined = true;
+            }
+            this.setState({isLoading: false, challenge: this.props.challenge, ifOwned, ifJoined});
         }
     }
 
@@ -43,7 +48,7 @@ class EventCard extends Component {
 
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <EventDescriptionModal ifOwned={this.state.ifOwned} challenge={this.state.challenge}
+            <EventDescriptionModal ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} challenge={this.state.challenge}
                 trigger={
                     <Card>
                         <Card.Content>

@@ -6,6 +6,7 @@ import ProfileProp from "./Profile";
 import React, { Component } from "react";
 import CreateEventProp from "./CreateEvent";
 import NextWorkoutProp from "./NextWorkout";
+import QL from '../GraphQL';
 
 /**
 * Tabs
@@ -15,7 +16,8 @@ import NextWorkoutProp from "./NextWorkout";
 class Tabs extends Component {
     state = {
         isLoading: true,
-        username: null
+        username: null,
+        userID: null
     };
 
     constructor(props) {
@@ -31,6 +33,13 @@ class Tabs extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps.username) {
             this.setState({isLoading: false, username: newProps.username});
+            QL.getClientByUsername(newProps.username, ["id"], (data) => {
+                if (data.id) {
+                    this.setState({userID: data.id});
+                }
+            }, (error) => {
+
+            });
         }
         else {
             this.setState({isLoading: true, username: null});
@@ -51,7 +60,7 @@ class Tabs extends Component {
                         </Card.Content>
                     </Card>
                     <div className="ui one column stackable center aligned page grid">
-                        <EventFeed/>
+                        <EventFeed userID={this.state.userID}/>
                     </div>
                 </Tab.Pane>
             },
