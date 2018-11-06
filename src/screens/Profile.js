@@ -57,14 +57,15 @@ class Profile extends Component {
         //alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["name", "id", "username", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            alert("User came back with: " + JSON.stringify(data));
-            this.setState({userInfo: this.createUserInfo(data)});
+            this.setState({isLoading: false, userInfo: this.createUserInfo(data)});
             // Now grab the profile picture
-            Storage.get(data.profileImagePath).then((data) => {
-                this.setState({profilePicture: data, isLoading: false});
-            }).catch((error) => {
-                this.setState({error: error});
-            });
+            if (data.profileImagePath) {
+                Storage.get(data.profileImagePath).then((data) => {
+                    this.setState({profilePicture: data, isLoading: false});
+                }).catch((error) => {
+                    this.setState({error: error});
+                });
+            }
         }, (error) => {
             console.log("Getting client by username failed for Profile.js");
             if (error.message) {
@@ -91,10 +92,10 @@ class Profile extends Component {
     }
 
     handleAccessSwitch = () => {
-        if(this.state.userInfo.access == 'public') {
+        if(this.state.userInfo.access === 'public') {
             this.state.userInfo.access = 'private';
         }
-        else if (this.state.userInfo.access == 'private') {
+        else if (this.state.userInfo.access === 'private') {
             this.state.userInfo.access = 'public';
         }
         else {
