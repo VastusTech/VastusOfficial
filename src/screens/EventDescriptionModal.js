@@ -21,7 +21,7 @@ class EventDescriptionModal extends Component {
 
     componentDidMount() {
         if (this.props.challenge) {
-            //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
                 isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
         }
@@ -31,9 +31,17 @@ class EventDescriptionModal extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
-            this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
+        if (this.props.challenge) {
+            alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
+                isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
         }
+        else {
+            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null})
+        }
+        // if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
+        //     this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
+        // }
     }
 
     /*

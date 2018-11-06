@@ -21,6 +21,7 @@ class EventCard extends Component {
         if (this.props.challenge) {
             let ifOwned = false;
             let ifJoined = false;
+            alert(this.props.userID);
             if (this.props.userID === this.props.challenge.owner) {
                 ifOwned = true;
             }
@@ -34,6 +35,9 @@ class EventCard extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps.challenge) {
             this.setState({isLoading: false, challenge: newProps.challenge});
+        }
+        if (newProps.userID) {
+            this.setState({userID: newProps.userID});
         }
     }
 

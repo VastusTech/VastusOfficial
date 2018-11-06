@@ -35,6 +35,7 @@ class EventFeed extends Component {
     }
 
     componentWillReceiveProps(newProps) {
+        alert("Set state to userID = " + newProps.userID);
         this.setState({userID: newProps.userID});
     }
 
@@ -87,13 +88,14 @@ class EventFeed extends Component {
     render() {
         /**
          * This function takes in a list of challenges and displays them in a list of Event Card views.
+         * @param userID
          * @param challenges
          * @returns {*}
          */
-        function rows(challenges) {
+        function rows(userID, challenges) {
             return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard challenge={challenges[i]}/>
+                    <EventCard userID={userID} challenge={challenges[i]}/>
                 </Grid.Row>
             ));
         }
@@ -103,7 +105,7 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <Grid>
-                    {rows(this.state.challenges)}
+                    {rows(this.state.userID, this.state.challenges)}
                 </Grid>
             </Visibility>
         );

@@ -32,9 +32,11 @@ class Tabs extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.username) {
+            alert("Getting ID from username");
             this.setState({isLoading: false, username: newProps.username});
             QL.getClientByUsername(newProps.username, ["id"], (data) => {
                 if (data.id) {
+                    alert("Setting userID to " + data.id);
                     this.setState({userID: data.id});
                 }
             }, (error) => {
