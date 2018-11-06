@@ -10,8 +10,8 @@ class ScheduledChallengesList extends Component {
     state = {
         isLoading: true,
         checked: false,
-        id: null,
         username: null,
+        userID: null,
         challenges: [],
         error: null
     };
@@ -20,7 +20,7 @@ class ScheduledChallengesList extends Component {
 
     constructor(props) {
         super(props);
-        alert("Got into Scheduled Challenges constructor");
+        // alert("Got into Scheduled Challenges constructor");
         this.state.username = this.props.username;
         this.update();
     }
@@ -30,18 +30,17 @@ class ScheduledChallengesList extends Component {
         // if (!this.state.isLoading) {
         //     return;
         // }
-        alert(JSON.stringify(this.props));
+        // alert(JSON.stringify(this.props));
         if (!this.props.username) {
             return;
         }
         // This can only run if we're already done loading
-        alert("Starting to get user attributes for Profile.js in GraphQL");
+        // alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["id", "scheduledChallenges"], (data) => {
             console.log("Successfully grabbed client by username for Profile.js");
-            alert("User came back with: " + JSON.stringify(data));
-            this.setState({id: data.id});
+            // alert("User came back with: " + JSON.stringify(data));
+            this.setState({userID: data.id});
             for (let i = 0; i < data.scheduledChallenges.length; i++) {
-                //this.setState({challenge[i]: data.scheduledChallenges[i]});
                 this.addChallengeFromGraphQL(data.scheduledChallenges[i]);
             }
         }, (error) => {
@@ -68,7 +67,7 @@ class ScheduledChallengesList extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        this.props = newProps;
+        // this.props = newProps;
         this.update();
     }
 
@@ -82,12 +81,10 @@ class ScheduledChallengesList extends Component {
     }
 
     render() {
-
         function rows(userID, challenges) {
-            alert("userID: " + userID + " challengeID: " + challenges[1]);
             return _.times(challenges.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard challenge={challenges[i]}/>
+                    <EventCard userID={userID} challenge={challenges[i]}/>
                 </Grid.Row>
             ));
         }
@@ -97,7 +94,7 @@ class ScheduledChallengesList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.id, this.state.challenges)}</Grid>
+            <Grid>{rows(this.state.userID, this.state.challenges)}</Grid>
         );
     }
 }
