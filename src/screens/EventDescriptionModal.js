@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
+import Lambda from '../Lambda';
 
 /*
 * Event Description Modal
@@ -11,27 +12,51 @@ import ClientModal from "./ClientModal";
 class EventDescriptionModal extends Component {
     state = {
         isLoading: false,
+        id: null,
         challenge: null,
         clientModalOpen: false,
     };
 
     componentDidMount() {
-        if (this.props.challenge) {
-            this.setState({isLoading: false, challenge: this.props.challenge});
+        if (this.props.challenge && this.props.id) {
+            this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id});
         }
         else {
-            this.setState({isLoading: true, challenge: null})
+            this.setState({isLoading: true, challenge: null, id: null})
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge) {
-            this.setState({isLoading: false, challenge: newProps.challenge});
+        if (newProps.challenge && this.props.id) {
+            this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
         }
+    }
+
+    handleDeleteChallengeButton() {
+        alert("Handling deleting the challenge");
+        Lambda.deleteChallenge(this.state.id, this.state.challenge, (data) => {
+            alert(JSON.stringify(data));
+        }, (error) => {
+            alert(JSON.stringify(error));
+        })
+    }
+
+    handleLeaveChallengeButton() {
+        alert("Handling leaving the challenge");
+        Lambda.leaveChallenge(this.state.id, this.state.id, this.state.challenge, (data) => {
+            alert(JSON.stringify(data));
+        }, (error) => {
+            alert(JSON.stringify(error));
+        })
     }
 
     handleJoinChallengeButton() {
         alert("Handling joining the challenge");
+        Lambda.joinChallenge(this.state.id, this.state.id, this.state.challenge, (data) => {
+            alert(JSON.stringify(data));
+        }, (error) => {
+            alert(JSON.stringify(error));
+        })
     }
 
     openClientModal() { this.setState({clientModalOpen: true}); }
@@ -44,6 +69,30 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
+        function createCorrectButton(isOwned, isJoined) {
+            if(isOwned) {
+                return () => (
+                    <Button basic color='purple' onClick={this.handleDeleteChallengeButton.bind(this)}>
+                        Delete
+                    </Button>
+                );
+            }
+            else if((isOwned === false) && isJoined) {
+                return () => (
+                <Button basic color='purple' onClick={this.handleLeaveChallengeButton.bind(this)}>
+                    Leave
+                </Button>
+                );
+            }
+            else if((isOwned === false) && (isJoined === false)) {
+                return () => (
+                <Button basic color='purple' onClick={this.handleJoinChallengeButton.bind(this)}>
+                    Join
+                </Button>
+                );
+            }
+        }
+
         return(
             <Modal trigger={this.props.trigger}>
                 <Modal.Header>{this.state.challenge.title}</Modal.Header>
@@ -57,10 +106,8 @@ class EventDescriptionModal extends Component {
                         <p>{this.state.challenge.time}</p>
                         <p>{this.state.challenge.goal}</p>
                     </Modal.Description>
-                    <div className='join button'>
-                        <Button basic color='purple' onClick={this.handleJoinChallengeButton.bind(this)}>
-                            Join
-                        </Button>
+                    <div className='button'>
+                        {createCorrectButton(false, true)}
                     </div>
                 </Modal.Content>
             </Modal>
