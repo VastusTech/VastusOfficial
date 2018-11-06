@@ -35,7 +35,6 @@ class EventFeed extends Component {
 
     queryChallenges() {
         this.setState({isLoading: true});
-        // alert("querying challenges");
 
         if (!this.state.ifFinished) {
             QL.queryChallenges(["id", "title", "goal", "time", "owner"], QL.generateFilter("and",
