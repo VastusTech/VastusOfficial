@@ -26,6 +26,34 @@ class Lambda {
             ]
         }, successHandler, failureHandler);
     }
+    static editPartyAttribute(fromID, partyID, attributeName, attributeValue, successHandler, failureHandler) {
+        this.invokeLambda({
+            fromID: fromID,
+            action: "UPDATESET",
+            itemType: "Party",
+            identifiers: [
+                partyID
+            ],
+            attributeName: attributeName,
+            attributeValues: [
+                attributeValue
+            ]
+        }, successHandler, failureHandler);
+    }
+    static editChallengeAttribute(fromID, challengeID, attributeName, attributeValue, successHandler, failureHandler) {
+        this.invokeLambda({
+            fromID: fromID,
+            action: "UPDATESET",
+            itemType: "Challenge",
+            identifiers: [
+                challengeID
+            ],
+            attributeName: attributeName,
+            attributeValues: [
+                attributeValue
+            ]
+        }, successHandler, failureHandler);
+    }
     static createChallenge(fromID, owner, time, capacity, address, title, goal, successHandler, failureHandler) {
         alert("Called the first create challenge");
         this.invokeLambda({

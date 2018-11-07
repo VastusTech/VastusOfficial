@@ -4,6 +4,8 @@ import Tabs from './screens/Tabs.js';
 import {Button, Grid} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
+import { connect } from "react-redux";
+import { fetchUser } from "./redux_helpers/actions/userActions";
 
 /**
 * Auth App
@@ -13,28 +15,11 @@ import SearchBarProp from "./screens/SearchBar";
 class AuthApp extends Component {
     state = {
         error: null,
-        isLoading: true,
-        username: null,
-
+        isLoading: false
     };
 
     constructor(props) {
         super(props);
-        this.setUsername();
-    }
-
-    async setUsername() {
-        //alert("Trying to set username");
-        const user = await Auth.currentAuthenticatedUser();
-        if (user.username) {
-            //alert("Successfully set the username to: " + user.username);
-            this.setState({username: user.username, isLoading: false});
-        }
-        else {
-            // TODO This is an error and we should log out the user immediately
-            // TODO TODO OH Lordy WHAT TODO
-            alert("Real weird error here, boyz");
-        }
     }
 
     handleLogOut() {
@@ -55,31 +40,41 @@ class AuthApp extends Component {
         // Analytics.record('Amplify_CLI');
     }
 
+    componentWillReceiveProps(newProps) {
+        // alert("NEW PROPS: " + JSON.stringify(newProps));
+    }
+
     //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
         return (
             <div className="App">
                 <Grid>
-
                     <Grid.Column floated='left' width={2}>
                         <SearchBarProp width={5}/>
                     </Grid.Column>
-
                     <Grid.Column floated='right' width={5}>
                             <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                     </Grid.Column>
-
                 </Grid>
-
-                    <Tabs username={this.state.username}/>
-
+                <Tabs />
             </div>
         );
     }
 }
 
+const mapStateToProps = (state) => ({
+    user: state.user
+});
 
-export default AuthApp;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUser: (username) => {
+            dispatch(fetchUser(username));
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(AuthApp);
 
 // TODO What's the point of this right now?
 // uploadFile = (evt) => {

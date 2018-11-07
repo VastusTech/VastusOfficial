@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 // import Tabs from './screens/Tabs.js';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import Amplify, { Storage, Auth, Analytics } from 'aws-amplify';
 // import { inspect } from 'util';
 // import Semantic, { Input } from 'semantic-ui-react';
+import { clearUser, fetchUserAttributes, fetchUser } from './redux_helpers/actions/userActions';
 import Lambda from './Lambda';
 import QL from './GraphQL';
 // import { Authenticator, SignIn, SignUp, ConfirmSignUp, Greetings, Connect, withAuthenticator } from 'aws-amplify-react';
@@ -55,53 +56,16 @@ Amplify.configure({
 class App extends Component {
     // This is the function that is called when the sign up button is pressed
     state = {
-        user: {},
-        isLoading: true
+        error: null
     };
 
     constructor(props) {
         super(props);
-        // const variableComparisons = {
-        //     name: "beginsWith",
-        //     username: "beginsWith"
-        // };
-        // const variableValues = {
-        //     name: "bl",
-        //     username: "bl"
-        // };
-        // alert(variableComparisons["username"]);
-        // QL.queryClients(["id", "name", "username", "email"], QL.generateFilter("or", variableComparisons, variableValues), 100, null, (data) => {
-        //     alert("Success: " + JSON.stringify(data));
-        // }, (error) => {
-        //     alert("Failure: " + JSON.stringify(error));
-        // })
-        // QL.getClient("CL310987761", ["id", "name", "email"], (data) => {
-        //     alert(JSON.stringify(data));
-        // }, (error) => {
-        //     alert(error);
-        // });
-        // QL.queryChallenges(["id", "title", "goal"], (data) => {
-        //     alert(JSON.stringify(data));
-        // }, (error) => {
-        //     alert(JSON.stringify(error))
-        // })
-        // Lambda.createChallenge("admin", "CL310987761", "2018-11-02T05:00:00+04:00_2018-11-02T06:30:00+04:00", "4", "100 Institute Road", "Cool Challenge!", "To be the very best!",
-        //     function(data) {
-        //         alert(JSON.stringify(data));
-        //     }, function(error) {
-        //         alert(JSON.stringify(error));
-        //     });
-        // QL.queryChallenges(["title", "goal", "time"], (data) => {
-        //     alert(JSON.stringify(data));
-        // }, (error) => {
-        //     alert(JSON.stringify(error));
-        // });
     }
 
     authenticate(user) {
-        if (user) {
-            // alert("setting the state to " + JSON.stringify(user));
-            this.setState({user});
+        if (user && user.username) {
+            this.props.fetchUser(user.username);
         }
         else {
             alert("received null user");
@@ -109,32 +73,27 @@ class App extends Component {
     }
 
     signOut() {
-        this.setState({user: {}});
+        this.props.clearUser();
     }
 
     async componentDidMount() {
-        // StatusBar.setHidden(true);
         try {
             const user = await Auth.currentAuthenticatedUser();
-            this.setState({ user, isLoading: false })
+            this.authenticate(user);
         } catch (err) {
-            this.setState({ isLoading: false })
+            this.setState({ error: err })
         }
     }
 
-    async componentWillReceiveProps(nextProps) {
-        try {
-            const user = await Auth.currentAuthenticatedUser();
-            this.setState({ user })
-        } catch (err) {
-            this.setState({ user: {} })
+    componentWillReceiveProps(nextProps) {
+        if (nextProps.user) {
+            this.setState();
         }
     }
 
     render() {
-        if (this.state.isLoading) return null;
         let loggedIn = false;
-        if (this.state.user.username) {
+        if (this.props.user.id) {
             loggedIn = true
         }
         if (loggedIn) {
@@ -155,8 +114,20 @@ class App extends Component {
     }
 }
 
-// const mapStateToProps = state => ({
-//     auth: state.auth
-// });
+const mapStateToProps = (state) => ({
+    user: state.user,
+    cache: state.cache
+});
 
-export default App; //connect(mapStateToProps)(App)
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUser: (username) => {
+            dispatch(fetchUser(username));
+        },
+        clearUser: () => {
+            dispatch(clearUser());
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(App);

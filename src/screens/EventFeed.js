@@ -35,7 +35,7 @@ class EventFeed extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        alert("Set state to userID = " + newProps.userID);
+        // alert("Set state to userID = " + newProps.userID);
         this.setState({userID: newProps.userID});
     }
 

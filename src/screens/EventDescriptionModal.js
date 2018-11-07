@@ -21,7 +21,7 @@ class EventDescriptionModal extends Component {
 
     componentDidMount() {
         if (this.props.challenge) {
-            alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            // alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
                 isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
         }
@@ -32,7 +32,7 @@ class EventDescriptionModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (this.props.challenge) {
-            alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            // alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
                 isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
         }

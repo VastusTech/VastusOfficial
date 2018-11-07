@@ -10,6 +10,30 @@ class GraphQL {
         this.execute(this.constructQuery("GetClientByUsername", "getClientByUsername", {username: username}, variableList),
             "getClientByUsername", successHandler, failureHandler);
     }
+    static getTrainer(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetTrainer", "getTrainer", {id: id}, variableList),
+            "getTrainer", successHandler, failureHandler);
+    }
+    static getTrainerByUsername(username, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetTrainerByUsername", "getTrainerByUsername", {username: username}, variableList),
+            "getTrainerByUsername", successHandler, failureHandler);
+    }
+    static getGym(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetGym", "getGym", {id: id}, variableList),
+            "getGym", successHandler, failureHandler);
+    }
+    static getGymByUsername(username, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetGymByUsername", "getGymByUsername", {username: username}, variableList),
+            "getGymByUsername", successHandler, failureHandler);
+    }
+    static getWorkout(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetWorkout", "getWorkout", {id: id}, variableList),
+            "getWorkout", successHandler, failureHandler);
+    }
+    static getReview(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetReview", "getReview", {id: id}, variableList),
+            "getReview", successHandler, failureHandler);
+    }
     static getParty(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetParty", "getParty", {id: id}, variableList),
             "getParty", successHandler, failureHandler);
@@ -17,11 +41,6 @@ class GraphQL {
     static getChallenge(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetChallenge", "getChallenge", {id: id}, variableList),
             "getChallenge", successHandler, failureHandler);
-    }
-    // TODO Eventually make this work better to allow for more intelligent queries
-    static queryChallenges(variableList, filter, limit, nextToken, successHandler, failureHandler) {
-        this.execute(this.constructQuery("QueryChallenges", "queryChallenges", {}, variableList, filter, true),
-            "queryChallenges", successHandler, failureHandler);
     }
     static queryClients(variableList, filter, limit, nextToken, successHandler, failureHandler) {
         var inputVariables = {};
@@ -34,12 +53,84 @@ class GraphQL {
         this.execute(this.constructQuery("QueryClients", "queryClients", inputVariables, variableList, filter, true),
             "queryClients", successHandler, failureHandler);
     }
+    static queryTrainers(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryTrainers", "queryTrainers", inputVariables, variableList, filter, true),
+            "queryTrainers", successHandler, failureHandler);
+    }
+    static queryGyms(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryGyms", "queryGyms", inputVariables, variableList, filter, true),
+            "queryGyms", successHandler, failureHandler);
+    }
+    static queryWorkouts(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryWorkouts", "queryWorkouts", inputVariables, variableList, filter, true),
+            "queryWorkouts", successHandler, failureHandler);
+    }
+    static queryReviews(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryReviews", "queryReviews", inputVariables, variableList, filter, true),
+            "queryReviews", successHandler, failureHandler);
+    }
+    static queryParties(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryParties", "queryParties", inputVariables, variableList, filter, true),
+            "queryParties", successHandler, failureHandler);
+    }
+    static queryChallenges(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryChallenges", "queryChallenges", inputVariables, variableList, filter, true),
+            "queryChallenges", successHandler, failureHandler);
+    }
 
+    // TODO Eventually make this work better to allow for more intelligent queries
     // TODO This function is going to be how to filter any query
-    // cohestionOperator is "and" or "or", depending on how you want the filter to go (TODO include "not"?)
-    // variableComparisons is object { variableName: comparisonFunction }
-    //          comparisonFunction is in {ne,eq,le,lt,ge,gt,contains,notContains,between,beginsWith}
-    // variableValues is object { variableName: variableValue }
+    // TODO include "not"? Also should we make it more flexible so like and { not { or ...
+    /**
+     * This is to construct a filter object that we can put into any queryObjects function
+     * @param cohesionOperator Either "and" or "or", depending on how we want to mix the operation
+     * @param variableComparisons The object that determines how we compare the variable { variableName: comparisonFunction }
+     *    The comparison function is string in {"ne","eq","le","lt","ge","gt","contains","notContains","between","beginsWith"}
+     * @param variableValues The object that determines what value we compare the variable with { variableName: variableValue }
+     * @returns {{parameterString: string, parameters: parameters}}
+     */
     static generateFilter(cohesionOperator, variableComparisons, variableValues) {
         var parameterString = 'filter: {\n        ' + cohesionOperator + ': [\n';
         var parameters = {};
