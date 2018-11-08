@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
+import appConfig from '../screens/AppConfig';
+
+appConfig();
 
 class SignUpModal extends Component {
     constructor(props) {
