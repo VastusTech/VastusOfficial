@@ -27,6 +27,12 @@ function convertDateTimeToISO8601(dateAndTime) {
     if(amorpm.trim() === 'AM') {
         return year + "-" + month + "-" + day + "T" + time + ":00+00:00";
     }
+    else if(amorpm.trim() === 'PM' && hour == 12) {
+        return year + "-" + month + "-" + day + "T" + "12" + minute + ":00+00:00";
+    }
+    else if(amorpm.trim() === 'AM' && hour == 12) {
+        return year + "-" + month + "-" + day + "T" + "00" + minute + ":00+00:00";
+    }
     else {
         return year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00";
     }
@@ -103,7 +109,7 @@ class CreateEventProp extends Component {
         const time = convertDateTimeToISO8601(this.state.dateTime) + "_" +
             convertDateTimeToISO8601(this.state.dateTimeEnd);
 
-        Lambda.createEvent(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
+        Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
             String(this.eventState.location), String(this.eventState.title),
             String(this.eventState.goal), (data) => {
                 alert(JSON.stringify(data));

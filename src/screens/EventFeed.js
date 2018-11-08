@@ -12,7 +12,7 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials(
 /**
 * Event Feed
 *
-* This is the main feed in the home page, it currently displays all public challenges inside of the database for
+* This is the main feed in the home page, it currently displays all public events inside of the database for
 * the user to see.
  */
 class EventFeed extends Component {
@@ -55,7 +55,7 @@ class EventFeed extends Component {
                         }
                     }
                     else {
-                        // TODO Came up with no challenges
+                        // TODO Came up with no events
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
@@ -83,7 +83,7 @@ class EventFeed extends Component {
 
     render() {
         /**
-         * This function takes in a list of challenges and displays them in a list of Event Card views.
+         * This function takes in a list of events and displays them in a list of Event Card views.
          * @param events
          * @returns {*}
          */
