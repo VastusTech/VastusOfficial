@@ -54,8 +54,21 @@ class Lambda {
             ]
         }, successHandler, failureHandler);
     }
+    static createClient(fromID, name, gender, birthday, email, username, successHandler, failureHandler) {
+        this.invokeLambda({
+            fromID: fromID,
+            action: "CREATE",
+            itemType: "Client",
+            createClientRequest: {
+                name: name,
+                gender: gender,
+                birthday: birthday,
+                email: email,
+                username: username
+            }
+        }, successHandler, failureHandler)
+    }
     static createChallenge(fromID, owner, time, capacity, address, title, goal, successHandler, failureHandler) {
-        alert("Called the first create challenge");
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
@@ -71,8 +84,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static createChallengeOptional(fromID, owner, time, capacity, address, title, goal, description, difficulty, memberIDs, access, successHandler, failureHandler) {
-        alert("Called the second create challenge");
-        this.invokeLambda({
+       this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
             itemType: "Challenge",
@@ -157,7 +169,7 @@ class Lambda {
             }
         }, successHandler, failureHandler);
     }
-    static createParty(fromID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
+    static createPartyOptional(fromID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",

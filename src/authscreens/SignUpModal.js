@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
+import Lambda from '../Lambda';
 
 class SignUpModal extends Component {
     constructor(props) {
@@ -48,19 +49,36 @@ class SignUpModal extends Component {
         };
 
         this.setState({isLoading: true});
-        Auth.signUp(params).then((data) => {
-            console.log("Successfully signed up!");
+        Lambda.createClient("admin", attributes.name, attributes.gender, attributes.birthdate, attributes.email, params.username,
+            (data) => {
+                if (data.errorMessage) {
+                    // Send response with no confirmation
+                    console.log("Problem with creating a database item!");
+                    const error = data;
+                    console.log(error);
+                    this.setState({isLoading: false});
+                    failureHandler(error);
+                }
+                else {
+                    console.log("Successfully created database item in the database!");
+                    Auth.signUp(params).then((data) => {
+                        console.log("Successfully signed up!");
+                        this.setState({isLoading: false});
+                        successHandler(data);
+                    }).catch((error) => {
+                        console.log("Sign up has failed :(");
+                        console.log(error);
+                        this.setState({isLoading: false});
+                        failureHandler(error);
+                    });
+                }
+        }, (error) => {
+            console.log("Problem with creating a database item!");
+            console.log(error);
             this.setState({isLoading: false});
-            successHandler(data);
-        }).catch((err) => {
-            console.log("Sign up has failed :(");
-            console.log(err);
-            if (err.message) {
-                err = err.message;
-            }
-            this.setState({isLoading: false});
-            failureHandler(err);
+            failureHandler(error);
         });
+
     }
 
     vastusConfirmSignUp(successHandler, failureHandler) {
@@ -74,9 +92,6 @@ class SignUpModal extends Component {
         }).catch((error) => {
             console.log("Confirm sign up has failed :(");
             console.log(error);
-            if (error.message) {
-                error = error.message;
-            }
             this.setState({isLoading: false});
             failureHandler(error);
         });
@@ -118,7 +133,7 @@ class SignUpModal extends Component {
                     <Modal.Description>
                         <Message color='red'>
                             <h1>Error!</h1>
-                            <p>{error}</p>
+                            <p>{error.message}</p>
                         </Message>
                     </Modal.Description>
                 );
