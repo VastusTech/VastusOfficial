@@ -124,7 +124,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryEvents", "queryEventss", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryEvents", "queryEvents", inputVariables, variableList, filter, true),
             "queryEvents", successHandler, failureHandler);
     }
 
