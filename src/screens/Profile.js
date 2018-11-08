@@ -5,7 +5,7 @@ import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
-// import QL from '../GraphQL';
+import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
 import ScheduledChallengesList from "./ScheduledEventList";
 import OwnedChallengesList from "./OwnedEventList";
@@ -22,7 +22,6 @@ class Profile extends Component {
         isLoading: true,
         checked: false,
         profilePicture: null,
-        ifS3: false,
         error: null
     };
 
@@ -32,6 +31,20 @@ class Profile extends Component {
         super(props);
         this.setState({isLoading: true});
         // ("Got into Profile constructor");
+        this.setPicture = this.setPicture.bind(this);
+        this.update = this.update.bind(this);
+        this.profilePicture = this.profilePicture.bind(this);
+    }
+
+    componentDidMount() {
+        this.update();
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.props = newProps;
+        if (newProps.user.profileImagePath) {
+            this.setState({isLoading: true});
+        }
         this.update();
     }
 
@@ -45,22 +58,19 @@ class Profile extends Component {
         if (user.id && user.name && user.username && user.birthday) {
             if (this.state.isLoading) {
                 // And start to get the profile image from S3
-                // alert("Starting to get profile image");
-                // Storage.get(user.profileImagePath).then((data) => {
-                //     if (data) {
-                //         alert("Received properly and setting! Data = " + JSON.stringify(data));
-                //         this.setState({profilePicture: data, isLoading: false, ifS3: true});
-                //     }
-                //     else {
-                //         // TODO Check if this is what happens when it doesn't exist
-                //         alert("Received null and setting to default!");
-                //         this.setState({profilePicture: proPic, isLoading: false, ifS3: false});
-                //     }
-                // }).catch((error) => {
-                //     alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                //     this.setState({error: error});
-                // });
-                this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
+                if (user.profileImagePath) {
+                    Storage.get(user.profileImagePath).then((data) => {
+                        // alert("Received properly and setting! Data = " + JSON.stringify(data));
+                        this.setState({profilePicture: data, isLoading: false});
+                    }).catch((error) => {
+                        alert("Received an error, so not setting. Error = " + JSON.stringify(error));
+                        this.setState({error: error});
+                    });
+                }
+                else {
+                    // Default
+                    this.setState({isLoading: false, profilePicture: proPic});
+                }
             }
         }
         else if (!this.props.user.info.isLoading) {
@@ -68,14 +78,49 @@ class Profile extends Component {
         }
     }
 
-    componentDidMount() {
-        this.update();
+    setPicture(event) {
+        //alert(JSON.stringify(this.props));
+        if (this.props.user.id) {
+            const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
+            //alert("Calling storage put");
+            //alert("File = " + JSON.stringify(event.target.files[0]));
+            Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
+                // Now we update the database object to reflect this
+                //alert(JSON.stringify(result));
+                //alert("Successfully put the image, now putting the data into the database!");
+                Lambda.editClientAttribute(this.props.user.id, this.props.user.id, "profileImagePath", path,
+                    (data) => {
+                        //alert("successfully editted client");
+                        //alert(JSON.stringify(data));
+                        this.props.fetchUserAttributes(this.props.user.id, ["profileImagePath"]);
+                        this.setState({isLoading: true});
+                    }, (error) => {
+                    alert("Failed edit client attribute");
+                        alert(JSON.stringify(error));
+                    });
+                this.setState({isLoading: true});
+            }).catch((error) => {
+                alert("failed storage put");
+                alert(error);
+            });
+        }
     }
 
-    componentWillReceiveProps(newProps) {
-        this.props = newProps;
-        this.update();
+    profilePicture() {
+        if (this.state.profilePicture) {
+            return(
+                <Item.Image size='medium' src={this.state.profilePicture} circular/>
+            );
+        }
+        else {
+            return(
+                <Dimmer>
+                    <Loader/>
+                </Dimmer>
+            );
+        }
     }
+
 
     render() {
         //alert(JSON.stringify(this.state));
@@ -100,25 +145,6 @@ class Profile extends Component {
          * @param profilePicture Displays the
          * @returns {*}
          */
-        function profilePicture(profilePicture, ifS3) {
-            if (profilePicture) {
-                if (ifS3) {
-                    return(
-                        <S3Image imgKey={profilePicture}/>
-                    );
-                }
-                return(
-                    <Item.Image size='medium' src={profilePicture} circular/>
-                );
-            }
-            else {
-                return(
-                    <Dimmer>
-                        <Loader/>
-                    </Dimmer>
-                );
-            }
-        }
 
         function numChallengesWon(challengesWon) {
             if (challengesWon && challengesWon.size()) {
@@ -143,7 +169,7 @@ class Profile extends Component {
                     <Card.Header textAlign={'center'}>{this.props.user.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    {profilePicture(this.state.profilePicture, this.state.ifS3)}
+                    {this.profilePicture()}
                     <Item.Content>
                         <Item.Extra>
                             <label htmlFor="proPicUpload" className="ui basic purple floated button">
@@ -152,7 +178,7 @@ class Profile extends Component {
                                         Upload New Profile Picture
                                 </div>
                             </label>
-                            <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
+                            <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                         </Item.Extra>
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Friend List</Button>}>
