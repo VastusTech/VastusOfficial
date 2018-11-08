@@ -34,6 +34,7 @@ class GraphQL {
         this.execute(this.constructQuery("GetReview", "getReview", {id: id}, variableList),
             "getReview", successHandler, failureHandler);
     }
+    /*
     static getParty(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetParty", "getParty", {id: id}, variableList),
             "getParty", successHandler, failureHandler);
@@ -41,6 +42,11 @@ class GraphQL {
     static getChallenge(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetChallenge", "getChallenge", {id: id}, variableList),
             "getChallenge", successHandler, failureHandler);
+    }
+    */
+    static getEvent(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
+            "getEvent", successHandler, failureHandler);
     }
     static queryClients(variableList, filter, limit, nextToken, successHandler, failureHandler) {
         var inputVariables = {};
@@ -97,6 +103,7 @@ class GraphQL {
         this.execute(this.constructQuery("QueryReviews", "queryReviews", inputVariables, variableList, filter, true),
             "queryReviews", successHandler, failureHandler);
     }
+    /*
     static queryParties(variableList, filter, limit, nextToken, successHandler, failureHandler) {
         var inputVariables = {};
         if (limit) {
@@ -108,7 +115,8 @@ class GraphQL {
         this.execute(this.constructQuery("QueryParties", "queryParties", inputVariables, variableList, filter, true),
             "queryParties", successHandler, failureHandler);
     }
-    static queryChallenges(variableList, filter, limit, nextToken, successHandler, failureHandler) {
+    */
+    static queryEvents(variableList, filter, limit, nextToken, successHandler, failureHandler) {
         var inputVariables = {};
         if (limit) {
             inputVariables.limit = limit;
@@ -116,8 +124,8 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryChallenges", "queryChallenges", inputVariables, variableList, filter, true),
-            "queryChallenges", successHandler, failureHandler);
+        this.execute(this.constructQuery("QueryEvents", "queryEventss", inputVariables, variableList, filter, true),
+            "queryEvents", successHandler, failureHandler);
     }
 
     // TODO Eventually make this work better to allow for more intelligent queries
