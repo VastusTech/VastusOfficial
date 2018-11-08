@@ -16,29 +16,29 @@ class EventDescriptionModal extends Component {
         isLoading: false,
         isOwned: null,
         isJoined: null,
-        challenge: null,
+        event: null,
         members: [],
         clientModalOpen: false,
     };
 
     componentDidMount() {
-        if (this.props.challenge) {
+        if (this.props.event) {
             //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
-            this.setState({isLoading: false, challenge: this.props.challenge, isOwned: this.props.ifOwned,
+            this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
                 isJoined: this.props.ifJoined, members: this.props.members});
         }
         else {
-            this.setState({isLoading: true, challenge: null, isOwned: null, isJoined: null, members: []})
+            this.setState({isLoading: true, event: null, isOwned: null, isJoined: null, members: []})
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge) {
-            this.setState({isLoading: false, challenge: newProps.challenge, isOwned: newProps.ifOwned,
+        if (newProps.event) {
+            this.setState({isLoading: false, event: newProps.event, isOwned: newProps.ifOwned,
                 isJoined: newProps.ifJoined, members: newProps.members});
         }
         else {
-            this.setState({isLoading: true, challenge: null, isOwned: null, isJoined: null})
+            this.setState({isLoading: true, event: null, isOwned: null, isJoined: null})
         }
         // if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
         //     this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
@@ -78,16 +78,16 @@ class EventDescriptionModal extends Component {
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     render() {
-        if (!this.state.challenge) {
+        if (!this.state.event) {
             return null;
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined, userID, challengeID) {
+        function createCorrectButton(isOwned, isJoined, userID, eventID) {
             if(isOwned === true) {
                 return (
-                    <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                    <Button basic color='purple' onClick={() => {Lambda.deleteEvent(userID, eventID, (data) => {
                         alert(JSON.stringify(data));
                     }, (error) => {
                         alert(JSON.stringify(error));
@@ -98,7 +98,7 @@ class EventDescriptionModal extends Component {
             }
             else if((isOwned === false) && isJoined === true) {
                 return (
-                <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                <Button basic color='purple' onClick={() => {Lambda.deleteEvent(userID, eventID, (data) => {
                     alert(JSON.stringify(data));
                 }, (error) => {
                     alert(JSON.stringify(error));
@@ -109,7 +109,7 @@ class EventDescriptionModal extends Component {
             }
             else if((isOwned === false) && (isJoined === false)) {
                 return (
-                <Button basic color='purple' onClick={() => {Lambda.deleteChallenge(userID, challengeID, (data) => {
+                <Button basic color='purple' onClick={() => {Lambda.deleteEvent(userID, eventID, (data) => {
                     alert(JSON.stringify(data));
                 }, (error) => {
                     alert(JSON.stringify(error));
@@ -122,16 +122,16 @@ class EventDescriptionModal extends Component {
 
         return(
             <Modal trigger={this.props.trigger}>
-                <Modal.Header>{this.state.challenge.title}</Modal.Header>
+                <Modal.Header>{this.state.event.title}</Modal.Header>
                 <Modal.Content image>
                     <div>
-                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.challenge.owner}/>
+                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.event.owner}/>
                     </div>
-                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.challenge.owner}</Button>
+                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.event.owner}</Button>
                     <Modal.Description>
                         <Header>Info: </Header>
-                        <p>{this.state.challenge.time}</p>
-                        <p>{this.state.challenge.goal}</p>
+                        <p>{this.state.event.time}</p>
+                        <p>{this.state.event.goal}</p>
                     </Modal.Description>
                     <div className='event list'>
                         <Modal trigger={<Button basic color='purple'>Members</Button>}>
@@ -141,7 +141,7 @@ class EventDescriptionModal extends Component {
                         </Modal>
                     </div>
                     <div className='button'>
-                        {createCorrectButton(this.state.isOwned, this.state.isJoined, this.state.id, this.state.challenge.id)}
+                        {createCorrectButton(this.state.isOwned, this.state.isJoined, this.state.id, this.state.event.id)}
                     </div>
                 </Modal.Content>
             </Modal>

@@ -208,6 +208,7 @@ class GraphQL {
                 console.log("Object returned nothing");
                 failureHandler("Object had returned null");
             }
+            alert(JSON.stringify(data.data[queryFunctionName]));
             successHandler(data.data[queryFunctionName]);
         }).catch((error) => {
             console.log("GraphQL operation failed...");

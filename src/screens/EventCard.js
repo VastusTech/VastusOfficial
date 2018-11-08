@@ -13,29 +13,29 @@ class EventCard extends Component {
     state = {
         error: null,
         isLoading: true,
-        challenge: null,
+        event: null,
         ifOwned: false,
         ifJoined: false,
     };
 
     componentDidMount() {
-        if (this.props.challenge) {
+        if (this.props.event) {
             let ifOwned = false;
             let ifJoined = false;
             // alert(this.props.userID);
-            if (this.props.user.id === this.props.challenge.owner) {
+            if (this.props.user.id === this.props.event.owner) {
                 ifOwned = true;
             }
-            if (this.props.challenge.members && this.props.challenge.members.includes(this.props.user.id)) {
+            if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
                 ifJoined = true;
             }
-            this.setState({isLoading: false, challenge: this.props.challenge, ifOwned, ifJoined});
+            this.setState({isLoading: false, event: this.props.event, ifOwned, ifJoined});
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge) {
-            this.setState({isLoading: false, challenge: newProps.challenge});
+        if (newProps.event) {
+            this.setState({isLoading: false, event: newProps.event});
         }
     }
 
@@ -50,14 +50,14 @@ class EventCard extends Component {
 
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <EventDescriptionModal ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} challenge={this.state.challenge}
+            <EventDescriptionModal ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
                 trigger={
                     <Card>
                         <Card.Content>
-                            <Card.Header>{this.state.challenge.title}</Card.Header>
-                            <Card.Meta>{this.state.challenge.time}</Card.Meta>
+                            <Card.Header>{this.state.event.title}</Card.Header>
+                            <Card.Meta>{this.state.event.time}</Card.Meta>
                             <Card.Description>
-                                {this.state.challenge.goal}
+                                {this.state.event.goal}
                             </Card.Description>
                         </Card.Content>
                     </Card>
