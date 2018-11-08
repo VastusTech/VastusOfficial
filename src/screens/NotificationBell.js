@@ -8,7 +8,7 @@ import { Icon, Label } from 'semantic-ui-react'
  */
 const NotificationBellProp = () => (
         <Label>
-            <Icon name='bell outline' /> 0
+            <Icon name='bell outline' />
         </Label>
 );
 

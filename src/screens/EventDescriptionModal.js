@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
+import ChallengeMemberList from "./ChallengeMemberList";
 
 /*
 * Event Description Modal
@@ -16,6 +17,7 @@ class EventDescriptionModal extends Component {
         isOwned: null,
         isJoined: null,
         challenge: null,
+        members: [],
         clientModalOpen: false,
     };
 
@@ -23,16 +25,16 @@ class EventDescriptionModal extends Component {
         if (this.props.challenge) {
             //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
-                isOwned: this.props.ifOwned, isJoined: this.props.ifJoined});
+                isOwned: this.props.ifOwned, isJoined: this.props.ifJoined, members: this.props.members});
         }
         else {
-            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null})
+            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null, members: []})
         }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
-            this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
+            this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id, members: newProps.members});
         }
     }
 
@@ -124,6 +126,13 @@ class EventDescriptionModal extends Component {
                         <p>{this.state.challenge.time}</p>
                         <p>{this.state.challenge.goal}</p>
                     </Modal.Description>
+                    <div className='event list'>
+                        <Modal trigger={<Button basic color='purple'>Members</Button>}>
+                            <Modal.Content>
+                                <ChallengeMemberList ifOwned = {this.state.isOwned}/>
+                            </Modal.Content>
+                        </Modal>
+                    </div>
                     <div className='button'>
                         {createCorrectButton(this.state.isOwned, this.state.isJoined, this.state.id, this.state.challenge.id)}
                     </div>
