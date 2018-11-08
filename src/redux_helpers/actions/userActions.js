@@ -18,6 +18,7 @@ export function fetchUserAttributes(id, variableList) {
             dispatch(setUser(data));
             dispatch(setIsNotLoading());
         }, (error) => {
+            alert(JSON.stringify(error));
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });
@@ -31,6 +32,7 @@ export function fetchUser(username) {
             dispatch(setUser(data));
             dispatch(setIsNotLoading());
         }, (error) => {
+            alert(JSON.stringify(error));
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });

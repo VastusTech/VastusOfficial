@@ -129,6 +129,7 @@ class SignUpModal extends Component {
     render() {
         function errorMessage(error) {
             if (error) {
+                alert(JSON.stringify(error));
                 return (
                     <Modal.Description>
                         <Message color='red'>
