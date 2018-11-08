@@ -36,7 +36,9 @@ function callBetterCurUser(callback) {
 callBetterCurUser(function(data) {
     curUserName = data;
     callQueryBetter(getClient(curUserName), function(data) {
-        curUserID = data.id;
+        if(data != null) {
+            curUserID = data.id;
+        }
     });
 });
 
