@@ -6,7 +6,7 @@ import proPic from "../img/BlakeProfilePic.jpg";
 
 let fakeMemberList = ["CL310987761", "CL585959295", "CL675206338"];
 
-class ChallengeMemberList extends Component {
+class EventMemberList extends Component {
     state = {
         error: null,
         isLoading: true,
@@ -74,4 +74,4 @@ class ChallengeMemberList extends Component {
     }
 }
 
-export default ChallengeMemberList;
+export default EventMemberList;

@@ -52,7 +52,7 @@ class CreateEventProp extends Component {
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
-    challengeState = {
+    eventState = {
         title: "",
         date: "",
         location: "",
@@ -80,21 +80,21 @@ class CreateEventProp extends Component {
     changeStateText(key, value) {
         // TODO Sanitize this input
         // TODO Check to see if this will, in fact, work.!
-        this.challengeState[key] = value.target.value;
+        this.eventState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
     handleAccessSwitch = () => {
-        if(this.challengeState.access == 'public') {
-            this.challengeState.access = 'private';
-            //alert(this.challengeState.access);
+        if(this.eventState.access == 'public') {
+            this.eventState.access = 'private';
+            //alert(this.eventState.access);
         }
-        else if (this.challengeState.access == 'private') {
-            this.challengeState.access = 'public';
-            //alert(this.challengeState.access);
+        else if (this.eventState.access == 'private') {
+            this.eventState.access = 'public';
+            //alert(this.eventState.access);
         }
         else {
-            alert("Challenge access should be public or private");
+            alert("Event access should be public or private");
         }
 
     };
@@ -103,9 +103,9 @@ class CreateEventProp extends Component {
         const time = convertDateTimeToISO8601(this.state.dateTime) + "_" +
             convertDateTimeToISO8601(this.state.dateTimeEnd);
 
-        Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.challengeState.capacity),
-            String(this.challengeState.location), String(this.challengeState.title),
-            String(this.challengeState.goal), (data) => {
+        Lambda.createEvent(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
+            String(this.eventState.location), String(this.eventState.title),
+            String(this.eventState.goal), (data) => {
                 alert(JSON.stringify(data));
                 // HANDLE WHAT HAPPENS afterwards
                 if (data.errorMessage) {
@@ -123,11 +123,11 @@ class CreateEventProp extends Component {
         );
     }
 
-    //Inside of render is a modal containing each form input required to create a challenge.
+    //Inside of render is a modal containing each form input required to create a Event.
     render() {
         return (
             <Container style={{padding: 10}}>
-                <Modal trigger={<Button basic color='purple'>+ Create Challenge</Button>}>
+                <Modal trigger={<Button basic color='purple'>+ Create Event</Button>}>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
 
@@ -141,7 +141,7 @@ class CreateEventProp extends Component {
 
                                 <div className="field">
                                     <label>Location</label>
-                                    <Input type="text" name="location" placeholder="Address for challenge" onChange={value => this.changeStateText("location", value)}/>
+                                    <Input type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
                                 </div>
 
                                 <div className="field">
@@ -178,9 +178,9 @@ class CreateEventProp extends Component {
 
                             </Form.Group>
 
-                            <div className="Challenge Description">
-                                <label>Challenge Description</label>
-                                <TextArea type="text" name="description" placeholder="Describe challenge here... " onChange={value => this.changeStateText("description", value)}/>
+                            <div className="Event Description">
+                                <label>Event Description</label>
+                                <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
                             </div>
 
                             <div className="Submit Button">
@@ -189,7 +189,7 @@ class CreateEventProp extends Component {
 
                             <div className="Privacy Switch">
                                 <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
-                                <div>{this.challengeState.access}</div>
+                                <div>{this.eventState.access}</div>
                             </div>
 
                         </Form>

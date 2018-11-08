@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
-import ChallengeMemberList from "./ChallengeMemberList";
+import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 
 /*
@@ -136,7 +136,7 @@ class EventDescriptionModal extends Component {
                     <div className='event list'>
                         <Modal trigger={<Button basic color='purple'>Members</Button>}>
                             <Modal.Content>
-                                <ChallengeMemberList ifOwned = {this.state.isOwned}/>
+                                <EventMemberList ifOwned = {this.state.isOwned}/>
                             </Modal.Content>
                         </Modal>
                     </div>

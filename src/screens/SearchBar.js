@@ -10,14 +10,14 @@ class SearchBarProp extends Component {
     state = {
         error: null,
         isLoading: true,
-        challengesLoading: false,
+        eventsLoading: false,
         clientsLoading: false,
         searchResults: [],
         searchQuery: '',
         source: [],
-        nextChallengeQueryToken: null,
+        nextEventQueryToken: null,
         nextClientQueryToken: null,
-        challengesLimit: 100,
+        eventsLimit: 100,
         clientsLimit: 100,
     };
 
@@ -31,48 +31,48 @@ class SearchBarProp extends Component {
             searchResults: [],
             searchQuery: '',
             source: [],
-            nextChallengeQueryToken: null,
+            nextEventQueryToken: null,
             nextClientQueryToken: null,
             clientsLoading: false,
-            challengesLoading: false
+            eventsLoading: false
         });
     };
 
-    loadMoreChallengeResults(searchQuery) {
+    loadMoreEventResults(searchQuery) {
         console.log("Starting to loading more client results");
-        if (!this.state.challengesLoading) {
-            const challengesVariableComparisons = {
+        if (!this.state.eventsLoading) {
+            const eventsVariableComparisons = {
                 title: "contains",
                 access: "eq"
             };
-            const challengesVariableValues = {
+            const eventsVariableValues = {
                 title: searchQuery,
                 access: "public"
             };
-            this.setState({challengesLoading: true});
-            QL.queryChallenges(["id", "item_type", "title", "goal", "access"], QL.generateFilter("and",
-                challengesVariableComparisons, challengesVariableValues), this.state.challengesLimit, this.state.nextChallengeQueryToken,
+            this.setState({eventsLoading: true});
+            QL.queryEvents(["id", "item_type", "title", "goal", "access"], QL.generateFilter("and",
+                eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
-                    console.log("Received challenges query: " + JSON.stringify(data));
+                    console.log("Received events query: " + JSON.stringify(data));
                     if (data.items && data.items.length) {
                         for (let i = 0; i < data.items.length; i++) {
                             this.addResult(data.items[i]);
                         }
                     }
                     this.setState({
-                        nextChallengeQueryToken: data.nextToken,
-                        challengesLoading: false
+                        nextEventQueryToken: data.nextToken,
+                        eventsLoading: false
                     });
                 }, (error) => {
-                    console.log("query challenges for search bar has failed");
+                    console.log("query events for search bar has failed");
                     if (error.message) {
                         error = error.message;
                     }
                     console.log(error);
                     this.setState({
                         error: error,
-                        nextChallengeQueryToken: null,
-                        challengesLoading: false
+                        nextEventQueryToken: null,
+                        eventsLoading: false
                     });
                 });
         }
@@ -129,7 +129,7 @@ class SearchBarProp extends Component {
                         content: <Message>Lmao</Message>
                     };
                 }
-                else if (item.item_type === "Challenge") {
+                else if (item.item_type === "Events") {
                     result = {
                         title: (item.title + " ~ (" + item.id + ")"),
                         description: item.goal,
@@ -157,14 +157,14 @@ class SearchBarProp extends Component {
         this.setState({ searchQuery: value });
         console.log("Handling search change, state = " + JSON.stringify(this.state));
         if (value.length < 1) return;
-        this.loadMoreChallengeResults(value);
+        this.loadMoreEventResults(value);
         this.loadMoreClientResults(value);
     };
 
     render() {
         // TODO Check to see that this is valid to do?
         console.log("Showing " + this.state.searchResults.length + " results");
-        const isLoading = (this.state.clientsLoading || this.state.challengesLoading);
+        const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
         return (
             <Grid>
                 <Grid.Column width={6}>

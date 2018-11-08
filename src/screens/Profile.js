@@ -7,8 +7,8 @@ import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import proPic from '../img/roundProfile.png';
-import ScheduledChallengesList from "./ScheduledChallengeList";
-import OwnedChallengesList from "./OwnedChallengesList";
+import ScheduledChallengesList from "./ScheduledEventList";
+import OwnedChallengesList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 

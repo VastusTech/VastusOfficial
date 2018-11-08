@@ -1,7 +1,7 @@
 import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
 import React, { Component } from "react";
-import ScheduledChallengesProp from "./ScheduledChallengeList";
-import OwnedChallengesProp from "./OwnedChallengesList";
+import ScheduledChallengesProp from "./ScheduledEventList";
+import OwnedChallengesProp from "./OwnedEventList";
 
 class ChallengeManagerProp extends Component {
     state = {
