@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Modal, Button, Item, Dimmer, Loader, Message } from 'semantic-ui-react';
 import QL from '../GraphQL';
+import Lambda from '../Lambda'
 
 
 /*
@@ -36,6 +37,7 @@ class ClientModal extends Component {
 
     handleAddFriendButton() {
         alert("Adding this friend!");
+        Lambda.sendFriendRequest();
     }
 
     render() {
