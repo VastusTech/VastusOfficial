@@ -7,7 +7,7 @@ import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 
 class OwnedChallengesList extends Component {
     state = {
-        isLoading: false,
+        isLoading: true,
         challenges: {},
         sentRequest: false,
         error: null
@@ -15,6 +15,8 @@ class OwnedChallengesList extends Component {
 
     constructor(props) {
         super(props);
+        // alert("Got into Scheduled Challenges constructor");
+        // this.state.username = this.props.username;
         this.update();
     }
 
@@ -26,14 +28,14 @@ class OwnedChallengesList extends Component {
             this.setState({isLoading: true});
         }
 
-        if (user.hasOwnProperty("ownedChallenges") && user.ownedChallenges && user.ownedChallenges.length) {
+        if (user.hasOwnProperty("ownedChallenges")) {
             for (var i = 0; i < user.ownedChallenges.length; i++) {
                 if (!(user.ownedChallenges[i] in this.state.challenges)) {
                     this.addChallengeFromGraphQL(user.ownedChallenges[i]);
                 }
             }
         }
-        else if (!this.state.isLoading) {
+        else if (!this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
                 this.props.fetchUserAttributes(user.id, ["ownedChallenges"]);
                 this.setState({sentRequest: true});
@@ -44,7 +46,7 @@ class OwnedChallengesList extends Component {
     addChallengeFromGraphQL(challengeID) {
         QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a challenge");
-            this.setState({challenges: [...this.state.challenges, data], isLoading: false});
+            this.setState({challenges: {...this.state.challenges, [data.id]: data}, isLoading: false});
         }, (error) => {
             console.log("Failed to get a challenge");
             console.log(JSON.stringify(error));
@@ -53,18 +55,18 @@ class OwnedChallengesList extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        // this.props = newProps;
+        this.props = newProps;
         this.update();
     }
 
     render() {
-        function rows(userID, challenges) {
+        function rows(challenges) {
             const rowProps = [];
             for (const key in challenges) {
                 if (challenges.hasOwnProperty(key)) {
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard userID={userID} challenge={challenges[key]}/>
+                            <EventCard challenge={challenges[key]}/>
                         </Grid.Row>
                     );
                 }
@@ -77,7 +79,7 @@ class OwnedChallengesList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.userID, this.state.challenges)}</Grid>
+            <Grid>{rows(this.state.challenges)}</Grid>
         );
     }
 }
