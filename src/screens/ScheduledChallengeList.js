@@ -1,21 +1,18 @@
 import React, { Component } from 'react'
-import _ from 'lodash';
-import {Grid, Button, Message} from 'semantic-ui-react';
-import { Storage } from 'aws-amplify';
+import {Grid, Message} from 'semantic-ui-react';
 import EventCard from "./EventCard";
-import QL from '../GraphQL';
-import Lambda from "../Lambda";
-
+import QL from "../GraphQL";
+import { connect } from "react-redux";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import { inspect } from 'util';
 
 class ScheduledChallengesList extends Component {
     state = {
         isLoading: true,
-        checked: false,
-        challenges: [],
+        challenges: {},
+        sentRequest: false,
         error: null
     };
-
-    toggle = () => this.setState({ checked: !this.state.checked });
 
     constructor(props) {
         super(props);
@@ -26,66 +23,56 @@ class ScheduledChallengesList extends Component {
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
-        // if (!this.state.isLoading) {
-        //     return;
-        // }
-        // alert(JSON.stringify(this.props));
-        // if (!this.props.username) {
-        //     return;
-        // }
-        // This can only run if we're already done loading
-        // alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["id", "scheduledChallenges"], (data) => {
-            console.log("Successfully grabbed client by username for Profile.js");
-            //alert("User came back with: " + JSON.stringify(data));
-            this.setState({userID: data.id});
-            for (let i = 0; i < data.scheduledChallenges.length; i++) {
-                this.addChallengeFromGraphQL(data.scheduledChallenges[i]);
+        const user = this.props.user;
+        if (!user.id) {
+            alert("Pretty bad error");
+            this.setState({isLoading: true});
+        }
+
+        if (user.hasOwnProperty("scheduledChallenges")) {
+            for (var i = 0; i < user.scheduledChallenges.length; i++) {
+                if (!(user.scheduledChallenges[i] in this.state.challenges)) {
+                    this.addChallengeFromGraphQL(user.scheduledChallenges[i]);
+                }
             }
-        }, (error) => {
-            console.log("Getting client by username failed for ScheduledChallengeList.js");
-            if (error.message) {
-                error = error.message;
+        }
+        else if (!this.props.user.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.user.info.error) {
+                this.props.fetchUserAttributes(user.id, ["scheduledChallenges"]);
+                this.setState({sentRequest: true});
             }
-            this.setState({error: error});
-        });
+        }
     }
 
     addChallengeFromGraphQL(challengeID) {
         QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a challenge");
-            this.setState({challenges: [...this.state.challenges, data], isLoading: false});
+            this.setState({challenges: {...this.state.challenges, [data.id]: data}, isLoading: false});
         }, (error) => {
             console.log("Failed to get a challenge");
-            if (error.message) {
-                error = error.message
-            }
-            console.log(error);
+            console.log(JSON.stringify(error));
             this.setState({error: error});
         });
     }
 
     componentWillReceiveProps(newProps) {
-        // this.props = newProps;
+        this.props = newProps;
         this.update();
     }
 
-    handleLeaveButton(challenge) {
-        Lambda.leaveChallenge(this.state.userInfo.id, this.state.userInfo.id,
-            challenge, (data) => {
-                alert(JSON.stringify(data));
-            }, (error) => {
-                alert(JSON.stringify(error));
-            });
-    }
-
     render() {
-        function rows(userID, challenges) {
-            return _.times(challenges.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard userID={userID} challenge={challenges[i]}/>
-                </Grid.Row>
-            ));
+        function rows(challenges) {
+            const rowProps = [];
+            for (const key in challenges) {
+                if (challenges.hasOwnProperty(key)) {
+                    rowProps.push(
+                        <Grid.Row className="ui one column stackable center aligned page grid">
+                            <EventCard challenge={challenges[key]}/>
+                        </Grid.Row>
+                    );
+                }
+            }
+            return rowProps;
         }
         if (this.state.isLoading) {
             return(
@@ -93,9 +80,21 @@ class ScheduledChallengesList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.userID, this.state.challenges)}</Grid>
+            <Grid>{rows(this.state.challenges)}</Grid>
         );
     }
 }
 
-export default ScheduledChallengesList;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUserAttributes: (id, attributeList) => {
+            dispatch(fetchUserAttributes(id, attributeList));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduledChallengesList);

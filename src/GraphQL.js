@@ -217,10 +217,8 @@ class GraphQL {
         };
     }
     static async execute(query, queryFunctionName, successHandler, failureHandler) {
-        // alert("About to send to GraphQL: " + query.query);
         API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
             console.log("GraphQL operation succeeded!");
-            // alert(JSON.stringify(data));
             if (!data.data || !data.data[queryFunctionName]) {
                 console.log("Object returned nothing");
                 failureHandler("Object had returned null");

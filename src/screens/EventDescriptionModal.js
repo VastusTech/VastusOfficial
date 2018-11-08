@@ -3,6 +3,7 @@ import { Modal, Button, Header } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import ChallengeMemberList from "./ChallengeMemberList";
+import { connect } from 'react-redux';
 
 /*
 * Event Description Modal
@@ -13,7 +14,6 @@ import ChallengeMemberList from "./ChallengeMemberList";
 class EventDescriptionModal extends Component {
     state = {
         isLoading: false,
-        id: null,
         isOwned: null,
         isJoined: null,
         challenge: null,
@@ -24,20 +24,21 @@ class EventDescriptionModal extends Component {
     componentDidMount() {
         if (this.props.challenge) {
             //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
-            this.setState({isLoading: false, challenge: this.props.challenge, id: this.props.id,
-                isOwned: this.props.ifOwned, isJoined: this.props.ifJoined, members: this.props.members});
+            this.setState({isLoading: false, challenge: this.props.challenge, isOwned: this.props.ifOwned,
+                isJoined: this.props.ifJoined, members: this.props.members});
         }
         else {
-            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null, members: []})
+            this.setState({isLoading: true, challenge: null, isOwned: null, isJoined: null, members: []})
         }
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
-            this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id, members: newProps.members});
+        if (newProps.challenge) {
+            this.setState({isLoading: false, challenge: newProps.challenge, isOwned: newProps.ifOwned,
+                isJoined: newProps.ifJoined, members: newProps.members});
         }
         else {
-            this.setState({isLoading: true, challenge: null, id: null, isOwned: null, isJoined: null})
+            this.setState({isLoading: true, challenge: null, isOwned: null, isJoined: null})
         }
         // if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
         //     this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
@@ -148,4 +149,8 @@ class EventDescriptionModal extends Component {
     }
 }
 
-export default EventDescriptionModal;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(EventDescriptionModal);

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Item} from 'semantic-ui-react'
+import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from './AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
@@ -8,6 +8,8 @@ import QL from "../GraphQL";
 import Lambda from "../Lambda";
 import ClientModal from "./ClientModal";
 import Notification from "./Notification";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {connect} from 'react-redux';
 
 setupAWS();
 
@@ -35,57 +37,65 @@ setupAWS();
 class NotificationFeed extends Component {
     state = {
         error: null,
-        isLoading: false,
-        username: null,
-        friendRequests: [],
+        isLoading: true,
+        sentRequest: false,
     };
 
     constructor(props) {
         super(props);
-        this.state.username = props.username;
+        this.setState({isLoading: true});
         this.update();
     }
 
 
     componentDidMount() {
-
+        this.update();
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({username: newProps.username});
+        // this.setState({isLoading: true});
+        this.props = newProps;
         this.update();
     }
 
     update() {
-        if (!this.state.username) {
-            return;
+        const user = this.props.user;
+        if (!user.id) {
+            alert("Pretty bad error");
+            this.setState({isLoading: true});
         }
-        this.setState({isLoading: true});
-        QL.getClientByUsername(this.state.username, ["friendRequests"], (data) => {
-            if (data.friendRequests) {
-                this.setState({friendRequests: data.friendRequests, isLoading: false});
+        if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.user.info.error) {
+                this.props.fetchUserAttributes(user.id, ["friendRequests"]);
+                this.setState({sentRequest: true, isLoading: false});
             }
-            else {
-                this.setState({isLoading: false});
-            }
-        }, (error) => {
-
-        });
+        }
+        else if (this.props.user.hasOwnProperty("friendRequests")) {
+            this.setState({sentRequest: true, isLoading: false});
+        }
     }
 
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
     render() {
+        if (this.state.isLoading) {
+            return(
+                <Dimmer>
+                    <Loader/>
+                </Dimmer>
+            );
+        }
         function rows(friendRequests)
         {
-            return _.times(friendRequests.length, i => (
-                <Notification friendRequestID={friendRequests[i]}/>
-            ));
+            if (friendRequests) {
+                return _.times(friendRequests.length, i => (
+                    <Notification friendRequestID={friendRequests[i]}/>
+                ));
+            }
         }
-
         return(
-            <Grid>{rows(this.state.friendRequests)}</Grid>
+            <Grid>{rows(this.props.user.friendRequests)}</Grid>
         );
     }
 }
@@ -103,4 +113,15 @@ class NotificationFeed extends Component {
 //     {/*</Modal.Content>*/}
 // {/*</Modal>*/}
 
-export default NotificationFeed;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUserAttributes: (id, attributesList) => {
+            dispatch(fetchUserAttributes(id, attributesList));
+        }
+    }
+};
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationFeed);

@@ -3,6 +3,7 @@ import {Item, Button, Card, Modal, Checkbox, Message, Dimmer, Loader } from 'sem
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
+import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import proPic from '../img/roundProfile.png';
@@ -21,49 +22,54 @@ class Profile extends Component {
         isLoading: true,
         checked: false,
         profilePicture: null,
+        ifS3: false,
         error: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
-
     constructor(props) {
         super(props);
         this.setState({isLoading: true});
         // ("Got into Profile constructor");
-        // this.update();
+        this.update();
     }
 
     update() {
         const user = this.props.user;
+        // alert("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
         if (!user.id) {
             alert("ID is not set inside profile... This means a problem has occurred");
         }
 
-        if (user.id && user.name && user.username && user.birthday && user.profileImagePath && user.challengesWon) {
-            if (this.props.isLoading) {
-                this.setState({isLoading: false});
+        if (user.id && user.name && user.username && user.birthday) {
+            if (this.state.isLoading) {
                 // And start to get the profile image from S3
-                alert("Starting to get profile image");
-                Storage.get(user.profileImagePath).then((data) => {
-                    if (data) {
-                        alert("Received properly and setting! Data = " + JSON.stringify(data));
-                        this.setState({profilePicture: data, isLoading: false});
-                    }
-                    else {
-                        // TODO Check if this is what happens when it doesn't exist
-                        alert("Received null and setting to default!");
-                        this.setState({profilePicture: proPic, isLoading: false});
-                    }
-                }).catch((error) => {
-                    alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                    this.setState({error: error});
-                });
+                // alert("Starting to get profile image");
+                // Storage.get(user.profileImagePath).then((data) => {
+                //     if (data) {
+                //         alert("Received properly and setting! Data = " + JSON.stringify(data));
+                //         this.setState({profilePicture: data, isLoading: false, ifS3: true});
+                //     }
+                //     else {
+                //         // TODO Check if this is what happens when it doesn't exist
+                //         alert("Received null and setting to default!");
+                //         this.setState({profilePicture: proPic, isLoading: false, ifS3: false});
+                //     }
+                // }).catch((error) => {
+                //     alert("Received an error, so not setting. Error = " + JSON.stringify(error));
+                //     this.setState({error: error});
+                // });
+                this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
             }
         }
-        else {
+        else if (!this.props.user.info.isLoading) {
             this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon"]);
         }
+    }
+
+    componentDidMount() {
+        this.update();
     }
 
     componentWillReceiveProps(newProps) {
@@ -72,6 +78,7 @@ class Profile extends Component {
     }
 
     render() {
+        //alert(JSON.stringify(this.state));
         /**
          * This creates an error message from the given error string
          * @param error A string containing the error message that was invoked
@@ -93,8 +100,13 @@ class Profile extends Component {
          * @param profilePicture Displays the
          * @returns {*}
          */
-        function profilePicture(profilePicture) {
+        function profilePicture(profilePicture, ifS3) {
             if (profilePicture) {
+                if (ifS3) {
+                    return(
+                        <S3Image imgKey={profilePicture}/>
+                    );
+                }
                 return(
                     <Item.Image size='medium' src={profilePicture} circular/>
                 );
@@ -131,13 +143,14 @@ class Profile extends Component {
                     <Card.Header textAlign={'center'}>{this.props.user.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    <Item.Image size='medium' src={profilePicture(this.state.profilePicture)} circular/>
+                    {profilePicture(this.state.profilePicture, this.state.ifS3)}
                     <Item.Content>
                         <Item.Extra>
                             <label htmlFor="proPicUpload" className="ui basic purple floated button">
-                                <i className='ui upload icon'>
-                                    Upload New Profile Picture
-                                </i>
+                                <div>
+                                    <i className='ui upload icon'></i>
+                                        Upload New Profile Picture
+                                </div>
                             </label>
                             <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
                         </Item.Extra>

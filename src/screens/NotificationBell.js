@@ -6,10 +6,8 @@ import { Icon, Label } from 'semantic-ui-react'
 *
 * This is the styling for the notification bell icon in the tab view.
  */
-const NotificationBellProp = () => (
+export default () => (
         <Label>
             <Icon name='bell outline' />
         </Label>
 );
-
-export default NotificationBellProp;

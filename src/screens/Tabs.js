@@ -12,7 +12,7 @@ import NextWorkoutProp from "./NextWorkout";
 *
 * The app is currently split up into three sections: home, profile, and notifications.
  */
-export default (props) => (
+export default () => (
     <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={
         [
             {
@@ -29,7 +29,7 @@ export default (props) => (
                             </Card.Content>
                         </Card>
                         <div className="ui one column stackable center aligned page grid">
-                            <EventFeed userID={this.state.userID}/>
+                            <EventFeed/>
                         </div>
                     </Tab.Pane>
             },
@@ -39,7 +39,7 @@ export default (props) => (
                 </Menu.Item>),
                 render: () => <Tab.Pane attached={false}>
                     <div className="ui one column stackable center aligned page grid">
-                        <ProfileProp username={this.state.username}/>
+                        <ProfileProp/>
                     </div>
                 </Tab.Pane>
             },
@@ -55,7 +55,7 @@ export default (props) => (
                                 <Card.Header textAlign={'center'}>Notification Feed</Card.Header>
                             </Card.Content>
                             <Card.Content>
-                                <NotificationFeedProp username={this.state.username}/>
+                                <NotificationFeedProp/>
                             </Card.Content>
                         </Card>
                     </div>

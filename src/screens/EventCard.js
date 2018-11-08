@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Card } from 'semantic-ui-react';
 import EventDescriptionModal from './EventDescriptionModal';
+import { connect } from 'react-redux';
 
 /*
 * Event Card
@@ -21,11 +22,11 @@ class EventCard extends Component {
         if (this.props.challenge) {
             let ifOwned = false;
             let ifJoined = false;
-            alert(this.props.userID);
-            if (this.props.userID === this.props.challenge.owner) {
+            // alert(this.props.userID);
+            if (this.props.user.id === this.props.challenge.owner) {
                 ifOwned = true;
             }
-            if (this.props.challenge.members && this.props.challenge.members.includes(this.props.userID)) {
+            if (this.props.challenge.members && this.props.challenge.members.includes(this.props.user.id)) {
                 ifJoined = true;
             }
             this.setState({isLoading: false, challenge: this.props.challenge, ifOwned, ifJoined});
@@ -35,9 +36,6 @@ class EventCard extends Component {
     componentWillReceiveProps(newProps) {
         if (newProps.challenge) {
             this.setState({isLoading: false, challenge: newProps.challenge});
-        }
-        if (newProps.userID) {
-            this.setState({userID: newProps.userID});
         }
     }
 
@@ -69,4 +67,8 @@ class EventCard extends Component {
     }
 }
 
-export default EventCard;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(EventCard);

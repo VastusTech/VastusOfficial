@@ -46,7 +46,6 @@ class AuthApp extends Component {
 
     //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
-        alert("Fuck me");
         return (
             <div className="App">
                 <Grid>

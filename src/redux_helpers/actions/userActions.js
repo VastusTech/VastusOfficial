@@ -8,9 +8,11 @@ export function setUser(user) {
     };
 }
 
+// TODO
 export function fetchUserAttributes(id, variableList) {
     return (dispatch) => {
-        alert("in fetchUserAttributes");
+        // alert("in fetchUserAttributes");
+        // alert("we can do multiple dispatches");
         dispatch(setIsLoading());
         QL.getClient(id, variableList, (data) => {
             dispatch(setUser(data));
