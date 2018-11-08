@@ -129,7 +129,7 @@ class SearchBarProp extends Component {
                         content: <Message>Lmao</Message>
                     };
                 }
-                else if (item.item_type === "Events") {
+                else if (item.item_type === "Event") {
                     result = {
                         title: (item.title + " ~ (" + item.id + ")"),
                         description: item.goal,
