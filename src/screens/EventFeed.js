@@ -18,10 +18,9 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials(
 class EventFeed extends Component {
     state = {
         isLoading: true,
-        userID: null,
-        challenges: [],
+        events: [],
         clientNames: {}, // id to name
-        challengeFeedLength: 10,
+        eventFeedLength: 10,
         nextToken: null,
         ifFinished: false,
         calculations: {
@@ -31,7 +30,7 @@ class EventFeed extends Component {
     };
 
     componentDidMount() {
-        this.queryChallenges();
+        this.queryEvents();
     }
 
     componentWillReceiveProps(newProps) {
@@ -39,16 +38,16 @@ class EventFeed extends Component {
         this.setState({userID: newProps.userID});
     }
 
-    queryChallenges() {
+    queryEvents() {
         this.setState({isLoading: true});
 
         if (!this.state.ifFinished) {
-            QL.queryChallenges(["id", "title", "goal", "time", "owner", "members"], QL.generateFilter("and",
-                {"access": "eq"}, {"access": "public"}), this.state.challengeFeedLength,
+            QL.queryEvents(["id", "title", "goal", "time", "owner", "members"], QL.generateFilter("and",
+                {"access": "eq"}, {"access": "public"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (data.items) {
                         for (let i = 0; i < data.items.length; i++) {
-                            this.setState({challenges: [...this.state.challenges, data.items[i]]});
+                            this.setState({events: [...this.state.events, data.items[i]]});
                         }
                         this.setState({nextToken: data.nextToken});
                         if (!data.nextToken) {
@@ -60,13 +59,10 @@ class EventFeed extends Component {
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
-                    console.log("Querying challenges failed!");
-                    if (error.message) {
-                        error = error.message;
-                    }
+                    console.log("Querying events failed!");
                     console.log(error);
                     alert(error);
-                    this.setState({isLoading: false});
+                    this.setState({isLoading: false, error: error});
                 });
         }
     }
@@ -81,21 +77,20 @@ class EventFeed extends Component {
         // console.log(calculations.bottomVisible);
         if(calculations.bottomVisible) {
             console.log("Next Token: " + this.state.nextToken);
-            this.queryChallenges();
+            this.queryEvents();
         }
     };
 
     render() {
         /**
          * This function takes in a list of challenges and displays them in a list of Event Card views.
-         * @param userID
-         * @param challenges
+         * @param events
          * @returns {*}
          */
-        function rows(userID, challenges) {
-            return _.times(challenges.length, i => (
+        function rows(events) {
+            return _.times(events.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard userID={userID} challenge={challenges[i]}/>
+                    <EventCard event={events[i]}/>
                 </Grid.Row>
             ));
         }
@@ -105,7 +100,7 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <Grid>
-                    {rows(this.state.userID, this.state.challenges)}
+                    {rows(this.state.events)}
                 </Grid>
             </Visibility>
         );
