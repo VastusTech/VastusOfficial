@@ -177,8 +177,6 @@ class SearchBarProp extends Component {
                         {...this.props}
                     />
                 </Grid.Column>
-                {/*<Grid.Column width={10}>*/}
-                {/*</Grid.Column>*/}
             </Grid>
         )
     }

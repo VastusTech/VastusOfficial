@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Message } from 'semantic-ui-react'
+import {Item, Button, Card, Modal, Checkbox, Message, Dimmer, Loader } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
 import ChallengeManagerProp from "./ManageChallenges";
-import QL from '../GraphQL';
+// import QL from '../GraphQL';
 import proPic from '../img/roundProfile.png';
 import ScheduledChallengesList from "./ScheduledChallengeList";
 import OwnedChallengesList from "./OwnedChallengesList";
+import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
+import { connect } from "react-redux";
 
 /**
 * Profile
@@ -18,18 +20,7 @@ class Profile extends Component {
     state = {
         isLoading: true,
         checked: false,
-        username: null,
-        userInfo: {
-            id: null,
-            username: null,
-            name: null,
-            birthday: null,
-            profileImagePath: null,
-            profilePicture: null,
-            challengesWon: null,
-            scheduledChallenges:[],
-            access: 'private'
-        },
+        profilePicture: null,
         error: null
     };
 
@@ -38,52 +29,41 @@ class Profile extends Component {
 
     constructor(props) {
         super(props);
-        //("Got into Profile constructor");
-        this.update();
+        this.setState({isLoading: true});
+        // ("Got into Profile constructor");
+        // this.update();
     }
 
     update() {
-        // TODO Change this if we want to actually be able to do something while it's loading
-        if (!this.state.isLoading) {
-            return;
+        const user = this.props.user;
+        if (!user.id) {
+            alert("ID is not set inside profile... This means a problem has occurred");
         }
-        //alert(JSON.stringify(this.props));
-        if (!this.props.username) {
-            return;
-        }
-        // This can only run if we're already done loading
-        this.state.username = this.props.username;
-        // TODO Start loading the profile picture
-        //alert("Starting to get user attributes for Profile.js in GraphQL");
-        QL.getClientByUsername(this.state.username, ["name", "id", "username", "birthday", "profileImagePath", "challengesWon", "scheduledChallenges"], (data) => {
-            console.log("Successfully grabbed client by username for Profile.js");
-            this.setState({isLoading: false, userInfo: this.createUserInfo(data)});
-            // Now grab the profile picture
-            if (data.profileImagePath) {
-                Storage.get(data.profileImagePath).then((data) => {
-                    this.setState({profilePicture: data, isLoading: false});
+
+        if (user.id && user.name && user.username && user.birthday && user.profileImagePath && user.challengesWon) {
+            if (this.props.isLoading) {
+                this.setState({isLoading: false});
+                // And start to get the profile image from S3
+                alert("Starting to get profile image");
+                Storage.get(user.profileImagePath).then((data) => {
+                    if (data) {
+                        alert("Received properly and setting! Data = " + JSON.stringify(data));
+                        this.setState({profilePicture: data, isLoading: false});
+                    }
+                    else {
+                        // TODO Check if this is what happens when it doesn't exist
+                        alert("Received null and setting to default!");
+                        this.setState({profilePicture: proPic, isLoading: false});
+                    }
                 }).catch((error) => {
+                    alert("Received an error, so not setting. Error = " + JSON.stringify(error));
                     this.setState({error: error});
                 });
             }
-        }, (error) => {
-            console.log("Getting client by username failed for Profile.js");
-            if (error.message) {
-                error = error.message;
-            }
-            this.setState({error: error});
-        });
-    }
-
-    createUserInfo(client) {
-        return {
-            name: client.name,
-            username: client.username,
-            birthday: client.birthday,
-            profileImagePath: client.profileImagePath,
-            challengesWon: client.challengesWon,
-            scheduledChallenges: client.scheduledChallenges
-        };
+        }
+        else {
+            this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon"]);
+        }
     }
 
     componentWillReceiveProps(newProps) {
@@ -91,35 +71,22 @@ class Profile extends Component {
         this.update();
     }
 
-    handleAccessSwitch = () => {
-        if(this.state.userInfo.access === 'public') {
-            this.state.userInfo.access = 'private';
-        }
-        else if (this.state.userInfo.access === 'private') {
-            this.state.userInfo.access = 'public';
-        }
-        else {
-            alert("Challenge access should be public or private");
-        }
-
-    };
-
     render() {
         /**
          * This creates an error message from the given error string
          * @param error A string containing the error message that was invoked
          * @returns {*} Returns a Semantic-ui script for displaying the error
          */
-        function errorMessage(error) {
-            if (error) {
-                return (
-                    <Message color='red'>
-                        <h1>Error!</h1>
-                        <p>{error}</p>
-                    </Message>
-                );
-            }
-        }
+        // function errorMessage(error) {
+        //     if (error) {
+        //         return (
+        //             <Message color='red'>
+        //                 <h1>Error!</h1>
+        //                 <p>{error}</p>
+        //             </Message>
+        //         );
+        //     }
+        // }
 
         /**
          *
@@ -134,7 +101,9 @@ class Profile extends Component {
             }
             else {
                 return(
-                    <p>Loading...</p>
+                    <Dimmer>
+                        <Loader/>
+                    </Dimmer>
                 );
             }
         }
@@ -148,7 +117,9 @@ class Profile extends Component {
 
         if (this.state.isLoading) {
             return(
-                <Message>Loading...</Message>
+                <Dimmer>
+                    <Loader/>
+                </Dimmer>
             )
         }
 
@@ -156,17 +127,17 @@ class Profile extends Component {
         //and a switch to set the privacy for the user.
         return(
             <Card>
-                {errorMessage(this.state.error)}
                 <Card.Content>
-                    <Card.Header textAlign={'center'}>{this.state.userInfo.name}</Card.Header>
+                    <Card.Header textAlign={'center'}>{this.props.user.name}</Card.Header>
                 </Card.Content>
                 <Item>
-                    <Item.Image size='medium' src={proPic} circular/>
+                    <Item.Image size='medium' src={profilePicture(this.state.profilePicture)} circular/>
                     <Item.Content>
                         <Item.Extra>
                             <label htmlFor="proPicUpload" className="ui basic purple floated button">
-                                <i className='ui upload icon'></i>
-                                Upload New Profile Picture
+                                <i className='ui upload icon'>
+                                    Upload New Profile Picture
+                                </i>
                             </label>
                             <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
                         </Item.Extra>
@@ -180,31 +151,43 @@ class Profile extends Component {
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Scheduled Challenges</Button>}>
                                 <Modal.Content>
-                                    <ScheduledChallengesList username={this.state.userInfo.username}/>
+                                    <ScheduledChallengesList/>
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>
                         <Item.Extra>
                             <Modal size='mini' trigger={<Button basic color='purple'>Owned Challenges</Button>}>
                                 <Modal.Content>
-                                    <OwnedChallengesList username={this.state.userInfo.username}/>
+                                    <OwnedChallengesList/>
                                 </Modal.Content>
                             </Modal>
                         </Item.Extra>
-
-                        <Item.Extra>Event Wins: <div>{numChallengesWon(this.state.userInfo.challengesWon)}</div></Item.Extra>
+                        <Item.Extra>Event Wins: <div>{numChallengesWon(this.props.user.challengesWon)}</div></Item.Extra>
                     </Item.Content>
                 </Item>
-                <div className="Privacy Switch">
-                    <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
-                    <div>{this.state.userInfo.access}</div>
-                </div>
                 <div className="ui one column stackable center aligned page grid">
-                    <TrophyCaseProp numTrophies={numChallengesWon(this.state.userInfo.challengesWon)}/>
+                    <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
                 </div>
             </Card>
         );
     }
 }
 
-export default Profile;
+// {/*<div className="Privacy Switch">*/}
+//     {/*<Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>*/}
+//     {/*<div>{this.state.userInfo.access}</div>*/}
+// {/*</div>*/}
+
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUserAttributes: (id, attributesList) => {
+            dispatch(fetchUserAttributes(id, attributesList));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

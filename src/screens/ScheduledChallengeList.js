@@ -6,12 +6,11 @@ import EventCard from "./EventCard";
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
 
+
 class ScheduledChallengesList extends Component {
     state = {
         isLoading: true,
         checked: false,
-        username: null,
-        userID: null,
         challenges: [],
         error: null
     };
@@ -21,7 +20,7 @@ class ScheduledChallengesList extends Component {
     constructor(props) {
         super(props);
         // alert("Got into Scheduled Challenges constructor");
-        this.state.username = this.props.username;
+        // this.state.username = this.props.username;
         this.update();
     }
 
@@ -31,9 +30,9 @@ class ScheduledChallengesList extends Component {
         //     return;
         // }
         // alert(JSON.stringify(this.props));
-        if (!this.props.username) {
-            return;
-        }
+        // if (!this.props.username) {
+        //     return;
+        // }
         // This can only run if we're already done loading
         // alert("Starting to get user attributes for Profile.js in GraphQL");
         QL.getClientByUsername(this.state.username, ["id", "scheduledChallenges"], (data) => {
