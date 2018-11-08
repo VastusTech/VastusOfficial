@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
 
-class ScheduledChallengesList extends Component {
+class ScheduledEventsList extends Component {
     state = {
         isLoading: true,
         events: {},
@@ -16,7 +16,7 @@ class ScheduledChallengesList extends Component {
 
     constructor(props) {
         super(props);
-        // alert("Got into Scheduled Challenges constructor");
+        // alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
         this.update();
     }
@@ -29,23 +29,23 @@ class ScheduledChallengesList extends Component {
             this.setState({isLoading: true});
         }
 
-        if (user.hasOwnProperty("scheduledChallenges")) {
-            for (var i = 0; i < user.scheduledChallenges.length; i++) {
-                if (!(user.scheduledChallenges[i] in this.state.events)) {
-                    this.addChallengeFromGraphQL(user.scheduledChallenges[i]);
+        if (user.hasOwnProperty("scheduledEvents")) {
+            for (var i = 0; i < user.scheduledEvents.length; i++) {
+                if (!(user.scheduledEvents[i] in this.state.events)) {
+                    this.addEventFromGraphQL(user.scheduledEvents[i]);
                 }
             }
         }
         else if (!this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
-                this.props.fetchUserAttributes(user.id, ["scheduledChallenges"]);
+                this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
     }
 
-    addChallengeFromGraphQL(eventID) {
-        QL.getChallenge(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
+    addEventFromGraphQL(eventID) {
+        QL.getEvent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a event");
             this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
@@ -97,4 +97,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduledChallengesList);
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduledEventsList);

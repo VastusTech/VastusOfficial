@@ -31,7 +31,7 @@ class OwnedEventsList extends Component {
         if (user.hasOwnProperty("ownedEvents")) {
             for (let i = 0; i < user.ownedEvents.length; i++) {
                 if (!(user.ownedEvents[i] in this.state.events)) {
-                    this.addeventFromGraphQL(user.ownedEvents[i]);
+                    this.addEventFromGraphQL(user.ownedEvents[i]);
                 }
             }
         }
@@ -44,7 +44,7 @@ class OwnedEventsList extends Component {
     }
 
     addEventFromGraphQL(eventID) {
-        QL.getevent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
+        QL.getEvent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a event");
             this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
