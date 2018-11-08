@@ -26,27 +26,13 @@ class Lambda {
             ]
         }, successHandler, failureHandler);
     }
-    static editPartyAttribute(fromID, partyID, attributeName, attributeValue, successHandler, failureHandler) {
+    static editEventAttribute(fromID, eventID, attributeName, attributeValue, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
             action: "UPDATESET",
-            itemType: "Party",
+            itemType: "Event",
             identifiers: [
-                partyID
-            ],
-            attributeName: attributeName,
-            attributeValues: [
-                attributeValue
-            ]
-        }, successHandler, failureHandler);
-    }
-    static editChallengeAttribute(fromID, challengeID, attributeName, attributeValue, successHandler, failureHandler) {
-        this.invokeLambda({
-            fromID: fromID,
-            action: "UPDATESET",
-            itemType: "Challenge",
-            identifiers: [
-                challengeID
+                eventID
             ],
             attributeName: attributeName,
             attributeValues: [
@@ -72,13 +58,14 @@ class Lambda {
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
-            itemType: "Challenge",
-            createChallengeRequest: {
+            itemType: "Event",
+            createEventRequest: {
                 owner: owner,
                 time: time,
                 capacity: capacity,
                 address: address,
                 title: title,
+                ifChallenge: "true",
                 goal: goal
             }
         }, successHandler, failureHandler);
@@ -87,13 +74,14 @@ class Lambda {
        this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
-            itemType: "Challenge",
-            createChallengeRequest: {
+            itemType: "Event",
+            createEventRequest: {
                 owner: owner,
                 time: time,
                 capacity: capacity,
                 address: address,
                 title: title,
+                ifChallenge: "true",
                 goal: goal,
                 description: description,
                 difficulty: difficulty,
@@ -102,7 +90,7 @@ class Lambda {
             }
         }, successHandler, failureHandler);
     }
-    static joinChallenge(fromID, clientID, challengeID, successHandler, failureHandler) {
+    static joinEvent(fromID, clientID, eventID, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
             action: "UPDATEADD",
@@ -110,9 +98,9 @@ class Lambda {
             identifiers: [
                 clientID
             ],
-            attributeName: "scheduledChallenges",
+            attributeName: "scheduledEvents",
             attributeValues: [
-                challengeID
+                eventID
             ]
         }, successHandler, failureHandler);
     }
@@ -120,7 +108,7 @@ class Lambda {
         this.invokeLambda({
             fromID: fromID,
             action: "UPDATESET",
-            itemType: "Challenge",
+            itemType: "Event",
             identifiers: [
                 challengeID
             ],
@@ -130,7 +118,7 @@ class Lambda {
             },
         }, successHandler, failureHandler);
     }
-    static leaveChallenge(fromID, clientID, challengeID, successHandler, failureHandler) {
+    static leaveEvent(fromID, clientID, eventID, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
             action: "UPDATEREMOVE",
@@ -138,19 +126,19 @@ class Lambda {
             identifiers: [
                 clientID
             ],
-            attributeName: "scheduledChallenges",
+            attributeName: "scheduledEvents",
             attributeValues: [
-                challengeID
+                eventID
             ]
         }, successHandler, failureHandler);
     }
-    static deleteChallenge(fromID, challengeID, successHandler, failureHandler) {
+    static deleteEvent(fromID, eventID, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
             action: "DELETE",
-            itemType: "Challenge",
+            itemType: "Event",
             identifiers: [
-                challengeID
+                eventID
             ]
         }, successHandler, failureHandler);
     }
@@ -158,14 +146,14 @@ class Lambda {
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
-            itemType: "Challenge",
-            createChallengeRequest: {
+            itemType: "Event",
+            createEventRequest: {
                 owner: owner,
                 time: time,
                 capacity: capacity,
                 address: address,
                 title: title,
-                // TODO Find a way to input optional params
+                ifChallenge: "false"
             }
         }, successHandler, failureHandler);
     }
@@ -173,8 +161,8 @@ class Lambda {
         this.invokeLambda({
             fromID: fromID,
             action: "CREATE",
-            itemType: "Challenge",
-            createChallengeRequest: {
+            itemType: "Event",
+            createEventRequest: {
                 owner: owner,
                 time: time,
                 capacity: capacity,
@@ -182,46 +170,9 @@ class Lambda {
                 title: title,
                 description: description,
                 memberIDs: memberIDs,
-                access: access
+                access: access,
+                ifChallenge: "false",
             }
-        }, successHandler, failureHandler);
-    }
-    static joinParty(fromID, clientID, partyID, successHandler, failureHandler) {
-        this.invokeLambda({
-            fromID: fromID,
-            action: "UPDATEADD",
-            itemType: "Client",
-            identifiers: [
-                clientID
-            ],
-            attributeName: "scheduledParties",
-            attributeValues: [
-                partyID
-            ]
-        }, successHandler, failureHandler);
-    }
-    static leaveParty(fromID, clientID, partyID, successHandler, failureHandler) {
-        this.invokeLambda({
-            fromID: fromID,
-            action: "UPDATEREMOVE",
-            itemType: "Client",
-            identifiers: [
-                clientID
-            ],
-            attributeName: "scheduledParties",
-            attributeValues: [
-                partyID
-            ]
-        }, successHandler, failureHandler);
-    }
-    static deleteParty(fromID, partyID, successHandler, failureHandler) {
-        this.invokeLambda({
-            fromID: fromID,
-            action: "DELETE",
-            itemType: "Party",
-            identifiers: [
-                partyID
-            ]
         }, successHandler, failureHandler);
     }
     static sendFriendRequest(fromID, clientID, friendID, successHandler, failureHandler) {
