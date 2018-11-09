@@ -11,3 +11,10 @@
 
 @lightPrimaryColor   : #7F47AE;
 @lightSecondaryColor : @lightBlack;
+
+/*-------------------
+    Focused Input
+--------------------*/
+
+/* Used on inputs, textarea etc */
+@focusedFormBorderColor: @primaryColor;

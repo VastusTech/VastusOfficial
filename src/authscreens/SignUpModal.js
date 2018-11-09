@@ -174,7 +174,7 @@ class SignUpModal extends Component {
             );
         }
         return(
-            <div>
+
                 <Modal open={this.props.open} trigger={<Button fluid primary inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.state.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
@@ -222,7 +222,7 @@ class SignUpModal extends Component {
                         </Form>
                     </Modal.Actions>
                 </Modal>
-            </div>
+
         );
     }
 }
