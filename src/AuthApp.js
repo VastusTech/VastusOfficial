@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Button, Grid, Menu} from "semantic-ui-react";
+import {Button, Menu, Sticky, Container} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
@@ -36,6 +36,8 @@ class AuthApp extends Component {
         });
     }
 
+    handleStickyRef = stickyRef => this.setState({ stickyRef })
+
     componentDidMount() {
         // Analytics.record('Amplify_CLI');
     }
@@ -46,19 +48,23 @@ class AuthApp extends Component {
 
     //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
+        const { stickyRef } = this.state;
+
         return (
             <div className="App">
-                <Grid>
-                    <Grid.Column floated='left' width={2}>
-                        <SearchBarProp width={5}/>
-                    </Grid.Column>
-                    <Grid.Column floated='right' width={5}>
+                <Sticky>
+                    <Menu borderless>
+                        <Menu.Item position="left">
+                            <SearchBarProp />
+                        </Menu.Item>
+                        <Menu.Item position="right">
                             <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
-                    </Grid.Column>
-                </Grid>
-                
+                        </Menu.Item>
+                    </Menu>
+                </Sticky>
+                <Container>
                     <Tabs />
-                
+                </Container>
             </div>
         );
     }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
-import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List } from 'semantic-ui-react';
+import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../img/vt_full_color.png';
@@ -115,10 +115,10 @@ class SignInPage extends Component {
         }
 
         return (
-            <div className='login-form'>
+            <Container className='login-form'>
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
-                <Grid textAlign='center' style={{ height: '92vh' }} verticalAlign='middle'>
+                <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Segment raised padded>
                             <Segment basic>
@@ -163,7 +163,7 @@ class SignInPage extends Component {
                         </Segment>
                     </Grid.Column>
                 </Grid>
-            </div>
+            </Container>
         );
     }
 }

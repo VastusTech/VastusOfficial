@@ -12,7 +12,7 @@ import NextWorkoutProp from "./NextWorkout";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 3, labeled: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 3, labeled: true, size: "huge"}} panes={
         [
             {
                 menuItem:

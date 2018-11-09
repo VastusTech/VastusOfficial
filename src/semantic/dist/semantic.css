@@ -764,7 +764,6 @@ body {
   background-image: -webkit-gradient(linear, right bottom, left top, from(#7F47AE), color-stop(#bc6ae1), color-stop(#db6ec9), color-stop(#eb79b6), to(#f189a8));
   background-image: -webkit-linear-gradient(right bottom, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
   background-image: linear-gradient(to left top, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
-  padding: 24px;
 }
 /*!
  * # Semantic UI undefined - Button
@@ -25926,8 +25925,14 @@ Floated Menu / Item
      Active
 ---------------*/
 
-.ui.menu .active.item {
+.ui.menu .active.item,
+.ui.menu a.item:hover,
+.ui.menu .active.item:hover {
   color: #7F47AE;
+}
+
+.sticky .ui.menu {
+  border-radius: 0;
 }
 /*!
  * # Semantic UI undefined - Message
@@ -37963,11 +37968,6 @@ body.pushable > .pusher {
 /*******************************
         User Overrides
 *******************************/
-
-.ui.menu .item {
-  padding-top: 20px;
-  padding-bottom: 20px;
-}
 /*!
  * # Semantic UI undefined - Transition
  * http://github.com/semantic-org/semantic-ui/

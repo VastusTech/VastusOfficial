@@ -6,6 +6,12 @@
      Active
 ---------------*/
 
-.ui.menu .active.item  {
+.ui.menu .active.item,
+.ui.menu a.item:hover,
+.ui.menu .active.item:hover  {
   color: @primaryColor;
+}
+
+.sticky .ui.menu {
+  border-radius: 0;
 }

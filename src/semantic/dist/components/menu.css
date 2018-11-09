@@ -2055,6 +2055,11 @@ Floated Menu / Item
      Active
 ---------------*/
 
-.ui.menu .active.item {
+.ui.menu .active.item,
+.ui.menu a.item:hover,
+.ui.menu .active.item:hover {
   color: #7F47AE;
+}
+.sticky .ui.menu {
+  border-radius: 0;
 }
