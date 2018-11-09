@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
-import { Checkbox, Modal, Button, Input, Form, Container, TextArea } from 'semantic-ui-react';
+import { Checkbox, Modal, Button, Input, Form, Segment, TextArea } from 'semantic-ui-react';
 import {
     DateInput,
     TimeInput,
@@ -132,8 +132,8 @@ class CreateEventProp extends Component {
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
         return (
-            <Container style={{padding: 10}}>
-                <Modal trigger={<Button basic color='purple'>+ Create Event</Button>}>
+            <Segment raised>
+                <Modal trigger={<Button primary fluid size="large">+ Create Event</Button>}>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
 
@@ -201,7 +201,7 @@ class CreateEventProp extends Component {
                         </Form>
                     </Modal.Content>
                 </Modal>
-            </Container>
+            </Segment>
         );
     }
 }
