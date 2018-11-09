@@ -175,7 +175,7 @@ class SignUpModal extends Component {
         }
         return(
 
-                <Modal open={this.props.open} trigger={<Button fluid primary inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
+                <Modal open={this.props.open} trigger={<Button size="large" fluid primary inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.state.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
                     {errorMessage(this.state.error)}
