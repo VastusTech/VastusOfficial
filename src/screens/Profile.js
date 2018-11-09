@@ -11,6 +11,11 @@ import ScheduledChallengesList from "./ScheduledEventList";
 import OwnedChallengesList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
+import AWSSetup from "./AppConfig";
+
+AWSSetup();
+
+window.LOG_LEVEL='DEBUG';
 
 /**
 * Profile
