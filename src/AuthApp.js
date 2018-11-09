@@ -58,7 +58,7 @@ class AuthApp extends Component {
                             <SearchBarProp />
                         </Menu.Item>
                         <Menu.Item position="right">
-                            <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
+                            <Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                         </Menu.Item>
                     </Menu>
                 </Sticky>

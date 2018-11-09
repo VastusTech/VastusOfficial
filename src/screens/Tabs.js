@@ -20,13 +20,9 @@ export default () => (
                         <Icon name='home' size='large' />
                     </Menu.Item>),
                 render: () =>
-                    <Tab.Pane attached={false}>
+                    <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
-                        <Card>
-                            <Card.Content>
-                                <NextWorkoutProp/>
-                            </Card.Content>
-                        </Card>
+                        <NextWorkoutProp/>
                         <div className="ui one column stackable center aligned page grid">
                             <EventFeed/>
                         </div>
