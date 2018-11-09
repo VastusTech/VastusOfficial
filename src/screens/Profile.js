@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Message, Dimmer, Loader } from 'semantic-ui-react'
+import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
-import proPic from '../img/roundProfile.png';
 import ScheduledChallengesList from "./ScheduledChallengeList";
 import OwnedChallengesList from "./OwnedChallengesList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
+import proPic from '../img/BlakeProfilePic.jpg';
 
 /**
 * Profile
@@ -108,7 +108,7 @@ class Profile extends Component {
                     );
                 }
                 return(
-                    <Item.Image size='medium' src={profilePicture} circular/>
+                    <Image size='tiny' circular centered raised src={profilePicture} />
                 );
             }
             else {
@@ -138,49 +138,47 @@ class Profile extends Component {
         //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
         //and a switch to set the privacy for the user.
         return(
-            <Card>
-                <Card.Content>
-                    <Card.Header textAlign={'center'}>{this.props.user.name}</Card.Header>
-                </Card.Content>
-                <Item>
+            <Card fluid>
+                <Card.Content textAlign="center">
                     {profilePicture(this.state.profilePicture, this.state.ifS3)}
-                    <Item.Content>
-                        <Item.Extra>
-                            <label htmlFor="proPicUpload" className="ui basic purple floated button">
+                    <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
+                    <p>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</p>
+                    <List>
+                        <List.Item>
+                            <label htmlFor="proPicUpload" className="ui large fluid primary button">
                                 <div>
                                     <i className='ui upload icon'></i>
                                         Upload New Profile Picture
                                 </div>
                             </label>
                             <input type="file" accept="image/*" id="proPicUpload" hidden='true'/>
-                        </Item.Extra>
-                        <Item.Extra>
-                            <Modal size='mini' trigger={<Button basic color='purple'>Friend List</Button>}>
+                        </List.Item>
+                        <List.Item>
+                            <Modal size='mini' trigger={<Button primary fluid size="large"><Icon name="users" /> Friend List</Button>}>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
                             </Modal>
-                        </Item.Extra>
-                        <Item.Extra>
-                            <Modal size='mini' trigger={<Button basic color='purple'>Scheduled Challenges</Button>}>
+                        </List.Item>
+                        <List.Item>
+                            <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="checked calendar" /> Scheduled Challenges</Button>}>
                                 <Modal.Content>
                                     <ScheduledChallengesList/>
                                 </Modal.Content>
                             </Modal>
-                        </Item.Extra>
-                        <Item.Extra>
-                            <Modal size='mini' trigger={<Button basic color='purple'>Owned Challenges</Button>}>
+                        </List.Item>
+                        <List.Item>
+                            <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="trophy" /> Owned Challenges</Button>}>
                                 <Modal.Content>
                                     <OwnedChallengesList/>
                                 </Modal.Content>
                             </Modal>
-                        </Item.Extra>
-                        <Item.Extra>Event Wins: <div>{numChallengesWon(this.props.user.challengesWon)}</div></Item.Extra>
-                    </Item.Content>
-                </Item>
-                <div className="ui one column stackable center aligned page grid">
-                    <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
-                </div>
+                        </List.Item>
+                    </List>
+                    <div>
+                        <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
+                    </div>
+                </Card.Content>          
             </Card>
         );
     }

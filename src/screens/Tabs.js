@@ -32,10 +32,8 @@ export default () => (
                 menuItem: (<Menu.Item>
                     <Icon name='user circle outline' size='large' />
                 </Menu.Item>),
-                render: () => <Tab.Pane attached={false}>
-                    <div className="ui one column stackable center aligned page grid">
-                        <ProfileProp/>
-                    </div>
+                render: () => <Tab.Pane basic attached={false}>
+                    <ProfileProp/>
                 </Tab.Pane>
             },
             {
