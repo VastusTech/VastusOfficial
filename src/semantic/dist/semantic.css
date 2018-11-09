@@ -25921,6 +25921,14 @@ Floated Menu / Item
 /*******************************
          Site Overrides
 *******************************/
+
+/*--------------
+     Active
+---------------*/
+
+.ui.menu .active.item {
+  color: #7F47AE;
+}
 /*!
  * # Semantic UI undefined - Message
  * http://github.com/semantic-org/semantic-ui/
@@ -37955,6 +37963,11 @@ body.pushable > .pusher {
 /*******************************
         User Overrides
 *******************************/
+
+.ui.menu .item {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
 /*!
  * # Semantic UI undefined - Transition
  * http://github.com/semantic-org/semantic-ui/

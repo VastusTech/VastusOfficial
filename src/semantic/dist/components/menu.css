@@ -2050,3 +2050,11 @@ Floated Menu / Item
          Site Overrides
 *******************************/
 
+
+/*--------------
+     Active
+---------------*/
+
+.ui.menu .active.item {
+  color: #7F47AE;
+}

@@ -1,7 +1,6 @@
-import {Tab, Card, Label, Menu } from "semantic-ui-react";
+import {Tab, Card, Label, Menu, Icon } from "semantic-ui-react";
 import EventFeed from "./EventFeed";
 import NotificationFeedProp from "./NotificationBellFeed";
-import NotificationBellProp from "./NotificationBell";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
@@ -13,12 +12,12 @@ import NextWorkoutProp from "./NextWorkout";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab classname='ui center aligned' menu={{inverted: true, secondary: true, pointing: true, tabular: 'right' }} panes={
+    <Tab menu={{fixed: "bottom", widths: 3, labeled: true}} panes={
         [
             {
                 menuItem:
                     (<Menu.Item>
-                        <Label icon='home' />
+                        <Icon name='home' size='large' />
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane attached={false}>
@@ -35,7 +34,7 @@ export default () => (
             },
             {
                 menuItem: (<Menu.Item>
-                    <Label icon='user circle outline' />
+                    <Icon name='user circle outline' size='large' />
                 </Menu.Item>),
                 render: () => <Tab.Pane attached={false}>
                     <div className="ui one column stackable center aligned page grid">
@@ -46,7 +45,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item>
-                        <NotificationBellProp />
+                        <Icon name='bell outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane attached={false}>
                     <div className="ui one column stackable center aligned page grid">

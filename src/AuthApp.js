@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Button, Grid} from "semantic-ui-react";
+import {Button, Grid, Menu} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
@@ -56,7 +56,9 @@ class AuthApp extends Component {
                             <Button color='purple' onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                     </Grid.Column>
                 </Grid>
-                <Tabs />
+                
+                    <Tabs />
+                
             </div>
         );
     }
