@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon } from 'semantic-ui-react'
+import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon, Segment } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
@@ -138,7 +138,7 @@ class Profile extends Component {
         //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
         //and a switch to set the privacy for the user.
         return(
-            <Card fluid>
+            <Card fluid raised>
                 <Card.Content textAlign="center">
                     {profilePicture(this.state.profilePicture, this.state.ifS3)}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
@@ -174,10 +174,11 @@ class Profile extends Component {
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
+                        <List.Item>
+                            <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
+                        </List.Item>
                     </List>
-                    <div>
-                        <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
-                    </div>
+                    
                 </Card.Content>          
             </Card>
         );
