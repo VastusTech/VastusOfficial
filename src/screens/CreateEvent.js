@@ -9,7 +9,7 @@ import {
 } from 'semantic-ui-calendar-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
-import setupAWS from "./AppConfig";
+import setupAWS from "../AppConfig";
 
 setupAWS();
 

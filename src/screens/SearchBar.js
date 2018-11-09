@@ -1,7 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import {Search, Grid, Message } from 'semantic-ui-react'
-import setupAWS from "./AppConfig";
+import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
 
 setupAWS();

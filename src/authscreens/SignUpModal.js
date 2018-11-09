@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
-import appConfig from '../screens/AppConfig';
+import appConfig from '../AppConfig';
 
 appConfig();
 

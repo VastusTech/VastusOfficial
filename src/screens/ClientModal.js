@@ -3,7 +3,7 @@ import { Modal, Button, Item, Dimmer, Loader, Message } from 'semantic-ui-react'
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
-import AWSConfig from "./AppConfig";
+import AWSConfig from "../AppConfig";
 
 AWSConfig();
 

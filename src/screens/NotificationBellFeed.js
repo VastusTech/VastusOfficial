@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import setupAWS from './AppConfig';
+import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
 import QL from "../GraphQL";
 import Lambda from "../Lambda";

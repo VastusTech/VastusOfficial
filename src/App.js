@@ -5,7 +5,7 @@ import { Auth } from 'aws-amplify';
 import { clearUser, fetchUser } from './redux_helpers/actions/userActions';
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
-import AWSConfig from './screens/AppConfig';
+import AWSConfig from './AppConfig';
 
 AWSConfig();
 

@@ -45,6 +45,10 @@ function setupAWS() {
 
 
             //authenticationFlowType: 'USER_PASSWORD_AUTH'
+        },
+        Storage: {
+            bucket: 'vastusofficial', //REQUIRED -  Amazon S3 bucket
+            region: 'us-east-1', //OPTIONAL -  Amazon service region
         }
     });
 
