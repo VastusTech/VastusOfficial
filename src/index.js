@@ -7,7 +7,7 @@ import { Provider } from 'react-redux';
 import thunk from 'redux-thunk';
 import './index.css';
 import App from './App';
-import 'semantic-ui-css/semantic.css'
+import 'semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
 
