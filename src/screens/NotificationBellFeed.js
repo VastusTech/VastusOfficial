@@ -66,7 +66,7 @@ class NotificationFeed extends Component {
         }
         if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
-                this.props.fetchUserAttributes(user.id, ["friendRequests"]);
+                this.props.fetchUserAttributes(user.id, ["id", "friendRequests"]);
                 this.setState({sentRequest: true, isLoading: false});
             }
         }
@@ -86,16 +86,16 @@ class NotificationFeed extends Component {
                 </Dimmer>
             );
         }
-        function rows(friendRequests)
+        function rows(friendRequests, userID)
         {
             if (friendRequests) {
                 return _.times(friendRequests.length, i => (
-                    <Notification friendRequestID={friendRequests[i]}/>
+                    <Notification userID={userID} friendRequestID={friendRequests[i]}/>
                 ));
             }
         }
         return(
-            <Grid>{rows(this.props.user.friendRequests)}</Grid>
+            <Grid>{rows(this.props.user.friendRequests, this.props.user.id)}</Grid>
         );
     }
 }

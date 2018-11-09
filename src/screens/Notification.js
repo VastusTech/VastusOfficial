@@ -12,6 +12,7 @@ class Notification extends Component {
     state = {
         error: null,
         isLoading: false,
+        userID: null,
         friendRequestID: null,
         clientModalOpen: false,
         name: null
@@ -52,7 +53,15 @@ class Notification extends Component {
     handleClientModalClose() { this.setState({clientModalOpen: false})};
 
     handleAcceptFriendRequestButton(friendRequestID) {
-        alert("TODO Accepting " + friendRequestID);
+        alert("Accepting " + friendRequestID);
+        if(this.state.userID && this.state.friendRequestID)
+        Lambda.acceptFriendRequest(this.state.userID, this.state.userID, this.state.friendRequestID,
+            (data) => {
+                alert("Successfully added " + this.state.client.name + " as a friend!");
+            }, (error) => {
+                alert(JSON.stringify(error));
+                this.setState({error: error});
+            });
     }
 
     handleDeclineFriendRequestButton(friendRequestID) {

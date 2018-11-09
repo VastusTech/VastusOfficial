@@ -15,14 +15,14 @@ setupAWS();
 
 
 function convertDateTimeToISO8601(dateAndTime) {
-    var dateTimeString = String(dateAndTime);
-    var day = dateTimeString.substr(0, 2);
-    var month = dateTimeString.substr(3, 2);
-    var year = dateTimeString.substr(6, 4);
-    var time = dateTimeString.substr(11, 5);
-    var hour = dateTimeString.substr(11, 2);
-    var minute = dateTimeString.substr(13, 3);
-    var amorpm = dateTimeString.substr(16, 3);
+    let dateTimeString = String(dateAndTime);
+    let day = dateTimeString.substr(0, 2);
+    let month = dateTimeString.substr(3, 2);
+    let year = dateTimeString.substr(6, 4);
+    let time = dateTimeString.substr(11, 5);
+    let hour = dateTimeString.substr(11, 2);
+    let minute = dateTimeString.substr(13, 3);
+    let amorpm = dateTimeString.substr(16, 3);
 
     if(amorpm.trim() === 'AM') {
         return year + "-" + month + "-" + day + "T" + time + ":00+00:00";

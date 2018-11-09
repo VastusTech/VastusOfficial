@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+/*import React, {Component} from 'react'
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item} from 'semantic-ui-react'
 import { Auth, API, graphqlOperation } from "aws-amplify";
@@ -130,6 +130,7 @@ function handleRemoveBuddyFailure(failure) {
 * To the left of the button is an image with the buddy's name displayed next to it, this is a modal that opens
 * a generic profile view.
  */
+/*
 export default class BuddyListProp extends Component {
 
     //This render is a loop which goes through the user's current friends and displays each one with the
@@ -168,3 +169,108 @@ export default class BuddyListProp extends Component {
         );
     }
 }
+*/
+
+import React, { Component } from 'react'
+import {Grid, Message} from 'semantic-ui-react';
+import ClientModal from "./ClientModal";
+import QL from "../GraphQL";
+import { connect } from "react-redux";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import { inspect } from 'util';
+
+class BuddyListProp extends Component {
+    state = {
+        isLoading: true,
+        friends: {},
+        sentRequest: false,
+        error: null
+    };
+
+    constructor(props) {
+        super(props);
+        this.update();
+    }
+
+    update() {
+        // TODO Change this if we want to actually be able to do something while it's loading
+        const user = this.props.user;
+        if (!user.id) {
+            alert("Pretty bad error");
+            this.setState({isLoading: true});
+        }
+
+        if (user.hasOwnProperty("friends")) {
+            if(user.friends != null) {
+                for (let i = 0; i < user.friends.length; i++) {
+                    if (!(user.friends[i] in this.state.friends)) {
+                        this.addFriendFromGraphQL(user.friends[i]);
+                    }
+                }
+            }
+            else {
+                alert("You got no friends you loser");
+            }
+        }
+        else if (!this.props.user.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.user.info.error) {
+                this.props.fetchUserAttributes(user.id, ["friends"]);
+                this.setState({sentRequest: true});
+            }
+        }
+    }
+
+    addFriendFromGraphQL(friendID) {
+        QL.getClient(friendID, ["id"], (data) => {
+            console.log("successfully got a friend");
+            this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
+        }, (error) => {
+            console.log("Failed to get a vent");
+            console.log(JSON.stringify(error));
+            this.setState({error: error});
+        });
+    }
+
+    componentWillReceiveProps(newProps) {
+        this.props = newProps;
+        this.update();
+    }
+
+    render() {
+        function rows(friends) {
+            const rowProps = [];
+            for (const key in friends) {
+                if (friends.hasOwnProperty(key)) {
+                    rowProps.push(
+                        <Grid.Row className="ui one column stackable center aligned page grid">
+                            <ClientModal clientID={friends[key]}/>
+                        </Grid.Row>
+                    );
+                }
+            }
+            return rowProps;
+        }
+        if (this.state.isLoading) {
+            return(
+                <Message>Loading...</Message>
+            )
+        }
+        return(
+            <Grid>{rows(this.state.friends)}</Grid>
+        );
+    }
+}
+
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUserAttributes: (id, attributeList) => {
+            dispatch(fetchUserAttributes(id, attributeList));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(BuddyListProp);
