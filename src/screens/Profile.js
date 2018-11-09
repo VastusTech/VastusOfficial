@@ -3,23 +3,20 @@ import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon }
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
-import { S3Image } from 'aws-amplify-react';
+// import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
-import ScheduledChallengesList from "./ScheduledChallengeList";
-import OwnedChallengesList from "./OwnedChallengesList";
 import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
 import ScheduledChallengesList from "./ScheduledEventList";
 import OwnedChallengesList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-import proPic from '../img/BlakeProfilePic.jpg';
 import AWSSetup from "../AppConfig";
 
 AWSSetup();
 
-Storage.configure({level: 'protected'});
+Storage.configure({level: 'public'});
 
 window.LOG_LEVEL='DEBUG';
 
