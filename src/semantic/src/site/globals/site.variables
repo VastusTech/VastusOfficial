@@ -1,3 +1,13 @@
 /*******************************
      User Global Variables
 *******************************/
+
+/*-------------------
+    Brand Colors
+--------------------*/
+
+@primaryColor        : #7F47AE;
+@secondaryColor      : @black;
+
+@lightPrimaryColor   : #7F47AE;
+@lightSecondaryColor : @lightBlack;

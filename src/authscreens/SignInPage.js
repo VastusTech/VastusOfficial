@@ -118,47 +118,50 @@ class SignInPage extends Component {
             <div className='login-form'>
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
-                <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
+                <Grid textAlign='center' style={{ height: '92vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <Header as='h2' color='teal' textAlign='center'>
-                            <Image src={Logo} /> Log-in to your account
-                        </Header>
-                        <Form size='large'>
-                            <Segment stacked>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={value => this.changeStateText("username", value)}/>
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='Password'
-                                    type='password'
-                                    onChange={value => this.changeStateText("password", value)}
-                                />
-                                <Button color='teal' fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
-                                    Login
-                                </Button>
+                        <Segment raised>
+                            <Image src={Logo} size="tiny" centered/>
+                            <Header as='h2' textAlign='center'>
+                                Log in to your account
+                            </Header>
+                            <Form size='large'>
+                                <Segment basic>
+                                    <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={value => this.changeStateText("username", value)}/>
+                                    <Form.Input
+                                        fluid
+                                        icon='lock'
+                                        iconPosition='left'
+                                        placeholder='Password'
+                                        type='password'
+                                        onChange={value => this.changeStateText("password", value)}
+                                    />
+                                    <Button primary fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
+                                        Log in
+                                    </Button>
+                                </Segment>
+                            </Form>
+                            <Segment basic>
+                                <Grid style={{ height: '25%'}}>
+                                    <Grid.Column width={8} style={{ paddingRight: '10px'}}>
+                                        <SignUpModal
+                                            open={this.state.signUpModalOpen}
+                                            onOpen={this.openSignUpModal.bind(this)}
+                                            onClose={this.closeSignUpModal.bind(this)}
+                                            authenticate={this.authenticate.bind(this)}
+                                        />
+                                    </Grid.Column>
+                                    <Grid.Column width={8} style={{ paddingLeft: '10px'}}>
+                                        <ForgotPasswordModal
+                                            open={this.state.forgotPasswordModalOpen}
+                                            onOpen={this.openForgotPasswordModal.bind(this)}
+                                            onClose={this.closeForgotPasswordModal.bind(this)}
+                                            authenticate={this.authenticate.bind(this)}
+                                        />
+                                    </Grid.Column>
+                                </Grid>
                             </Segment>
-                        </Form>
-                        <Message>
-                            <Grid style={{ height: '25%'}}>
-                                <Grid.Column width={8} style={{ paddingRight: '10px'}}>
-                                    <SignUpModal
-                                        open={this.state.signUpModalOpen}
-                                        onOpen={this.openSignUpModal.bind(this)}
-                                        onClose={this.closeSignUpModal.bind(this)}
-                                        authenticate={this.authenticate.bind(this)}
-                                    />
-                                </Grid.Column>
-                                <Grid.Column width={8} style={{ paddingLeft: '10px'}}>
-                                    <ForgotPasswordModal
-                                        open={this.state.forgotPasswordModalOpen}
-                                        onOpen={this.openForgotPasswordModal.bind(this)}
-                                        onClose={this.closeForgotPasswordModal.bind(this)}
-                                        authenticate={this.authenticate.bind(this)}
-                                    />
-                                </Grid.Column>
-                            </Grid>
-                        </Message>
+                        </Segment>
                     </Grid.Column>
                 </Grid>
             </div>

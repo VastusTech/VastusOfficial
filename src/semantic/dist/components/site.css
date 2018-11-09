@@ -202,3 +202,8 @@ body .ui.inverted::-webkit-scrollbar-thumb:hover {
          Site Overrides
 *******************************/
 
+body {
+  background-image: -webkit-gradient(linear, right bottom, left top, from(#7F47AE), color-stop(#bc6ae1), color-stop(#db6ec9), color-stop(#eb79b6), to(#f189a8));
+  background-image: -webkit-linear-gradient(right bottom, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
+  background-image: linear-gradient(to left top, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
+}
