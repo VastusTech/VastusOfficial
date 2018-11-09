@@ -118,6 +118,20 @@ class Lambda {
             ]
         }, successHandler, failureHandler);
     }
+    static uninviteFromEvent(fromID, eventID, clientID, successHandler, failureHandler) {
+        this.invokeLambda({
+            fromID: fromID,
+            action: "UPDATEREMOVE",
+            itemType: "Client",
+            identifiers: [
+                clientID
+            ],
+            attributeName: "invitedEvents",
+            attributeValues: [
+                eventID
+            ]
+        }, successHandler, failureHandler);
+    }
     static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
         this.invokeLambda({
             fromID: fromID,
