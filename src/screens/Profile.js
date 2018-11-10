@@ -176,7 +176,7 @@ class Profile extends Component {
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
-                    <p>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</p>
+                    <Card.Description>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Description>
                     <List>
                         <List.Item>
                             <label htmlFor="proPicUpload" className="ui large fluid primary button">

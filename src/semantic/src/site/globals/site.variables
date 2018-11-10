@@ -15,6 +15,16 @@
 @black: #3A4454;
 
 /*-------------------
+      Base Sizes
+--------------------*/
+
+/* This is the single variable that controls them all */
+@emSize   : 16px;
+
+/* The size of page text  */
+@fontSize : 16px;
+
+/*-------------------
     Focused Input
 --------------------*/
 

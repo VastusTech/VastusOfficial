@@ -22,3 +22,6 @@
 
 /* Description */
 @descriptionColor: @white;
+
+/* Additional Content */
+@extraDivider: 1px solid rgba(255, 255, 255, 0.08);

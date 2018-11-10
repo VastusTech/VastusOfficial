@@ -54,11 +54,15 @@ class EventCard extends Component {
                 trigger={
                     <Card fluid raised>
                         <Card.Content>
-                            <Card.Header>{this.state.event.title}</Card.Header>
-                            <Card.Meta>{this.state.event.time}</Card.Meta>
+                            <Card.Header>
+                                {this.state.event.title}
+                            </Card.Header>
                             <Card.Description>
                                 {this.state.event.goal}
                             </Card.Description>
+                        </Card.Content>
+                        <Card.Content extra>
+                            <Card.Meta>{this.state.event.time}</Card.Meta>
                         </Card.Content>
                     </Card>
                 }
