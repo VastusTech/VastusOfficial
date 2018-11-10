@@ -45,7 +45,7 @@ class ScheduledEventsList extends Component {
     }
 
     addEventFromGraphQL(eventID) {
-        QL.getEvent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
+        QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a event");
             this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
@@ -62,16 +62,29 @@ class ScheduledEventsList extends Component {
 
     render() {
         function rows(events) {
+            const row = [];
             const rowProps = [];
             for (const key in events) {
                 if (events.hasOwnProperty(key)) {
+                    //alert(JSON.stringify(events[key]));
+                    row.push(
+                        events[key]
+                    );
+                }
+            }
+            row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
+
+            for (const key in row) {
+                if (row.hasOwnProperty(key)) {
+                    //alert(JSON.stringify(events[key]));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={events[key]}/>
+                            <EventCard event={row[key]}/>
                         </Grid.Row>
                     );
                 }
             }
+
             return rowProps;
         }
         if (this.state.isLoading) {
