@@ -1,3 +1,24 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+/*-------------------
+         View
+--------------------*/
+
+@background: @black;
+
+@borderWidth: 0;
+
+/*-------------------
+       Content
+--------------------*/
+
+/* Header */
+@headerColor: @white;
+
+/* Metadata */
+@metaColor: @white;
+
+/* Description */
+@descriptionColor: @white;

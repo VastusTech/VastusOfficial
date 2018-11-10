@@ -42,7 +42,7 @@ class EventCard extends Component {
     render() {
         if (this.state.isLoading) {
             return(
-                <Card>
+                <Card fluid raised>
                     <h1>Loading...</h1>
                 </Card>
             );
@@ -52,7 +52,7 @@ class EventCard extends Component {
             // This is displays a few important pieces of information about the challenge for the feed view.
             <EventDescriptionModal ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
                 trigger={
-                    <Card>
+                    <Card fluid raised>
                         <Card.Content>
                             <Card.Header>{this.state.event.title}</Card.Header>
                             <Card.Meta>{this.state.event.time}</Card.Meta>

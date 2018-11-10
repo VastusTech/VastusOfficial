@@ -3,5 +3,7 @@
 *******************************/
 
 body {
-  background-image: linear-gradient(to left top, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
+  background-color: #252D36;
+  background-image: linear-gradient(top left, #252D36, #2F1A40);
+  background-attachment: fixed;
 }

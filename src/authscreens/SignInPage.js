@@ -4,7 +4,7 @@ import { inspect } from 'util';
 import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import Logo from '../img/vt_full_color.png';
+import Logo from '../img/vt_on_black.png';
 
 class SignInPage extends Component {
     // This is the function that is called when the sign up button is pressed
@@ -118,12 +118,12 @@ class SignInPage extends Component {
             <Container className='login-form'>
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
-                <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+                <Grid textAlign='center' style={{ height: '92vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <Segment raised padded>
+                        <Segment raised padded basic>
                             <Segment basic>
                                 <Image src={Logo} size="tiny" centered />
-                                <Header as='h2' textAlign='center'>
+                                <Header as='h2' inverted textAlign='center'>
                                     Log in to your account
                                 </Header>
                             </Segment>
@@ -141,7 +141,7 @@ class SignInPage extends Component {
                                     Log in
                                 </Button>
                             </Form>
-                            <Divider horizontal>or</Divider>
+                            <Divider horizontal inverted>or</Divider>
                             <List>
                             <List.Item>
                                 <SignUpModal

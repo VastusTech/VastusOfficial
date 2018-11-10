@@ -12,7 +12,7 @@ import NextWorkoutProp from "./NextWorkout";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 3, labeled: true, size: "huge"}} panes={
+    <Tab menu={{fixed: "bottom", widths: 3, labeled: true, size: "huge", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -23,9 +23,7 @@ export default () => (
                     <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
                         <NextWorkoutProp/>
-                        <div className="ui one column stackable center aligned page grid">
-                            <EventFeed/>
-                        </div>
+                        <EventFeed/>
                     </Tab.Pane>
             },
             {

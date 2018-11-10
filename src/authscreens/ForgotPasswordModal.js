@@ -152,7 +152,7 @@ class ForgotPasswordModal extends Component {
             );
         }
         return(
-            <Modal open={this.props.open} onClose={() => (false)} trigger={<Button size="large" fluid basic onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
+            <Modal open={this.props.open} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
                 {loadingProp(this.state.isLoading)}
                 <Modal.Header>Forgot Password?</Modal.Header>
                 {errorMessage(this.state.error)}

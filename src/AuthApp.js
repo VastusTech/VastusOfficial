@@ -53,7 +53,7 @@ class AuthApp extends Component {
         return (
             <div className="App">
                 <Sticky>
-                    <Menu borderless>
+                    <Menu borderless inverted>
                         <Menu.Item position="left">
                             <SearchBarProp />
                         </Menu.Item>

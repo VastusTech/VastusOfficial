@@ -12,6 +12,8 @@
 @lightPrimaryColor   : #7F47AE;
 @lightSecondaryColor : @lightBlack;
 
+@black: #3A4454;
+
 /*-------------------
     Focused Input
 --------------------*/

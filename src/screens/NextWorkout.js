@@ -100,8 +100,8 @@ const NextWorkoutProp = () => (
     <Card fluid raised>
         <Card.Content>
             <Image src={proPic} circular floated="right" size="mini" />
-            <Card.Header>Next Challenge</Card.Header>
-            <Card.Description>{nextChal}</Card.Description>
+            <Card.Header inverted>Next Challenge</Card.Header>
+            <Card.Description inverted>{nextChal}</Card.Description>
         </Card.Content>
     </Card>
 );
