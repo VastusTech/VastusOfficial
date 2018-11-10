@@ -13,17 +13,17 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials(
 setupAWS();
 
 //username of the current user
-var curUserName;
+let curUserName;
 
 //name of the current user
-var curName;
+let curName;
 
-//Number of challenge wins for the current user
-var curChalWins;
+//Number of event wins for the current user
+let curChalWins;
 
-var challengeScheduleLen;
+let eventScheduleLen;
 
-var nextChal;
+let nextChal;
 
 async function asyncCallCurUser(callback) {
     console.log('calling');
@@ -52,17 +52,15 @@ callBetterCurUser(function(data) {
     //alert(getClient(curUserName));
     callQueryBetter(getClient(curUserName), function(data) {
         curName = data.name;
-        curChalWins = data.challengesWon;
-        if (data.scheduledChallenges != null) {
-            challengeScheduleLen = data.scheduledChallenges.length - 1;
-            nextChal = data.scheduledChallenges[challengeScheduleLen];
+        curChalWins = data.eventsWon;
+        if (data.scheduledEvents != null) {
+            eventScheduleLen = data.scheduledEvents.length - 1;
+            nextChal = data.scheduledEvents[eventScheduleLen];
         }
         else {
-            challengeScheduleLen = 0;
-            nextChal = "You have no upcoming challenges"
+            eventScheduleLen = 0;
+            nextChal = "You have no upcoming events"
         }
-        //alert(challengeScheduleLen);
-        //alert(data.scheduledChallenges);
     });
 });
 
@@ -81,11 +79,6 @@ function callQueryBetter(query, callback) {
         let user = JSON.parse(userJSON);
         callback(user.data.getClientByUsername);
     });
-    /*
-    let allChallengesJSON = JSON.stringify(asyncCall(query));//.data.queryChallenges.items);
-    alert(allChallengesJSON);
-    let allChallenges = JSON.parse(allChallengesJSON);
-    callback(allChallenges);*/
 }
 
 function getClient(userName) {
@@ -94,8 +87,8 @@ function getClient(userName) {
             id
             name
             username
-            challengesWon
-            scheduledChallenges
+            eventsWon
+            scheduledEvents
             friends
             friendRequests
             }

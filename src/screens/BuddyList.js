@@ -91,8 +91,8 @@ function getClientByUsername(userName) {
             id
             name
             username
-            challengesWon
-            scheduledChallenges
+            eventsWon
+            scheduledEvents
             friends
             friendRequests
             }
@@ -106,8 +106,8 @@ function getClientByID(userID) {
             id
             name
             username
-            challengesWon
-            scheduledChallenges
+            eventsWon
+            scheduledEvents
             friends
             friendRequests
             }

@@ -1,21 +1,22 @@
 import React, { Component } from 'react'
 import {Grid, Message} from 'semantic-ui-react';
 import EventCard from "./EventCard";
-import QL from '../GraphQL';
-import { connect } from 'react-redux';
+import QL from "../GraphQL";
+import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import { inspect } from 'util';
 
-class OwnedChallengesList extends Component {
+class ScheduledEventsList extends Component {
     state = {
         isLoading: true,
-        challenges: {},
+        events: {},
         sentRequest: false,
         error: null
     };
 
     constructor(props) {
         super(props);
-        // alert("Got into Scheduled Challenges constructor");
+        // alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
         this.update();
     }
@@ -28,27 +29,27 @@ class OwnedChallengesList extends Component {
             this.setState({isLoading: true});
         }
 
-        if (user.hasOwnProperty("ownedChallenges")) {
-            for (var i = 0; i < user.ownedChallenges.length; i++) {
-                if (!(user.ownedChallenges[i] in this.state.challenges)) {
-                    this.addChallengeFromGraphQL(user.ownedChallenges[i]);
+        if (user.hasOwnProperty("scheduledEvents")) {
+            for (var i = 0; i < user.scheduledEvents.length; i++) {
+                if (!(user.scheduledEvents[i] in this.state.events)) {
+                    this.addEventFromGraphQL(user.scheduledEvents[i]);
                 }
             }
         }
         else if (!this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
-                this.props.fetchUserAttributes(user.id, ["ownedChallenges"]);
+                this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
     }
 
-    addChallengeFromGraphQL(challengeID) {
-        QL.getChallenge(challengeID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
-            console.log("successfully got a challenge");
-            this.setState({challenges: {...this.state.challenges, [data.id]: data}, isLoading: false});
+    addEventFromGraphQL(eventID) {
+        QL.getEvent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
+            console.log("successfully got a event");
+            this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
-            console.log("Failed to get a challenge");
+            console.log("Failed to get a vent");
             console.log(JSON.stringify(error));
             this.setState({error: error});
         });
@@ -60,13 +61,13 @@ class OwnedChallengesList extends Component {
     }
 
     render() {
-        function rows(challenges) {
+        function rows(events) {
             const rowProps = [];
-            for (const key in challenges) {
-                if (challenges.hasOwnProperty(key)) {
+            for (const key in events) {
+                if (events.hasOwnProperty(key)) {
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard challenge={challenges[key]}/>
+                            <EventCard event={events[key]}/>
                         </Grid.Row>
                     );
                 }
@@ -79,7 +80,7 @@ class OwnedChallengesList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.challenges)}</Grid>
+            <Grid>{rows(this.state.events)}</Grid>
         );
     }
 }
@@ -96,5 +97,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(OwnedChallengesList);
-
+export default connect(mapStateToProps, mapDispatchToProps)(ScheduledEventsList);

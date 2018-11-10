@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Modal, Button, Item, Dimmer, Loader, Message } from 'semantic-ui-react';
 import QL from '../GraphQL';
-
+import Lambda from "../Lambda";
+import { connect } from "react-redux";
 
 /*
 * Client Modal
@@ -34,8 +35,17 @@ class ClientModal extends Component {
         }
     }
 
-    handleAddFriendButton() {
+    handleAddFriendButton(friendID) {
         alert("Adding this friend!");
+        if (this.props.user.id && this.state.client) {
+            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.state.client.id,
+                (data) => {
+                    alert("Successfully added " + this.state.client.name + " as a friend!");
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                    this.setState({error: error});
+                });
+        }
     }
 
     render() {
@@ -101,4 +111,8 @@ class ClientModal extends Component {
     }
 }
 
-export default ClientModal;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(ClientModal);

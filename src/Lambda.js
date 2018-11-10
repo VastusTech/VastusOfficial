@@ -233,7 +233,6 @@ class Lambda {
     }
     static invokeLambda(payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
-        failureHandler({error: "ay lmao"});
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
