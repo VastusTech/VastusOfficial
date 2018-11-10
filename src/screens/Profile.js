@@ -8,8 +8,8 @@ import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
-import ScheduledChallengesList from "./ScheduledEventList";
-import OwnedChallengesList from "./OwnedEventList";
+import ScheduledEventList from "./ScheduledEventList";
+import OwnedEventList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import AWSSetup from "../AppConfig";
@@ -177,7 +177,7 @@ class Profile extends Component {
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
                     <p>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</p>
-                    <List>
+                    <List id = "profile buttons">
                         <List.Item>
                             <label htmlFor="proPicUpload" className="ui large fluid primary button">
                                 <div>
@@ -195,17 +195,22 @@ class Profile extends Component {
                             </Modal>
                         </List.Item>
                         <List.Item>
-                            <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="checked calendar" /> Scheduled Challenges</Button>}>
+                            <Modal size='mini' trigger = {<Button primary fluid  size="large"><Icon name="checked calendar" /> Scheduled Challenges</Button>}>
                                 <Modal.Content>
-                                    <ScheduledChallengesList/>
-                                </Modal.Content>
+                                    <ScheduledEventList/>
+                                </Modal.Content>w
                             </Modal>
                         </List.Item>
                         <List.Item>
                             <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="trophy" /> Owned Challenges</Button>}>
                                 <Modal.Content>
-                                    <OwnedChallengesList/>
+                                    <OwnedEventList/>
                                 </Modal.Content>
+                            </Modal>
+                        </List.Item>
+                        <List.Item>
+                            <Modal size='mini' trigger={<Button primary fluid size="large"><Icon name="trophy" />Test Button</Button>}>
+                                <Modal.Content>I'm workin</Modal.Content>
                             </Modal>
                         </List.Item>
                     </List>

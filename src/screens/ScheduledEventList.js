@@ -16,14 +16,14 @@ class ScheduledEventsList extends Component {
 
     constructor(props) {
         super(props);
-        // alert("Got into Scheduled Events constructor");
+        alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
-        this.update();
     }
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = this.props.user;
+        alert("Updating");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
@@ -55,12 +55,19 @@ class ScheduledEventsList extends Component {
         });
     }
 
+    componentDidMount() {
+        this.update();
+        alert("Mounted OwO");
+    }
+
     componentWillReceiveProps(newProps) {
+        //alert("Receevin props");
         this.props = newProps;
         this.update();
     }
 
     render() {
+        alert("Redering");
         function rows(events) {
             const row = [];
             const rowProps = [];
@@ -88,12 +95,13 @@ class ScheduledEventsList extends Component {
             return rowProps;
         }
         if (this.state.isLoading) {
+            alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message>Loading...</Message>
             )
         }
         return(
-            <Grid>{rows(this.state.events)}</Grid>
+            <Grid><div>{alert(JSON.stringify(this.state))}</div>{rows(this.state.events)}</Grid>
         );
     }
 }

@@ -29,6 +29,10 @@ export default (state = initialState, action) => {
                 info: state.info
             };
             break;
+        default:
+            state = {
+                ...initialState
+            };
     }
 
     return state;
