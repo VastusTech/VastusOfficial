@@ -1,10 +1,10 @@
 import React from 'react'
-import { Grid, Image } from 'semantic-ui-react'
+import { Card, Image } from 'semantic-ui-react'
 import proPic from '../img/BlakeProfilePic.jpg';
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
 import * as AWS from "aws-sdk";
-import setupAWS from "./AppConfig";
+import setupAWS from "../AppConfig";
 
 AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
@@ -87,7 +87,7 @@ function getClient(userName) {
             id
             name
             username
-            eventsWon
+            challengesWon
             scheduledEvents
             friends
             friendRequests
@@ -97,14 +97,13 @@ function getClient(userName) {
 }
 
 const NextWorkoutProp = () => (
-    <Grid>
-        <Grid.Column width={4}>
-            <Image src={proPic} circular/>
-        </Grid.Column>
-        <Grid.Column width={9}>
-            Next Event: {nextChal}
-        </Grid.Column>
-    </Grid>
+    <Card fluid raised>
+        <Card.Content>
+            <Image src={proPic} circular floated="right" size="mini" />
+            <Card.Header>Next Challenge</Card.Header>
+            <Card.Description>{nextChal}</Card.Description>
+        </Card.Content>
+    </Card>
 );
 
 export default NextWorkoutProp

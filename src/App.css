@@ -39,14 +39,6 @@ body {
 }
 
 /*Section Behind menu and search bar*/
-#root{
-  background-color: #999999;
-  font-weight: 7000;
-  --link-color: #000c90;
-
-  /*Sign Out Button*/
-  --button-background-color: rgba(37, 36, 37, 0.73);
-}
 
 .Section__sectionHeader___2fwDQ{
   color: #73006e;

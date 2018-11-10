@@ -2,7 +2,7 @@
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item} from 'semantic-ui-react'
 import { Auth, API, graphqlOperation } from "aws-amplify";
-import setupAWS from './AppConfig';
+import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
 import Lambda from '../Lambda';
 
@@ -202,6 +202,7 @@ class BuddyListProp extends Component {
 
         if (user.hasOwnProperty("friends")) {
             if(user.friends != null) {
+                alert("Friends: " + user.friends);
                 for (let i = 0; i < user.friends.length; i++) {
                     if (!(user.friends[i] in this.state.friends)) {
                         this.addFriendFromGraphQL(user.friends[i]);
@@ -241,6 +242,7 @@ class BuddyListProp extends Component {
             const rowProps = [];
             for (const key in friends) {
                 if (friends.hasOwnProperty(key)) {
+                    alert("Friend " + key + ": " + friends[key]);
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
                             <ClientModal clientID={friends[key]}/>

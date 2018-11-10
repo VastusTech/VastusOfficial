@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import setupAWS from './AppConfig';
+import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
 import QL from "../GraphQL";
 import Lambda from "../Lambda";
@@ -39,6 +39,7 @@ class NotificationFeed extends Component {
         error: null,
         isLoading: true,
         sentRequest: false,
+        friendRequests: {}
     };
 
     constructor(props) {
@@ -70,11 +71,7 @@ class NotificationFeed extends Component {
                 this.setState({sentRequest: true, isLoading: false});
             }
         }
-        else if (this.props.user.hasOwnProperty("friendRequests")) {
-            this.setState({sentRequest: true, isLoading: false});
-        }
     }
-
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
@@ -88,7 +85,7 @@ class NotificationFeed extends Component {
         }
         function rows(friendRequests, userID)
         {
-            if (friendRequests) {
+            if (friendRequests != null) {
                 return _.times(friendRequests.length, i => (
                     <Notification userID={userID} friendRequestID={friendRequests[i]}/>
                 ));

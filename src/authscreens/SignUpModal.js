@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
-import appConfig from '../screens/AppConfig';
+import appConfig from '../AppConfig';
 
 appConfig();
 
@@ -177,8 +177,8 @@ class SignUpModal extends Component {
             );
         }
         return(
-            <div>
-                <Modal open={this.props.open} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+
+                <Modal open={this.props.open} trigger={<Button size="large" fluid primary inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.state.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
                     {errorMessage(this.state.error)}
@@ -225,7 +225,7 @@ class SignUpModal extends Component {
                         </Form>
                     </Modal.Actions>
                 </Modal>
-            </div>
+
         );
     }
 }

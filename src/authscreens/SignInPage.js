@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
-import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader } from 'semantic-ui-react';
+import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../img/vt_full_color.png';
@@ -115,16 +115,19 @@ class SignInPage extends Component {
         }
 
         return (
-            <div className='login-form'>
+            <Container className='login-form'>
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
-                <Grid textAlign='center' style={{ height: '100%' }} verticalAlign='middle'>
+                <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <Header as='h2' color='teal' textAlign='center'>
-                            <Image src={Logo} /> Log-in to your account
-                        </Header>
-                        <Form size='large'>
-                            <Segment stacked>
+                        <Segment raised padded>
+                            <Segment basic>
+                                <Image src={Logo} size="tiny" centered />
+                                <Header as='h2' textAlign='center'>
+                                    Log in to your account
+                                </Header>
+                            </Segment>
+                            <Form size='large'>
                                 <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={value => this.changeStateText("username", value)}/>
                                 <Form.Input
                                     fluid
@@ -134,34 +137,33 @@ class SignInPage extends Component {
                                     type='password'
                                     onChange={value => this.changeStateText("password", value)}
                                 />
-                                <Button color='teal' fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
-                                    Login
+                                <Button primary fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
+                                    Log in
                                 </Button>
-                            </Segment>
-                        </Form>
-                        <Message>
-                            <Grid style={{ height: '25%'}}>
-                                <Grid.Column width={8} style={{ paddingRight: '10px'}}>
-                                    <SignUpModal
-                                        open={this.state.signUpModalOpen}
-                                        onOpen={this.openSignUpModal.bind(this)}
-                                        onClose={this.closeSignUpModal.bind(this)}
-                                        authenticate={this.authenticate.bind(this)}
-                                    />
-                                </Grid.Column>
-                                <Grid.Column width={8} style={{ paddingLeft: '10px'}}>
-                                    <ForgotPasswordModal
-                                        open={this.state.forgotPasswordModalOpen}
-                                        onOpen={this.openForgotPasswordModal.bind(this)}
-                                        onClose={this.closeForgotPasswordModal.bind(this)}
-                                        authenticate={this.authenticate.bind(this)}
-                                    />
-                                </Grid.Column>
-                            </Grid>
-                        </Message>
+                            </Form>
+                            <Divider horizontal>or</Divider>
+                            <List>
+                            <List.Item>
+                                <SignUpModal
+                                    open={this.state.signUpModalOpen}
+                                    onOpen={this.openSignUpModal.bind(this)}
+                                    onClose={this.closeSignUpModal.bind(this)}
+                                    authenticate={this.authenticate.bind(this)}
+                                />
+                            </List.Item>
+                            <List.Item>
+                                <ForgotPasswordModal
+                                    open={this.state.forgotPasswordModalOpen}
+                                    onOpen={this.openForgotPasswordModal.bind(this)}
+                                    onClose={this.closeForgotPasswordModal.bind(this)}
+                                    authenticate={this.authenticate.bind(this)}
+                                />
+                                </List.Item>
+                            </List>
+                        </Segment>
                     </Grid.Column>
                 </Grid>
-            </div>
+            </Container>
         );
     }
 }
