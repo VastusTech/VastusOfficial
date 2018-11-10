@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
+import {Grid, Image, Modal, Button, Item, Dimmer, Loader, Card} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
@@ -87,15 +87,13 @@ class Notification extends Component {
     render() {
         if (this.state.isLoading) {
             return(
-                <Grid.Row className="ui one column stackable center aligned page grid">
-                    <Dimmer>
-                        <Loader />
-                    </Dimmer>
-                </Grid.Row>
+                <Dimmer>
+                    <Loader />
+                </Dimmer>
             );
         }
         return(
-            <Grid.Row className="ui one column stackable center aligned page grid">
+            <Card>
                 <Button basic color='purple' onClick={this.handleClientModalOpen.bind(this)}>{this.state.name}</Button>
                 <ClientModal
                     clientID={this.state.friendRequestID}
@@ -106,8 +104,9 @@ class Notification extends Component {
                 <div> has sent you a buddy request</div>
                 <Button basic color='purple' onClick={() => {this.handleAcceptFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Accept</Button>
                 <Button basic
-                        onClick={() => {this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Deny</Button>
-            </Grid.Row>
+                    onClick={() => {this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Deny
+                </Button>
+            </Card>
         );
     }
 }
