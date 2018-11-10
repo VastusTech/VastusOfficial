@@ -12,6 +12,7 @@ class Notification extends Component {
     state = {
         error: null,
         isLoading: false,
+        userID: null,
         friendRequestID: null,
         clientModalOpen: false,
         name: null
@@ -20,11 +21,13 @@ class Notification extends Component {
     constructor(props) {
         super(props);
         this.state.friendRequestID = this.props.friendRequestID;
+        this.state.userID = this.props.userID;
         this.update()
     }
 
     componentWillReceiveProps(newProps) {
-        this.setState({friendRequestID: newProps.friendRequests});
+        this.setState({friendRequestID: newProps.friendRequestID});
+        this.setState({userID: newProps.userID});
         this.update();
     }
 
@@ -51,12 +54,34 @@ class Notification extends Component {
     handleClientModalOpen() { this.setState({clientModalOpen: true})};
     handleClientModalClose() { this.setState({clientModalOpen: false})};
 
-    handleAcceptFriendRequestButton(friendRequestID) {
-        alert("TODO Accepting " + friendRequestID);
+    handleAcceptFriendRequestButton(userID, friendRequestID) {
+        alert("Accepting " + friendRequestID);
+        if(userID && this.state.friendRequestID) {
+            alert("User ID: " + userID + " Friend ID: " + friendRequestID);
+            Lambda.acceptFriendRequest(userID, userID, friendRequestID,
+                (data) => {
+                    alert("Successfully added " + userID + " as a friend!");
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                    this.setState({error: error});
+                });
+        }
     }
 
-    handleDeclineFriendRequestButton(friendRequestID) {
-        alert("TODO Declining " + friendRequestID);
+    handleDeclineFriendRequestButton(userID, friendRequestID) {
+        alert("DECLINING " + "User ID: " + userID + " Friend ID: " + friendRequestID);
+        if(userID != null && friendRequestID != null) {
+            Lambda.declineFriendRequest(userID, userID, friendRequestID,
+                (data) => {
+                    alert("Successfully declined " + userID + " as a friend!");
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                    this.setState({error: error});
+                });
+        }
+        else {
+            alert("Lambda Didn't go through");
+        }
     }
 
     render() {
@@ -79,8 +104,9 @@ class Notification extends Component {
                     onClose={this.handleClientModalClose.bind(this)}
                 />
                 <div> has sent you a buddy request</div>
-                <Button basic color='purple' onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>
-                <Button basic onClick={this.handleDeclineFriendRequestButton.bind(this)}>Deny</Button>
+                <Button basic color='purple' onClick={() => {this.handleAcceptFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Accept</Button>
+                <Button basic
+                        onClick={() => {this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Deny</Button>
             </Grid.Row>
         );
     }

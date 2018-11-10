@@ -124,8 +124,8 @@ class SearchBarProp extends Component {
                 var result;
                 if (item.item_type === "Client") {
                     result = {
-                        title: item.username,
-                        description: item.name,
+                        title: item.name,
+                        description: item.username,
                         content: <Message>Lmao</Message>
                     };
                 }
