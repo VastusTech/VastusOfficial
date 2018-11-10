@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
-import setupAWS from './AppConfig';
+import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
 import QL from "../GraphQL";
 import Lambda from "../Lambda";
@@ -39,6 +39,7 @@ class NotificationFeed extends Component {
         error: null,
         isLoading: true,
         sentRequest: false,
+        friendRequests: {}
     };
 
     constructor(props) {
@@ -66,15 +67,11 @@ class NotificationFeed extends Component {
         }
         if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
-                this.props.fetchUserAttributes(user.id, ["friendRequests"]);
+                this.props.fetchUserAttributes(user.id, ["id", "friendRequests"]);
                 this.setState({sentRequest: true, isLoading: false});
             }
         }
-        else if (this.props.user.hasOwnProperty("friendRequests")) {
-            this.setState({sentRequest: true, isLoading: false});
-        }
     }
-
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
@@ -86,16 +83,16 @@ class NotificationFeed extends Component {
                 </Dimmer>
             );
         }
-        function rows(friendRequests)
+        function rows(friendRequests, userID)
         {
-            if (friendRequests) {
+            if (friendRequests != null) {
                 return _.times(friendRequests.length, i => (
-                    <Notification friendRequestID={friendRequests[i]}/>
+                    <Notification userID={userID} friendRequestID={friendRequests[i]}/>
                 ));
             }
         }
         return(
-            <Grid>{rows(this.props.user.friendRequests)}</Grid>
+            <Grid>{rows(this.props.user.friendRequests, this.props.user.id)}</Grid>
         );
     }
 }

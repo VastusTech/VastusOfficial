@@ -4,6 +4,7 @@ import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
+import QL from '../GraphQL';
 
 /*
 * Event Description Modal
@@ -17,6 +18,7 @@ class EventDescriptionModal extends Component {
         isOwned: null,
         isJoined: null,
         event: null,
+        ownerName: null,
         members: [],
         clientModalOpen: false,
     };
@@ -33,6 +35,11 @@ class EventDescriptionModal extends Component {
             //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
                 isJoined: this.props.ifJoined, members: this.props.members});
+            QL.getClient(this.props.event.owner, ["name"], (data) => {
+                this.setState({ownerName: data.name});
+            }, (error) => {
+                alert(JSON.stringify(error));
+            })
         }
         else {
             this.setState({isLoading: true, event: null, isOwned: null, isJoined: null, members: []})
@@ -118,7 +125,7 @@ class EventDescriptionModal extends Component {
                     <div>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.event.owner}/>
                     </div>
-                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.event.owner}</Button>
+                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.ownerName}</Button>
                     <Modal.Description>
                         <Header>Info: </Header>
                         <p>{this.state.event.time}</p>

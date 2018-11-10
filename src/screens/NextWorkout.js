@@ -4,7 +4,7 @@ import proPic from '../img/BlakeProfilePic.jpg';
 import Amplify, { API, Auth, graphqlOperation} from 'aws-amplify';
 import { withAuthenticator } from 'aws-amplify-react';
 import * as AWS from "aws-sdk";
-import setupAWS from "./AppConfig";
+import setupAWS from "../AppConfig";
 
 AWS.config.update({region: 'us-east-1'});
 AWS.config.credentials = new AWS.CognitoIdentityCredentials(
@@ -87,7 +87,7 @@ function getClient(userName) {
             id
             name
             username
-            eventsWon
+            challengesWon
             scheduledEvents
             friends
             friendRequests

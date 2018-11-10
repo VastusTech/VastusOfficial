@@ -1,6 +1,6 @@
 import {Tab, Card, Label, Menu, Icon } from "semantic-ui-react";
 import EventFeed from "./EventFeed";
-import NotificationFeedProp from "./NotificationBellFeed";
+import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
@@ -48,7 +48,7 @@ export default () => (
                                 <Card.Header textAlign={'center'}>Notification Feed</Card.Header>
                             </Card.Content>
                             <Card.Content>
-                                <NotificationFeedProp/>
+                                <NotificationFeed/>
                             </Card.Content>
                         </Card>
                     </div>
