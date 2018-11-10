@@ -24,7 +24,7 @@ class AuthApp extends Component {
 
     handleLogOut() {
         this.setState({isLoading: true});
-        Auth.signOut().then((data) => {
+        Auth.signOut({global: true}).then((data) => {
             console.log("Successfully signed out!");
             console.log(data);
             this.setState({isLoading: false, username: null});

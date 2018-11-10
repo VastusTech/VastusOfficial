@@ -3,7 +3,7 @@ import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon }
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
-// import { S3Image } from 'aws-amplify-react';
+import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
@@ -30,14 +30,17 @@ class Profile extends Component {
         isLoading: true,
         checked: false,
         profilePicture: null,
+        ifS3: false,
         error: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
     constructor(props) {
+        // alert("constructor");
+        // alert("constructor props: " + JSON.stringify(props));
         super(props);
-        this.setState({isLoading: true});
+        this.setState({isLoading: true, checked: false, profilePicture: null, ifS3: false, error: null});
         // ("Got into Profile constructor");
         this.setPicture = this.setPicture.bind(this);
         this.update = this.update.bind(this);
@@ -45,10 +48,13 @@ class Profile extends Component {
     }
 
     componentDidMount() {
+        // alert("componentDidMount");
         this.update();
     }
 
     componentWillReceiveProps(newProps) {
+        // alert("componentWillReceiveProps");
+        // alert("receive props: " + JSON.stringify(newProps));
         this.props = newProps;
         if (newProps.user.profileImagePath) {
             this.setState({isLoading: true});
@@ -67,17 +73,20 @@ class Profile extends Component {
             if (this.state.isLoading) {
                 // And start to get the profile image from S3
                 if (user.profileImagePath) {
+                    // this.setState({profilePicture: user.profileImagePath, isLoading: false, ifS3: true});
+                    // alert("Getting " + user.profileImagePath + " from S3?");
                     Storage.get(user.profileImagePath).then((data) => {
                         // alert("Received properly and setting! Data = " + JSON.stringify(data));
-                        this.setState({profilePicture: data, isLoading: false});
+                        this.setState({profilePicture: data, isLoading: false, ifS3: true});
                     }).catch((error) => {
+                        alert("Error getting profile image");
                         alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                        this.setState({error: error});
+                        this.setState({error: error, isLoading: true});
                     });
                 }
                 else {
                     // Default
-                    this.setState({isLoading: false, profilePicture: proPic});
+                    this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
                 }
             }
         }
@@ -103,7 +112,7 @@ class Profile extends Component {
                         this.props.fetchUserAttributes(this.props.user.id, ["profileImagePath"]);
                         this.setState({isLoading: true});
                     }, (error) => {
-                    alert("Failed edit client attribute");
+                        alert("Failed edit client attribute");
                         alert(JSON.stringify(error));
                     });
                 this.setState({isLoading: true});
@@ -116,6 +125,12 @@ class Profile extends Component {
 
     profilePicture() {
         if (this.state.profilePicture) {
+            if (this.state.ifS3) {
+                // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
+                return(
+                    <Item.Image size='medium' src={this.state.profilePicture} circular/>
+                );
+            }
             return(
                 <Item.Image size='medium' src={this.state.profilePicture} circular/>
             );
