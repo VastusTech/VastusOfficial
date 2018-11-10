@@ -3,6 +3,30 @@ import { Card } from 'semantic-ui-react';
 import EventDescriptionModal from './EventDescriptionModal';
 import { connect } from 'react-redux';
 
+function convertTime(time) {
+    if (parseInt(time, 10) > 12) {
+        return "0" + (parseInt(time, 10) - 12) + time.substr(2, 3) + "pm";
+    }
+    else if (parseInt(time, 10) === 12) {
+        return time + "pm";
+    }
+    else if (parseInt(time, 10) === 0) {
+        return "0" + (parseInt(time, 10) + 12) + time.substr(2, 3) + "am"
+    }
+    else {
+        return time + "am"
+    }
+}
+
+function convertDate(date) {
+    let dateString = String(date);
+    let year = dateString.substr(0, 4);
+    let month = dateString.substr(5, 2);
+    let day = dateString.substr(8, 2);
+
+    return month + "/" + day + "/" + year;
+}
+
 /*
 * Event Card
 *
@@ -39,6 +63,14 @@ class EventCard extends Component {
         }
     }
 
+    convertFromISO(dateTime) {
+        let dateTimeString = String(dateTime);
+        let date = dateTimeString.substr(0, 10);
+        let time = dateTimeString.substr(11, 5);
+        let time1 = dateTimeString.substr(37, 5);
+        return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
+    }
+
     render() {
         if (this.state.isLoading) {
             return(
@@ -55,7 +87,8 @@ class EventCard extends Component {
                     <Card>
                         <Card.Content>
                             <Card.Header>{this.state.event.title}</Card.Header>
-                            <Card.Meta>{this.state.event.time}</Card.Meta>
+                            <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
+                            <Card.Meta>{this.state.event.time_created}</Card.Meta>
                             <Card.Description>
                                 {this.state.event.goal}
                             </Card.Description>

@@ -8,8 +8,8 @@ import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
-import ScheduledChallengesList from "./ScheduledEventList";
-import OwnedChallengesList from "./OwnedEventList";
+import ScheduledEventList from "./ScheduledEventList";
+import OwnedEventList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import AWSSetup from "../AppConfig";
@@ -25,10 +25,13 @@ window.LOG_LEVEL='DEBUG';
 *
 * This is the profile page which displays information about the current user.
  */
-class Profile extends Component {
+class Profile extends React.PureComponent {
     state = {
         isLoading: true,
         checked: false,
+        buddyModalOpen: false,
+        scheduledModalOpen: false,
+        ownedModalOpen: false,
         profilePicture: null,
         ifS3: false,
         error: null
@@ -45,6 +48,12 @@ class Profile extends Component {
         this.setPicture = this.setPicture.bind(this);
         this.update = this.update.bind(this);
         this.profilePicture = this.profilePicture.bind(this);
+        this.openBuddyModal = this.openBuddyModal.bind(this);
+        this.closeBuddyModal = this.closeBuddyModal.bind(this);
+        this.openScheduledModal = this.openScheduledModal.bind(this);
+        this.closeScheduledModal = this.closeScheduledModal.bind(this);
+        this.openOwnedModal = this.openOwnedModal.bind(this);
+        this.closeOwnedModal = this.closeOwnedModal.bind(this);
     }
 
     componentDidMount() {
@@ -124,6 +133,7 @@ class Profile extends Component {
     }
 
     profilePicture() {
+        console.log(this.state.profilePicture);
         if (this.state.profilePicture) {
             if (this.state.ifS3) {
                 // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
@@ -143,6 +153,13 @@ class Profile extends Component {
             );
         }
     }
+
+    openBuddyModal = () => { this.setState({buddyModalOpen: true}); }
+    closeBuddyModal = () => { this.setState({buddyModalOpen: false}); }
+    openScheduledModal = () => { this.setState({scheduledModalOpen: true}); }
+    closeScheduledModal = () => { this.setState({scheduledModalOpen: false}); }
+    openOwnedModal = () => { this.setState({ownedModalOpen: true}); }
+    closeOwnedModal = () => { this.setState({ownedModalOpen: false}); }
 
 
     render() {
@@ -192,7 +209,7 @@ class Profile extends Component {
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
                     <p>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</p>
-                    <List>
+                    <List id = "profile buttons">
                         <List.Item>
                             <label htmlFor="proPicUpload" className="ui large fluid primary button">
                                 <div>
@@ -203,23 +220,26 @@ class Profile extends Component {
                             <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                         </List.Item>
                         <List.Item>
-                            <Modal size='mini' trigger={<Button primary fluid size="large"><Icon name="users" /> Friend List</Button>}>
+                            <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Friend List</Button>
+                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)}>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
                         <List.Item>
-                            <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="checked calendar" /> Scheduled Challenges</Button>}>
+                            <Button primary fluid  size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
+                            <Modal size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
                                 <Modal.Content>
-                                    <ScheduledChallengesList/>
-                                </Modal.Content>
+                                    <ScheduledEventList/>
+                                </Modal.Content>w
                             </Modal>
                         </List.Item>
                         <List.Item>
-                            <Modal size='mini' trigger={<Button primary fluid  size="large"><Icon name="trophy" /> Owned Challenges</Button>}>
+                            <Button primary fluid  size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
+                            <Modal size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
                                 <Modal.Content>
-                                    <OwnedChallengesList/>
+                                    <OwnedEventList/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>

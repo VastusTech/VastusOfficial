@@ -22,7 +22,8 @@ class Notification extends Component {
         super(props);
         this.state.friendRequestID = this.props.friendRequestID;
         this.state.userID = this.props.userID;
-        this.update()
+        this.update = this.update.bind(this);
+        this.update();
     }
 
     componentWillReceiveProps(newProps) {
@@ -31,7 +32,7 @@ class Notification extends Component {
         this.update();
     }
 
-    update() {
+    update = () => {
         if (this.state.friendRequestID) {
             QL.getClient(this.state.friendRequestID, ["name"], (data) => {
                 if (data.name) {
