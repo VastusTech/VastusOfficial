@@ -21,3 +21,6 @@ yarn-debug.log*
 yarn-error.log*
 
 .idea/
+
+# Styles — compile your own: gulp build in /src/semantic
+/src/semantic/dist

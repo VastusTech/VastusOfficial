@@ -6,7 +6,6 @@ import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
 import ChallengeManagerProp from "./ManageChallenges";
 import Lambda from '../Lambda';
-import proPic from '../img/roundProfile.png';
 import ScheduledChallengesList from "./ScheduledEventList";
 import OwnedChallengesList from "./OwnedEventList";
 import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
