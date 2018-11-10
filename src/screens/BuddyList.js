@@ -31,9 +31,9 @@ class BuddyListProp extends Component {
         }
 
         if (user.hasOwnProperty("friends")) {
-            alert("Friends: " + user.friends);
+            //alert("Friends: " + user.friends);
             if(user.friends != null) {
-                alert("getting to friend loupe");
+                //alert("getting to friend loupe");
                 for (let i = 0; i < user.friends.length; i++) {
                     if (!(user.friends[i] in this.state.friends)) {
                         this.addFriendFromGraphQL(user.friends[i]);
@@ -77,7 +77,7 @@ class BuddyListProp extends Component {
             const rowProps = [];
             for (const key in friends) {
                 if (friends.hasOwnProperty(key)) {
-                    alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
+                    //alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
                             <ClientModal open={openBool} onClose={closeModal} clientID={friends[key].id}/>

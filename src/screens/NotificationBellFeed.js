@@ -45,6 +45,7 @@ class NotificationFeed extends Component {
     constructor(props) {
         super(props);
         this.update();
+        this.update = this.update.bind(this);
     }
 
     componentDidMount() {
@@ -58,7 +59,7 @@ class NotificationFeed extends Component {
         this.update();
     }
 
-    update() {
+    update = () => {
         alert("Updooting");
         const user = this.props.user;
         if (!user.id) {
