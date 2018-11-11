@@ -5,7 +5,7 @@ import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import AWSConfig from "../AppConfig";
 
-AWSConfig();
+// AWSConfig();
 
 /*
 * Client Modal

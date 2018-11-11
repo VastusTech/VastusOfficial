@@ -4,7 +4,7 @@ import {Search, Grid, Message } from 'semantic-ui-react'
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
 
-setupAWS();
+// setupAWS();
 
 class SearchBarProp extends Component {
     state = {
