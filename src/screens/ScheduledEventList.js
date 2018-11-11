@@ -81,7 +81,7 @@ class ScheduledEventsList extends Component {
             row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
 
             for (const key in row) {
-                if (row.hasOwnProperty(key)) {
+                if (row.hasOwnProperty(key) === true) {
                     //alert(JSON.stringify(events[key]));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">

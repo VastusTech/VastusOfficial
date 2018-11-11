@@ -4,6 +4,7 @@ import ClientModal from "./ClientModal";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import Lambda from "../Lambda";
 import { inspect } from 'util';
 
 class BuddyListProp extends Component {
@@ -73,15 +74,25 @@ class BuddyListProp extends Component {
 
     render() {
 
-        function rows(friends, closeModal, openModal, openBool) {
+        function rows(friends, closeModal, openModal, openBool, userID) {
             const rowProps = [];
             for (const key in friends) {
-                if (friends.hasOwnProperty(key)) {
+                if (friends.hasOwnProperty(key) === true) {
                     //alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
                             <ClientModal open={openBool} onClose={closeModal} clientID={friends[key].id}/>
                             <Button basic color='purple' onClick={openModal}>{friends[key].id}</Button>
+                            <div>
+                                <Button basic color='purple' onClick={() => {
+                                    Lambda.removeFriend(userID, userID, friends[key].id,
+                                        (data) => {
+                                            alert("Successfully declined " + friends[key].id + " as a friend!");
+                                        }, (error) => {
+                                            alert(JSON.stringify(error));
+                                            this.setState({error: error});
+                                        })}}>Remove Buddy</Button>
+                            </div>
                         </Grid.Row>
                     );
                 }
@@ -96,7 +107,7 @@ class BuddyListProp extends Component {
         }
         return(
             <div>
-                <Grid>{rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen)}</Grid>
+                <Grid>{rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id)}</Grid>
             </div>
         );
     }

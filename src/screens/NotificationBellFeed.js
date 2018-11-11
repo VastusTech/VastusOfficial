@@ -37,10 +37,12 @@ setupAWS();
 class NotificationFeed extends Component {
     state = {
         error: null,
-        isLoading: true,
+        isLoading: false,
         sentRequest: false,
         friendRequests: {}
     };
+
+    _isMounted = false;
 
     constructor(props) {
         super(props);
@@ -49,18 +51,23 @@ class NotificationFeed extends Component {
     }
 
     componentDidMount() {
-        this.setState({isLoading: true});
+        //this.setState({isLoading: true});
         this.update();
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     componentWillReceiveProps(newProps) {
-        // this.setState({isLoading: true});
+        //this.setState({isLoading: true});
         this.props = newProps;
         this.update();
     }
 
     update = () => {
-        alert("Updooting");
+        //alert("Updooting");
         const user = this.props.user;
         if (!user.id) {
             alert("Pretty bad error");
@@ -69,7 +76,8 @@ class NotificationFeed extends Component {
         if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
                 this.props.fetchUserAttributes(user.id, ["id", "friendRequests"]);
-                this.setState({sentRequest: true, isLoading: false});
+                //if(this._isMounted)
+                    this.setState({sentRequest: true, isLoading: false});
             }
         }
     }
@@ -110,4 +118,5 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationFeed);
