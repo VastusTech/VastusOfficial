@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Grid, Label, Icon } from 'semantic-ui-react';
 
 // TODO: Feature to be implemented later don't worry about this file.
@@ -18,16 +18,16 @@ class TrophyCase extends Component {
     render() {
         function columns(num) {
             return(_.times(num, i => (
-                <Grid.Column key={i}>
-                    <Label>
-                        <Icon name='trophy' />
-                    </Label>
-                </Grid.Column>
+                <Label key={i}>
+                    <Icon name='trophy' />
+                </Label>
             )));
         }
 
         return(
-            <Grid>{columns(this.state.numTrophies)}</Grid>
+            <Fragment>
+                {columns(this.state.numTrophies)}
+            </Fragment>
         );
     }
 }

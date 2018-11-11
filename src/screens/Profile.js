@@ -211,7 +211,7 @@ class Profile extends React.PureComponent {
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
-                    <Card.Description>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Description>
+                    <Card.Meta>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Meta>
                     <List id = "profile buttons">
                         <List.Item>
                             <label htmlFor="proPicUpload" className="ui large fluid primary button">
