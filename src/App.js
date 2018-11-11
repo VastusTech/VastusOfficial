@@ -22,6 +22,9 @@ class App extends Component {
 
     async authenticate(user) {
         if (user && user.username) {
+            // Refresh the tokens potentially?
+            // Auth.currentSession();
+            Auth.currentCredentials();
             Auth.currentAuthenticatedUser().then((authenticatedUser) => {
                 if (authenticatedUser && (user.username === authenticatedUser.username)) {
                     alert("Logging in the user");

@@ -1,171 +1,85 @@
 import QL from "../../GraphQL";
+import { Storage } from "aws-amplify";
 
-export function fetchClient(id, variablesList) {
-    return (dispatch) => {
+function addProfilePictureToData(data, imageKey, callback) {
+    Storage.get(imageKey).then((url) => {
+        callback({
+            ...data,
+            profilePicture: url
+        });
+    }).catch((error) => {
+        console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
+        console.log(error);
+        callback(data);
+    });
+}
+function fetch(id, variablesList, cacheSet, QLFunction, fetchDispatchType, readDispatchType) {
+    return (dispatch, getState) => {
+        dispatch({
+            type: "SET_IS_LOADING"
+        });
         if (!variablesList.contains("id")) {
             variablesList = [...variablesList, "id"];
         }
-        QL.getClient(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_CLIENT",
-                payload: data
+        const currentObject = getState().cache[cacheSet][id];
+        if (!currentObject || variablesList.some(v => !Object.keys(currentObject).includes(v))) {
+            const profilePictureIndex = variablesList.indexOf("profilePicture");
+            if (profilePictureIndex !== -1) { variablesList.splice(profilePictureIndex, 1); }
+            QLFunction(id, variablesList, (data) => {
+                if (profilePictureIndex !== -1 && data.profileImagePath) {
+                    addProfilePictureToData(data, data.profileImagePath, (updatedData) => {
+                        dispatch({
+                            type: fetchDispatchType,
+                            payload: updatedData
+                        });
+                        dispatch({
+                            type: "SET_IS_NOT_LOADING"
+                        });
+                    });
+                }
+                else {
+                    dispatch({
+                        type: fetchDispatchType,
+                        payload: data
+                    });
+                    dispatch({
+                        type: "SET_IS_NOT_LOADING"
+                    });
+                }
+            }, (error) => {
+                dispatch({
+                    type: "SET_ERROR",
+                    payload: error
+                });
+                dispatch({
+                    type: "SET_IS_NOT_LOADING"
+                });
             });
-        }, (error) => {
+        }
+        else {
+            // We're fine, so just update it in the cache
             dispatch({
-                type: "SET_ERROR",
-                payload: error
+                type: readDispatchType,
+                payload: { id }
             });
-        });
+        }
     };
+}
+export function fetchClient(id, variablesList) {
+    return fetch(id, variablesList, "clients", QL.getClient, "FETCH_CLIENT", "READ_CLIENT");
 }
 export function fetchTrainer(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getTrainer(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_CLIENT",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
+    return fetch(id, variablesList, "trainers", QL.getTrainer, "FETCH_TRAINER", "READ_TRAINER");
 }
 export function fetchGym(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getGym(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_GYM",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
+    return fetch(id, variablesList, "gyms", QL.getGym, "FETCH_GYM", "READ_GYM");
 }
 export function fetchWorkout(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getWorkout(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_WORKOUT",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
+    return fetch(id, variablesList, "workouts", QL.getWorkout, "FETCH_WORKOUT", "READ_WORKOUT");
 }
 export function fetchReview(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getReview(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_REVIEW",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
+    return fetch(id, variablesList, "reviews", QL.getReview, "FETCH_REVIEW", "READ_REVIEW");
 }
-export function fetchParty(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getParty(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_PARTY",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
-}
-export function fetchChallenge(id, variablesList) {
-    return (dispatch) => {
-        if (!variablesList.contains("id")) {
-            variablesList = [...variablesList, "id"];
-        }
-        QL.getChallenge(id, variablesList, (data) => {
-            dispatch({
-                type: "FETCH_CHALLENGE",
-                payload: data
-            });
-        }, (error) => {
-            dispatch({
-                type: "SET_ERROR",
-                payload: error
-            });
-        });
-    };
-}
-
-export function updateReadClient(id) {
-    return {
-        type: "READ_CLIENT",
-        payload: { id }
-    }
-}
-export function updateReadTrainer(id) {
-    return {
-        type: "READ_TRAINER",
-        payload: { id }
-    }
-}
-export function updateReadGym(id) {
-    return {
-        type: "READ_GYM",
-        payload: { id }
-    }
-}
-export function updateReadWorkout(id) {
-    return {
-        type: "READ_WORKOUT",
-        payload: { id }
-    }
-}
-export function updateReadReview(id) {
-    return {
-        type: "READ_REVIEW",
-        payload: { id }
-    }
-}
-export function updateReadParty(id) {
-    return {
-        type: "READ_PARTY",
-        payload: { id }
-    }
-}
-export function updateReadChallenge(id) {
-    return {
-        type: "READ_CHALLENGE",
-        payload: { id }
-    }
+export function fetchEvent(id, variablesList) {
+    return fetch(id, variablesList, "events", QL.getEvent, "FETCH_EVENT", "READ_EVENT");
 }

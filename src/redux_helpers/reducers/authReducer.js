@@ -14,6 +14,8 @@ export const CONFIRM_LOGIN = 'CONFIRM_LOGIN';
 export const CONFIRM_LOGIN_SUCCESS = 'CONFIRM_LOGIN_SUCCESS';
 export const CONFIRM_LOGIN_FAILURE = 'CONFIRM_LOGIN_FAILURE';
 
+// TODO SHOULD WE SWITCH TO THIS TO MAKE THE AUTH FLOW EASIER?
+
 const initialState = {
     isAuthenticating: false,
     user: {},
