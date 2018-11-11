@@ -6,7 +6,7 @@ import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
 import ClientModal from "./ClientModal";
 
-setupAWS();
+// setupAWS();
 
 class SearchBarProp extends Component {
     state = {

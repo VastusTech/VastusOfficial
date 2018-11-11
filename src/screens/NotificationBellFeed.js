@@ -11,7 +11,7 @@ import Notification from "./Notification";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 
-setupAWS();
+// setupAWS();
 
 // function denyFriendRequest(userID, requestID) {
 //     Lambda.declineFriendRequest(userID, userID, requestID, handleBudRequestSuccess, handleBudRequestFailure)

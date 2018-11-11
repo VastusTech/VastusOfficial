@@ -1,4 +1,8 @@
+import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
+
+// TODO Use this instead?
+// AWSConfig();
 
 /// Configure AWS SDK for JavaScript
 AWS.config.update({region: 'us-east-1'});

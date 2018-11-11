@@ -3,11 +3,11 @@ import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
-import * as AWS from "aws-sdk";
+// import * as AWS from "aws-sdk";
 
-AWS.config.update({region: 'REGION'});
-AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-    {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+// AWS.config.update({region: 'REGION'});
+// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
+//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 /**
 * Event Feed

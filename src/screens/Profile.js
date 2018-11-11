@@ -14,9 +14,9 @@ import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import AWSSetup from "../AppConfig";
 
-AWSSetup();
+// AWSSetup();
 
-Storage.configure({level: 'public'});
+// Storage.configure({level: 'public'});
 
 window.LOG_LEVEL='DEBUG';
 
