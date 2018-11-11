@@ -4,7 +4,7 @@ import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
 import appConfig from '../AppConfig';
 
-appConfig();
+// appConfig();
 
 class SignUpModal extends Component {
     constructor(props) {

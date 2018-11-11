@@ -6,9 +6,9 @@ import { withAuthenticator } from 'aws-amplify-react';
 import * as AWS from "aws-sdk";
 import setupAWS from "../AppConfig";
 
-AWS.config.update({region: 'us-east-1'});
-AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-    {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+// AWS.config.update({region: 'us-east-1'});
+// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
+//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 setupAWS();
 
