@@ -2,6 +2,10 @@
      User Global Variables
 *******************************/
 
+// Out of scope vars (not in Semantic)
+
+@primaryGradient: linear-gradient(135deg, #7F47AE, #7D82B8);
+
 /**
   * Inverted is poorly supported in Semantic UI React,
   * so we have to set our dark theme based on not using
@@ -19,11 +23,8 @@
 @lightBlack: #323441;
 
 @textColor: @white;
-@lightTextColor: @textColor;
+@lightTextColor: darken(@textColor, 28%);
 @hoveredTextColor: @textColor;
-
-@emSize   : 16px;
-@fontSize : 16px;
 
 @focusedFormBorderColor: @primaryColor;
 @inputBackground        : @lightBlack;

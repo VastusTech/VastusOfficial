@@ -88,13 +88,13 @@ class EventCard extends Component {
                         <Card.Content>
                             <Card.Header>{this.state.event.title}</Card.Header>
                             <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                            <Card.Meta>{this.state.event.time_created}</Card.Meta>
                             <Card.Description>
                                 {this.state.event.goal}
                             </Card.Description>
                         </Card.Content>
                         <Card.Content extra>
-                            <Card.Meta>{this.state.event.time}</Card.Meta>
+                            {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
+                            <Card.Meta>4 out of 8 people joined</Card.Meta>
                         </Card.Content>
                     </Card>
                 }

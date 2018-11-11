@@ -97,11 +97,12 @@ function getClient(userName) {
 }
 
 const NextWorkoutProp = () => (
-    <Card fluid raised>
+    <Card fluid raised className="u-bg--primaryGradient">
         <Card.Content>
             <Image src={proPic} circular floated="right" size="mini" />
-            <Card.Header inverted="true">Next Challenge</Card.Header>
-            <Card.Description inverted="true">{nextChal}</Card.Description>
+            <Card.Header>Next Challenge</Card.Header>
+            <Card.Meta>Starting in 4 days!</Card.Meta>
+            <Card.Description>{nextChal}</Card.Description>
         </Card.Content>
     </Card>
 );

@@ -5,3 +5,11 @@
 body {
   background-color: #323441;
 }
+
+// **
+// * Utility Classes
+// **
+
+.u-bg--primaryGradient {
+  background-image: @primaryGradient !important;
+}

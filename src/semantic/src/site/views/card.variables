@@ -8,13 +8,10 @@
 @borderWidth: 0;
 
 /* Header */
-@headerColor: @white;
-
-/* Metadata */
-@metaColor: @white;
+@headerColor: @textColor;
 
 /* Description */
-@descriptionColor: @white;
+@descriptionColor: @textColor;
 
 /* Additional Content */
 @extraDivider: 1px solid rgba(255, 255, 255, 0.08);
