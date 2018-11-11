@@ -94,7 +94,7 @@ class NotificationFeed extends Component {
         }
         function rows(friendRequests, userID)
         {
-            alert(friendRequests);
+            //alert(friendRequests);
             if (friendRequests != null) {
                 return _.times(friendRequests.length, i => (
                     <Notification userID={userID} friendRequestID={friendRequests[i]}/>

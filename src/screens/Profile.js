@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon, Segment } from 'semantic-ui-react'
-import { Storage } from 'aws-amplify';
+import { Storage, Auth } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
@@ -10,7 +10,7 @@ import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
 import ScheduledEventList from "./ScheduledEventList";
 import OwnedEventList from "./OwnedEventList";
-import { fetchUserAttributes } from "../redux_helpers/actions/userActions";
+import {fetchUser, fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import AWSSetup from "../AppConfig";
 
@@ -54,6 +54,7 @@ class Profile extends React.PureComponent {
         this.closeScheduledModal = this.closeScheduledModal.bind(this);
         this.openOwnedModal = this.openOwnedModal.bind(this);
         this.closeOwnedModal = this.closeOwnedModal.bind(this);
+        this.handleLogOut = this.handleLogOut.bind(this);
     }
 
     componentDidMount() {
@@ -157,6 +158,20 @@ class Profile extends React.PureComponent {
         }
     }
 
+    handleLogOut() {
+        this.setState({isLoading: true});
+        Auth.signOut({global: true}).then((data) => {
+            console.log("Successfully signed out!");
+            console.log(data);
+            this.setState({isLoading: false, username: null});
+            this.props.signOut();
+        }).catch((error) => {
+            console.log("Sign out has failed :(");
+            console.log(error);
+            this.setState({error: error, isLoading: false});
+        });
+    }
+
     openBuddyModal = () => { this.setState({buddyModalOpen: true}); };
     closeBuddyModal = () => { this.setState({buddyModalOpen: false}); };
     openScheduledModal = () => { this.setState({scheduledModalOpen: true}); };
@@ -208,6 +223,7 @@ class Profile extends React.PureComponent {
         //and a switch to set the privacy for the user.
         return(
             <Card fluid raised>
+                <Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
@@ -270,6 +286,9 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (id, attributesList) => {
             dispatch(fetchUserAttributes(id, attributesList));
         },
+        fetchUser: (username) => {
+            dispatch(fetchUser(username));
+        }
     };
 };
 
