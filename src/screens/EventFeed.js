@@ -3,6 +3,8 @@ import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
+import { connect } from 'react-redux';
+import ScheduledEventsList from "./ScheduledEventList";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -109,4 +111,8 @@ class EventFeed extends Component {
     }
 }
 
-export default EventFeed;
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(EventFeed);

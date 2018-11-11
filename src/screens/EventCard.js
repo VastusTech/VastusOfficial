@@ -38,6 +38,8 @@ class EventCard extends Component {
         error: null,
         isLoading: true,
         event: null,
+        members: {},
+        owner: null,
         ifOwned: false,
         ifJoined: false,
     };
@@ -46,20 +48,23 @@ class EventCard extends Component {
         if (this.props.event) {
             let ifOwned = false;
             let ifJoined = false;
-            // alert(this.props.userID);
+            //alert("Membahs: " + this.props.event.members);
+            //alert(this.props.owner + "vs. " + this.props.event.owner);
             if (this.props.user.id === this.props.event.owner) {
-                ifOwned = true;
+                alert("Same owner and cur user for: " + this.props.event.id);
+                this.setState({ifOwned: true});
             }
             if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
-                ifJoined = true;
+                this.setState({ifJoined: true});
             }
-            this.setState({isLoading: false, event: this.props.event, ifOwned, ifJoined});
+
+            this.setState({isLoading: false, event: this.props.event, members: this.props.event.members, ifOwned: ifOwned, ifJoined: ifJoined});
         }
     }
 
     componentWillReceiveProps(newProps) {
         if (newProps.event) {
-            this.setState({isLoading: false, event: newProps.event});
+            this.setState({isLoading: false, event: newProps.event, members: newProps.members});
         }
     }
 
@@ -79,18 +84,17 @@ class EventCard extends Component {
                 </Card>
             );
         }
-
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <EventDescriptionModal ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
+            <EventDescriptionModal members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
                 trigger={
                     <Card>
                         <Card.Content>
                             <Card.Header>{this.state.event.title}</Card.Header>
                             <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                            <Card.Meta>{this.state.event.time_created}</Card.Meta>
+                            <Card.Meta>{this.state.event.members}</Card.Meta>
                             <Card.Description>
-                                {this.state.event.goal}
+                                {String(this.state.event.goal + ", ")}
                             </Card.Description>
                         </Card.Content>
                     </Card>

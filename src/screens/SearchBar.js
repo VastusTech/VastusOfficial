@@ -1,6 +1,7 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import {Search, Grid, Message } from 'semantic-ui-react'
+import EventCard from "./EventCard";
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
@@ -52,7 +53,7 @@ class SearchBarProp extends Component {
                 access: "public"
             };
             this.setState({eventsLoading: true});
-            QL.queryEvents(["id", "item_type", "title", "goal", "access"], QL.generateFilter("and",
+            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));

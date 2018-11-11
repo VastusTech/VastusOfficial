@@ -5,6 +5,7 @@ import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
 import NextWorkoutProp from "./NextWorkout";
+import ScheduledEventsList from "./ScheduledEventList";
 
 /**
 * Tabs TODO Potentially clean this up
