@@ -18,6 +18,20 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+
+        // const badList = ["2"];
+        // const list = ["1", "2", "3"];
+        // const filterList = list.filter((v) => {return !badList.includes(v)});
+        // alert(filterList);
+        // const currentObject = {
+        //     id: "id",
+        //     name: "name",
+        //     username: "username"
+        // };
+        // const variablesList = ["id", "name", "username", "profileImagePath"];
+        // if (variablesList.some(v => !Object.keys(currentObject).includes(v))) {
+        //     alert("Your theory works");
+        // }
     }
 
     async authenticate(user) {
@@ -27,8 +41,11 @@ class App extends Component {
             Auth.currentCredentials();
             Auth.currentAuthenticatedUser().then((authenticatedUser) => {
                 if (authenticatedUser && (user.username === authenticatedUser.username)) {
-                    alert("Logging in the user");
+                    // alert("Logging in the user");
                     this.setState({ifLoggedIn: true});
+                    if (user.username !== this.props.user.username) {
+                        this.props.clearUser();
+                    }
                     this.props.fetchUser(user.username);
                 }
                 else {
@@ -45,9 +62,9 @@ class App extends Component {
     }
 
     signOut() {
-        alert("logging out the user");
+        // alert("logging out the user");
         this.setState({ifLoggedIn: false});
-        this.props.clearUser();
+        // this.props.clearUser();
     }
 
     async componentDidMount() {

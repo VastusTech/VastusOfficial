@@ -23,11 +23,26 @@ function fetch(id, variablesList, cacheSet, QLFunction, fetchDispatchType, readD
         }
         const currentObject = getState().cache[cacheSet][id];
         if (!currentObject || variablesList.some(v => !Object.keys(currentObject).includes(v))) {
+            alert("There is something still to fetch in this object");
             const profilePictureIndex = variablesList.indexOf("profilePicture");
-            if (profilePictureIndex !== -1) { variablesList.splice(profilePictureIndex, 1); }
+            if (profilePictureIndex !== -1) {
+                alert("The variable list is requesting the profilePicture to be uploaded as well.");
+                variablesList.splice(profilePictureIndex, 1);
+                // Add
+                if (!variablesList.includes("profileImagePath")) {
+                    alert("lmao you forgot to include the profile image path, I'll include it tho, no worries");
+                    variablesList = [
+                        ...variablesList,
+                        "profileImagePath"
+                    ]
+                }
+            }
             QLFunction(id, variablesList, (data) => {
+                alert("Successfully retrieved the QL info");
                 if (profilePictureIndex !== -1 && data.profileImagePath) {
+                    alert("Adding profile image to the data");
                     addProfilePictureToData(data, data.profileImagePath, (updatedData) => {
+                        alert("Dispatching the profile image + data");
                         dispatch({
                             type: fetchDispatchType,
                             payload: updatedData
@@ -38,6 +53,7 @@ function fetch(id, variablesList, cacheSet, QLFunction, fetchDispatchType, readD
                     });
                 }
                 else {
+                    alert("Just dispatching the normal data");
                     dispatch({
                         type: fetchDispatchType,
                         payload: data
@@ -47,6 +63,7 @@ function fetch(id, variablesList, cacheSet, QLFunction, fetchDispatchType, readD
                     });
                 }
             }, (error) => {
+                alert("Error in retrieval");
                 dispatch({
                     type: "SET_ERROR",
                     payload: error
@@ -58,6 +75,7 @@ function fetch(id, variablesList, cacheSet, QLFunction, fetchDispatchType, readD
         }
         else {
             // We're fine, so just update it in the cache
+            alert("Nothing to fetch, just updating the LRU Handler");
             dispatch({
                 type: readDispatchType,
                 payload: { id }

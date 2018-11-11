@@ -32,8 +32,8 @@ class Profile extends React.PureComponent {
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
-        profilePicture: null,
-        ifS3: false,
+        // profilePicture: null,
+        // ifS3: false,
         error: null
     };
 
@@ -43,7 +43,7 @@ class Profile extends React.PureComponent {
         // alert("constructor");
         // alert("constructor props: " + JSON.stringify(props));
         super(props);
-        this.setState({isLoading: true, checked: false, profilePicture: null, ifS3: false, error: null});
+        this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
         this.setPicture = this.setPicture.bind(this);
         this.update = this.update.bind(this);
@@ -78,29 +78,32 @@ class Profile extends React.PureComponent {
             alert("ID is not set inside profile... This means a problem has occurred");
         }
 
-        if (user.id && user.name && user.username && user.birthday) {
-            if (this.state.isLoading) {
+        // if (user.id && user.name && user.username && user.birthday) {
+            // if (this.state.isLoading) {
                 // And start to get the profile image from S3
-                if (user.profileImagePath) {
+                // if (user.profileImagePath) {
                     // this.setState({profilePicture: user.profileImagePath, isLoading: false, ifS3: true});
                     // alert("Getting " + user.profileImagePath + " from S3?");
-                    Storage.get(user.profileImagePath).then((data) => {
-                        // alert("Received properly and setting! Data = " + JSON.stringify(data));
-                        this.setState({profilePicture: data, isLoading: false, ifS3: true});
-                    }).catch((error) => {
-                        alert("Error getting profile image");
-                        alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                        this.setState({error: error, isLoading: true});
-                    });
-                }
-                else {
-                    // Default
-                    this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
-                }
-            }
+                    // Storage.get(user.profileImagePath).then((data) => {
+                    //     // alert("Received properly and setting! Data = " + JSON.stringify(data));
+                    //     this.setState({profilePicture: data, isLoading: false, ifS3: true});
+                    // }).catch((error) => {
+                    //     alert("Error getting profile image");
+                    //     alert("Received an error, so not setting. Error = " + JSON.stringify(error));
+                    //     this.setState({error: error, isLoading: true});
+                    // });
+                // }
+                // else {
+                //     // Default
+                //     this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
+                // }
+            // }
+        // }
+        if (!this.props.user.info.isLoading && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
+            this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture"]);
         }
-        else if (!this.props.user.info.isLoading) {
-            this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon"]);
+        else {
+            this.setState({isLoading: false});
         }
     }
 
@@ -118,7 +121,7 @@ class Profile extends React.PureComponent {
                     (data) => {
                         //alert("successfully editted client");
                         //alert(JSON.stringify(data));
-                        this.props.fetchUserAttributes(this.props.user.id, ["profileImagePath"]);
+                        this.props.fetchUserAttributes(this.props.user.id, ["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         alert("Failed edit client attribute");
@@ -134,15 +137,15 @@ class Profile extends React.PureComponent {
 
     profilePicture() {
         console.log(this.state.profilePicture);
-        if (this.state.profilePicture) {
-            if (this.state.ifS3) {
-                // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
-                return(
-                    <Item.Image size='medium' src={this.state.profilePicture} circular/>
-                );
-            }
+        if (this.props.user.profilePicture) {
+            // if (this.state.ifS3) {
+            //     // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
+            //     return(
+            //         <Item.Image size='medium' src={this.state.profilePicture} circular/>
+            //     );
+            // }
             return(
-                <Item.Image size='medium' src={this.state.profilePicture} circular/>
+                <Item.Image size='medium' src={this.props.user.profilePicture} circular/>
             );
         }
         else {
@@ -154,12 +157,12 @@ class Profile extends React.PureComponent {
         }
     }
 
-    openBuddyModal = () => { this.setState({buddyModalOpen: true}); }
-    closeBuddyModal = () => { this.setState({buddyModalOpen: false}); }
-    openScheduledModal = () => { this.setState({scheduledModalOpen: true}); }
-    closeScheduledModal = () => { this.setState({scheduledModalOpen: false}); }
-    openOwnedModal = () => { this.setState({ownedModalOpen: true}); }
-    closeOwnedModal = () => { this.setState({ownedModalOpen: false}); }
+    openBuddyModal = () => { this.setState({buddyModalOpen: true}); };
+    closeBuddyModal = () => { this.setState({buddyModalOpen: false}); };
+    openScheduledModal = () => { this.setState({scheduledModalOpen: true}); };
+    closeScheduledModal = () => { this.setState({scheduledModalOpen: false}); };
+    openOwnedModal = () => { this.setState({ownedModalOpen: true}); };
+    closeOwnedModal = () => { this.setState({ownedModalOpen: false}); };
 
 
     render() {
