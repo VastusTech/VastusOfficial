@@ -19,15 +19,17 @@
 @lightPrimaryColor   : #7F47AE;
 @lightSecondaryColor : @lightBlack;
 
-@black: #25252f;
-@lightBlack: #323441;
+@black      : #25252f;
+@lightBlack : #323441;
 
-@textColor: @white;
-@lightTextColor: darken(@textColor, 28%);
-@hoveredTextColor: @textColor;
+@textColor         : @white;
+@lightTextColor    : darken(@textColor, 28%);
+@hoveredTextColor  : @textColor;
+@selectedTextColor : @textColor;
 
-@focusedFormBorderColor: @primaryColor;
+@focusedFormBorderColor : @primaryColor;
 @inputBackground        : @lightBlack;
+@inputPlaceholderColor  : @lightTextColor;
 
 @internalBorderColor       : lighten(@lightBlack, 4%);
 @solidInternalBorderColor  : lighten(@lightBlack, 4%);
