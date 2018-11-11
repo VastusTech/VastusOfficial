@@ -110,24 +110,29 @@ class CreateEventProp extends Component {
         const time = convertDateTimeToISO8601(this.state.dateTime) + "_" +
             convertDateTimeToISO8601(this.state.dateTimeEnd);
 
-        Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
-            String(this.eventState.location), String(this.eventState.title),
-            String(this.eventState.goal), (data) => {
-                alert(JSON.stringify(data));
-                // HANDLE WHAT HAPPENS afterwards
-                if (data.errorMessage) {
-                    // Java error handling
-                    alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
+        if(Number.isInteger(+this.eventState.capacity)) {
+            Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
+                String(this.eventState.location), String(this.eventState.title),
+                String(this.eventState.goal), (data) => {
+                    alert(JSON.stringify(data));
+                    // HANDLE WHAT HAPPENS afterwards
+                    if (data.errorMessage) {
+                        // Java error handling
+                        alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
+                    }
+                    else {
+                        alert("ya did it ya filthy animal");
+                    }
+                }, (error) => {
+                    alert(error);
+                    // TODO HANDLE WHAT HAPPENS afterwards
+                    // TODO keep in mind that this is asynchronous
                 }
-                else {
-                    alert("ya did it ya filthy animal");
-                }
-            }, (error) => {
-                alert(error);
-                // TODO HANDLE WHAT HAPPENS afterwards
-                // TODO keep in mind that this is asynchronous
-            }
-        );
+            );
+        }
+        else {
+            alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
+        }
     }
 
     //Inside of render is a modal containing each form input required to create a Event.

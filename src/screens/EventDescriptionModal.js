@@ -43,7 +43,7 @@ class EventDescriptionModal extends Component {
         isJoined: null,
         event: null,
         ownerName: null,
-        members: [],
+        members: {},
         clientModalOpen: false,
     };
 
@@ -57,6 +57,9 @@ class EventDescriptionModal extends Component {
     componentDidMount() {
         if (this.props.event) {
             //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            // if(this.props.members) {
+            //     alert("Members: " + this.props.members);
+            // }
             this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
                 isJoined: this.props.ifJoined, members: this.props.members});
             QL.getClient(this.props.event.owner, ["name"], (data) => {
@@ -150,6 +153,7 @@ class EventDescriptionModal extends Component {
             }
         }
 
+        //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Modal trigger={this.props.trigger}>
                 <Modal.Header>{this.state.event.title}</Modal.Header>
@@ -162,11 +166,12 @@ class EventDescriptionModal extends Component {
                         <Header>Info: </Header>
                         <p>{this.convertFromISO(this.state.event.time)}</p>
                         <p>{this.state.event.goal}</p>
+                        <div>{this.state.event.members}</div>
                     </Modal.Description>
                     <div className='event list'>
                         <Modal trigger={<Button basic color='purple'>Members</Button>}>
                             <Modal.Content>
-                                <EventMemberList ifOwned = {this.state.isOwned}/>
+                                <EventMemberList challengeID = {this.state.event.id} members = {this.state.event.members} ifOwned = {this.state.isOwned}/>
                             </Modal.Content>
                         </Modal>
                     </div>
