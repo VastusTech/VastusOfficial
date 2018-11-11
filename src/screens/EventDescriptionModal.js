@@ -6,6 +6,30 @@ import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
 
+function convertTime(time) {
+    if (parseInt(time, 10) > 12) {
+        return "0" + (parseInt(time, 10) - 12) + time.substr(2, 3) + "pm";
+    }
+    else if (parseInt(time, 10) === 12) {
+        return time + "pm";
+    }
+    else if (parseInt(time, 10) === 0) {
+        return "0" + (parseInt(time, 10) + 12) + time.substr(2, 3) + "am"
+    }
+    else {
+        return time + "am"
+    }
+}
+
+function convertDate(date) {
+    let dateString = String(date);
+    let year = dateString.substr(0, 4);
+    let month = dateString.substr(5, 2);
+    let day = dateString.substr(8, 2);
+
+    return month + "/" + day + "/" + year;
+}
+
 /*
 * Event Description Modal
 *
@@ -57,6 +81,14 @@ class EventDescriptionModal extends Component {
         // if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
         //     this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
         // }
+    }
+
+    convertFromISO(dateTime) {
+        let dateTimeString = String(dateTime);
+        let date = dateTimeString.substr(0, 10);
+        let time = dateTimeString.substr(11, 5);
+        let time1 = dateTimeString.substr(37, 5);
+        return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
     }
 
     handleDeleteEventButton() {
@@ -128,7 +160,7 @@ class EventDescriptionModal extends Component {
                     <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.ownerName}</Button>
                     <Modal.Description>
                         <Header>Info: </Header>
-                        <p>{this.state.event.time}</p>
+                        <p>{this.convertFromISO(this.state.event.time)}</p>
                         <p>{this.state.event.goal}</p>
                     </Modal.Description>
                     <div className='event list'>

@@ -41,7 +41,7 @@ function setupAWS() {
             userPoolWebClientId: '124v8f255kaqivbm5bp71s6rej',
 
             // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
-            mandatorySignIn: false,
+            mandatorySignIn: true,
 
 
             //authenticationFlowType: 'USER_PASSWORD_AUTH'

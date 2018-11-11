@@ -63,6 +63,7 @@ class CreateEventProp extends Component {
         date: "",
         location: "",
         time: "",
+        time_created: "",
         capacity: "",
         goal: "",
         description: "",

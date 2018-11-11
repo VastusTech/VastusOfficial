@@ -1,23 +1,19 @@
 import info, { infoFunctions, infoReducer } from './infoReducer';
 
-// TODO This is where we will store all the retrieved database items and use a LRU cache to rid them if necessary
+// This is where we will store all the retrieved database items and use a LRU cache to rid them if necessary
 const ADD_CLIENT = 'ADD_CLIENT';
 const ADD_TRAINER = 'ADD_TRAINER';
 const ADD_GYM = 'ADD_GYM';
 const ADD_WORKOUT = 'ADD_WORKOUT';
 const ADD_REVIEW = 'ADD_REVIEW';
-// TODO I'm considering changing this just to events...
-const ADD_PARTY = 'ADD_PARTY';
-const ADD_CHALLENGE = 'ADD_CHALLENGE';
+const ADD_EVENT = 'ADD_EVENT';
 
 const READ_CLIENT = 'READ_CLIENT';
 const READ_TRAINER = 'READ_TRAINER';
 const READ_GYM = 'READ_GYM';
 const READ_WORKOUT = 'READ_WORKOUT';
 const READ_REVIEW = 'READ_REVIEW';
-// TODO I'm considering changing this just to events...
-const READ_PARTY = 'READ_PARTY';
-const READ_CHALLENGE = 'READ_CHALLENGE';
+const READ_EVENT = 'READ_EVENT';
 
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
@@ -25,9 +21,7 @@ const trainerCacheSize = 100;
 const gymCacheSize = 100;
 const workoutCacheSize = 100;
 const reviewCacheSize = 100;
-// TODO I'm considering changing this just to events...
-const partyCacheSize = 1000;
-const challengeCacheSize = 1000;
+const eventCacheSize = 2000;
 
 const initialState = {
     info,
@@ -36,18 +30,14 @@ const initialState = {
     gyms: {},
     workouts: {},
     reviews: {},
-// TODO I'm considering changing this just to events...
-    parties: {},
-    challenges: {},
+    events: {},
 
     clientLRUHandler: [],
     trainerLRUHandler: [],
     gymLRUHandler: [],
     workoutLRUHandler: [],
     reviewLRUHandler: [],
-// TODO I'm considering changing this just to events...
-    partyLRUHandler: [],
-    challengeLRUHandler: [],
+    eventLRUHandler: []
 };
 
 export default (state = initialState, action) => {
@@ -72,11 +62,8 @@ export default (state = initialState, action) => {
         case ADD_REVIEW:
             state = addObjectToCache(state, "reviews", reviewCacheSize, "reviewLRUHandler", action.payload);
             break;
-        case ADD_PARTY:
-            state = addObjectToCache(state, "parties", partyCacheSize, "partyLRUHandler", action.payload);
-            break;
-        case ADD_CHALLENGE:
-            state = addObjectToCache(state, "challenges", challengeCacheSize, "challengeLRUHandler", action.payload);
+        case ADD_EVENT:
+            state = addObjectToCache(state, "events", eventCacheSize, "eventLRUHandler", action.payload);
             break;
         case READ_CLIENT:
             state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);
@@ -93,12 +80,8 @@ export default (state = initialState, action) => {
         case READ_REVIEW:
             state = updateReadObject(state, "reviews", "reviewLRUHandler", action.payload);
             break;
-        case READ_PARTY:
-            state = updateReadObject(state, "parties", "partyLRUHandler", action.payload);
-            break;
-        case READ_CHALLENGE:
-            state = updateReadObject(state, "challenges", "challengeLRUHandler", action.payload);
-            break;
+        case READ_EVENT:
+            state = updateReadObject(state, "events", "eventLRUHandler", action.payload);
     }
     return state;
 };

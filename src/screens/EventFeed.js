@@ -42,7 +42,7 @@ class EventFeed extends Component {
         this.setState({isLoading: true});
 
         if (!this.state.ifFinished) {
-            QL.queryEvents(["id", "title", "goal", "time", "owner", "members"], QL.generateFilter("and",
+            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members"], QL.generateFilter("and",
                 {"access": "eq"}, {"access": "public"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (data.items) {
@@ -88,6 +88,8 @@ class EventFeed extends Component {
          * @returns {*}
          */
         function rows(events) {
+            //if(events != null)
+                //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Fragment key={i}>
                     <EventCard event={events[i]}/>
@@ -99,7 +101,7 @@ class EventFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                {rows(this.state.events)}
+                {rows(this.state.events.sort(function(a,b){return b.time_created.localeCompare(a.time_created)}))}
             </Visibility>
         );
     }

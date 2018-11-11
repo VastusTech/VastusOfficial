@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
-import { API, Auth, graphqlOperation } from "aws-amplify";
+import { API, Auth, Operation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
 import QL from "../GraphQL";
@@ -37,29 +37,37 @@ setupAWS();
 class NotificationFeed extends Component {
     state = {
         error: null,
-        isLoading: true,
+        isLoading: false,
         sentRequest: false,
         friendRequests: {}
     };
 
+    _isMounted = false;
+
     constructor(props) {
         super(props);
-        this.setState({isLoading: true});
         this.update();
+        this.update = this.update.bind(this);
     }
 
-
     componentDidMount() {
+        //this.setState({isLoading: true});
         this.update();
+        this._isMounted = true;
+    }
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     componentWillReceiveProps(newProps) {
-        // this.setState({isLoading: true});
+        //this.setState({isLoading: true});
         this.props = newProps;
         this.update();
     }
 
-    update() {
+    update = () => {
+        //alert("Updooting");
         const user = this.props.user;
         if (!user.id) {
             alert("Pretty bad error");
@@ -68,7 +76,8 @@ class NotificationFeed extends Component {
         if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
                 this.props.fetchUserAttributes(user.id, ["id", "friendRequests"]);
-                this.setState({sentRequest: true, isLoading: false});
+                //if(this._isMounted)
+                    this.setState({sentRequest: true, isLoading: false});
             }
         }
     }
@@ -85,6 +94,7 @@ class NotificationFeed extends Component {
         }
         function rows(friendRequests, userID)
         {
+            alert(friendRequests);
             if (friendRequests != null) {
                 return _.times(friendRequests.length, i => (
                     <Notification userID={userID} friendRequestID={friendRequests[i]}/>
@@ -98,19 +108,6 @@ class NotificationFeed extends Component {
         );
     }
 }
-// {/*<Modal>*/}
-//     {/*<Modal.Header>Select a Photo</Modal.Header>*/}
-//     {/*<Modal.Content image>*/}
-//         {/*<Item>*/}
-//             {/*<Item.Image size='medium' src={proPic} circular/>*/}
-//             {/*<Item.Content>*/}
-//                 {/*<Item.Header as='a'><div>{friendRequestNames[i]}</div></Item.Header>*/}
-//                 {/*<Item.Extra>Friends: <div>{}</div></Item.Extra>*/}
-//                 {/*<Item.Extra>Event Wins: <div>{}</div></Item.Extra>*/}
-//             {/*</Item.Content>*/}
-//         {/*</Item>*/}
-//     {/*</Modal.Content>*/}
-// {/*</Modal>*/}
 
 const mapStateToProps = (state) => ({
     user: state.user
@@ -123,4 +120,5 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationFeed);

@@ -16,14 +16,14 @@ class ScheduledEventsList extends Component {
 
     constructor(props) {
         super(props);
-        // alert("Got into Scheduled Events constructor");
+        //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
-        this.update();
     }
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = this.props.user;
+        //alert("Updating");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
@@ -45,7 +45,7 @@ class ScheduledEventsList extends Component {
     }
 
     addEventFromGraphQL(eventID) {
-        QL.getEvent(eventID, ["id", "time", "title", "goal", "owner", "members"], (data) => {
+        QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
             console.log("successfully got a event");
             this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
@@ -55,26 +55,46 @@ class ScheduledEventsList extends Component {
         });
     }
 
+    componentDidMount() {
+        this.update();
+    }
+
     componentWillReceiveProps(newProps) {
+        //alert("Receevin props");
         this.props = newProps;
         this.update();
     }
 
     render() {
+        //alert("Redering");
         function rows(events) {
+            const row = [];
             const rowProps = [];
             for (const key in events) {
                 if (events.hasOwnProperty(key)) {
+                    //alert(JSON.stringify(events[key]));
+                    row.push(
+                        events[key]
+                    );
+                }
+            }
+            row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
+
+            for (const key in row) {
+                if (row.hasOwnProperty(key) === true) {
+                    //alert(JSON.stringify(events[key]));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={events[key]}/>
+                            <EventCard event={row[key]}/>
                         </Grid.Row>
                     );
                 }
             }
+
             return rowProps;
         }
         if (this.state.isLoading) {
+            //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message>Loading...</Message>
             )

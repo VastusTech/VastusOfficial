@@ -20,6 +20,7 @@ export default {
 export function infoReducer(state, action) {
     switch (action.type) {
         case SET_ERROR:
+            console.log("Error inside a redux action/reducer! (Leo wrote this) Error = " + JSON.stringify(action.payload));
             state = {
                 ...state,
                 info: {
