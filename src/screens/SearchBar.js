@@ -1,8 +1,10 @@
 import _ from 'lodash'
 import React, { Component } from 'react'
 import {Search, Grid, Message } from 'semantic-ui-react'
+import EventCard from "./EventCard";
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
+import ClientModal from "./ClientModal";
 
 setupAWS();
 
@@ -50,7 +52,7 @@ class SearchBarProp extends Component {
                 access: "public"
             };
             this.setState({eventsLoading: true});
-            QL.queryEvents(["id", "item_type", "title", "goal", "access"], QL.generateFilter("and",
+            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));
@@ -124,17 +126,28 @@ class SearchBarProp extends Component {
                 var result;
                 if (item.item_type === "Client") {
                     result = {
-                        title: item.name,
+                        title: (<div>{item.id}</div>),
                         description: item.username,
-                        content: <Message>Lmao</Message>
+                        content: [item.item_type, item.id]
                     };
                 }
                 else if (item.item_type === "Event") {
-                    result = {
-                        title: (item.title + " ~ (" + item.id + ")"),
-                        description: item.goal,
-                        content: <Message>Lmao</Message>
-                    };
+                    /*
+                    if(item.owner != null && item.id != null) {
+                        result = {
+                            title: (<EventCard owner={item.owner} event={item.id}/>),
+                            description: item.goal,
+                            content: <Message>Lmao</Message>
+                        };
+                    }
+                    else {
+                    */
+                        result = {
+                            title: (<EventCard owner={item.owner} event={item.id}/>),
+                            description: item.goal,
+                            content: [item.item_type, item.id, item.owner]
+                        };
+                    //}
                 }
                 else {
                     alert("item has item_type of " + item.item_type + " for some reason?");
@@ -146,9 +159,15 @@ class SearchBarProp extends Component {
     }
 
     handleResultSelect = (e, { result }) => {
-
-        alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        // this.setState({ value: result.title });
+        /*
+        alert(result.content[0]);
+        return (
+            <ClientModal open={true} clientID={result.content[1]}/>
+        );
+        //return (
+            //<EventCard owner={result.content[0]} event={result.content[1]}/>
+        //);
+        */
     };
 
     handleSearchChange = (e, { value }) => {

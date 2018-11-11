@@ -23,11 +23,12 @@ class ScheduledEventsList extends Component {
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = this.props.user;
-        //alert("Updating");
+        //alert("Updating Scheduled Events");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
         }
+
 
         if (user.hasOwnProperty("scheduledEvents")) {
             for (var i = 0; i < user.scheduledEvents.length; i++) {

@@ -252,7 +252,7 @@ class Profile extends React.PureComponent {
                             <Modal size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
                                 <Modal.Content>
                                     <ScheduledEventList/>
-                                </Modal.Content>w
+                                </Modal.Content>
                             </Modal>
                         </List.Item>
                         <List.Item>

@@ -49,7 +49,7 @@ class EventCard extends Component {
             let ifOwned = false;
             let ifJoined = false;
             //alert("Membahs: " + this.props.event.members);
-            alert(this.props.owner + "vs. " + this.props.event.owner);
+            //alert(this.props.owner + "vs. " + this.props.event.owner);
             if (this.props.user.id === this.props.event.owner) {
                 alert("Same owner and cur user for: " + this.props.event.id);
                 this.setState({ifOwned: true});
