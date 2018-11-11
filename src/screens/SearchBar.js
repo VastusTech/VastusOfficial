@@ -3,6 +3,8 @@ import React, { Component } from 'react'
 import {Search, Grid, Message } from 'semantic-ui-react'
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
+import EventDescriptionModal from "./EventDescriptionModal";
+import ClientModal from "./ClientModal";
 
 setupAWS();
 
@@ -146,7 +148,6 @@ class SearchBarProp extends Component {
     }
 
     handleResultSelect = (e, { result }) => {
-
         alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
         // this.setState({ value: result.title });
     };
@@ -161,6 +162,24 @@ class SearchBarProp extends Component {
         this.loadMoreClientResults(value);
     };
 
+    resultModal(type, object) {
+        if (type === "Client") {
+            return(
+                <ClientModal />
+            );
+        }
+        else if (type === "Event") {
+            return(
+                <EventDescriptionModal />
+            );
+        }
+        else {
+            alert("Wrong type inputted! Received " + type);
+        }
+    }
+
+
+
     render() {
         // TODO Check to see that this is valid to do?
         console.log("Showing " + this.state.searchResults.length + " results");
@@ -168,6 +187,7 @@ class SearchBarProp extends Component {
         return (
             <Grid>
                 <Grid.Column width={6}>
+                    {/*result modal*/}
                     <Search
                         loading={isLoading}
                         onResultSelect={this.handleResultSelect}
