@@ -6,3 +6,7 @@
 .ui.search.fluid .input {
   width: 100%;
 }
+
+.ui .search.icon {
+  color: @white;
+}

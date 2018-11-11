@@ -3,7 +3,5 @@
 *******************************/
 
 body {
-  background-color: #252D36;
-  background-image: linear-gradient(top left, #252D36, #2F1A40);
-  background-attachment: fixed;
+  background-color: #323441;
 }

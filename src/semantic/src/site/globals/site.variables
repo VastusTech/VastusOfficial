@@ -2,9 +2,12 @@
      User Global Variables
 *******************************/
 
-/*-------------------
-    Brand Colors
---------------------*/
+/**
+  * Inverted is poorly supported in Semantic UI React,
+  * so we have to set our dark theme based on not using
+  * inverted. In some cases values are hardcoded in the
+  * default themes 🤦‍
+ **/
 
 @primaryColor        : #7F47AE;
 @secondaryColor      : @black;
@@ -12,21 +15,18 @@
 @lightPrimaryColor   : #7F47AE;
 @lightSecondaryColor : @lightBlack;
 
-@black: #3A4454;
+@black: #25252f;
+@lightBlack: #323441;
 
-/*-------------------
-      Base Sizes
---------------------*/
+@textColor: @white;
+@lightTextColor: @textColor;
+@hoveredTextColor: @textColor;
 
-/* This is the single variable that controls them all */
 @emSize   : 16px;
-
-/* The size of page text  */
 @fontSize : 16px;
 
-/*-------------------
-    Focused Input
---------------------*/
-
-/* Used on inputs, textarea etc */
 @focusedFormBorderColor: @primaryColor;
+@inputBackground        : @lightBlack;
+
+@internalBorderColor       : lighten(@lightBlack, 4%);
+@solidInternalBorderColor  : lighten(@lightBlack, 4%);

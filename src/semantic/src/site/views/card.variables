@@ -2,17 +2,10 @@
     User Variable Overrides
 *******************************/
 
-/*-------------------
-         View
---------------------*/
-
 @background: @black;
+@linkHoverBackground: lighten(@black, 2%);
 
 @borderWidth: 0;
-
-/*-------------------
-       Content
---------------------*/
 
 /* Header */
 @headerColor: @white;

@@ -1,3 +1,5 @@
 /*******************************
     User Variable Overrides
 *******************************/
+
+@coloredBackgroundImage: linear-gradient(to right, #259ff5, #7F47AE);
