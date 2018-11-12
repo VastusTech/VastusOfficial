@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Modal, Button, Item, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import { Modal, Button, Dimmer, Loader, Message, Grid, List } from 'semantic-ui-react';
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
@@ -89,9 +89,9 @@ class ClientModal extends Component {
             //if(events != null)
             //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Button basic color='purple'>Invite to Event</Button>
-                </Grid.Row>
+                <Fragment key={i}>
+                    <Button primary>Invite to Event</Button>
+                </Fragment>
             ));
         }
         // <Item.Image size='medium' src={proPic} circular/> TODO
@@ -103,42 +103,52 @@ class ClientModal extends Component {
                 {loadingProp(this.state.isLoading)}
                 {errorMessage(this.state.error)}
                 <Modal.Header>{this.state.client.name}</Modal.Header>
-                <Modal.Content image>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header as='a'><div>{}</div></Item.Header>
-                            <Item.Meta>Bio: </Item.Meta>
-                            <Item.Description>
-                                <div>{}</div>
-                            </Item.Description>
-                            <Item.Extra>Friends: <div>{}</div></Item.Extra>
-                            <Item.Extra>Event Wins: <div>{}</div></Item.Extra>
-                            <Item.Extra>
-                                <Button basic color='purple'
-                                        type='button'
-                                        onClick={this.handleAddFriendButton.bind(this)}>
-                                    Add Buddy
-                                </Button>
-                            </Item.Extra>
-                            <Item.Extra>
-                                <div>
-                                    <Modal trigger={<Button color='purple'>Invite to Challenge</Button>}>
-                                        <Grid columns='three' divided>
-                                            <Grid.Row>
-                                                <Grid.Column>
-                                                    <ScheduledEventsList/>
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    <InviteToScheduledEventsProp friendID={this.state.client.id}/>
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-                                    </Modal>
-                                </div>
-                            </Item.Extra>
-                        </Item.Content>
-                    </Item>
+                <Modal.Content>
+                    <Modal.Description>
+                        <List relaxed>
+                            {/* Bio */}
+                            <List.Item>
+                                <List.Icon name='user' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                            {/* Friends */}
+                            <List.Item>
+                                <List.Icon name='users' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                            {/* Event Wins */}
+                            <List.Item>
+                                <List.Icon name='trophy' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                        </List>
+                    </Modal.Description>
                 </Modal.Content>
+                <Modal.Actions>
+                    <Button inverted
+                            type='button'
+                            onClick={this.handleAddFriendButton.bind(this)}>
+                        Add Buddy
+                    </Button>
+                    <Modal trigger={<Button primary>Invite to Challenge</Button>}>
+                        <Grid columns='three' divided>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <ScheduledEventsList/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <InviteToScheduledEventsProp friendID={this.state.client.id}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Modal>
+                </Modal.Actions>
             </Modal>
         );
     }
