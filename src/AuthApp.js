@@ -6,6 +6,7 @@ import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
 import {logOut} from "./redux_helpers/actions/authActions";
+import QL from "./GraphQL";
 // import {  } from "./redux_helpers/actions/userActions";
 
 /**
@@ -21,6 +22,11 @@ class AuthApp extends Component {
 
     constructor(props) {
         super(props);
+        QL.getClients(["CL115901346"], ["id", "username"], (data) => {
+            alert(JSON.stringify(data));
+        }, (error) => {
+            alert(JSON.stringify(error));
+        })
     }
 
     handleLogOut() {
