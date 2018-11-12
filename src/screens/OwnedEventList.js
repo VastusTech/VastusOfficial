@@ -73,7 +73,7 @@ class OwnedEventsList extends Component {
                     }
                 }
             }
-            row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
+            //row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
 
             for (const key in row) {
                 if (row.hasOwnProperty(key)) {
