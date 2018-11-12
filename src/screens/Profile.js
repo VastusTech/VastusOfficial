@@ -246,7 +246,7 @@ class Profile extends React.PureComponent {
                         <Divider />
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
-                            <Modal size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
                                 <Modal.Content>
                                     <OwnedEventList/>
                                 </Modal.Content>
