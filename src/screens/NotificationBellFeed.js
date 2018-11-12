@@ -8,7 +8,7 @@ import QL from "../GraphQL";
 import Lambda from "../Lambda";
 import ClientModal from "./ClientModal";
 import Notification from "./Notification";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 
 // setupAWS();
@@ -48,6 +48,7 @@ class NotificationFeed extends Component {
         super(props);
         this.update();
         this.update = this.update.bind(this);
+        this.forceUpdate = this.forceUpdate.bind(this);
     }
 
     componentDidMount() {
@@ -75,12 +76,16 @@ class NotificationFeed extends Component {
         }
         if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
             if (!this.state.sentRequest && !this.props.user.info.error) {
-                this.props.fetchUserAttributes(user.id, ["id", "friendRequests"]);
+                this.props.fetchUserAttributes(user.id, ["friendRequests"]);
                 //if(this._isMounted)
                     this.setState({sentRequest: true, isLoading: false});
             }
         }
-    }
+    };
+
+    forceUpdate = () => {
+        this.props.forceFetchUserAttributes(this.props.user.id, ["friendRequests"]);
+    };
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
@@ -92,17 +97,17 @@ class NotificationFeed extends Component {
                 </Dimmer>
             );
         }
-        function rows(friendRequests, userID)
+        function rows(friendRequests, userID, feedUpdate)
         {
             //alert(friendRequests);
             if (friendRequests != null) {
                 return _.times(friendRequests.length, i => (
-                    <Notification userID={userID} friendRequestID={friendRequests[i]}/>
+                    <Notification userID={userID} friendRequestID={friendRequests[i]} feedUpdate={feedUpdate}/>
                 ));
             }
         }
         return(
-            <Grid>{rows(this.props.user.friendRequests, this.props.user.id)}</Grid>
+            <Grid>{rows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate)}</Grid>
         );
     }
 }
@@ -115,6 +120,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchUserAttributes: (id, attributesList) => {
             dispatch(fetchUserAttributes(id, attributesList));
+        },
+        forceFetchUserAttributes: (id, attributeList) => {
+            dispatch(forceFetchUserAttributes(id, attributeList));
         }
     }
 };

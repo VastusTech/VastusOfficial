@@ -50,7 +50,7 @@ class Notification extends Component {
                 this.setState({error: error, isLoading: false});
             });
         }
-    }
+    };
 
     handleClientModalOpen() { this.setState({clientModalOpen: true})};
     handleClientModalClose() { this.setState({clientModalOpen: false})};
@@ -62,6 +62,7 @@ class Notification extends Component {
             Lambda.acceptFriendRequest(userID, userID, friendRequestID,
                 (data) => {
                     alert("Successfully added " + userID + " as a friend!");
+                    this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
@@ -75,6 +76,7 @@ class Notification extends Component {
             Lambda.declineFriendRequest(userID, userID, friendRequestID,
                 (data) => {
                     alert("Successfully declined " + userID + " as a friend!");
+                    this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
