@@ -22,11 +22,11 @@ class AuthApp extends Component {
 
     constructor(props) {
         super(props);
-        QL.getClients(["CL115901346"], ["id", "username"], (data) => {
-            alert(JSON.stringify(data));
-        }, (error) => {
-            alert(JSON.stringify(error));
-        })
+        // QL.getClients(["CL115901346"], ["id", "username"], (data) => {
+        //     alert(JSON.stringify(data));
+        // }, (error) => {
+        //     alert(JSON.stringify(error));
+        // })
     }
 
     handleLogOut() {

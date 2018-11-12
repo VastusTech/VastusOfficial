@@ -1,4 +1,4 @@
-import info, { infoFunctions, infoReducer } from './infoReducer';
+// import info, { infoFunctions, infoReducer } from './infoReducer';
 
 // This is where we will store all the retrieved database items and use a LRU cache to rid them if necessary
 const ADD_CLIENT = 'ADD_CLIENT';
@@ -24,7 +24,7 @@ const reviewCacheSize = 100;
 const eventCacheSize = 2000;
 
 const initialState = {
-    info,
+    // info,
     clients: {},
     trainers: {},
     gyms: {},
@@ -41,10 +41,9 @@ const initialState = {
 };
 
 export default (state = initialState, action) => {
-    if (infoFunctions[action.type]) {
-        return infoReducer(state, action);
-    }
-
+    // if (infoFunctions[action.type]) {
+    //     return infoReducer(state, action);
+    // }
     switch (action.type) {
         case ADD_CLIENT:
             // TODO Also make sure that the item to get also has all the attributes we desire?

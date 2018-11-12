@@ -110,8 +110,8 @@ class SignInPage extends Component {
 
         return (
             <Container className='login-form'>
-                {loadingProp(this.props.user.info.isLoading)}
-                {errorMessage(this.props.user.info.error)}
+                {loadingProp(this.props.info.isLoading)}
+                {errorMessage(this.props.info.error)}
                 <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Segment raised padded>
@@ -157,7 +157,8 @@ class SignInPage extends Component {
 // {/*</div>*/}
 
 const mapStateToProps = state => ({
-    user: state.user
+    auth: state.auth,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {

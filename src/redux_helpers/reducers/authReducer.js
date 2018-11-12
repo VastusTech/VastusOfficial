@@ -33,7 +33,7 @@ export const authFunctions = {
     CLOSE_FORGOT_PASSWORD_MODAL
 };
 
-export default {
+const initialState = {
     loggedIn: false,
     confirmingSignUp: false,
     confirmingForgotPassword: false,
@@ -41,108 +41,78 @@ export default {
     forgotPasswordModalOpen: false
 };
 
-export function authReducer(state, action) {
+export default (state = initialState, action) => {
     switch (action.type) {
         case LOG_IN:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    loggedIn: true,
-                    confirmingSignUp: false,
-                    confirmingForgotPassword: false,
-                    signUpModalOpen: false,
-                    forgotPasswordModalOpen: false
-                }
+                loggedIn: true,
+                confirmingSignUp: false,
+                confirmingForgotPassword: false,
+                signUpModalOpen: false,
+                forgotPasswordModalOpen: false
             };
             break;
         case LOG_OUT:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    loggedIn: false,
-                    confirmingSignUp: false,
-                    confirmingForgotPassword: false,
-                    signUpModalOpen: false,
-                    forgotPasswordModalOpen: false
-                }
+                loggedIn: false,
+                confirmingSignUp: false,
+                confirmingForgotPassword: false,
+                signUpModalOpen: false,
+                forgotPasswordModalOpen: false
             };
             break;
         case SIGN_UP:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    loggedIn: false,
-                    confirmingSignUp: true
-                }
+                loggedIn: false,
+                confirmingSignUp: true
             };
             break;
         case CONFIRM_SIGNUP:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    loggedIn: false,
-                    confirmingSignUp: false,
-                    signUpModalOpen: false,
-                }
+                loggedIn: false,
+                confirmingSignUp: false,
+                signUpModalOpen: false,
             };
             break;
         case FORGOT_PASSWORD:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    confirmingForgotPassword: true
-                }
+                confirmingForgotPassword: true
             };
             break;
         case CONFIRM_FORGOT_PASSWORD:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    confirmingForgotPassword: false,
-                    forgotPasswordModalOpen: false
-                }
+                confirmingForgotPassword: false,
+                forgotPasswordModalOpen: false
             };
             break;
         case OPEN_SIGN_UP_MODAL:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    signUpModalOpen: true
-                }
+                signUpModalOpen: true
             };
             break;
         case CLOSE_SIGN_UP_MODAL:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    signUpModalOpen: false
-                }
+                signUpModalOpen: false
             };
             break;
         case OPEN_FORGOT_PASSWORD_MODAL:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    forgotPasswordModalOpen: true
-                }
+                forgotPasswordModalOpen: true
             };
             break;
         case CLOSE_FORGOT_PASSWORD_MODAL:
             state = {
                 ...state,
-                auth: {
-                    ...state.auth,
-                    forgotPasswordModalOpen: false
-                }
+                forgotPasswordModalOpen: false
             };
             break;
     }

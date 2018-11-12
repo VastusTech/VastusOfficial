@@ -115,7 +115,8 @@ class ClientModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache
 });
 
 export default connect(mapStateToProps)(ClientModal);
