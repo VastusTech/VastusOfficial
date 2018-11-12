@@ -56,10 +56,10 @@ class EventDescriptionModal extends Component {
 
     componentDidMount() {
         if (this.props.event) {
-            //alert("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
+            //("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
             // if(this.props.members) {
             //     alert("Members: " + this.props.members);
-            // }
+            //}
             this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
                 isJoined: this.props.ifJoined, members: this.props.members});
             QL.getClient(this.props.event.owner, ["name"], (data) => {

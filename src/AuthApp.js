@@ -6,7 +6,6 @@ import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
 import {logOut} from "./redux_helpers/actions/authActions";
-import QL from "./GraphQL";
 // import {  } from "./redux_helpers/actions/userActions";
 
 /**
@@ -22,11 +21,6 @@ class AuthApp extends Component {
 
     constructor(props) {
         super(props);
-        // QL.getClients(["CL115901346"], ["id", "username"], (data) => {
-        //     alert(JSON.stringify(data));
-        // }, (error) => {
-        //     alert(JSON.stringify(error));
-        // })
     }
 
     handleLogOut() {
@@ -60,15 +54,16 @@ class AuthApp extends Component {
 
         return (
             <div className="App">
-                <Menu borderless inverted vertical fluid widths={1} fixed="top">
-                    <Menu.Item>
-                        <Container>
+                <Sticky>
+                    <Menu borderless>
+                        <Menu.Item position="center">
                             <SearchBarProp />
-                        </Container>
-                    </Menu.Item>
-                    {/*<Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>*/}
-                </Menu>
-                <Tabs />
+                        </Menu.Item>
+                    </Menu>
+                </Sticky>
+                <Container>
+                    <Tabs />
+                </Container>
             </div>
         );
     }
