@@ -7,10 +7,9 @@
 @primaryGradient: linear-gradient(135deg, #7F47AE, #7D82B8);
 
 /**
-  * Inverted is poorly supported in Semantic UI React,
+  * Inverted state is poorly supported in Semantic UI React,
   * so we have to set our dark theme based on not using
-  * inverted. In some cases values are hardcoded in the
-  * default themes 🤦‍
+  * inverted. 🤦‍
  **/
 
 @primaryColor        : #7F47AE;
@@ -26,11 +25,12 @@
 @lightTextColor    : darken(@textColor, 28%);
 @hoveredTextColor  : @textColor;
 @selectedTextColor : @textColor;
-@linkColor         : @primaryColor;
+@linkColor         : lighten(@primaryColor, 12%);
 
 @focusedFormBorderColor : @primaryColor;
 @inputBackground        : @lightBlack;
 @inputPlaceholderColor  : @lightTextColor;
 
+@borderColor               : lighten(@lightBlack, 4%);
 @internalBorderColor       : lighten(@lightBlack, 4%);
 @solidInternalBorderColor  : lighten(@lightBlack, 4%);
