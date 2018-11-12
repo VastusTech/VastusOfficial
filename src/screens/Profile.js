@@ -10,9 +10,10 @@ import Lambda from '../Lambda';
 import proPic from '../img/roundProfile.png';
 import ScheduledEventList from "./ScheduledEventList";
 import OwnedEventList from "./OwnedEventList";
-import {fetchUser, fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import AWSSetup from "../AppConfig";
+import {logOut} from "../redux_helpers/actions/authActions";
 
 // AWSSetup();
 
@@ -159,17 +160,18 @@ class Profile extends React.PureComponent {
     }
 
     handleLogOut() {
-        this.setState({isLoading: true});
-        Auth.signOut({global: true}).then((data) => {
-            console.log("Successfully signed out!");
-            console.log(data);
-            this.setState({isLoading: false, username: null});
-            this.props.signOut();
-        }).catch((error) => {
-            console.log("Sign out has failed :(");
-            console.log(error);
-            this.setState({error: error, isLoading: false});
-        });
+        this.props.logOut();
+        // this.setState({isLoading: true});
+        // Auth.signOut({global: true}).then((data) => {
+        //     console.log("Successfully signed out!");
+        //     console.log(data);
+        //     this.setState({isLoading: false, username: null});
+        //     this.props.signOut();
+        // }).catch((error) => {
+        //     console.log("Sign out has failed :(");
+        //     console.log(error);
+        //     this.setState({error: error, isLoading: false});
+        // });
     }
 
     openBuddyModal = () => { this.setState({buddyModalOpen: true}); };
@@ -287,9 +289,12 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (id, attributesList) => {
             dispatch(fetchUserAttributes(id, attributesList));
         },
-        fetchUser: (username) => {
-            dispatch(fetchUser(username));
+        logOut: () => {
+            dispatch(logOut());
         }
+        // fetchUser: (username) => {
+        //     dispatch(fetchUser(username));
+        // }
     };
 };
 

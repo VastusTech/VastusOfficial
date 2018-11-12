@@ -5,7 +5,8 @@ import {Button, Menu, Sticky, Container} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
-import { fetchUser } from "./redux_helpers/actions/userActions";
+import {logOut} from "./redux_helpers/actions/authActions";
+// import {  } from "./redux_helpers/actions/userActions";
 
 /**
 * Auth App
@@ -13,27 +14,28 @@ import { fetchUser } from "./redux_helpers/actions/userActions";
 * This file contains the general outline of the app in a grid based format.
  */
 class AuthApp extends Component {
-    state = {
-        error: null,
-        isLoading: false
-    };
+    // state = {
+    //     error: null,
+    //     isLoading: false
+    // };
 
     constructor(props) {
         super(props);
     }
 
     handleLogOut() {
-        this.setState({isLoading: true});
-        Auth.signOut(/*{global: false}*/).then((data) => {
-            console.log("Successfully signed out!");
-            console.log(data);
-            this.setState({isLoading: false, username: null});
-            this.props.signOut();
-        }).catch((error) => {
-            console.log("Sign out has failed :(");
-            console.log(error);
-            this.setState({error: error, isLoading: false});
-        });
+        this.props.logOut();
+        // this.setState({isLoading: true});
+        // Auth.signOut(/*{global: false}*/).then((data) => {
+        //     console.log("Successfully signed out!");
+        //     console.log(data);
+        //     this.setState({isLoading: false, username: null});
+        //     this.props.signOut();
+        // }).catch((error) => {
+        //     console.log("Sign out has failed :(");
+        //     console.log(error);
+        //     this.setState({error: error, isLoading: false});
+        // });
     }
 
     handleStickyRef = stickyRef => this.setState({ stickyRef })
@@ -48,7 +50,7 @@ class AuthApp extends Component {
 
     //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
-        const { stickyRef } = this.state;
+        // const { stickyRef } = this.state;
 
         return (
             <div className="App">
@@ -76,8 +78,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUser: (username) => {
-            dispatch(fetchUser(username));
+        logOut: () => {
+            dispatch(logOut());
         }
     }
 };
