@@ -42,6 +42,7 @@ class EventCard extends Component {
         owner: null,
         ifOwned: false,
         ifJoined: false,
+        eventModalOpen: false
     };
 
     componentDidMount() {
@@ -76,6 +77,9 @@ class EventCard extends Component {
         return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
     }
 
+    openEventModal = () => { this.setState({eventModalOpen: true})};
+    closeEventModal = () => {this.setState({eventModalOpen: false})};
+
     render() {
         if (this.state.isLoading) {
             return(
@@ -86,20 +90,17 @@ class EventCard extends Component {
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <EventDescriptionModal members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
-                trigger={
-                    <Card>
-                        <Card.Content>
-                            <Card.Header>{this.state.event.title}</Card.Header>
-                            <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                            <Card.Meta>{this.state.event.members}</Card.Meta>
-                            <Card.Description>
-                                {String(this.state.event.goal + ", ")}
-                            </Card.Description>
-                        </Card.Content>
-                    </Card>
-                }
-            />
+            <Card onClick={this.openEventModal.bind(this)}>
+                <Card.Content>
+                    <Card.Header>{this.state.event.title}</Card.Header>
+                    <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
+                    <Card.Meta>{this.state.event.members}</Card.Meta>
+                    <Card.Description>
+                        {String(this.state.event.goal + ", ")}
+                    </Card.Description>
+                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}/>
+                </Card.Content>
+            </Card>
         );
     }
 }
