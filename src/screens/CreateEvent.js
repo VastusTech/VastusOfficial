@@ -138,7 +138,7 @@ class CreateEventProp extends Component {
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
         return (
-            <Segment raised>
+            <Segment raised inverted>
                 <Modal trigger={<Button primary fluid size="large">+ Create Event</Button>}>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>

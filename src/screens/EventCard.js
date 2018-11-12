@@ -83,14 +83,14 @@ class EventCard extends Component {
     render() {
         if (this.state.isLoading) {
             return(
-                <Card>
+                <Card fluid raised>
                     <h1>Loading...</h1>
                 </Card>
             );
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <Card onClick={this.openEventModal.bind(this)}>
+            <Card fluid raised onClick={this.openEventModal.bind(this)}>
                 <Card.Content>
                     <Card.Header>{this.state.event.title}</Card.Header>
                     <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
@@ -99,6 +99,10 @@ class EventCard extends Component {
                         {String(this.state.event.goal + ", ")}
                     </Card.Description>
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}/>
+                </Card.Content>
+                <Card.Content extra>
+                    {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
+                    <Card.Meta>4 out of 8 people joined</Card.Meta>
                 </Card.Content>
             </Card>
         );

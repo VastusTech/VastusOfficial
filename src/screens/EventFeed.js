@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
@@ -93,9 +93,9 @@ class EventFeed extends Component {
             //if(events != null)
                 //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
+                <Fragment key={i}>
                     <EventCard event={events[i]}/>
-                </Grid.Row>
+                </Fragment>
             ));
         }
 
@@ -103,9 +103,7 @@ class EventFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                <Grid>
-                    {rows(this.state.events)}
-                </Grid>
+                {rows(this.state.events)}
             </Visibility>
         );
     }

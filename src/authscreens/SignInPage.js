@@ -5,7 +5,7 @@ import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, M
 import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import Logo from '../img/vt_full_color.png';
+import Logo from '../img/vt_on_black.png';
 import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
 import {setError} from "../redux_helpers/actions/infoActions";
 
@@ -114,10 +114,10 @@ class SignInPage extends Component {
                 {errorMessage(this.props.info.error)}
                 <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
-                        <Segment raised padded>
+                        <Segment raised padded inverted>
                             <Segment basic>
                                 <Image src={Logo} size="tiny" centered />
-                                <Header as='h2' textAlign='center'>
+                                <Header as='h2' inverted textAlign='center'>
                                     Log in to your account
                                 </Header>
                             </Segment>
@@ -135,7 +135,7 @@ class SignInPage extends Component {
                                     Log in
                                 </Button>
                             </Form>
-                            <Divider horizontal>or</Divider>
+                            <Divider horizontal inverted>or</Divider>
                             <List>
                             <List.Item>
                                 <SignUpModal/>

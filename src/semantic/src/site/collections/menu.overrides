@@ -12,6 +12,10 @@
   color: @primaryColor;
 }
 
-.sticky .ui.menu {
-  border-radius: 0;
+.ui.menu.fixed.top {
+  box-shadow: 0 1px 4px rgba(0,0,0,.1);
+}
+
+.ui.menu.fixed.bottom {
+  box-shadow: 0 -1px 4px rgba(0,0,0,.1);
 }

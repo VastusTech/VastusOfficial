@@ -3,5 +3,47 @@
 *******************************/
 
 body {
-  background-image: linear-gradient(to left top, #7F47AE, #bc6ae1, #db6ec9, #eb79b6, #f189a8);
+  background-color: #49465f; // Refactor into var
+}
+
+// **
+// * Utility Classes
+// * !important are necessary due to Semantic's non-singular
+// * approach to style selectors. In a better scenario, the
+// * CSS framework would be entirely singular and rely on the
+// * cascade for specificity.
+// **
+
+.u-bg--primaryGradient {
+  background-image: @primaryGradient !important;
+}
+
+.u-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.u-margin-top--1 {
+  margin-top: 8px !important;
+}
+
+.u-margin-right--0 {
+  margin-right: 0 !important;
+}
+
+.ui.u-padding-left--1 {
+  padding-left: 8px !important;
+}
+
+.u-button--flat {
+  display: inline !important;
+  padding: 0 !important;
+  color: @linkColor !important;
+  box-shadow: none !important;
+  border: none !important;
+  background: none !important;
 }

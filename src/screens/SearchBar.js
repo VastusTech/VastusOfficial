@@ -1,6 +1,6 @@
 import _ from 'lodash'
-import React, { Component } from 'react'
-import {Search, Grid, Message } from 'semantic-ui-react'
+import React, { Component, Fragment } from 'react'
+import {Search } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
@@ -208,19 +208,19 @@ class SearchBarProp extends Component {
         console.log("Showing " + this.state.searchResults.length + " results");
         const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
         return (
-            <Grid>
-                <Grid.Column width={6}>
-                    {this.resultModal()}
-                    <Search
-                        loading={isLoading}
-                        onResultSelect={this.handleResultSelect}
-                        onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                        results={this.state.searchResults}
-                        value={this.state.searchQuery}
-                        {...this.props}
-                    />
-                </Grid.Column>
-            </Grid>
+            <Fragment>
+                {this.resultModal()}
+                <Search
+                    fluid
+                    size="large"
+                    loading={isLoading}
+                    onResultSelect={this.handleResultSelect}
+                    onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+                    results={this.state.searchResults}
+                    value={this.state.searchQuery}
+                    {...this.props}
+                />
+            </Fragment>
         )
     }
 }

@@ -1,6 +1,6 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Item, Dimmer, Loader} from 'semantic-ui-react'
+import {Dimmer, Loader} from 'semantic-ui-react'
 import { API, Auth, Operation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
@@ -107,7 +107,9 @@ class NotificationFeed extends Component {
             }
         }
         return(
-            <Grid>{rows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate)}</Grid>
+            <Fragment>
+                {rows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate)}
+            </Fragment>
         );
     }
 }

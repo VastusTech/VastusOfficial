@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Modal, Button, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
 import {
     closeForgotPasswordModal,
@@ -167,7 +167,7 @@ class ForgotPasswordModal extends Component {
             );
         }
         return(
-            <Modal open={this.props.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid basic onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
+            <Modal open={this.props.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
                 {loadingProp(this.props.info.isLoading)}
                 <Modal.Header>Forgot Password?</Modal.Header>
                 {errorMessage(this.props.info.error)}

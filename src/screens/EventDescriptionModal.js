@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Header } from 'semantic-ui-react';
+import { Modal, Button, Header, List, Divider } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
@@ -143,13 +143,13 @@ class EventDescriptionModal extends Component {
         function createCorrectButton(isOwned, isJoined, joinHandler, leaveHandler, deleteHandler) {
             if(isOwned) {
                 // TODO This should also link the choose winner button
-                return (<Button basic color='purple' onClick={deleteHandler}>Delete</Button>)
+                return (<Button primary fluid size="large" onClick={deleteHandler}>Delete</Button>)
             }
             else if(isJoined) {
-                return (<Button basic color='purple' onClick={leaveHandler}>Leave</Button>)
+                return (<Button primary fluid size="large" onClick={leaveHandler}>Leave</Button>)
             }
             else {
-                return (<Button basic color='purple' onClick={joinHandler}>Join</Button>)
+                return (<Button primary fluid size="large" onClick={joinHandler}>Join</Button>)
             }
         }
 
@@ -157,28 +157,43 @@ class EventDescriptionModal extends Component {
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{this.state.event.title}</Modal.Header>
-                <Modal.Content image>
-                    <div>
-                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.event.owner}/>
-                    </div>
-                    <Button basic color='purple' onClick={this.openClientModal.bind(this)}>{this.state.ownerName}</Button>
+                <Modal.Content>
                     <Modal.Description>
-                        <Header>Info: </Header>
-                        <p>{this.convertFromISO(this.state.event.time)}</p>
-                        <p>{this.state.event.goal}</p>
-                        <div>{this.state.event.members}</div>
+                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.event.owner}/>
+                        <List relaxed>
+                            <List.Item>
+                                <List.Icon name='user' />
+                                <List.Content>
+                                    Created by <Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.state.ownerName}</Button>
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Icon name='calendar' />
+                                <List.Content>
+                                    {this.convertFromISO(this.state.event.time)}
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Icon name='trophy' />
+                                <List.Content>
+                                    {this.state.event.goal}
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Icon name='users' />
+                                <List.Content>
+                                    {this.state.event.members}
+                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>}>
+                                        <Modal.Content>
+                                            <EventMemberList challengeID = {this.state.event.id} members = {this.state.event.members} ifOwned = {this.state.isOwned}/>
+                                        </Modal.Content>
+                                    </Modal>
+                                </List.Content>
+                            </List.Item>
+                        </List>
+                            {createCorrectButton(this.state.isOwned, this.state.isJoined, this.handleJoinEventButton,
+                            this.handleLeaveEventButton, this.handleDeleteEventButton)}
                     </Modal.Description>
-                    <div className='event list'>
-                        <Modal trigger={<Button basic color='purple'>Members</Button>}>
-                            <Modal.Content>
-                                <EventMemberList challengeID = {this.state.event.id} members = {this.state.event.members} ifOwned = {this.state.isOwned}/>
-                            </Modal.Content>
-                        </Modal>
-                    </div>
-                    <div className='button'>
-                        {createCorrectButton(this.state.isOwned, this.state.isJoined, this.handleJoinEventButton,
-                        this.handleLeaveEventButton, this.handleDeleteEventButton)}
-                    </div>
                 </Modal.Content>
             </Modal>
         );

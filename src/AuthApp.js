@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Button, Menu, Sticky, Container} from "semantic-ui-react";
+import {Menu, Container} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
@@ -60,19 +60,15 @@ class AuthApp extends Component {
 
         return (
             <div className="App">
-                <Sticky>
-                    <Menu borderless>
-                        <Menu.Item position="left">
+                <Menu borderless inverted vertical fluid widths={1} fixed="top">
+                    <Menu.Item>
+                        <Container>
                             <SearchBarProp />
-                        </Menu.Item>
-                        <Menu.Item position="right">
-                            <Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
-                        </Menu.Item>
-                    </Menu>
-                </Sticky>
-                <Container>
-                    <Tabs />
-                </Container>
+                        </Container>
+                    </Menu.Item>
+                    {/*<Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>*/}
+                </Menu>
+                <Tabs />
             </div>
         );
     }

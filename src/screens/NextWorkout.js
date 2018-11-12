@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {Grid, Message} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, Image, List, Icon } from 'semantic-ui-react'
+import {Button, Card, Modal, Checkbox, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage, Auth } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
@@ -147,13 +147,18 @@ class Profile extends React.PureComponent {
             //     );
             // }
             return(
-                <Item.Image size='medium' src={this.props.user.profilePicture} circular/>
+                <div className="u-avatar" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                    <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                        <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                    </Label>
+                    <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                </div>
             );
         }
         else {
             return(
-                <Dimmer>
-                    <Loader/>
+                <Dimmer inverted>
+                    <Loader />
                 </Dimmer>
             );
         }
@@ -224,23 +229,12 @@ class Profile extends React.PureComponent {
         //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
         //and a switch to set the privacy for the user.
         return(
-
-            <Card fluid>
-                <Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
+            <Card fluid raised>
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
-                    <p>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</p>
+                    <Card.Meta>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Meta>
                     <List id = "profile buttons">
-                        <List.Item>
-                            <label htmlFor="proPicUpload" className="ui large fluid primary button">
-                                <div>
-                                    <i className='ui upload icon'></i>
-                                        Upload New Profile Picture
-                                </div>
-                            </label>
-                            <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                        </List.Item>
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Friend List</Button>
                             <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)}>
@@ -249,27 +243,29 @@ class Profile extends React.PureComponent {
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
+                        <Divider />
                         <List.Item>
-                            <Button primary fluid  size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
-                            <Modal size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
-                                <Modal.Content>
-                                    <ScheduledEventList/>
-                                </Modal.Content>
-                            </Modal>
-                        </List.Item>
-                        <List.Item>
-                            <Button primary fluid  size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
+                            <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
                             <Modal size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
                                 <Modal.Content>
                                     <OwnedEventList/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
-                    </List>
-                    <div>
-                        <TrophyCaseProp numTrophies={numChallengesWon(this.props.user.challengesWon)}/>
-                    </div>
-                </Card.Content>
+                        <List.Item>
+                            <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
+                            <Modal size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
+                                <Modal.Content>
+                                    <ScheduledEventList/>
+                                </Modal.Content>
+                            </Modal>
+                        </List.Item>
+                        <Divider />
+                        <List.Item>
+                            <Button fluid inverted size="large" onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>
+                        </List.Item>
+                    </List>       
+                </Card.Content>          
             </Card>
         );
     }
