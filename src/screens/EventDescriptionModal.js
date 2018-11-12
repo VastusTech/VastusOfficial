@@ -143,10 +143,10 @@ class EventDescriptionModal extends Component {
         function createCorrectButton(isOwned, isJoined, joinHandler, leaveHandler, deleteHandler) {
             if(isOwned) {
                 // TODO This should also link the choose winner button
-                return (<Button primary fluid size="large" onClick={deleteHandler}>Delete</Button>)
+                return (<Button inverted fluid size="large" onClick={deleteHandler}>Delete</Button>)
             }
             else if(isJoined) {
-                return (<Button primary fluid size="large" onClick={leaveHandler}>Leave</Button>)
+                return (<Button inverted fluid size="large" onClick={leaveHandler}>Leave</Button>)
             }
             else {
                 return (<Button primary fluid size="large" onClick={joinHandler}>Join</Button>)
