@@ -42,6 +42,7 @@ class EventCard extends Component {
         owner: null,
         ifOwned: false,
         ifJoined: false,
+        capacity: null,
         eventModalOpen: false
     };
 
@@ -94,7 +95,6 @@ class EventCard extends Component {
                 <Card.Content>
                     <Card.Header>{this.state.event.title}</Card.Header>
                     <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                    <Card.Meta>{this.state.event.time_created}</Card.Meta>
                     <Card.Description>
                         {String(this.state.event.goal + ", ")}
                     </Card.Description>
@@ -102,7 +102,7 @@ class EventCard extends Component {
                 </Card.Content>
                 <Card.Content extra>
                     {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
-                    <Card.Meta>4 out of 8 people joined</Card.Meta>
+                    <Card.Meta>{this.state.event.members.length} out of {this.state.event.capacity} people joined</Card.Meta>
                 </Card.Content>
             </Card>
         );
