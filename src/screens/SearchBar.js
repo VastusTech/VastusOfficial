@@ -6,6 +6,7 @@ import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
 import ClientModal from "./ClientModal";
+import {connect} from "react-redux";
 
 // setupAWS();
 
@@ -177,8 +178,21 @@ class SearchBarProp extends Component {
             );
         }
         else if (type === "Event") {
+            let ifJoined = false;
+            let ifOwned = false;
+            if (this.state.result.owner === this.props.user.id) {
+                ifOwned = true;
+            }
+            if (this.props.user.id in this.state.result.members) {
+                ifJoined = true;
+            }
             return(
-                <EventDescriptionModal />
+                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)}
+                                       members={this.state.result.members}
+                                       ifOwned={ifOwned}
+                                       ifJoined={ifJoined}
+                                       event={this.state.result}
+                />
             );
         }
         else {
@@ -186,8 +200,8 @@ class SearchBarProp extends Component {
         }
     }
 
-    openResultModal() { this.setState({resultModalOpen: true}); }
-    closeResultModal() { this.setState({resultModalOpen: false}); }
+    openResultModal = () => { this.setState({resultModalOpen: true}); };
+    closeResultModal = () => { this.setState({resultModalOpen: false}); };
 
     render() {
         // TODO Check to see that this is valid to do?
@@ -211,4 +225,8 @@ class SearchBarProp extends Component {
     }
 }
 
-export default SearchBarProp;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(SearchBarProp);
