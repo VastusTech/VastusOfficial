@@ -13,3 +13,20 @@ body {
 .u-bg--primaryGradient {
   background-image: @primaryGradient !important;
 }
+
+.u-avatar {
+  width: 100px;
+  height: 100px;
+  margin: 0 auto;
+  background-size: cover;
+  background-position: center;
+  border-radius: 50%;
+}
+
+.u-margin-top--1 {
+  margin-top: 8px !important;
+}
+
+.u-margin-right--0 {
+  margin-right: 0 !important;
+}

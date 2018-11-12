@@ -4,6 +4,7 @@ import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 // import * as AWS from "aws-sdk";
+import { connect } from 'react-redux';
 
 // AWS.config.update({region: 'REGION'});
 // AWS.config.credentials = new AWS.CognitoIdentityCredentials(
