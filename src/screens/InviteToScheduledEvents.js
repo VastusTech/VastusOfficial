@@ -1,15 +1,17 @@
 import React, { Component } from 'react'
-import {Grid, Message} from 'semantic-ui-react';
+import {Grid, Message, Button} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
+import Lambda from "../Lambda";
 
-class ScheduledEventsList extends Component {
+class InviteToScheduledEventsProp extends Component {
     state = {
         isLoading: true,
         events: {},
+        friendID: null,
         sentRequest: false,
         error: null
     };
@@ -68,7 +70,7 @@ class ScheduledEventsList extends Component {
 
     render() {
         //alert("Redering");
-        function rows(events) {
+        function rows(userID, friendID, events) {
             const row = [];
             const rowProps = [];
             for (const key in events) {
@@ -85,8 +87,23 @@ class ScheduledEventsList extends Component {
                 if (row.hasOwnProperty(key) === true) {
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={row[key]}/>
+                            <div>{alert(row[key].id)}</div>
+                            <Button basic color='purple' onClick={() => {Lambda.inviteToEvent(userID, row[key].id, friendID,
+                                (data) => {
+                                    alert(JSON.stringify(data));
+                                    // HANDLE WHAT HAPPENS afterwards
+                                    if (data.errorMessage) {
+                                        // Java error handling
+                                        alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
+                                    }
+                                    else {
+                                        alert("ya did it ya filthy animal");
+                                    }
+                                }, (error) => {
+                                    alert(error);
+                                })}}>Invite to Event</Button>
                         </Grid.Row>
+
                     );
                 }
             }
@@ -100,7 +117,7 @@ class ScheduledEventsList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.events)}</Grid>
+            <Grid>{rows(this.props.user.id, this.props.friendID, this.state.events)}</Grid>
         );
     }
 }
@@ -117,4 +134,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduledEventsList);
+export default connect(mapStateToProps, mapDispatchToProps)(InviteToScheduledEventsProp);
