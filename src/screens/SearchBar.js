@@ -22,6 +22,8 @@ class SearchBarProp extends Component {
         nextClientQueryToken: null,
         eventsLimit: 100,
         clientsLimit: 100,
+        selectedResult: null,
+        resultModalOpen: false
     };
 
     componentWillMount() {
@@ -53,7 +55,7 @@ class SearchBarProp extends Component {
                 access: "public"
             };
             this.setState({eventsLoading: true});
-            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access"], QL.generateFilter("and",
+            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access", "members"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));
@@ -129,14 +131,14 @@ class SearchBarProp extends Component {
                     result = {
                         title: item.name,
                         description: item.username,
-                        content: <Message>Lmao</Message>
+                        content: item
                     };
                 }
                 else if (item.item_type === "Event") {
                     result = {
                         title: (item.title + " ~ (" + item.id + ")"),
                         description: item.goal,
-                        content: <Message>Lmao</Message>
+                        content: item
                     };
                 }
                 else {
@@ -149,8 +151,8 @@ class SearchBarProp extends Component {
     }
 
     handleResultSelect = (e, { result }) => {
-        alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        // this.setState({ value: result.title });
+        // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        this.setState({result: result.content, resultModalOpen: true});
     };
 
     handleSearchChange = (e, { value }) => {
@@ -163,10 +165,15 @@ class SearchBarProp extends Component {
         this.loadMoreClientResults(value);
     };
 
-    resultModal(type, object) {
+    resultModal() {
+        if (!this.state.result) {
+            return null;
+        }
+        const type = this.state.result.item_type;
         if (type === "Client") {
+            // alert("opening client modal");
             return(
-                <ClientModal />
+                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} clientID={this.state.result.id}/>
             );
         }
         else if (type === "Event") {
@@ -179,7 +186,8 @@ class SearchBarProp extends Component {
         }
     }
 
-
+    openResultModal() { this.setState({resultModalOpen: true}); }
+    closeResultModal() { this.setState({resultModalOpen: false}); }
 
     render() {
         // TODO Check to see that this is valid to do?
@@ -188,7 +196,7 @@ class SearchBarProp extends Component {
         return (
             <Grid>
                 <Grid.Column width={6}>
-                    {/*result modal*/}
+                    {this.resultModal()}
                     <Search
                         loading={isLoading}
                         onResultSelect={this.handleResultSelect}

@@ -104,7 +104,7 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <Grid>
-                    {rows(this.state.events.sort(function(a,b){return b.time_created.localeCompare(a.time_created)}))}
+                    {rows(this.state.events)}
                 </Grid>
             </Visibility>
         );
