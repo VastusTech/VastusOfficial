@@ -7,10 +7,10 @@ export function updateAuth() {
     return (dispatch) => {
         // TODO This could totally be overkill lol
         Auth.currentCredentials();
-        Auth.currentSession();
-        Auth.currentUserCredentials();
-        Auth.currentUserInfo();
-        Auth.currentUserPoolUser();
+        // Auth.currentSession();
+        // Auth.currentUserCredentials();
+        // Auth.currentUserInfo();
+        // Auth.currentUserPoolUser();
         Auth.currentAuthenticatedUser().then((user) => {
             QL.getClientByUsername(user.username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully updated the authentication credentials");
@@ -55,7 +55,7 @@ export function logOut() {
         dispatch(setIsLoading());
         Auth.signOut({global: true}).then((data) => {
             console.log("REDUX: Successfully logged out!");
-            dispatch(clearUser());
+            // dispatch(clearUser());
             dispatch(authLogOut());
             dispatch(setIsNotLoading());
         }).catch((error) => {
