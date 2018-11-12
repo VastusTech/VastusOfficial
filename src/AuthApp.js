@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Menu, Container} from "semantic-ui-react";
+import {Menu, Container, Sticky} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";

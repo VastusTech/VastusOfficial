@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Dimmer, Loader} from 'semantic-ui-react'
+import {Dimmer, Loader, Grid} from 'semantic-ui-react'
 import { API, Auth, Operation } from "aws-amplify";
 import Notification from "./Notification";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -16,7 +16,8 @@ class NotificationFeed extends Component {
         error: null,
         isLoading: false,
         sentRequest: false,
-        friendRequests: {}
+        friendRequests: {},
+        feedUpdate: null
     };
 
     _isMounted = false;
@@ -75,7 +76,7 @@ class NotificationFeed extends Component {
             );
         }
 
-        function friendRows(friendRequests, userID)
+        function friendRows(friendRequests, userID, feedUpdate)
         {
             //alert(friendRequests);
             if (friendRequests != null) {
@@ -95,7 +96,7 @@ class NotificationFeed extends Component {
             }
         }
         return(
-            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id)}
+            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id, this.props.feedUpdate)}
             {challengeRows(this.props.user.invitedEvents, this.props.user.id)}</Grid>
         );
     }
