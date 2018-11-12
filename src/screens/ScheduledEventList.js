@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Grid, Message} from 'semantic-ui-react';
+import {List, Message} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -85,9 +85,9 @@ class ScheduledEventsList extends Component {
                 if (row.hasOwnProperty(key) === true) {
                     //alert(JSON.stringify(events[key]));
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
+                        <List.Item>
                             <EventCard event={row[key]}/>
-                        </Grid.Row>
+                        </List.Item>
                     );
                 }
             }
@@ -101,7 +101,7 @@ class ScheduledEventsList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.events)}</Grid>
+            <List>{rows(this.state.events)}</List>
         );
     }
 }

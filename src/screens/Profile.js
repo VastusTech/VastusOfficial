@@ -254,7 +254,7 @@ class Profile extends React.PureComponent {
                         </List.Item>
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
-                            <Modal size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
                                 <Modal.Content>
                                     <ScheduledEventList/>
                                 </Modal.Content>
