@@ -145,18 +145,11 @@ class CreateEventProp extends Component {
 
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group unstackable widths={2}>
-
-                                <div className="field">
-                                    <label>Title</label>
-                                    <Input type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Location</label>
-                                    <Input type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
-                                </div>
-
-                                <div className="field">
+                                <Form.Input label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
+                                <Form.Input label="Location" type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
+                            </Form.Group>
+                            <Form.Group unstackable widths={2}>
+                                <Form.Field>
                                     <label>Start Date and Time</label>
                                     <DateTimeInput
                                         name="dateTime"
@@ -165,9 +158,9 @@ class CreateEventProp extends Component {
                                         iconPosition="left"
                                         onChange={this.handleStartTimeChange}
                                         timeFormat={this.state.timeFormat} />
-                                </div>
+                                </Form.Field>
 
-                                <div className="field">
+                                <Form.Field>
                                     <label>End Date and Time</label>
                                     <DateTimeInput
                                         name="dateTimeEnd"
@@ -176,33 +169,29 @@ class CreateEventProp extends Component {
                                         iconPosition="left"
                                         onChange={this.handleEndTimeChange}
                                         timeFormat={this.state.timeFormat}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Capacity</label>
-                                    <Input type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Goal</label>
-                                    <Input type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                </div>
-
+                                </Form.Field>
+                            </Form.Group>
+                            <Form.Group unstackable widths={2}>
+                                <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
+                                <Form.Input label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
                             </Form.Group>
 
-                            <div className="Event Description">
-                                <label>Event Description</label>
-                                <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
-                            </div>
+                            <Form.Group>
+                                <Form.Field width={12}>
+                                    <label>Event Description</label>
+                                    <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
+                                </Form.Field>
+                            </Form.Group>
 
-                            <div className="Submit Button">
-                                <Button type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
-                            </div>
+                            <Form.Group>
+                                <Form.Field width={12}>
+                                    <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
+                                </Form.Field>
+                            </Form.Group>
 
-                            <div className="Privacy Switch">
-                                <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
-                                <div>{this.eventState.access}</div>
-                            </div>
+                            <Button primary fluid size="large" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
+
+                            
 
                         </Form>
                     </Modal.Content>
