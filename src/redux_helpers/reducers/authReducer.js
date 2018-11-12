@@ -15,6 +15,10 @@ export const SIGN_UP = 'SIGN_UP';
 export const CONFIRM_SIGNUP = 'CONFIRM_SIGNUP';
 export const FORGOT_PASSWORD = 'FORGOT_PASSWORD';
 export const CONFIRM_FORGOT_PASSWORD = 'CONFIRM_FORGOT_PASSWORD';
+export const OPEN_SIGN_UP_MODAL = 'OPEN_SIGN_UP_MODAL';
+export const CLOSE_SIGN_UP_MODAL = 'CLOSE_SIGN_UP_MODAL';
+export const OPEN_FORGOT_PASSWORD_MODAL = 'OPEN_FORGOT_PASSWORD_MODAL';
+export const CLOSE_FORGOT_PASSWORD_MODAL = 'CLOSE_FORGOT_PASSWORD_MODAL';
 
 export const authFunctions = {
     LOG_IN,
@@ -22,13 +26,19 @@ export const authFunctions = {
     SIGN_UP,
     CONFIRM_SIGNUP,
     FORGOT_PASSWORD,
-    CONFIRM_FORGOT_PASSWORD
+    CONFIRM_FORGOT_PASSWORD,
+    OPEN_SIGN_UP_MODAL,
+    CLOSE_SIGN_UP_MODAL,
+    OPEN_FORGOT_PASSWORD_MODAL,
+    CLOSE_FORGOT_PASSWORD_MODAL
 };
 
 export default {
     loggedIn: false,
     confirmingSignUp: false,
-    confirmingForgotPassword: false
+    confirmingForgotPassword: false,
+    signUpModalOpen: false,
+    forgotPasswordModalOpen: false
 };
 
 export function authReducer(state, action) {
@@ -40,7 +50,9 @@ export function authReducer(state, action) {
                     ...state.auth,
                     loggedIn: true,
                     confirmingSignUp: false,
-                    confirmingForgotPassword: false
+                    confirmingForgotPassword: false,
+                    signUpModalOpen: false,
+                    forgotPasswordModalOpen: false
                 }
             };
             break;
@@ -51,7 +63,9 @@ export function authReducer(state, action) {
                     ...state.auth,
                     loggedIn: false,
                     confirmingSignUp: false,
-                    confirmingForgotPassword: false
+                    confirmingForgotPassword: false,
+                    signUpModalOpen: false,
+                    forgotPasswordModalOpen: false
                 }
             };
             break;
@@ -70,8 +84,9 @@ export function authReducer(state, action) {
                 ...state,
                 auth: {
                     ...state.auth,
-                    loggedIn: true,
-                    confirmingSignUp: false
+                    loggedIn: false,
+                    confirmingSignUp: false,
+                    signUpModalOpen: false,
                 }
             };
             break;
@@ -89,8 +104,44 @@ export function authReducer(state, action) {
                 ...state,
                 auth: {
                     ...state.auth,
-                    loggedIn: true,
                     confirmingForgotPassword: false,
+                    forgotPasswordModalOpen: false
+                }
+            };
+            break;
+        case OPEN_SIGN_UP_MODAL:
+            state = {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    signUpModalOpen: true
+                }
+            };
+            break;
+        case CLOSE_SIGN_UP_MODAL:
+            state = {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    signUpModalOpen: false
+                }
+            };
+            break;
+        case OPEN_FORGOT_PASSWORD_MODAL:
+            state = {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    forgotPasswordModalOpen: true
+                }
+            };
+            break;
+        case CLOSE_FORGOT_PASSWORD_MODAL:
+            state = {
+                ...state,
+                auth: {
+                    ...state.auth,
+                    forgotPasswordModalOpen: false
                 }
             };
             break;

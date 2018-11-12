@@ -6,7 +6,7 @@ import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../img/vt_full_color.png';
-import {logIn} from "../redux_helpers/actions/authActions";
+import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
 import {setError} from "../redux_helpers/actions/infoActions";
 
 class SignInPage extends Component {
@@ -55,18 +55,18 @@ class SignInPage extends Component {
         // });
     // }
 
-    openSignUpModal() {
-        this.setState({signUpModalOpen: true})
-    }
-    closeSignUpModal() {
-        this.setState({signUpModalOpen: false})
-    }
-    openForgotPasswordModal() {
-        this.setState({forgotPasswordModalOpen: true})
-    }
-    closeForgotPasswordModal() {
-        this.setState({forgotPasswordModalOpen: false})
-    }
+    // openSignUpModal() {
+    //     // this.setState({signUpModalOpen: true})
+    // }
+    // closeSignUpModal() {
+    //     this.setState({signUpModalOpen: false})
+    // }
+    // openForgotPasswordModal() {
+    //     this.setState({forgotPasswordModalOpen: true})
+    // }
+    // closeForgotPasswordModal() {
+    //     this.setState({forgotPasswordModalOpen: false})
+    // }
 
     // async componentDidMount() {
     //     // StatusBar.setHidden(true);
@@ -138,18 +138,10 @@ class SignInPage extends Component {
                             <Divider horizontal>or</Divider>
                             <List>
                             <List.Item>
-                                <SignUpModal
-                                    open={this.state.signUpModalOpen}
-                                    onOpen={this.openSignUpModal.bind(this)}
-                                    onClose={this.closeSignUpModal.bind(this)}
-                                />
+                                <SignUpModal/>
                             </List.Item>
                             <List.Item>
-                                <ForgotPasswordModal
-                                    open={this.state.forgotPasswordModalOpen}
-                                    onOpen={this.openForgotPasswordModal.bind(this)}
-                                    onClose={this.closeForgotPasswordModal.bind(this)}
-                                />
+                                <ForgotPasswordModal/>
                                 </List.Item>
                             </List>
                         </Segment>
@@ -175,6 +167,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         setError: (error) => {
             dispatch(setError(error));
+        },
+        openSignUpModal: () => {
+            dispatch(openSignUpModal());
+        },
+        openForgotPasswordModal: () => {
+            dispatch(openForgotPasswordModal());
         }
     }
 };

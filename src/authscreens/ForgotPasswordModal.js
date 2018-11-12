@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
 import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
-import {confirmForgotPassword, forgotPassword} from "../redux_helpers/actions/authActions";
+import {
+    closeForgotPasswordModal,
+    confirmForgotPassword,
+    forgotPassword, openForgotPasswordModal,
+    openSignUpModal
+} from "../redux_helpers/actions/authActions";
 import { connect } from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
 
@@ -96,7 +101,7 @@ class ForgotPasswordModal extends Component {
     handleCancelButton() {
         // TODO Have a are you sure? thing attached to this
         // this.setState({error: null, isConfirming: false});
-        this.props.onClose();
+        this.props.closeForgotPasswordModal();
     }
 
     render() {
@@ -125,7 +130,7 @@ class ForgotPasswordModal extends Component {
 
         if (this.props.user.auth.confirmingForgotPassword) {
             return(
-                <Modal open={this.props.open} onClose={() => (false)} trigger={<Button onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
+                <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
                     {loadingProp(this.props.user.info.isLoading)}
                     <Modal.Header>Confirm your email and choose your new password!</Modal.Header>
                     {errorMessage(this.props.user.info.error)}
@@ -162,7 +167,7 @@ class ForgotPasswordModal extends Component {
             );
         }
         return(
-            <Modal open={this.props.open} onClose={() => (false)} trigger={<Button size="large" fluid basic onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
+            <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid basic onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
                 {loadingProp(this.props.user.info.isLoading)}
                 <Modal.Header>Forgot Password?</Modal.Header>
                 {errorMessage(this.props.user.info.error)}
@@ -206,6 +211,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         setError: (error) => {
             dispatch(setError(error));
+        },
+        openForgotPasswordModal: () => {
+            dispatch(openForgotPasswordModal());
+        },
+        closeForgotPasswordModal: () => {
+            dispatch(closeForgotPasswordModal());
         }
     }
 };

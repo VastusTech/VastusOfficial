@@ -3,7 +3,7 @@ import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loa
 import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
 import appConfig from '../AppConfig';
-import {confirmSignUp, signUp} from "../redux_helpers/actions/authActions";
+import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux_helpers/actions/authActions";
 import { connect } from "react-redux";
 import {clearError, setError} from "../redux_helpers/actions/infoActions";
 
@@ -126,7 +126,12 @@ class SignUpModal extends Component {
 
     handleConfirmButton() {
         // TODO Is there a chance that the username could be lost here?
-        this.props.confirmSignUp(this.authState.username, this.authState.confirmationCode);
+        if (this.authState.confirmationCode) {
+            this.props.confirmSignUp(this.authState.username, this.authState.confirmationCode);
+        }
+        else {
+            this.props.setError(new Error("Confirmation code cannot be empty"));
+        }
         // this.vastusConfirmSignUp((user) => {
         //     this.setState({isConfirming: false, error: null});
         //     this.authenticate(user);
@@ -139,7 +144,8 @@ class SignUpModal extends Component {
         // TODO Have a confirmation like are you sure ya wanna close?
         // this.setState({error: null});
         this.props.clearError();
-        this.props.onClose();
+        this.props.closeSignUpModal();
+        // this.props.onClose();
     }
 
     render() {
@@ -170,7 +176,7 @@ class SignUpModal extends Component {
         if (this.props.user.auth.confirmingSignUp) {
             return(
                 <div>
-                    <Modal open={this.props.open} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+                    <Modal open={this.props.user.auth.signUpModalOpen} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.openSignUpModal.bind(this)} inverted> Sign Up </Button>} size='tiny'>
                         {loadingProp(this.props.user.info.isLoading)}
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
                         {errorMessage(this.props.user.info.error)}
@@ -191,7 +197,7 @@ class SignUpModal extends Component {
         }
         return(
 
-                <Modal open={this.props.open} trigger={<Button size="large" fluid primary inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
+                <Modal open={this.props.user.auth.signUpModalOpen} trigger={<Button size="large" fluid primary inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.props.user.info.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
                     {errorMessage(this.props.user.info.error)}
@@ -260,6 +266,12 @@ const mapDispatchToProps = (dispatch) => {
         },
         clearError: () => {
             dispatch(clearError());
+        },
+        openSignUpModal: () => {
+            dispatch(openSignUpModal());
+        },
+        closeSignUpModal: () => {
+            dispatch(closeSignUpModal());
         }
     };
 };

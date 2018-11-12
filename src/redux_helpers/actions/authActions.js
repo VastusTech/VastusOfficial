@@ -98,19 +98,12 @@ export function signUp(username, password, name, gender, birthday, email) {
 export function confirmSignUp(username, confirmationCode) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
-        QL.getClientByUsername(username, ["id", "username"], (user) => {
-            Auth.confirmSignUp(username, confirmationCode).then(() => {
-                console.log("REDUX: Successfully confirmed the sign up!");
-                dispatch(setUser(user));
-                dispatch(authConfirmSignUp());
-                dispatch(setIsNotLoading());
-            }).catch((error) => {
-                console.log("REDUX: Failed confirming sign up...");
-                dispatch(setError(error));
-                dispatch(setIsNotLoading());
-            });
-        }, (error) => {
-            console.log("REDUX: Could not fetch the client");
+        Auth.confirmSignUp(username, confirmationCode).then((authUser) => {
+            dispatch(closeSignUpModal());
+            dispatch(authConfirmSignUp());
+            dispatch(setIsNotLoading());
+        }).catch((error) => {
+            console.log("REDUX: Failed confirming sign up...");
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });
@@ -133,23 +126,38 @@ export function forgotPassword(username) {
 export function confirmForgotPassword(username, confirmationCode, newPassword) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
-        QL.getClientByUsername(username, ["id", "username"], (user) => {
-            Auth.forgotPasswordSubmit(username, confirmationCode, newPassword).then(() => {
-                console.log("REDUX: Successfully submitted forgot password!");
-                dispatch(setUser(user));
-                dispatch(authConfirmSignUp());
-                dispatch(setIsNotLoading());
-            }).catch((error) => {
-                console.log("REDUX: Failed submitting forgot password...");
-                dispatch(setError(error));
-                dispatch(setIsNotLoading());
-            });
-        }, (error) => {
-            console.log("REDUX: Could not fetch the client...");
+        Auth.forgotPasswordSubmit(username, confirmationCode, newPassword).then(() => {
+            console.log("REDUX: Successfully submitted forgot password!");
+            dispatch(authConfirmSignUp());
+            dispatch(closeForgotPasswordModal());
+            dispatch(setIsNotLoading());
+        }).catch((error) => {
+            console.log("REDUX: Failed submitting forgot password...");
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });
     }
+}
+
+export function openSignUpModal() {
+    return {
+        type: 'OPEN_SIGN_UP_MODAL'
+    };
+}
+export function closeSignUpModal() {
+    return {
+        type: 'CLOSE_SIGN_UP_MODAL'
+    };
+}
+export function openForgotPasswordModal() {
+    return {
+        type: 'OPEN_FORGOT_PASSWORD_MODAL'
+    };
+}
+export function closeForgotPasswordModal() {
+    return {
+        type: 'CLOSE_FORGOT_PASSWORD_MODAL'
+    };
 }
 
 function authLogIn() {
