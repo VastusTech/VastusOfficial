@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Menu, Container} from "semantic-ui-react";
+import {Menu, Container, Sticky} from "semantic-ui-react";
 import { Auth } from 'aws-amplify';
 import SearchBarProp from "./screens/SearchBar";
 import { connect } from "react-redux";
@@ -55,9 +55,11 @@ class AuthApp extends Component {
         return (
             <div className="App">
                 <Sticky>
-                    <Menu borderless>
+                    <Menu borderless inverted vertical fluid widths={1} fixed="top">
                         <Menu.Item position="center">
-                            <SearchBarProp />
+                            <Container>
+                                <SearchBarProp />
+                            </Container>
                         </Menu.Item>
                     </Menu>
                 </Sticky>

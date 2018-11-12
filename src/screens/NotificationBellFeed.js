@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Dimmer, Loader} from 'semantic-ui-react'
+import {Dimmer, Loader, Grid} from 'semantic-ui-react'
 import { API, Auth, Operation } from "aws-amplify";
 import Notification from "./Notification";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -51,8 +51,8 @@ class NotificationFeed extends Component {
             alert("Pretty bad error");
             this.setState({isLoading: true});
         }
-        if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.user.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.user.info.error) {
+        if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.info.error) {
                 this.props.fetchUserAttributes(user.id, ["id", "friendRequests", "invitedEvents"]);
                 //if(this._isMounted)
                     this.setState({sentRequest: true, isLoading: false});
@@ -75,7 +75,7 @@ class NotificationFeed extends Component {
             );
         }
 
-        function friendRows(friendRequests, userID)
+        function friendRows(friendRequests, userID, feedUpdate)
         {
             //alert(friendRequests);
             if (friendRequests != null) {
@@ -95,14 +95,15 @@ class NotificationFeed extends Component {
             }
         }
         return(
-            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id)}
+            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate.bind(this))}
             {challengeRows(this.props.user.invitedEvents, this.props.user.id)}</Grid>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {
