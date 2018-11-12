@@ -188,13 +188,11 @@ class CreateEventProp extends Component {
                                     <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                 </Form.Field>
                             </Form.Group>
-
-                            <Button primary fluid size="large" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
-
-                            
-
                         </Form>
                     </Modal.Content>
+                    <Modal.Actions>
+                        <Button primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
+                    </Modal.Actions>
                 </Modal>
             </Segment>
         );
