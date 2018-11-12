@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Item, Button, Card, Modal, Checkbox, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
+import {Button, Card, Modal, Checkbox, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage, Auth } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 import TrophyCaseProp from "./TrophyCase";
@@ -148,7 +148,7 @@ class Profile extends React.PureComponent {
             return(
                 <div className="u-avatar" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                        <Icon className='ui upload icon u-margin-right--0' size="large" inverted />
+                        <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
                     <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                 </div>
