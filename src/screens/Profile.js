@@ -101,7 +101,7 @@ class Profile extends React.PureComponent {
                 // }
             // }
         // }
-        if (!this.props.user.info.isLoading && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
+        if (!this.props.info.isLoading && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture"]);
         }
         else {
@@ -277,7 +277,8 @@ class Profile extends React.PureComponent {
 // {/*</div>*/}
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {

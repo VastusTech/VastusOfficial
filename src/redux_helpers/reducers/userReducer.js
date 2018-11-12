@@ -22,11 +22,7 @@ export default (state = initialState, action) => {
                 info: state.info
             };
             break;
-        default:
-            state = {
-                ...initialState
-            };
     }
-
+    // alert("USER: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
 };
