@@ -80,19 +80,19 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
     });
 }
 
-export function fetchUser(username) {
-    return (dispatch) => {
-        dispatch(setIsLoading());
-        QL.getClientByUsername(username, ["id", "username"], (data) => {
-            dispatch(setUser(data));
-            dispatch(setIsNotLoading());
-        }, (error) => {
-            alert(JSON.stringify(error));
-            dispatch(setError(error));
-            dispatch(setIsNotLoading());
-        });
-    }
-}
+// export function fetchUser(username, successHandler, failureHandler) {
+//     return (dispatch) => {
+//         dispatch(setIsLoading());
+//         QL.getClientByUsername(username, ["id", "username"], (data) => {
+//             dispatch(setUser(data));
+//             dispatch(setIsNotLoading());
+//         }, (error) => {
+//             alert(JSON.stringify(error));
+//             dispatch(setError(error));
+//             dispatch(setIsNotLoading());
+//         });
+//     }
+// }
 
 export function clearUser() {
     return {

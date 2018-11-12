@@ -4,9 +4,10 @@ import {Search, Grid, Message } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
+import EventDescriptionModal from "./EventDescriptionModal";
 import ClientModal from "./ClientModal";
 
-setupAWS();
+// setupAWS();
 
 class SearchBarProp extends Component {
     state = {
@@ -126,28 +127,17 @@ class SearchBarProp extends Component {
                 var result;
                 if (item.item_type === "Client") {
                     result = {
-                        title: (<div>{item.id}</div>),
+                        title: item.name,
                         description: item.username,
-                        content: [item.item_type, item.id]
+                        content: <Message>Lmao</Message>
                     };
                 }
                 else if (item.item_type === "Event") {
-                    /*
-                    if(item.owner != null && item.id != null) {
-                        result = {
-                            title: (<EventCard owner={item.owner} event={item.id}/>),
-                            description: item.goal,
-                            content: <Message>Lmao</Message>
-                        };
-                    }
-                    else {
-                    */
-                        result = {
-                            title: (<EventCard owner={item.owner} event={item.id}/>),
-                            description: item.goal,
-                            content: [item.item_type, item.id, item.owner]
-                        };
-                    //}
+                    result = {
+                        title: (item.title + " ~ (" + item.id + ")"),
+                        description: item.goal,
+                        content: <Message>Lmao</Message>
+                    };
                 }
                 else {
                     alert("item has item_type of " + item.item_type + " for some reason?");
@@ -159,15 +149,8 @@ class SearchBarProp extends Component {
     }
 
     handleResultSelect = (e, { result }) => {
-        /*
-        alert(result.content[0]);
-        return (
-            <ClientModal open={true} clientID={result.content[1]}/>
-        );
-        //return (
-            //<EventCard owner={result.content[0]} event={result.content[1]}/>
-        //);
-        */
+        alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        // this.setState({ value: result.title });
     };
 
     handleSearchChange = (e, { value }) => {
@@ -180,6 +163,24 @@ class SearchBarProp extends Component {
         this.loadMoreClientResults(value);
     };
 
+    resultModal(type, object) {
+        if (type === "Client") {
+            return(
+                <ClientModal />
+            );
+        }
+        else if (type === "Event") {
+            return(
+                <EventDescriptionModal />
+            );
+        }
+        else {
+            alert("Wrong type inputted! Received " + type);
+        }
+    }
+
+
+
     render() {
         // TODO Check to see that this is valid to do?
         console.log("Showing " + this.state.searchResults.length + " results");
@@ -187,6 +188,7 @@ class SearchBarProp extends Component {
         return (
             <Grid>
                 <Grid.Column width={6}>
+                    {/*result modal*/}
                     <Search
                         loading={isLoading}
                         onResultSelect={this.handleResultSelect}

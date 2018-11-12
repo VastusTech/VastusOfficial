@@ -11,7 +11,7 @@ import Lambda from "../Lambda";
 import {connect} from "react-redux";
 import setupAWS from "../AppConfig";
 
-setupAWS();
+// setupAWS();
 
 
 function convertDateTimeToISO8601(dateAndTime) {

@@ -2,15 +2,18 @@ import React, { Component } from 'react';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
 import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
+import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../img/vt_full_color.png';
+import {logIn} from "../redux_helpers/actions/authActions";
+import {setError} from "../redux_helpers/actions/infoActions";
 
 class SignInPage extends Component {
     // This is the function that is called when the sign up button is pressed
     constructor(props) {
         super(props);
-        this.authenticate = this.props.authenticate.bind(this);
+        this.vastusSignIn = this.vastusSignIn.bind(this);
     }
 
     authState = {
@@ -19,31 +22,21 @@ class SignInPage extends Component {
     };
 
     state = {
-        error: null,
-        user: {},
-        isLoading: true,
+        // error: null,
+        // user: {},
+        // isLoading: true,
         signUpModalOpen: false,
         forgotPasswordModalOpen: false
     };
 
-    vastusSignIn(successHandler, failureHandler) {
+    vastusSignIn() {
         // TODO Check to see if the input fields are put  in correctly
-        console.log("Starting Auth.signin!");
-        this.setState({isLoading: true});
-        Auth.signIn(this.authState.username, this.authState.password).then((data) => {
-            console.log("Successfully signed in!");
-            this.setState({isLoading: false});
-            successHandler(data);
-        }).catch((error) => {
-            console.log("There was an error!");
-            if (error.message) {
-                error = error.message;
-            }
-            console.log(error);
-            this.setState({isLoading: false});
-            failureHandler(error);
-        });
-        console.log("We got past the sign in call!");
+        if (this.authState.username && this.authState.password) {
+            this.props.logIn(this.authState.username, this.authState.password);
+        }
+        else {
+            this.props.setError(new Error("Username and password must be filled!"));
+        }
     }
 
     changeStateText(key, value) {
@@ -52,14 +45,15 @@ class SignInPage extends Component {
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
-    handleLogInButtonPress() {
-        this.vastusSignIn((user) => {
-            this.setState({user: user});
-            this.authenticate(user);
-        }, (error) => {
-            this.setState({error: error})
-        });
-    }
+    // handleLogInButtonPress() {
+
+        // this.vastusSignIn((user) => {
+        //     this.setState({user: user});
+        //     // this.authenticate(user);
+        // }, (error) => {
+        //     this.setState({error: error})
+        // });
+    // }
 
     openSignUpModal() {
         this.setState({signUpModalOpen: true})
@@ -74,15 +68,15 @@ class SignInPage extends Component {
         this.setState({forgotPasswordModalOpen: false})
     }
 
-    async componentDidMount() {
-        // StatusBar.setHidden(true);
-        try {
-            const user = await Auth.currentAuthenticatedUser();
-            this.setState({ user, isLoading: false })
-        } catch (err) {
-            this.setState({ isLoading: false })
-        }
-    }
+    // async componentDidMount() {
+    //     // StatusBar.setHidden(true);
+    //     try {
+    //         const user = await Auth.currentAuthenticatedUser();
+    //         this.setState({ user, isLoading: false })
+    //     } catch (err) {
+    //         this.setState({ isLoading: false })
+    //     }
+    // }
     // async componentWillReceiveProps(nextProps) {
     //     try {
     //         const user = await Auth.currentAuthenticatedUser();
@@ -98,7 +92,7 @@ class SignInPage extends Component {
                 return (
                     <Message color='red'>
                         <h1>Error!</h1>
-                        <p>{error}</p>
+                        <p>{error.message}</p>
                     </Message>
                 );
             }
@@ -116,8 +110,8 @@ class SignInPage extends Component {
 
         return (
             <Container className='login-form'>
-                {loadingProp(this.state.isLoading)}
-                {errorMessage(this.state.error)}
+                {loadingProp(this.props.user.info.isLoading)}
+                {errorMessage(this.props.user.info.error)}
                 <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Segment raised padded>
@@ -137,7 +131,7 @@ class SignInPage extends Component {
                                     type='password'
                                     onChange={value => this.changeStateText("password", value)}
                                 />
-                                <Button primary fluid size='large' onClick={this.handleLogInButtonPress.bind(this)}>
+                                <Button primary fluid size='large' onClick={this.vastusSignIn}>
                                     Log in
                                 </Button>
                             </Form>
@@ -148,7 +142,6 @@ class SignInPage extends Component {
                                     open={this.state.signUpModalOpen}
                                     onOpen={this.openSignUpModal.bind(this)}
                                     onClose={this.closeSignUpModal.bind(this)}
-                                    authenticate={this.authenticate.bind(this)}
                                 />
                             </List.Item>
                             <List.Item>
@@ -156,7 +149,6 @@ class SignInPage extends Component {
                                     open={this.state.forgotPasswordModalOpen}
                                     onOpen={this.openForgotPasswordModal.bind(this)}
                                     onClose={this.closeForgotPasswordModal.bind(this)}
-                                    authenticate={this.authenticate.bind(this)}
                                 />
                                 </List.Item>
                             </List>
@@ -173,7 +165,18 @@ class SignInPage extends Component {
 // {/*</div>*/}
 
 const mapStateToProps = state => ({
-    auth: state.auth
+    user: state.user
 });
 
-export default SignInPage;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        logIn: (username, password) => {
+            dispatch(logIn(username, password));
+        },
+        setError: (error) => {
+            dispatch(setError(error));
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignInPage);
