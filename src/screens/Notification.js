@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Grid, Image, Modal, Button, Item, Dimmer, Loader, Card} from 'semantic-ui-react'
+import {Image, Modal, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
@@ -94,19 +94,36 @@ class Notification extends Component {
             );
         }
         return(
-            <Card>
-                <Button basic color='purple' onClick={this.handleClientModalOpen.bind(this)}>{this.state.name}</Button>
-                <ClientModal
-                    clientID={this.state.friendRequestID}
-                    open={this.state.clientModalOpen}
-                    onOpen={this.handleClientModalOpen.bind(this)}
-                    onClose={this.handleClientModalClose.bind(this)}
-                />
-                <div> has sent you a buddy request</div>
-                <Button basic color='purple' onClick={() => {this.handleAcceptFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Accept</Button>
-                <Button basic
-                    onClick={() => {this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Deny
-                </Button>
+            <Card fluid raised>
+                <Card.Content>
+                    <Feed>
+                        <Feed.Event>
+                            <Feed.Label>
+                                <Image src={proPic} circular size="large" />
+                            </Feed.Label>
+                            <Feed.Content>
+                                <Feed.Summary>
+                                    <Feed.User onClick={this.handleClientModalOpen.bind(this)}>
+                                        {this.state.name}
+                                    </Feed.User>
+                                    <ClientModal
+                                        clientID={this.state.friendRequestID}
+                                        open={this.state.clientModalOpen}
+                                        onOpen={this.handleClientModalOpen.bind(this)}
+                                        onClose={this.handleClientModalClose.bind(this)}
+                                    />
+                                    {' '}has sent you a buddy request
+                                    <Feed.Date>4 hours ago</Feed.Date>
+                                </Feed.Summary>
+                                <Divider />
+                                <Feed.Extra>
+                                    <Button floated="right" size="small" onClick={() => {this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Deny</Button>
+                                    <Button primary floated="right" size="small" onClick={() => {this.handleAcceptFriendRequestButton(this.state.userID, this.state.friendRequestID)}}>Accept</Button>
+                                </Feed.Extra>
+                            </Feed.Content>
+                        </Feed.Event>
+                    </Feed>
+                </Card.Content>
             </Card>
         );
     }

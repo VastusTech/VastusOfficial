@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import {Tab, Card, Label, Menu, Icon, Header } from "semantic-ui-react";
+import {Tab, Menu, Icon, Header, Feed } from "semantic-ui-react";
 import EventFeed from "./EventFeed";
 import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";

@@ -26,6 +26,7 @@
 @lightTextColor    : darken(@textColor, 28%);
 @hoveredTextColor  : @textColor;
 @selectedTextColor : @textColor;
+@linkColor         : @primaryColor;
 
 @focusedFormBorderColor : @primaryColor;
 @inputBackground        : @lightBlack;
