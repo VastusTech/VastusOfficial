@@ -54,16 +54,14 @@ class AuthApp extends Component {
 
         return (
             <div className="App">
-                <Sticky>
-                    <Menu borderless>
-                        <Menu.Item position="center">
+                <Menu borderless inverted vertical fluid widths={1} fixed="top">
+                    <Menu.Item>
+                        <Container>
                             <SearchBarProp />
-                        </Menu.Item>
-                    </Menu>
-                </Sticky>
-                <Container>
-                    <Tabs />
-                </Container>
+                        </Container>
+                    </Menu.Item>
+                </Menu>
+                <Tabs />
             </div>
         );
     }

@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Image, Modal, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
+import {Image, Modal, Grid, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";

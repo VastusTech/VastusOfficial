@@ -75,7 +75,7 @@ class NotificationFeed extends Component {
             );
         }
 
-        function friendRows(friendRequests, userID)
+        function friendRows(friendRequests, userID, feedUpdate)
         {
             //alert(friendRequests);
             if (friendRequests != null) {
@@ -95,8 +95,10 @@ class NotificationFeed extends Component {
             }
         }
         return(
-            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id)}
-            {challengeRows(this.props.user.invitedEvents, this.props.user.id)}</Grid>
+            <Fragment>
+                {friendRows(this.props.user.friendRequests, this.props.user.id)}
+                {challengeRows(this.props.user.invitedEvents, this.props.user.id)}
+            </Fragment>
         );
     }
 }
