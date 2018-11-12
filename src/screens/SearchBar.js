@@ -1,8 +1,12 @@
 import _ from 'lodash'
-import React, { Component } from 'react'
-import {Search, Grid, Message } from 'semantic-ui-react'
+import React, { Component, Fragment } from 'react'
+import {Search } from 'semantic-ui-react'
+import EventCard from "./EventCard";
 import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
+import EventDescriptionModal from "./EventDescriptionModal";
+import ClientModal from "./ClientModal";
+import {connect} from "react-redux";
 
 // setupAWS();
 
@@ -19,6 +23,8 @@ class SearchBarProp extends Component {
         nextClientQueryToken: null,
         eventsLimit: 100,
         clientsLimit: 100,
+        selectedResult: null,
+        resultModalOpen: false
     };
 
     componentWillMount() {
@@ -50,7 +56,7 @@ class SearchBarProp extends Component {
                 access: "public"
             };
             this.setState({eventsLoading: true});
-            QL.queryEvents(["id", "item_type", "title", "goal", "access"], QL.generateFilter("and",
+            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access", "members"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));
@@ -126,14 +132,14 @@ class SearchBarProp extends Component {
                     result = {
                         title: item.name,
                         description: item.username,
-                        content: <Message>Lmao</Message>
+                        content: item
                     };
                 }
                 else if (item.item_type === "Event") {
                     result = {
                         title: (item.title + " ~ (" + item.id + ")"),
                         description: item.goal,
-                        content: <Message>Lmao</Message>
+                        content: item
                     };
                 }
                 else {
@@ -146,9 +152,8 @@ class SearchBarProp extends Component {
     }
 
     handleResultSelect = (e, { result }) => {
-
-        alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        // this.setState({ value: result.title });
+        // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        this.setState({result: result.content, resultModalOpen: true});
     };
 
     handleSearchChange = (e, { value }) => {
@@ -161,23 +166,67 @@ class SearchBarProp extends Component {
         this.loadMoreClientResults(value);
     };
 
+    resultModal() {
+        if (!this.state.result) {
+            return null;
+        }
+        const type = this.state.result.item_type;
+        if (type === "Client") {
+            // alert("opening client modal");
+            return(
+                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} clientID={this.state.result.id}/>
+            );
+        }
+        else if (type === "Event") {
+            let ifJoined = false;
+            let ifOwned = false;
+            if (this.state.result.owner === this.props.user.id) {
+                ifOwned = true;
+            }
+            if (this.props.user.id in this.state.result.members) {
+                ifJoined = true;
+            }
+            return(
+                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)}
+                                       members={this.state.result.members}
+                                       ifOwned={ifOwned}
+                                       ifJoined={ifJoined}
+                                       event={this.state.result}
+                />
+            );
+        }
+        else {
+            alert("Wrong type inputted! Received " + type);
+        }
+    }
+
+    openResultModal = () => { this.setState({resultModalOpen: true}); };
+    closeResultModal = () => { this.setState({resultModalOpen: false}); };
+
     render() {
         // TODO Check to see that this is valid to do?
         console.log("Showing " + this.state.searchResults.length + " results");
         const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
         return (
-            <Search
-                fluid
-                size="large"
-                loading={isLoading}
-                onResultSelect={this.handleResultSelect}
-                onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
-                results={this.state.searchResults}
-                value={this.state.searchQuery}
-                {...this.props}
-            />
+            <Fragment>
+                {this.resultModal()}
+                <Search
+                    fluid
+                    size="large"
+                    loading={isLoading}
+                    onResultSelect={this.handleResultSelect}
+                    onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+                    results={this.state.searchResults}
+                    value={this.state.searchQuery}
+                    {...this.props}
+                />
+            </Fragment>
         )
     }
 }
 
-export default SearchBarProp;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+export default connect(mapStateToProps)(SearchBarProp);

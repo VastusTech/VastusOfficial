@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
+import { Modal, Button, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
 import Amplify, { Auth } from 'aws-amplify';
+import {
+    closeForgotPasswordModal,
+    confirmForgotPassword,
+    forgotPassword, openForgotPasswordModal,
+    openSignUpModal
+} from "../redux_helpers/actions/authActions";
+import { connect } from "react-redux";
+import {setError} from "../redux_helpers/actions/infoActions";
 
 class ForgotPasswordModal extends Component {
     authState = {
@@ -10,54 +18,54 @@ class ForgotPasswordModal extends Component {
         confirmNewPassword: ""
     };
 
-    state = {
-        isConfirming: false,
-        isLoading: false,
-        error: null
-    };
+    // state = {
+    //     isConfirming: false,
+    //     isLoading: false,
+    //     error: null
+    // };
 
-    vastusForgotPassword(successHandler, failureHandler) {
-        // TODO Check to see if the input fields are put in correctly
-        this.setState({isLoading: true});
-        Auth.forgotPassword(this.authState.username).then((data) => {
-            console.log("Successfully forgot the password! :)");
-            console.log(data);
-            this.setState({isLoading: false});
-            successHandler(data);
-        }).catch((error) => {
-            console.log("Failed to forget the password (just like how I failed to forget the day my dad left me)");
-            if (error.message) {
-                error = error.message
-            }
-            console.log(error);
-            this.setState({isLoading: false});
-            failureHandler(error);
-        });
-    }
+    // vastusForgotPassword(successHandler, failureHandler) {
+    //     // TODO Check to see if the input fields are put in correctly
+    //     this.setState({isLoading: true});
+    //     Auth.forgotPassword(this.authState.username).then((data) => {
+    //         console.log("Successfully forgot the password! :)");
+    //         console.log(data);
+    //         this.setState({isLoading: false});
+    //         successHandler(data);
+    //     }).catch((error) => {
+    //         console.log("Failed to forget the password (just like how I failed to forget the day my dad left me)");
+    //         if (error.message) {
+    //             error = error.message
+    //         }
+    //         console.log(error);
+    //         this.setState({isLoading: false});
+    //         failureHandler(error);
+    //     });
+    // }
 
-    vastusForgetPasswordSubmit(successHandler, failureHandler) {
-        // TODO Check to see if the input fields are put  in correctly
-        if (this.authState.newPassword !== this.authState.confirmNewPassword) {
-            console.log("Failed to make a new password :(");
-            console.log("Passwords did not match");
-            failureHandler("The Passwords do not match");
-        }
-        this.setState({isLoading: true});
-        Auth.forgotPasswordSubmit(this.authState.username, this.authState.confirmationCode, this.authState.newPassword).then(function(data) {
-            console.log("Successfully made a new password");
-            console.log(data);
-            this.setState({isLoading: false});
-            successHandler(data);
-        }).catch(function(error) {
-            console.log("Failed to make a new password :(");
-            if (error.message) {
-                error = error.message
-            }
-            console.log(error);
-            this.setState({isLoading: false});
-            failureHandler(error);
-        });
-    }
+    // vastusForgetPasswordSubmit(successHandler, failureHandler) {
+    //     // TODO Check to see if the input fields are put  in correctly
+    //     if (this.authState.newPassword !== this.authState.confirmNewPassword) {
+    //         console.log("Failed to make a new password :(");
+    //         console.log("Passwords did not match");
+    //         failureHandler("The Passwords do not match");
+    //     }
+    //     this.setState({isLoading: true});
+    //     Auth.forgotPasswordSubmit(this.authState.username, this.authState.confirmationCode, this.authState.newPassword).then(function(data) {
+    //         console.log("Successfully made a new password");
+    //         console.log(data);
+    //         this.setState({isLoading: false});
+    //         successHandler(data);
+    //     }).catch(function(error) {
+    //         console.log("Failed to make a new password :(");
+    //         if (error.message) {
+    //             error = error.message
+    //         }
+    //         console.log(error);
+    //         this.setState({isLoading: false});
+    //         failureHandler(error);
+    //     });
+    // }
 
     changeStateText(key, value) {
         // TODO Sanitize this input
@@ -68,25 +76,32 @@ class ForgotPasswordModal extends Component {
     }
 
     handleSubmitButton() {
-        this.vastusForgotPassword((user) => {
-            this.setState({isConfirming: true, error: null});
-        }, (error) => {
-            this.setState({error: error});
-        });
+        // this.vastusForgotPassword((user) => {
+        //     this.setState({isConfirming: true, error: null});
+        // }, (error) => {
+        //     this.setState({error: error});
+        // });
+        this.props.forgotPassword(this.authState.username);
     }
 
     handleConfirmButton() {
-        this.vastusForgetPasswordSubmit((user) => {
-            this.setState({isConfirming: false, error: null})
-        }, (error) => {
-            this.setState({error: error});
-        });
+        if (this.authState.newPassword !== this.authState.confirmNewPassword) {
+            console.log("Failed to make a new password :(");
+            console.log("Passwords did not match");
+            this.props.setError(new Error("Password and confirm password do not match!"));
+        }
+        else if (this.authState.username && this.authState.confirmationCode && this.authState.newPassword) {
+            this.props.setError(new Error("All fields need to be filled in!"));
+        }
+        else {
+            this.props.confirmForgotPassword(this.authState.username, this.authState.confirmationCode, this.authState.newPassword);
+        }
     }
 
     handleCancelButton() {
         // TODO Have a are you sure? thing attached to this
-        this.setState({error: null, isConfirming: false});
-        this.props.onClose();
+        // this.setState({error: null, isConfirming: false});
+        this.props.closeForgotPasswordModal();
     }
 
     render() {
@@ -113,12 +128,12 @@ class ForgotPasswordModal extends Component {
             return null;
         }
 
-        if (this.state.isConfirming) {
+        if (this.props.user.auth.confirmingForgotPassword) {
             return(
-                <Modal open={this.props.open} onClose={() => (false)} trigger={<Button onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
-                    {loadingProp(this.state.isLoading)}
+                <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
+                    {loadingProp(this.props.user.info.isLoading)}
                     <Modal.Header>Confirm your email and choose your new password!</Modal.Header>
-                    {errorMessage(this.state.error)}
+                    {errorMessage(this.props.user.info.error)}
                     <Modal.Content>
                         <p>Enter your username to retrieve your information</p>
                     </Modal.Content>
@@ -152,10 +167,10 @@ class ForgotPasswordModal extends Component {
             );
         }
         return(
-            <Modal open={this.props.open} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.onOpen.bind(this)}>Forgot Password?</Button>}size='tiny'>
-                {loadingProp(this.state.isLoading)}
+            <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
+                {loadingProp(this.props.user.info.isLoading)}
                 <Modal.Header>Forgot Password?</Modal.Header>
-                {errorMessage(this.state.error)}
+                {errorMessage(this.props.user.info.error)}
                 <Modal.Content>
                     <p>Enter your username to retrieve your information</p>
                 </Modal.Content>
@@ -182,4 +197,28 @@ class ForgotPasswordModal extends Component {
     }
 }
 
-export default ForgotPasswordModal;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        forgotPassword: (username) => {
+            dispatch(forgotPassword(username));
+        },
+        confirmForgotPassword: (username, confirmationCode, newPassword) => {
+            dispatch(confirmForgotPassword(username, confirmationCode, newPassword));
+        },
+        setError: (error) => {
+            dispatch(setError(error));
+        },
+        openForgotPasswordModal: () => {
+            dispatch(openForgotPasswordModal());
+        },
+        closeForgotPasswordModal: () => {
+            dispatch(closeForgotPasswordModal());
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPasswordModal);

@@ -42,6 +42,7 @@ class EventCard extends Component {
         owner: null,
         ifOwned: false,
         ifJoined: false,
+        eventModalOpen: false
     };
 
     componentDidMount() {
@@ -49,7 +50,7 @@ class EventCard extends Component {
             let ifOwned = false;
             let ifJoined = false;
             //alert("Membahs: " + this.props.event.members);
-            alert(this.props.owner + "vs. " + this.props.event.owner);
+            //alert(this.props.owner + "vs. " + this.props.event.owner);
             if (this.props.user.id === this.props.event.owner) {
                 alert("Same owner and cur user for: " + this.props.event.id);
                 this.setState({ifOwned: true});
@@ -76,6 +77,9 @@ class EventCard extends Component {
         return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
     }
 
+    openEventModal = () => { this.setState({eventModalOpen: true})};
+    closeEventModal = () => {this.setState({eventModalOpen: false})};
+
     render() {
         if (this.state.isLoading) {
             return(
@@ -86,24 +90,21 @@ class EventCard extends Component {
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <EventDescriptionModal members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}
-                trigger={
-                    <Card fluid raised>
-                        <Card.Content>
-                            <Card.Header>{this.state.event.title}</Card.Header>
-                            <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                            <Card.Meta>{this.state.event.members}</Card.Meta>
-                            <Card.Description>
-                                {String(this.state.event.goal + ", ")}
-                            </Card.Description>
-                        </Card.Content>
-                        <Card.Content extra>
-                            {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
-                            <Card.Meta>4 out of 8 people joined</Card.Meta>
-                        </Card.Content>
-                    </Card>
-                }
-            />
+            <Card fluid raised onClick={this.openEventModal.bind(this)}>
+                <Card.Content>
+                    <Card.Header>{this.state.event.title}</Card.Header>
+                    <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
+                    <Card.Meta>{this.state.event.members}</Card.Meta>
+                    <Card.Description>
+                        {String(this.state.event.goal + ", ")}
+                    </Card.Description>
+                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}/>
+                </Card.Content>
+                <Card.Content extra>
+                    {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
+                    <Card.Meta>4 out of 8 people joined</Card.Meta>
+                </Card.Content>
+            </Card>
         );
     }
 }

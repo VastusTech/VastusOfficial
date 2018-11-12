@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
 import { Auth } from 'aws-amplify';
-import { clearUser, fetchUser } from './redux_helpers/actions/userActions';
+import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
@@ -13,67 +13,47 @@ class App extends Component {
     // This is the function that is called when the sign up button is pressed
     state = {
         error: null,
-        ifLoggedIn: false
     };
 
     constructor(props) {
         super(props);
-
-        // const badList = ["2"];
-        // const list = ["1", "2", "3"];
-        // const filterList = list.filter((v) => {return !badList.includes(v)});
-        // alert(filterList);
-        // const currentObject = {
-        //     id: "id",
-        //     name: "name",
-        //     username: "username"
-        // };
-        // const variablesList = ["id", "name", "username", "profileImagePath"];
-        // if (variablesList.some(v => !Object.keys(currentObject).includes(v))) {
-        //     alert("Your theory works");
-        // }
     }
 
-    async authenticate(user) {
-        if (user && user.username) {
-            // Refresh the tokens potentially?
-            // Auth.currentSession();
-            Auth.currentCredentials();
-            Auth.currentAuthenticatedUser().then((authenticatedUser) => {
-                if (authenticatedUser && (user.username === authenticatedUser.username)) {
-                    // alert("Logging in the user");
-                    this.setState({ifLoggedIn: true});
-                    if (user.username !== this.props.user.username) {
-                        this.props.clearUser();
-                    }
-                    this.props.fetchUser(user.username);
-                }
-                else {
-                    alert("Error with second check");
-                }
-            }).catch((error) => {
-                alert("Error");
-                this.setState({ifLoggedIn: false, error: error});
-            });
-        }
-        else {
-            alert("received null user");
-        }
-    }
+    // async authenticate(user) {
+    //     if (user && user.username) {
+    //         // Refresh the tokens potentially?
+    //         // Auth.currentSession();
+    //         Auth.currentCredentials();
+    //         Auth.currentAuthenticatedUser().then((authenticatedUser) => {
+    //             if (authenticatedUser && (user.username === authenticatedUser.username)) {
+    //                 // alert("Logging in the user");
+    //                 this.setState({ifLoggedIn: true});
+    //                 if (user.username !== this.props.user.username) {
+    //                     this.props.clearUser();
+    //                 }
+    //                 this.props.fetchUser(user.username);
+    //             }
+    //             else {
+    //                 alert("Error with second check");
+    //             }
+    //         }).catch((error) => {
+    //             alert("Error");
+    //             this.setState({ifLoggedIn: false, error: error});
+    //         });
+    //     }
+    //     else {
+    //         alert("received null user");
+    //     }
+    // }
 
-    signOut() {
-        // alert("logging out the user");
-        this.setState({ifLoggedIn: false});
-        // this.props.clearUser();
-    }
+    // signOut() {
+    //     // alert("logging out the user");
+    //     this.setState({ifLoggedIn: false});
+    //     // this.props.clearUser();
+    // }
 
     async componentDidMount() {
-        try {
-            const user = await Auth.currentAuthenticatedUser();
-            this.authenticate(user);
-        } catch (err) {
-            this.setState({ error: err })
-        }
+        this.props.updateAuth();
     }
 
     componentWillReceiveProps(nextProps) {
@@ -83,22 +63,18 @@ class App extends Component {
     }
 
     render() {
-        // let loggedIn = false;
-        // if (this.props.user.id) {
-        //     loggedIn = true
-        // }
-        if (this.state.ifLoggedIn) {
+        if (this.props.user.auth.loggedIn) {
             // The actual App
             return (
                 <div>
-                    <AuthApp signOut={this.signOut.bind(this)}/>
+                    <AuthApp/>
                 </div>
             );
         }
         else {
             return (
                 <div>
-                    <UnauthApp authenticate={this.authenticate.bind(this)}/>
+                    <UnauthApp/>
                 </div>
             );
         }
@@ -107,17 +83,14 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    cache: state.cache
+    // cache: state.cache,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUser: (username) => {
-            dispatch(fetchUser(username));
+        updateAuth: () => {
+            dispatch(updateAuth());
         },
-        clearUser: () => {
-            dispatch(clearUser());
-        }
     }
 };
 

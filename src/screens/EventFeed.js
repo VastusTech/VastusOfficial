@@ -3,8 +3,9 @@ import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
-// import * as AWS from "aws-sdk";
 import { connect } from 'react-redux';
+import ScheduledEventsList from "./ScheduledEventList";
+// import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
 // AWS.config.credentials = new AWS.CognitoIdentityCredentials(
@@ -35,7 +36,8 @@ class EventFeed extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        alert("Set state to userID = " + this.props.user.id);
+        // alert("Set state to userID = " + newProps.userID);
+        this.setState({userID: newProps.userID});
     }
 
     queryEvents() {
@@ -87,12 +89,12 @@ class EventFeed extends Component {
          * @param events
          * @returns {*}
          */
-        function rows(userID, events) {
+        function rows(events) {
             //if(events != null)
                 //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Fragment key={i}>
-                    <EventCard owner={userID} event={events[i]}/>
+                    <EventCard event={events[i]}/>
                 </Fragment>
             ));
         }
@@ -101,7 +103,7 @@ class EventFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                {rows(this.props.user.id, this.state.events.sort(function(a,b){return b.time_created.localeCompare(a.time_created)}))}
+                {rows(this.state.events)}
             </Visibility>
         );
     }

@@ -3,20 +3,23 @@ import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loa
 import Amplify, { Auth } from 'aws-amplify';
 import Lambda from '../Lambda';
 import appConfig from '../AppConfig';
+import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux_helpers/actions/authActions";
+import { connect } from "react-redux";
+import {clearError, setError} from "../redux_helpers/actions/infoActions";
 
 // appConfig();
 
 class SignUpModal extends Component {
     constructor(props) {
         super(props);
-        this.authenticate = this.props.authenticate.bind(this);
+        // this.authenticate = this.props.authenticate.bind(this);
     }
 
-    state = {
-        error: null,
-        isLoading: false,
-        isConfirming: false
-    };
+    // state = {
+    //     error: null,
+    //     isLoading: false,
+    //     isConfirming: false
+    // };
 
     authState = {
         username: "",
@@ -29,76 +32,76 @@ class SignUpModal extends Component {
         confirmationCode: "",
     };
 
-    async vastusSignUp(successHandler, failureHandler) {
-        // TODO Check to see if the input fields are put  in correctly
-        console.log("Starting Auth.signup!");
-        if (this.authState.password !== this.authState.confirmPassword) {
-            console.log("Sign up failed");
-            failureHandler("Password and confirm password do not match");
-            return;
-        }
+    // async vastusSignUp(successHandler, failureHandler) {
+        // // TODO Check to see if the input fields are put  in correctly
+        // console.log("Starting Auth.signup!");
+        // if (this.authState.password !== this.authState.confirmPassword) {
+        //     console.log("Sign up failed");
+        //     failureHandler("Password and confirm password do not match");
+        //     return;
+        // }
+        //
+        // const attributes = {
+        //     name: this.authState.name,
+        //     gender: this.authState.gender,
+        //     birthdate: this.authState.birthday,
+        //     email: this.authState.email,
+        // };
+        // const params = {
+        //     username: this.authState.username,
+        //     password: this.authState.password,
+        //     attributes: attributes,
+        //     validationData: []
+        // };
+        //
+        // this.setState({isLoading: true});
+        // Lambda.createClient("admin", attributes.name, attributes.gender, attributes.birthdate, attributes.email, params.username,
+        //     (data) => {
+        //         if (data.errorMessage) {
+        //             // Send response with no confirmation
+        //             console.log("Problem with creating a database item!");
+        //             const error = data;
+        //             console.log(error);
+        //             this.setState({isLoading: false});
+        //             failureHandler(error);
+        //         }
+        //         else {
+        //             console.log("Successfully created database item in the database!");
+        //             Auth.signUp(params).then((data) => {
+        //                 console.log("Successfully signed up!");
+        //                 this.setState({isLoading: false});
+        //                 successHandler(data);
+        //             }).catch((error) => {
+        //                 console.log("Sign up has failed :(");
+        //                 console.log(error);
+        //                 this.setState({isLoading: false});
+        //                 failureHandler(error);
+        //             });
+        //         }
+        // }, (error) => {
+        //     console.log("Problem with creating a database item!");
+        //     console.log(error);
+        //     this.setState({isLoading: false});
+        //     failureHandler(error);
+        // });
 
-        const attributes = {
-            name: this.authState.name,
-            gender: this.authState.gender,
-            birthdate: this.authState.birthday,
-            email: this.authState.email,
-        };
-        const params = {
-            username: this.authState.username,
-            password: this.authState.password,
-            attributes: attributes,
-            validationData: []
-        };
+    // }
 
-        this.setState({isLoading: true});
-        Lambda.createClient("admin", attributes.name, attributes.gender, attributes.birthdate, attributes.email, params.username,
-            (data) => {
-                if (data.errorMessage) {
-                    // Send response with no confirmation
-                    console.log("Problem with creating a database item!");
-                    const error = data;
-                    console.log(error);
-                    this.setState({isLoading: false});
-                    failureHandler(error);
-                }
-                else {
-                    console.log("Successfully created database item in the database!");
-                    Auth.signUp(params).then((data) => {
-                        console.log("Successfully signed up!");
-                        this.setState({isLoading: false});
-                        successHandler(data);
-                    }).catch((error) => {
-                        console.log("Sign up has failed :(");
-                        console.log(error);
-                        this.setState({isLoading: false});
-                        failureHandler(error);
-                    });
-                }
-        }, (error) => {
-            console.log("Problem with creating a database item!");
-            console.log(error);
-            this.setState({isLoading: false});
-            failureHandler(error);
-        });
-
-    }
-
-    vastusConfirmSignUp(successHandler, failureHandler) {
-        // TODO Check to see if the input fields are put  in correctly
-        this.setState({isLoading: true});
-        Auth.confirmSignUp(this.authState.username, this.authState.confirmationCode).then((data) => {
-            console.log("Successfully confirmed the sign up");
-            console.log(data);
-            this.setState({isLoading: false});
-            successHandler(data);
-        }).catch((error) => {
-            console.log("Confirm sign up has failed :(");
-            console.log(error);
-            this.setState({isLoading: false});
-            failureHandler(error);
-        });
-    }
+    // vastusConfirmSignUp(successHandler, failureHandler) {
+    //     // TODO Check to see if the input fields are put  in correctly
+    //     this.setState({isLoading: true});
+    //     Auth.confirmSignUp(this.authState.username, this.authState.confirmationCode).then((data) => {
+    //         console.log("Successfully confirmed the sign up");
+    //         console.log(data);
+    //         this.setState({isLoading: false});
+    //         successHandler(data);
+    //     }).catch((error) => {
+    //         console.log("Confirm sign up has failed :(");
+    //         console.log(error);
+    //         this.setState({isLoading: false});
+    //         failureHandler(error);
+    //     });
+    // }
 
     changeStateText(key, value) {
         this.authState[key] = value.target.value;
@@ -107,31 +110,47 @@ class SignUpModal extends Component {
 
     handleCreateButton() {
         // alert("Setting state with isConfirming is true");
-        this.vastusSignUp((user) => {
-            this.setState({isConfirming: true, error: null})
-        }, (error) => {
-            this.setState({isConfirming: false, error: error})
-        });
+        if (this.authState.password !== this.authState.confirmPassword) {
+            this.props.setError(new Error("Password and confirm password do not match!"));
+        }
+        else {
+            this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
+                this.authState.birthday, this.authState.email);
+        }
+        // this.vastusSignUp((user) => {
+        //     this.setState({isConfirming: true, error: null})
+        // }, (error) => {
+        //     this.setState({isConfirming: false, error: error})
+        // });
     }
 
-    async handleConfirmButton() {
-        this.vastusConfirmSignUp((user) => {
-            this.setState({isConfirming: false, error: null});
-            this.authenticate(user);
-        }, (error) => {
-            this.setState({isConfirming: true, error: error});
-        });
+    handleConfirmButton() {
+        // TODO Is there a chance that the username could be lost here?
+        if (this.authState.confirmationCode) {
+            this.props.confirmSignUp(this.authState.username, this.authState.confirmationCode);
+        }
+        else {
+            this.props.setError(new Error("Confirmation code cannot be empty"));
+        }
+        // this.vastusConfirmSignUp((user) => {
+        //     this.setState({isConfirming: false, error: null});
+        //     this.authenticate(user);
+        // }, (error) => {
+        //     this.setState({isConfirming: true, error: error});
+        // });
     }
 
     handleCancelButton() {
         // TODO Have a confirmation like are you sure ya wanna close?
-        this.setState({error: null});
-        this.props.onClose();
+        // this.setState({error: null});
+        this.props.clearError();
+        this.props.closeSignUpModal();
+        // this.props.onClose();
     }
 
     render() {
         function errorMessage(error) {
-            if (error) {
+            if (error && error.message) {
                 alert(JSON.stringify(error));
                 return (
                     <Modal.Description>
@@ -154,13 +173,13 @@ class SignUpModal extends Component {
             return null;
         }
 
-        if (this.state.isConfirming) {
+        if (this.props.user.auth.confirmingSignUp) {
             return(
                 <div>
-                    <Modal open={this.props.open} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.onOpen.bind(this)} inverted> Sign Up </Button>} size='tiny'>
-                        {loadingProp(this.state.isLoading)}
+                    <Modal open={this.props.user.auth.signUpModalOpen} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.openSignUpModal.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+                        {loadingProp(this.props.user.info.isLoading)}
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
-                        {errorMessage(this.state.error)}
+                        {errorMessage(this.props.user.info.error)}
                         <Modal.Actions>
                             <div>
                                 <Form>
@@ -178,10 +197,10 @@ class SignUpModal extends Component {
         }
         return(
 
-                <Modal open={this.props.open} trigger={<Button size="large" fluid inverted onClick={this.props.onOpen.bind(this)}> Sign Up </Button>} size='tiny'>
-                    {loadingProp(this.state.isLoading)}
+                <Modal open={this.props.user.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
+                    {loadingProp(this.props.user.info.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
-                    {errorMessage(this.state.error)}
+                    {errorMessage(this.props.user.info.error)}
                     <Modal.Actions>
                         <Form>
                             <div className="field">
@@ -230,4 +249,31 @@ class SignUpModal extends Component {
     }
 }
 
-export default SignUpModal;
+const mapStateToProps = state => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        signUp: (username, password, name, gender, birthday, email) => {
+            dispatch(signUp(username, password, name, gender, birthday, email));
+        },
+        confirmSignUp: (username, confirmationCode) => {
+            dispatch(confirmSignUp(username, confirmationCode));
+        },
+        setError: (error) => {
+            dispatch(setError(error));
+        },
+        clearError: () => {
+            dispatch(clearError());
+        },
+        openSignUpModal: () => {
+            dispatch(openSignUpModal());
+        },
+        closeSignUpModal: () => {
+            dispatch(closeSignUpModal());
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SignUpModal);

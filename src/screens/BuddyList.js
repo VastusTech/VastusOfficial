@@ -69,8 +69,8 @@ class BuddyListProp extends Component {
         this.update();
     }
 
-    openClientModal = () => { this.setState({clientModalOpen: true}); }
-    closeClientModal = () => { this.setState({clientModalOpen: false}); }
+    openClientModal = () => { this.setState({clientModalOpen: true}); };
+    closeClientModal = () => { this.setState({clientModalOpen: false}); };
 
     render() {
 
