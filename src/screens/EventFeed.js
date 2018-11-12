@@ -3,19 +3,12 @@ import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
-import * as AWS from "aws-sdk";
-import { connect } from 'react-redux';
-import ScheduledEventsList from "./ScheduledEventList";
-
-AWS.config.update({region: 'REGION'});
-AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-    {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 /**
-* Event Feed
-*
-* This is the main feed in the home page, it currently displays all public events inside of the database for
-* the user to see.
+ * Event Feed
+ *
+ * This is the main feed in the home page, it currently displays all public events inside of the database for
+ * the user to see.
  */
 class EventFeed extends Component {
     state = {
@@ -36,7 +29,8 @@ class EventFeed extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        alert("Set state to userID = " + this.props.user.id);
+        // alert("Set state to userID = " + newProps.userID);
+        this.setState({userID: newProps.userID});
     }
 
     queryEvents() {
@@ -88,12 +82,12 @@ class EventFeed extends Component {
          * @param events
          * @returns {*}
          */
-        function rows(userID, events) {
+        function rows(events) {
             //if(events != null)
-                //alert(JSON.stringify(events[0]));
+            //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <EventCard owner={userID} event={events[i]}/>
+                    <EventCard event={events[i]}/>
                 </Grid.Row>
             ));
         }
@@ -103,15 +97,11 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <Grid>
-                    {rows(this.props.user.id, this.state.events.sort(function(a,b){return b.time_created.localeCompare(a.time_created)}))}
+                    {rows(this.state.events)}))}
                 </Grid>
             </Visibility>
         );
     }
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user
-});
-
-export default connect(mapStateToProps)(EventFeed);
+export default EventFeed;

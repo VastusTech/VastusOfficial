@@ -60,8 +60,8 @@ class EventDescriptionModal extends Component {
             // if(this.props.members) {
             //     alert("Members: " + this.props.members);
             // }
-            this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
-                isJoined: this.props.ifJoined, members: this.props.members});
+            // this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
+            //     isJoined: this.props.ifJoined, members: this.props.members});
             QL.getClient(this.props.event.owner, ["name"], (data) => {
                 this.setState({ownerName: data.name});
             }, (error) => {
@@ -146,7 +146,10 @@ class EventDescriptionModal extends Component {
                 return (<Button basic color='purple' onClick={deleteHandler}>Delete</Button>)
             }
             else if(isJoined) {
-                return (<Button basic color='purple' onClick={leaveHandler}>Leave</Button>)
+                return (<div>
+                            <Button basic color='purple' onClick={leaveHandler}>Leave</Button>
+                            <Button basic color='purple'>Invite</Button>
+                        </div>)
             }
             else {
                 return (<Button basic color='purple' onClick={joinHandler}>Join</Button>)

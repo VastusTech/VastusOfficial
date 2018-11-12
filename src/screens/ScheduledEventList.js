@@ -18,17 +18,17 @@ class ScheduledEventsList extends Component {
         super(props);
         //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
+        this.update();
     }
 
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = this.props.user;
-        //alert("Updating Scheduled Events");
+        //alert("Updating");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
         }
-
 
         if (user.hasOwnProperty("scheduledEvents")) {
             for (var i = 0; i < user.scheduledEvents.length; i++) {
@@ -56,9 +56,7 @@ class ScheduledEventsList extends Component {
         });
     }
 
-    componentDidMount() {
-        this.update();
-    }
+
 
     componentWillReceiveProps(newProps) {
         //alert("Receevin props");
@@ -79,7 +77,7 @@ class ScheduledEventsList extends Component {
                     );
                 }
             }
-            row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
+            //row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
 
             for (const key in row) {
                 if (row.hasOwnProperty(key) === true) {

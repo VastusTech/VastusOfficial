@@ -63,14 +63,12 @@ class OwnedEventsList extends Component {
         function rows(events) {
             const row = [];
             const rowProps = [];
-            if(events != null) {
-                for (const key in events) {
-                    if (events.hasOwnProperty(key)) {
-                        //alert(JSON.stringify(events[key]));
-                        row.push(
-                            events[key]
-                        );
-                    }
+            for (const key in events) {
+                if (events.hasOwnProperty(key)) {
+                    //alert(JSON.stringify(events[key]));
+                    row.push(
+                        events[key]
+                    );
                 }
             }
             row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
@@ -112,4 +110,3 @@ const mapDispatchToProps = (dispatch) => {
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OwnedEventsList);
-

@@ -23,7 +23,10 @@ export default () => (
                 render: () =>
                     <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
+                        <div>
+                            Next Challenge:
                         <NextWorkoutProp/>
+                        </div>
                         <div className="ui one column stackable center aligned page grid">
                             <EventFeed/>
                         </div>
