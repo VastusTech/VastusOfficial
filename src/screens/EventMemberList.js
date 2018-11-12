@@ -17,7 +17,7 @@ class EventMemberList extends Component {
 
     componentDidMount() {
         //if (this.props.members) {
-        alert("owned:" + this.props.ifOwned);
+        //alert("owned:" + this.props.ifOwned);
         this.setState({isLoading: false, members: this.props.members, ifOwned: this.props.ifOwned});
         //}
     }
@@ -30,7 +30,7 @@ class EventMemberList extends Component {
 
     render() {
         function createCorrectButton(userID, winnerID, challengeID, isOwned) {
-            alert("user: " + userID + " winner: " + winnerID + " challenge: " + challengeID + " Owned?: " + isOwned);
+            //alert("user: " + userID + " winner: " + winnerID + " challenge: " + challengeID + " Owned?: " + isOwned);
             if(isOwned === true) {
                 return (
                     <Button basic color='purple' onClick={() => {Lambda.completeChallenge(userID, winnerID, challengeID,

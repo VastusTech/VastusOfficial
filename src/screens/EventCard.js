@@ -51,7 +51,7 @@ class EventCard extends Component {
             //alert("Membahs: " + this.props.event.members);
             //alert(this.props.owner + "vs. " + this.props.event.owner);
             if (this.props.user.id === this.props.event.owner) {
-                alert("Same owner and cur user for: " + this.props.event.id);
+                //alert("Same owner and cur user for: " + this.props.event.id);
                 ifOwned = true;
             }
             if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
