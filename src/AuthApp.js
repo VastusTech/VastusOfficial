@@ -54,15 +54,16 @@ class AuthApp extends Component {
 
         return (
             <div className="App">
-                <Menu borderless inverted vertical fluid widths={1} fixed="top">
-                    <Menu.Item>
-                        <Container>
+                <Sticky>
+                    <Menu borderless>
+                        <Menu.Item position="center">
                             <SearchBarProp />
-                        </Container>
-                    </Menu.Item>
-                    {/*<Button primary inverted onClick={this.handleLogOut.bind(this)} width={5}>Log Out</Button>*/}
-                </Menu>
-                <Tabs />
+                        </Menu.Item>
+                    </Menu>
+                </Sticky>
+                <Container>
+                    <Tabs />
+                </Container>
             </div>
         );
     }

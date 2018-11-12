@@ -1,23 +1,11 @@
-import info, { infoFunctions, infoReducer } from './infoReducer';
-import auth, { authFunctions, authReducer } from "./authReducer";
-
 const SET_USER = 'SET_USER';
 const CLEAR_USER = 'CLEAR_USER';
 
 const initialState = {
-    info,
-    auth,
     id: null,
 };
 
 export default (state = initialState, action) => {
-    if (infoFunctions[action.type]) {
-        return infoReducer(state, action);
-    }
-    else if (authFunctions[action.type]) {
-        return authReducer(state, action);
-    }
-
     switch (action.type) {
         // For the user, we want to be able to store all the pertinent information
         case SET_USER:
@@ -34,11 +22,7 @@ export default (state = initialState, action) => {
                 info: state.info
             };
             break;
-        default:
-            state = {
-                ...initialState
-            };
     }
-
+    // alert("USER: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
 };

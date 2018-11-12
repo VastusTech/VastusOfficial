@@ -12,60 +12,46 @@ export const infoFunctions = {
     TOGGLE_IS_LOADING
 };
 
-export default {
+const initialState = {
     isLoading: false,
     error: null
 };
 
-export function infoReducer(state, action) {
+export default (state = initialState, action) => {
     switch (action.type) {
         case SET_ERROR:
             console.log("Error inside a redux action/reducer! (Leo wrote this) Error = " + JSON.stringify(action.payload));
             state = {
                 ...state,
-                info: {
-                    ...state.info,
-                    error: action.payload
-                }
+                error: action.payload
             };
             break;
         case CLEAR_ERROR:
             state = {
                 ...state,
-                info: {
-                    ...state.info,
-                    error: null
-                }
+                error: null
             };
             break;
         case SET_IS_LOADING:
             state = {
                 ...state,
-                info: {
-                    ...state.info,
-                    isLoading: true
-                }
+                isLoading: true
             };
             break;
         case SET_IS_NOT_LOADING:
             state = {
                 ...state,
-                info: {
-                    ...state.info,
-                    isLoading: false
-                }
+                isLoading: false
             };
             break;
         case TOGGLE_IS_LOADING:
             state = {
                 ...state,
-                info: {
-                    ...state.info,
-                    isLoading: !state.info.isLoading
-                }
+                isLoading: !state.info.isLoading
             };
             break;
     }
+    // alert("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
 }
 

@@ -49,6 +49,7 @@ class EventFeed extends Component {
                 this.state.nextToken, (data) => {
                     if (data.items) {
                         for (let i = 0; i < data.items.length; i++) {
+                            //alert(data.items[i].time_created);
                             this.setState({events: [...this.state.events, data.items[i]]});
                         }
                         this.setState({nextToken: data.nextToken});

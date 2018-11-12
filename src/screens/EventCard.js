@@ -52,14 +52,14 @@ class EventCard extends Component {
             //alert("Membahs: " + this.props.event.members);
             //alert(this.props.owner + "vs. " + this.props.event.owner);
             if (this.props.user.id === this.props.event.owner) {
-                alert("Same owner and cur user for: " + this.props.event.id);
-                this.setState({ifOwned: true});
+                //alert("Same owner and cur user for: " + this.props.event.id);
+                ifOwned = true;
             }
             if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
-                this.setState({ifJoined: true});
+                ifJoined = false;
             }
 
-            this.setState({isLoading: false, event: this.props.event, members: this.props.event.members, ifOwned: ifOwned, ifJoined: ifJoined});
+            this.setState({isLoading: false, event: this.props.event, members: this.props.event.members, ifOwned, ifJoined});
         }
     }
 
@@ -94,7 +94,7 @@ class EventCard extends Component {
                 <Card.Content>
                     <Card.Header>{this.state.event.title}</Card.Header>
                     <Card.Meta>{this.convertFromISO(this.state.event.time)}</Card.Meta>
-                    <Card.Meta>{this.state.event.members}</Card.Meta>
+                    <Card.Meta>{this.state.event.time_created}</Card.Meta>
                     <Card.Description>
                         {String(this.state.event.goal + ", ")}
                     </Card.Description>

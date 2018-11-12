@@ -1,9 +1,13 @@
 import React, { Component } from 'react';
-import { Modal, Button, Item, Dimmer, Loader, Message } from 'semantic-ui-react';
+import { Modal, Button, Item, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
 import QL from '../GraphQL';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import AWSConfig from "../AppConfig";
+import ScheduledEventsList from "./ScheduledEventList";
+import InviteToScheduledEventsProp from "./InviteToScheduledEvents";
+import _ from "lodash";
+import EventCard from "./EventCard";
 
 // AWSConfig();
 
@@ -27,7 +31,7 @@ class ClientModal extends Component {
         if (newProps.clientID) {
             if (!this.state.client) {
                 this.setState({isLoading: true});
-                QL.getClient(newProps.clientID, ["id", "name", "friends", "challengesWon"], (data) => {
+                QL.getClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents"], (data) => {
                     console.log("successfully retrieved the client");
                     this.setState({isLoading: false, client: data})
                 }, (error) => {
@@ -80,6 +84,16 @@ class ClientModal extends Component {
                 </Modal>
             );
         }
+
+        function button_rows(events) {
+            //if(events != null)
+            //alert(JSON.stringify(events[0]));
+            return _.times(events.length, i => (
+                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
+                    <Button basic color='purple'>Invite to Event</Button>
+                </Grid.Row>
+            ));
+        }
         // <Item.Image size='medium' src={proPic} circular/> TODO
 
         //This render function displays the user's information in a small profile page, and at the
@@ -106,6 +120,22 @@ class ClientModal extends Component {
                                     Add Buddy
                                 </Button>
                             </Item.Extra>
+                            <Item.Extra>
+                                <div>
+                                    <Modal trigger={<Button color='purple'>Invite to Challenge</Button>}>
+                                        <Grid columns='three' divided>
+                                            <Grid.Row>
+                                                <Grid.Column>
+                                                    <ScheduledEventsList/>
+                                                </Grid.Column>
+                                                <Grid.Column>
+                                                    <InviteToScheduledEventsProp friendID={this.state.client.id}/>
+                                                </Grid.Column>
+                                            </Grid.Row>
+                                        </Grid>
+                                    </Modal>
+                                </div>
+                            </Item.Extra>
                         </Item.Content>
                     </Item>
                 </Modal.Content>
@@ -115,7 +145,8 @@ class ClientModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache
 });
 
 export default connect(mapStateToProps)(ClientModal);

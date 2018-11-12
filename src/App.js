@@ -57,13 +57,13 @@ class App extends Component {
     }
 
     componentWillReceiveProps(nextProps) {
-        if (nextProps.user) {
+        if (nextProps.auth) {
             this.setState();
         }
     }
 
     render() {
-        if (this.props.user.auth.loggedIn) {
+        if (this.props.auth.loggedIn) {
             // The actual App
             return (
                 <div>
@@ -82,7 +82,8 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user,
+    // user: state.user,
+    auth: state.auth
     // cache: state.cache,
 });
 

@@ -173,13 +173,13 @@ class SignUpModal extends Component {
             return null;
         }
 
-        if (this.props.user.auth.confirmingSignUp) {
+        if (this.props.auth.confirmingSignUp) {
             return(
                 <div>
-                    <Modal open={this.props.user.auth.signUpModalOpen} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.openSignUpModal.bind(this)} inverted> Sign Up </Button>} size='tiny'>
-                        {loadingProp(this.props.user.info.isLoading)}
+                    <Modal open={this.props.auth.signUpModalOpen} onClose={() => (false)} trigger={<Button fluid color='red' onClick={this.props.openSignUpModal.bind(this)} inverted> Sign Up </Button>} size='tiny'>
+                        {loadingProp(this.props.info.isLoading)}
                         <Modal.Header>Check your email to confirm the sign up!</Modal.Header>
-                        {errorMessage(this.props.user.info.error)}
+                        {errorMessage(this.props.info.error)}
                         <Modal.Actions>
                             <div>
                                 <Form>
@@ -197,10 +197,10 @@ class SignUpModal extends Component {
         }
         return(
 
-                <Modal open={this.props.user.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
-                    {loadingProp(this.props.user.info.isLoading)}
+                <Modal open={this.props.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
+                    {loadingProp(this.props.info.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
-                    {errorMessage(this.props.user.info.error)}
+                    {errorMessage(this.props.info.error)}
                     <Modal.Actions>
                         <Form>
                             <div className="field">
@@ -250,7 +250,8 @@ class SignUpModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    auth: state.auth,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {

@@ -34,8 +34,8 @@ export function logIn(username, password) {
         Auth.signIn(username, password).then(() => {
             QL.getClientByUsername(username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully logged in!");
-                dispatch(setUser(user));
                 dispatch(authLogIn());
+                dispatch(setUser(user));
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");

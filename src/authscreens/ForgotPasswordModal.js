@@ -128,12 +128,12 @@ class ForgotPasswordModal extends Component {
             return null;
         }
 
-        if (this.props.user.auth.confirmingForgotPassword) {
+        if (this.props.auth.confirmingForgotPassword) {
             return(
-                <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
-                    {loadingProp(this.props.user.info.isLoading)}
+                <Modal open={this.props.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
+                    {loadingProp(this.props.info.isLoading)}
                     <Modal.Header>Confirm your email and choose your new password!</Modal.Header>
-                    {errorMessage(this.props.user.info.error)}
+                    {errorMessage(this.props.info.error)}
                     <Modal.Content>
                         <p>Enter your username to retrieve your information</p>
                     </Modal.Content>
@@ -167,10 +167,10 @@ class ForgotPasswordModal extends Component {
             );
         }
         return(
-            <Modal open={this.props.user.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
-                {loadingProp(this.props.user.info.isLoading)}
+            <Modal open={this.props.auth.forgotPasswordModalOpen} onClose={() => (false)} trigger={<Button size="large" fluid inverted onClick={this.props.openForgotPasswordModal.bind(this)}>Forgot Password?</Button>}size='tiny'>
+                {loadingProp(this.props.info.isLoading)}
                 <Modal.Header>Forgot Password?</Modal.Header>
-                {errorMessage(this.props.user.info.error)}
+                {errorMessage(this.props.info.error)}
                 <Modal.Content>
                     <p>Enter your username to retrieve your information</p>
                 </Modal.Content>
@@ -198,7 +198,8 @@ class ForgotPasswordModal extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    auth: state.auth,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {

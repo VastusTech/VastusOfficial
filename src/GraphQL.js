@@ -38,6 +38,60 @@ class GraphQL {
         this.execute(this.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
             "getEvent", successHandler, failureHandler);
     }
+    static getClients(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetClients", "getClients", null, variableList, idList, true),
+            "getClients", successHandler, failureHandler);
+    }
+    static getTrainers(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetTrainers", "getTrainers", null, variableList, idList, true),
+            "getTrainers", successHandler, failureHandler);
+    }
+    static getGyms(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetGyms", "getGyms", null, variableList, idList, true),
+            "getGyms", successHandler, failureHandler);
+    }
+    static getWorkouts(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetWorkouts", "getWorkouts", null, variableList, idList, true),
+            "getWorkouts", successHandler, failureHandler);
+    }
+    static getReviews(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetReviews", "getReviews", null, variableList, idList, true),
+            "getReviews", successHandler, failureHandler);
+    }
+    static getEvents(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetEvents", "getEvents", null, variableList, idList, true),
+            "getEvents", successHandler, failureHandler);
+    }
     static queryClients(variableList, filter, limit, nextToken, successHandler, failureHandler) {
         var inputVariables = {};
         if (limit) {
@@ -46,7 +100,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryClients", "queryClients", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryClients", "queryClients", inputVariables, variableList, filter, false, true),
             "queryClients", successHandler, failureHandler);
     }
     static queryTrainers(variableList, filter, limit, nextToken, successHandler, failureHandler) {
@@ -57,7 +111,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryTrainers", "queryTrainers", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryTrainers", "queryTrainers", inputVariables, variableList, filter, false, true),
             "queryTrainers", successHandler, failureHandler);
     }
     static queryGyms(variableList, filter, limit, nextToken, successHandler, failureHandler) {
@@ -68,7 +122,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryGyms", "queryGyms", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryGyms", "queryGyms", inputVariables, variableList, filter, false, true),
             "queryGyms", successHandler, failureHandler);
     }
     static queryWorkouts(variableList, filter, limit, nextToken, successHandler, failureHandler) {
@@ -79,7 +133,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryWorkouts", "queryWorkouts", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryWorkouts", "queryWorkouts", inputVariables, variableList, filter, false, true),
             "queryWorkouts", successHandler, failureHandler);
     }
     static queryReviews(variableList, filter, limit, nextToken, successHandler, failureHandler) {
@@ -90,7 +144,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryReviews", "queryReviews", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryReviews", "queryReviews", inputVariables, variableList, filter, false, true),
             "queryReviews", successHandler, failureHandler);
     }
     static queryEvents(variableList, filter, limit, nextToken, successHandler, failureHandler) {
@@ -101,7 +155,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
-        this.execute(this.constructQuery("QueryEvents", "queryEvents", inputVariables, variableList, filter, true),
+        this.execute(this.constructQuery("QueryEvents", "queryEvents", inputVariables, variableList, filter, false, true),
             "queryEvents", successHandler, failureHandler);
     }
 
@@ -137,8 +191,23 @@ class GraphQL {
             parameters: parameters
         };
     }
-    // TODO This only supports input String! types. Reason to change?
-    static constructQuery(queryName, queryFunction, inputVariables, outputVariables, filter = null, ifList = false) {
+    static generateIDList(ids) {
+        let idListString = "ids: [";
+        const parameters = {};
+        for (let i = 0; i < ids.length; i++) {
+            const id = ids[i];
+            const idName = "id" + i;
+            parameters[idName] = id;
+            idListString += ("$" + idName + ", ");
+        }
+        idListString += "]";
+        return {
+            parameterString: idListString,
+            parameters: parameters
+        }
+    }
+    // TODO This only supports input String! regular types. Reason to change?
+    static constructQuery(queryName, queryFunction, inputVariables, outputVariables, filter = null, ifBatch = false, ifQuery = false) {
         let query = '';
         var finalInputVariables;
         if (filter) {
@@ -158,6 +227,9 @@ class GraphQL {
                 query += '$' + variable + ': ';
                 if (variable === "limit") {
                     query += 'Int';
+                }
+                else if (variable === "ids") {
+                    query += '[String]!';
                 }
                 else {
                     query += 'String!';
@@ -182,17 +254,20 @@ class GraphQL {
             query += ')';
         }
         query += ' {\n';
-        if (ifList) {
+        if (ifQuery || ifBatch) {
             query += '        items {\n';
         }
         for (let i in outputVariables) {
-            if (ifList) {
+            if (ifQuery || ifBatch) {
                 query += '    ';
             }
             query += '        ' + outputVariables[i] + '\n';
         }
-        if (ifList) {
+        if (ifQuery) {
             query += '        }\n        nextToken\n';
+        }
+        else if (ifBatch) {
+            query += '        }\n        unretrievedItems {\n            id\n        }\n';
         }
         query += '    }\n}';
 
@@ -202,6 +277,7 @@ class GraphQL {
         };
     }
     static async execute(query, queryFunctionName, successHandler, failureHandler) {
+        // alert("Sending ql = " + query.query);
         API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
             console.log("GraphQL operation succeeded!");
             if (!data.data || !data.data[queryFunctionName]) {
