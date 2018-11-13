@@ -56,7 +56,7 @@ class AuthApp extends Component {
             <div className="App">
                 <Sticky>
                     <Menu borderless inverted vertical fluid widths={1} fixed="top">
-                        <Menu.Item position="center">
+                        <Menu.Item position="left">
                             <Container>
                                 <SearchBarProp />
                             </Container>

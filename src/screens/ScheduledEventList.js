@@ -5,6 +5,7 @@ import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
+import {fetchEvent} from "../redux_helpers/actions/cacheActions";
 
 class ScheduledEventsList extends Component {
     state = {
@@ -29,32 +30,41 @@ class ScheduledEventsList extends Component {
             this.setState({isLoading: true});
         }
 
-
-        if (user.hasOwnProperty("scheduledEvents")) {
-            for (var i = 0; i < user.scheduledEvents.length; i++) {
-                if (!(user.scheduledEvents[i] in this.state.events)) {
-                    this.addEventFromGraphQL(user.scheduledEvents[i]);
-                }
+        if (this.state.isLoading && user.hasOwnProperty("scheduledEvents") && user.scheduledEvents && user.scheduledEvents.length) {
+            this.setState({isLoading: false});
+            for (let i = 0; i < user.scheduledEvents.length; i++) {
+                this.props.fetchEvent(user.scheduledEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                // if (!(user.scheduledEvents[i] in this.state.events)) {
+                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
+                // }
             }
         }
-        else if (!this.props.user.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.user.info.error) {
+        else if (!this.props.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.info.error) {
                 this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
     }
 
-    addEventFromGraphQL(eventID) {
-        QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
-            console.log("successfully got a event");
-            this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
-        }, (error) => {
-            console.log("Failed to get a vent");
-            console.log(JSON.stringify(error));
-            this.setState({error: error});
-        });
-    }
+    // addEventFromGraphQL(eventID) {
+    //     QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
+    //         console.log("successfully got a event");
+    //         this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
+    //     }, (error) => {
+    //         console.log("Failed to get a vent");
+    //         console.log(JSON.stringify(error));
+    //         this.setState({error: error});
+    //     });
+    // }
+
+    // getEventAttribute(id, attribute) {
+    //     if (id && attribute) {
+    //         if (this.props.cache.events[id]) {
+    //             return this.props.cache.events[id][attribute];
+    //         }
+    //     }
+    // }
 
     componentDidMount() {
         this.update();
@@ -79,13 +89,13 @@ class ScheduledEventsList extends Component {
                     );
                 }
             }
-            //row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
+            // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
 
             for (const key in row) {
                 if (row.hasOwnProperty(key) === true) {
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={row[key]}/>
+                        <Grid.Row key={key} className="ui one column stackable center aligned page grid">
+                            <EventCard eventID={row[key]}/>
                         </Grid.Row>
                     );
                 }
@@ -100,19 +110,24 @@ class ScheduledEventsList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.state.events)}</Grid>
+            <Grid>{rows(this.props.user.scheduledEvents)}</Grid>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchUserAttributes: (id, attributeList) => {
             dispatch(fetchUserAttributes(id, attributeList));
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
         }
     };
 };

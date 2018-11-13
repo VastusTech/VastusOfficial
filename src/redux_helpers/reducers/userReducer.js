@@ -22,6 +22,11 @@ export default (state = initialState, action) => {
                 info: state.info
             };
             break;
+        default:
+            state = {
+                ...state
+            };
+            break;
     }
     // alert("USER: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;

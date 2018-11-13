@@ -115,6 +115,11 @@ export default (state = initialState, action) => {
                 forgotPasswordModalOpen: false
             };
             break;
+        default:
+            state = {
+                ...state
+            };
+            break;
     }
     // alert("AUTH: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;

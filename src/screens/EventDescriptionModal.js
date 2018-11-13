@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
-import { Modal, Button, Header, List, Divider } from 'semantic-ui-react';
+import { Card, Modal, Button, Header, List, Divider } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
+import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -38,12 +39,13 @@ function convertDate(date) {
  */
 class EventDescriptionModal extends Component {
     state = {
-        isLoading: false,
-        isOwned: null,
-        isJoined: null,
-        event: null,
-        ownerName: null,
-        members: {},
+        // isLoading: false,
+        // isOwned: null,
+        // isJoined: null,
+        eventID: null,
+        // event: null,
+        // ownerName: null,
+        // members: {},
         clientModalOpen: false,
     };
 
@@ -54,36 +56,35 @@ class EventDescriptionModal extends Component {
         this.handleDeleteEventButton = this.handleDeleteEventButton.bind(this);
     }
 
-    componentDidMount() {
-        if (this.props.event) {
-            //("Owned: " + this.props.ifOwned + " Joined: " + this.props.ifJoined);
-            // if(this.props.members) {
-            //     alert("Members: " + this.props.members);
-            //}
-            this.setState({isLoading: false, event: this.props.event, isOwned: this.props.ifOwned,
-                isJoined: this.props.ifJoined, members: this.props.members});
-            QL.getClient(this.props.event.owner, ["name"], (data) => {
-                this.setState({ownerName: data.name});
-            }, (error) => {
-                alert(JSON.stringify(error));
-            })
+    componentWillReceiveProps(newProps) {
+        if (newProps.eventID && !this.state.eventID) {
+            this.state.eventID = newProps.eventID;
         }
-        else {
-            this.setState({isLoading: true, event: null, isOwned: null, isJoined: null, members: []})
+        if (!this.props.open && newProps.open && newProps.eventID && !this.getEventAttribute("id")) {
+            // this.props.fetchEvent(newProps.eventID, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
         }
     }
 
-    componentWillReceiveProps(newProps) {
-        if (newProps.event) {
-            this.setState({isLoading: false, event: newProps.event, isOwned: newProps.ifOwned,
-                isJoined: newProps.ifJoined, members: newProps.members});
+    getEventAttribute(attribute) {
+        if (this.state.eventID && this.props.cache.events[this.state.eventID]) {
+            return this.props.cache.events[this.state.eventID][attribute];
         }
         else {
-            this.setState({isLoading: true, event: null, isOwned: false, isJoined: false});
+            return null;
         }
-        // if (newProps.challenge && this.props.id && this.props.ifJoined && this.props.ifOwned) {
-        //     this.setState({isLoading: false, challenge: newProps.challenge, id: newProps.id});
-        // }
+    }
+
+    getOwnerName() {
+        const owner = this.getEventAttribute("owner");
+        if (owner) {
+            if (this.props.cache.clients[owner]) {
+                return this.props.cache.clients[owner].name
+            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
+        }
+        return null;
     }
 
     convertFromISO(dateTime) {
@@ -97,7 +98,7 @@ class EventDescriptionModal extends Component {
     handleDeleteEventButton() {
         alert("Handling deleting the event");
         this.setState({isLoading: true});
-        Lambda.deleteEvent(this.props.user.id, this.state.event.id, (data) => {
+        Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
@@ -109,7 +110,7 @@ class EventDescriptionModal extends Component {
     handleLeaveEventButton() {
         alert("Handling leaving the event");
         this.setState({isLoading: true});
-        Lambda.leaveEvent(this.props.user.id, this.props.user.id, this.state.event.id, (data) => {
+        Lambda.leaveEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             //alert(JSON.stringify(data));
             this.setState({isLoading: false, isJoined: false});
         }, (error) => {
@@ -121,7 +122,7 @@ class EventDescriptionModal extends Component {
     handleJoinEventButton() {
         alert("Handling joining the event");
         this.setState({isLoading: true});
-        Lambda.joinEvent(this.props.user.id, this.props.user.id, this.state.event.id, (data) => {
+        Lambda.joinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, isJoined: true});
         }, (error) => {
@@ -130,12 +131,26 @@ class EventDescriptionModal extends Component {
         })
     }
 
+    isJoined() {
+        const members = this.getEventAttribute("members");
+        if (members) {
+            return members.includes(this.props.user.id);
+        }
+        return false;
+    }
+
+    isOwned() {
+        return this.props.user.id === this.getEventAttribute("owner");
+    }
+
     openClientModal() { this.setState({clientModalOpen: true}); }
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     render() {
-        if (!this.state.event) {
-            return null;
+        if (!this.getEventAttribute("id")) {
+            return(
+                null
+            );
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
@@ -156,42 +171,42 @@ class EventDescriptionModal extends Component {
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                <Modal.Header>{this.state.event.title}</Modal.Header>
+                <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
-                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.event.owner}/>
+                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.getEventAttribute("owner")}/>
                         <List relaxed>
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
-                                    Created by <Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.state.ownerName}</Button>
+                                    Created by <Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.getOwnerName()}</Button>
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Icon name='calendar' />
                                 <List.Content>
-                                    {this.convertFromISO(this.state.event.time)}
+                                    {this.convertFromISO(this.getEventAttribute("time"))}
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {this.state.event.goal}
+                                    {this.getEventAttribute("goal")}
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    {this.state.event.members}
+                                    {this.getEventAttribute("members")}
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>}>
                                         <Modal.Content>
-                                            <EventMemberList challengeID = {this.state.event.id} members = {this.state.event.members} ifOwned = {this.state.isOwned}/>
+                                            <EventMemberList challengeID = {this.state.eventID} members = {this.getEventAttribute("members")} ifOwned = {this.state.isOwned}/>
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.state.isOwned, this.state.isJoined, this.handleJoinEventButton,
+                            {createCorrectButton(this.isOwned(), this.isJoined(), this.handleJoinEventButton,
                             this.handleLeaveEventButton, this.handleDeleteEventButton)}
                     </Modal.Description>
                 </Modal.Content>
@@ -201,7 +216,20 @@ class EventDescriptionModal extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache,
+    info: state.info
 });
 
-export default connect(mapStateToProps)(EventDescriptionModal);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventDescriptionModal);
