@@ -77,7 +77,7 @@ class Profile extends React.PureComponent {
         const user = this.props.user;
         // alert("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
         if (!user.id) {
-            alert("ID is not set inside profile... This means a problem has occurred");
+            // alert("ID is not set inside profile... This means a problem has occurred");
         }
 
         // if (user.id && user.name && user.username && user.birthday) {

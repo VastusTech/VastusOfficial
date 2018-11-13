@@ -46,8 +46,8 @@ class BuddyListProp extends Component {
                 alert("You got no friends you loser");
             }
         }
-        else if (!this.props.user.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.user.info.error) {
+        else if (!this.props.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.info.error) {
                 this.props.fetchUserAttributes(user.id, ["friends"]);
                 this.setState({sentRequest: true});
             }
@@ -119,7 +119,8 @@ class BuddyListProp extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    info: state.info
 });
 
 const mapDispatchToProps = (dispatch) => {

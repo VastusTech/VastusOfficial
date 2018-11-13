@@ -155,6 +155,7 @@ class CreateEventProp extends Component {
                                         name="dateTime"
                                         placeholder="Start"
                                         value={this.state.dateTime}
+                                        readonly="true"
                                         iconPosition="left"
                                         onChange={this.handleStartTimeChange}
                                         timeFormat={this.state.timeFormat} />
@@ -166,6 +167,7 @@ class CreateEventProp extends Component {
                                         name="dateTimeEnd"
                                         placeholder="End"
                                         value={this.state.dateTimeEnd}
+                                        touchReadonly="true"
                                         iconPosition="left"
                                         onChange={this.handleEndTimeChange}
                                         timeFormat={this.state.timeFormat}/>

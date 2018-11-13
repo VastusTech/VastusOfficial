@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Grid, Message} from 'semantic-ui-react';
+import {Grid, Message, Label} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -38,7 +38,7 @@ class NextEventProp extends Component {
     }
 
     addEventFromGraphQL(eventID) {
-        QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
+        QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members", "capacity"], (data) => {
             console.log("successfully got a event");
             this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
         }, (error) => {
@@ -69,7 +69,12 @@ class NextEventProp extends Component {
 
             //alert(JSON.stringify(row));
 
-            return (<EventCard owner={row[0].id} event={row[0]}/>);
+            return (
+                <div>
+                    <Label>Next Scheduled Event</Label>
+                    <EventCard owner={row[0].id} event={row[0]}/>
+                </div>
+            );
         }
         if (this.state.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
