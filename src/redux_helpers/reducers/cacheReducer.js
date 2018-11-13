@@ -134,6 +134,11 @@ export default (state = initialState, action) => {
                 }
             };
             break;
+        default:
+            state = {
+                ...state
+            };
+            break;
         // case READ_CLIENT:
         //     state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);
         //     break;

@@ -277,7 +277,6 @@ class GraphQL {
         };
     }
     static async execute(query, queryFunctionName, successHandler, failureHandler, queryCache, putQuery) {
-        alert("Sending ql = " + query.query);
         const queryString = JSON.stringify(query.query) + JSON.stringify(query.variables);
         // alert(queryString);
         if (queryCache && queryCache[queryString]) {
@@ -287,6 +286,7 @@ class GraphQL {
             successHandler(queryCache[queryString]);
         }
         else {
+            alert("Sending ql = " + query.query);
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {
@@ -294,7 +294,7 @@ class GraphQL {
                     failureHandler("Object had returned null");
                 }
                 // alert("Returned!");
-                // alert(JSON.stringify(data.data[queryFunctionName]));
+                alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 // alert(JSON.stringify(queryCache));
                 if (putQuery) {
                     // alert("Putting the query in!");

@@ -43,7 +43,6 @@ class EventFeed extends Component {
 
     queryEvents() {
         this.setState({isLoading: true});
-        // alert("Queryin events. State = " + JSON.stringify(this.state));
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
             QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"], QL.generateFilter("and",
@@ -104,7 +103,7 @@ class EventFeed extends Component {
             // alert("EVENTS TO PRINT: ");
             // alert(JSON.stringify(events));
             return _.times(events.length, i => (
-                <Fragment key={i}>
+                <Fragment key={i + 1}>
                     <EventCard eventID={events[i].id}/>
                 </Fragment>
             ));

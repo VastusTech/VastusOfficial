@@ -80,9 +80,9 @@ class EventDescriptionModal extends Component {
             if (this.props.cache.clients[owner]) {
                 return this.props.cache.clients[owner].name
             }
-            else if (!this.props.info.isLoading) {
-                this.props.fetchClient(owner, ["name"]);
-            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
         }
         return null;
     }

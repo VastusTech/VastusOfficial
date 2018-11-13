@@ -18,7 +18,7 @@ export default () => (
         [
             {
                 menuItem:
-                    (<Menu.Item>
+                    (<Menu.Item key={0}>
                         <Icon name='home' size='large' />
                     </Menu.Item>),
                 render: () =>
@@ -29,7 +29,7 @@ export default () => (
                     </Tab.Pane>
             },
             {
-                menuItem: (<Menu.Item>
+                menuItem: (<Menu.Item key={1}>
                     <Icon name='user circle outline' size='large' />
                 </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
@@ -38,7 +38,7 @@ export default () => (
             },
             {
                 menuItem: (
-                    <Menu.Item>
+                    <Menu.Item key={2}>
                         <Icon name='bell outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>

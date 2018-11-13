@@ -225,7 +225,6 @@ class SearchBarProp extends Component {
                     onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
                     results={this.state.searchResults}
                     value={this.state.searchQuery}
-                    {...this.props}
                 />
             </Fragment>
         )

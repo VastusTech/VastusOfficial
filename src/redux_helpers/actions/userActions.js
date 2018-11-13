@@ -38,46 +38,51 @@ export function fetchUserAttributes(id, variablesList) {
 
 function overwriteFetchUserAttributes(id, variablesList, dispatch) {
     dispatch(setIsLoading());
-    const pictureIndex = variablesList.indexOf("profilePicture");
-    if (pictureIndex !== -1) {
-        variablesList.splice(pictureIndex, 1);
-    }
-    QL.getClient(id, variablesList, (data) => {
+    if (variablesList.length > 0) {
+        const pictureIndex = variablesList.indexOf("profilePicture");
         if (pictureIndex !== -1) {
-            if (data.profileImagePath) {
-                Storage.get(data.profileImagePath).then((url) => {
+            variablesList.splice(pictureIndex, 1);
+        }
+        QL.getClient(id, variablesList, (data) => {
+            if (pictureIndex !== -1) {
+                if (data.profileImagePath) {
+                    Storage.get(data.profileImagePath).then((url) => {
+                        data = {
+                            ...data,
+                            profilePicture: url
+                        };
+                        dispatch(setUser(data));
+                        dispatch(setIsNotLoading());
+                    }, (error) => {
+                        console.log("Failed to get profile image");
+                        console.log(error);
+                        dispatch(setUser(data));
+                        dispatch(setIsNotLoading());
+                    });
+                }
+                else {
+                    // Put the default image there
                     data = {
                         ...data,
-                        profilePicture: url
+                        profilePicture: defaultProfilePicture
                     };
                     dispatch(setUser(data));
                     dispatch(setIsNotLoading());
-                }, (error) => {
-                    console.log("Failed to get profile image");
-                    console.log(error);
-                    dispatch(setUser(data));
-                    dispatch(setIsNotLoading());
-                });
+                }
             }
             else {
-                // Put the default image there
-                data = {
-                    ...data,
-                    profilePicture: defaultProfilePicture
-                };
                 dispatch(setUser(data));
                 dispatch(setIsNotLoading());
             }
-        }
-        else {
-            dispatch(setUser(data));
+        }, (error) => {
+            alert(JSON.stringify(error));
+            dispatch(setError(error));
             dispatch(setIsNotLoading());
-        }
-    }, (error) => {
-        alert(JSON.stringify(error));
-        dispatch(setError(error));
+        });
+    }
+    else {
         dispatch(setIsNotLoading());
-    });
+    }
 }
 
 // export function fetchUser(username, successHandler, failureHandler) {

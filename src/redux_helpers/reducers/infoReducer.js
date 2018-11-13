@@ -50,6 +50,11 @@ export default (state = initialState, action) => {
                 isLoading: !state.info.isLoading
             };
             break;
+        default:
+            state = {
+                ...state
+            };
+            break;
     }
     // alert("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
