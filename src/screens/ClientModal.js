@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
-import { Modal, Button, Item, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
-import QL from '../GraphQL';
+import { Label, Icon, Modal, Button, Item, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
-import AWSConfig from "../AppConfig";
 import ScheduledEventsList from "./ScheduledEventList";
 import InviteToScheduledEventsProp from "./InviteToScheduledEvents";
 import _ from "lodash";
-import EventCard from "./EventCard";
-
-// AWSConfig();
+import {fetchClient} from "../redux_helpers/actions/cacheActions";
 
 /*
 * Client Modal
@@ -20,7 +16,7 @@ class ClientModal extends Component {
     state = {
         error: null,
         isLoading: true,
-        client: null,
+        //clientID: null,
     };
 
     componentDidMount() {
@@ -29,29 +25,60 @@ class ClientModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
-            if (!this.state.client) {
-                this.setState({isLoading: true});
-                QL.getClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents"], (data) => {
-                    console.log("successfully retrieved the client");
-                    this.setState({isLoading: false, client: data})
-                }, (error) => {
-                    console.log("Failed to receive the client for the modal");
-                    this.setState({isLoading: false, error: error});
-                });
+            if (!this.state.clientID) {
+                this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                this.setState({clientID: newProps.clientID});
             }
+            // if (!this.state.client) {
+            //     this.setState({isLoading: true});
+            //     QL.getClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents"], (data) => {
+            //         console.log("successfully retrieved the client");
+            //         this.setState({isLoading: false, client: data})
+            //     }, (error) => {
+            //         console.log("Failed to receive the client for the modal");
+            //         this.setState({isLoading: false, error: error});
+            //     });
+            // }
+        }
+    }
+
+    getClientAttribute(attributeName) {
+        if (this.state.clientID) {
+            const client = this.props.cache.clients[this.state.clientID];
+            if (client) {
+                return client[attributeName];
+            }
+        }
+        else {
+            return null;
         }
     }
 
     handleAddFriendButton(friendID) {
         alert("Adding this friend!");
-        if (this.props.user.id && this.state.client) {
-            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.state.client.id,
+        if (this.props.user.id && this.getClientAttribute("id")) {
+            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClient().id,
                 (data) => {
-                    alert("Successfully added " + this.state.client.name + " as a friend!");
+                    alert("Successfully added " + this.getClient().name + " as a friend!");
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
                 });
+        }
+    }
+
+    profilePicture() {
+        if (this.getClientAttribute("profilePicture")) {
+            return(
+                <div className="u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}/>
+            );
+        }
+        else {
+            return(
+                <Dimmer inverted>
+                    <Loader />
+                </Dimmer>
+            );
         }
     }
 
@@ -77,14 +104,13 @@ class ClientModal extends Component {
             return null;
         }
 
-        if (!this.state.client) {
+        if (this.props.info.isLoading) {
             return(
                 <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Modal.Header>Loading...</Modal.Header>
                 </Modal>
             );
         }
-
         function button_rows(events) {
             //if(events != null)
             //alert(JSON.stringify(events[0]));
@@ -100,14 +126,18 @@ class ClientModal extends Component {
         //bottom there is an add buddy function, which sends out a buddy request (friend request).
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                {loadingProp(this.state.isLoading)}
-                {errorMessage(this.state.error)}
-                <Modal.Header>{this.state.client.name}</Modal.Header>
+                {loadingProp(this.props.info.isLoading)}
+                {errorMessage(this.props.info.error)}
+                <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
                 <Modal.Content image>
                     <Item>
                         <Item.Content>
+                            {this.profilePicture()}
+                        </Item.Content>
+                    </Item>
+                    <Item>
+                        <Item.Content>
                             <Item.Header as='a'><div>{}</div></Item.Header>
-                            <Item.Meta>Bio: </Item.Meta>
                             <Item.Description>
                                 <div>{}</div>
                             </Item.Description>
@@ -129,7 +159,7 @@ class ClientModal extends Component {
                                                     <ScheduledEventsList/>
                                                 </Grid.Column>
                                                 <Grid.Column>
-                                                    <InviteToScheduledEventsProp friendID={this.state.client.id}/>
+                                                    <InviteToScheduledEventsProp friendID={this.getClientAttribute("id")}/>
                                                 </Grid.Column>
                                             </Grid.Row>
                                         </Grid>
@@ -146,7 +176,16 @@ class ClientModal extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    cache: state.cache
+    cache: state.cache,
+    info: state.info
 });
 
-export default connect(mapStateToProps)(ClientModal);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ClientModal);
