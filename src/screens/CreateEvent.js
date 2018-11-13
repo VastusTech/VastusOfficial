@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
-import { Checkbox, Modal, Button, Input, Form, Segment, TextArea } from 'semantic-ui-react';
+import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Popup, Dropdown } from 'semantic-ui-react';
 import {
     DateInput,
     TimeInput,
@@ -12,7 +12,6 @@ import {connect} from "react-redux";
 import setupAWS from "../AppConfig";
 
 // setupAWS();
-
 
 function convertDateTimeToISO8601(dateAndTime) {
     let dateTimeString = String(dateAndTime);
@@ -69,6 +68,25 @@ class CreateEventProp extends Component {
         description: "",
         access: "public"
     };
+
+    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
+    monthOptions = [ { key: 'JAN', value: 'JAN', text: 'January' },
+                    { key: 'FEB', value: 'FEB', text: 'February' },
+                    { key: 'MAR', value: 'MAR', text: 'March' },
+                    { key: 'APR', value: 'APR', text: 'April' },
+                    { key: 'MAY', value: 'MAY', text: 'May' },
+                    { key: 'JUN', value: 'JUN', text: 'June' },
+                    { key: 'JUL', value: 'JUL', text: 'July' },
+                    { key: 'AUG', value: 'AUG', text: 'August' },
+                    { key: 'SEP', value: 'SEP', text: 'September' },
+                    { key: 'OCT', value: 'OCT', text: 'October' },
+                    { key: 'NOV', value: 'NOV', text: 'November' },
+                    { key: 'DEC', value: 'DEC', text: 'December' },];
+    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
+
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
 
     handleStartTimeChange = (event, {name, value}) => {
         if (this.state.hasOwnProperty(name)) {
@@ -157,27 +175,18 @@ class CreateEventProp extends Component {
                                 </div>
 
                                 <div className="field">
-                                    <label>Start Date and Time</label>
-                                    <DateTimeInput
-                                        name="dateTime"
-                                        placeholder="Start"
-                                        value={this.state.dateTime}
-                                        readonly="true"
-                                        iconPosition="left"
-                                        onChange={this.handleStartTimeChange}
-                                        timeFormat={this.state.timeFormat} />
+                                    <label>Event Date</label>
+                                    <input type="date"/>
                                 </div>
 
                                 <div className="field">
-                                    <label>End Date and Time</label>
-                                    <DateTimeInput
-                                        name="dateTimeEnd"
-                                        placeholder="End"
-                                        value={this.state.dateTimeEnd}
-                                        touchReadonly="true"
-                                        iconPosition="left"
-                                        onChange={this.handleEndTimeChange}
-                                        timeFormat={this.state.timeFormat}/>
+                                    <label>Start Time</label>
+                                    <input type="time"/>
+                                </div>
+
+                                <div className="field">
+                                    <label>End Time</label>
+                                    <input type="time"/>
                                 </div>
 
                                 <div className="field">
