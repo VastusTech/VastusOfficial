@@ -4,3 +4,4 @@
 
 @background: @black;
 @headerBackground: @black;
+@activeBackgroundColor: @lightBlack;
