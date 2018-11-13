@@ -69,25 +69,6 @@ class CreateEventProp extends Component {
         access: "public"
     };
 
-    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
-    monthOptions = [ { key: 'JAN', value: 'JAN', text: 'January' },
-                    { key: 'FEB', value: 'FEB', text: 'February' },
-                    { key: 'MAR', value: 'MAR', text: 'March' },
-                    { key: 'APR', value: 'APR', text: 'April' },
-                    { key: 'MAY', value: 'MAY', text: 'May' },
-                    { key: 'JUN', value: 'JUN', text: 'June' },
-                    { key: 'JUL', value: 'JUL', text: 'July' },
-                    { key: 'AUG', value: 'AUG', text: 'August' },
-                    { key: 'SEP', value: 'SEP', text: 'September' },
-                    { key: 'OCT', value: 'OCT', text: 'October' },
-                    { key: 'NOV', value: 'NOV', text: 'November' },
-                    { key: 'DEC', value: 'DEC', text: 'December' },];
-    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
-
-    handleDateChangeRaw = (e) => {
-        e.preventDefault();
-    }
-
     handleStartTimeChange = (event, {name, value}) => {
         if (this.state.hasOwnProperty(name)) {
             this.setState({ [name]: value });
