@@ -47,7 +47,6 @@ export default (state = initialState, action) => {
     switch (action.type) {
         case FETCH_CLIENT:
             // TODO Also make sure that the item to get also has all the attributes we desire?
-            alert(state);
             state = addObjectToCache(state, "clients", clientCacheSize, "clientLRUHandler", action.payload);
             break;
         case FETCH_TRAINER:

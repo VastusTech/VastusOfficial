@@ -41,6 +41,7 @@ class EventDescriptionModal extends Component {
         isLoading: false,
         isOwned: null,
         isJoined: null,
+        eventID: null,
         event: null,
         ownerName: null,
         members: {},

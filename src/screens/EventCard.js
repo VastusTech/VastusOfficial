@@ -98,7 +98,7 @@ class EventCard extends Component {
                     <Card.Description>
                         {String(this.state.event.goal + ", ")}
                     </Card.Description>
-                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event}/>
+                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} ifOwned={this.state.ifOwned} ifJoined={this.state.ifJoined} event={this.state.event} eventID={this.state.event.id}/>
                 </Card.Content>
                 <Card.Content extra>
                     {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}

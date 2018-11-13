@@ -31,7 +31,7 @@ export function fetchUserAttributes(id, variablesList) {
         // alert("Originally asked for variablesList = " + JSON.stringify(variablesList));
         // alert("UserKeyList = " + JSON.stringify(userKeyList));
         const filterVariablesList = variablesList.filter((v) => { return !userKeyList.includes(v) });
-        alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
+        // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
         overwriteFetchUserAttributes(id, filterVariablesList, dispatch);
     }
 }

@@ -1,19 +1,28 @@
 import { setIsNotLoading, setError, setIsLoading } from "./infoActions";
 import QL from "../../GraphQL";
 import { Storage } from "aws-amplify";
+import defaultProfilePicture from "../../img/roundProfile.png";
 
 function addProfilePictureToData(data, imageKey, callback) {
-    Storage.get(imageKey).then((url) => {
+    if (imageKey) {
+        Storage.get(imageKey).then((url) => {
+            callback({
+                ...data,
+                profilePicture: url
+            });
+        }).catch((error) => {
+            alert("ERROR IN GETTING PROFILE IMAGE FOR USER");
+            console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
+            console.log(error);
+            callback(data);
+        });
+    }
+    else {
         callback({
             ...data,
-            profilePicture: url
+            profilePicture: defaultProfilePicture
         });
-    }).catch((error) => {
-        alert("ERROR IN GETTING PROFILE IMAGE FOR USER");
-        console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
-        console.log(error);
-        callback(data);
-    });
+    }
 }
 function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
     return (dispatch, getStore) => {
@@ -36,7 +45,7 @@ function forceFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchTy
 function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
     if (profilePictureIndex !== -1) {
-        alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
@@ -53,10 +62,10 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         }
         QL[QLFunctionName](id, variablesList, (data) => {
             // alert("Successfully retrieved the QL info");
-            if (profilePictureIndex !== -1 && data.profileImagePath) {
-                alert("Adding profile image to the data");
+            if (profilePictureIndex !== -1) {
+                // alert("Adding profile image to the data");
                 addProfilePictureToData(data, data.profileImagePath, (updatedData) => {
-                    alert("Dispatching the profile image + data");
+                    // alert("Dispatching the profile image + data");
                     dispatch({
                         type: fetchDispatchType,
                         payload: updatedData
@@ -65,7 +74,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                 });
             }
             else {
-                alert("Just dispatching the normal data");
+                // alert("Just dispatching the normal data");
                 dispatch({
                     type: fetchDispatchType,
                     payload: data

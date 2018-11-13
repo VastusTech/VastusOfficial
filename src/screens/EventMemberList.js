@@ -12,8 +12,15 @@ class EventMemberList extends Component {
         isLoading: true,
         members: [],
         challengeID: null,
-        ifOwned: false
+        ifOwned: false,
+        clientModalOpen: false,
+        selectedClientID: null
     };
+
+    constructor(props) {
+        super(props);
+        this.openClientModal = this.openClientModal.bind(this);
+    }
 
     componentDidMount() {
         //if (this.props.members) {
@@ -28,47 +35,32 @@ class EventMemberList extends Component {
         //}
     }
 
-    render() {
-        function createCorrectButton(userID, winnerID, challengeID, isOwned) {
-            //alert("user: " + userID + " winner: " + winnerID + " challenge: " + challengeID + " Owned?: " + isOwned);
-            if(isOwned === true) {
-                return (
-                    <Button basic color='purple' onClick={() => {Lambda.completeChallenge(userID, winnerID, challengeID,
-                        (data) => {
-                            alert(JSON.stringify(data));
-                        }, (error) => {
-                            alert(JSON.stringify(error));
-                        })}}>
-                        Declare Winner
-                    </Button>
-                )
-            }
-        }
+    openClientModal = (id) => {this.setState({selectedClientID: id, clientModalOpen: true})};
+    closeClientModal = () => {this.setState({clientModalOpen: false})};
 
-        function rows(userID, members, challengeID, ifOwned)
+    render() {
+        // function createCorrectButton(userID, winnerID, challengeID, isOwned) {
+        //     //alert("user: " + userID + " winner: " + winnerID + " challenge: " + challengeID + " Owned?: " + isOwned);
+        //     if(isOwned === true) {
+        //         return (
+        //             <Button basic color='purple' onClick={() => {Lambda.completeChallenge(userID, winnerID, challengeID,
+        //                 (data) => {
+        //                     alert(JSON.stringify(data));
+        //                 }, (error) => {
+        //                     alert(JSON.stringify(error));
+        //                 })}}>
+        //                 Declare Winner
+        //             </Button>
+        //         )
+        //     }
+        // }
+
+        function rows(userID, members, handleClientPress)
         {
             //alert(members);
             return _.times(members.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Modal size='mini' trigger ={<div><Image src={proPic} circular avatar/>
-                        <span>{members[i]}</span></div>}>
-                        <Modal.Content image>
-                            <Item>
-                                <Item.Image size='medium' src={proPic} circular/>
-                                <Item.Content>
-                                    <Item.Header as='a'><div>{members[i]}</div></Item.Header>
-                                    <Item.Description>
-                                        <div>{}</div>
-                                    </Item.Description>
-                                    <Item.Extra>Friends: <div>{}</div></Item.Extra>
-                                    <Item.Extra>Event Wins: <div>{}</div></Item.Extra>
-                                </Item.Content>
-                            </Item>
-                        </Modal.Content>
-                    </Modal>
-                    <div>
-                        {createCorrectButton(userID, members[i], challengeID, ifOwned)}
-                    </div>
+                    <Button onClick={() => {handleClientPress(members[i])}}>{members[i]}</Button>
                 </Grid.Row>
             ));
         }
@@ -77,8 +69,16 @@ class EventMemberList extends Component {
                 <Message>Loading...</Message>
             )
         }
+        if (!this.state.selectedClientID) {
+            return(
+                <Grid>{rows(this.props.user.id, this.state.members, this.openClientModal)}</Grid>
+            );
+        }
         return(
-            <Grid>{rows(this.props.user.id, this.state.members, this.props.challengeID, this.props.ifOwned)}</Grid>
+            <Grid>
+                <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.selectedClientID}/>
+                {rows(this.props.user.id, this.state.members, this.openClientModal)}
+            </Grid>
         );
     }
 }

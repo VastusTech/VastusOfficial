@@ -16,7 +16,7 @@ class ClientModal extends Component {
     state = {
         error: null,
         isLoading: true,
-        //clientID: null,
+        clientID: null,
     };
 
     componentDidMount() {
