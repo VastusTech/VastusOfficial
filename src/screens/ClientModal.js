@@ -158,11 +158,6 @@ class ClientModal extends Component {
                     </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button inverted
-                            type='button'
-                            onClick={this.handleAddFriendButton.bind(this)}>
-                        Add Buddy
-                    </Button>
                     <Modal trigger={<Button primary>Invite to Challenge</Button>}>
                         <Grid columns='three' divided>
                             <Grid.Row>
@@ -175,6 +170,11 @@ class ClientModal extends Component {
                             </Grid.Row>
                         </Grid>
                     </Modal>
+                    <Button inverted
+                            type='button'
+                            onClick={this.handleAddFriendButton.bind(this)}>
+                        Add Buddy
+                    </Button>
                 </Modal.Actions>
             </Modal>
         );

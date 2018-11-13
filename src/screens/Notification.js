@@ -157,7 +157,7 @@ class Notification extends Component {
                                     </Feed.Summary>
                                     <Divider/>
                                     <Feed.Extra>
-                                        <Button floated="right" size="small" onClick={() => {
+                                        <Button inverted floated="right" size="small" onClick={() => {
                                             this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)
                                         }}>Deny</Button>
                                         <Button primary floated="right" size="small" onClick={() => {
