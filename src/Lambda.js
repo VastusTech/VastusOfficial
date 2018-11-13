@@ -1,4 +1,4 @@
-import AWSConfig from "./AppConfig";
+// import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
 
 // TODO Use this instead?
@@ -272,6 +272,7 @@ class Lambda {
         }, (error, data) => {
             if (error) {
                 console.log(error);
+                alert("Lambda failure: " + JSON.stringify(error));
                 failureHandler(error);
             } else if (data.Payload) {
                 //alert(data.Payload);
@@ -283,6 +284,7 @@ class Lambda {
                 }
                 else {
                     console.log("Successfully invoked lambda function!");
+                    alert("Successful Lambda, received " + JSON.stringify(payload));
                     successHandler(payload);
                 }
             }

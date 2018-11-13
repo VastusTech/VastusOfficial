@@ -1,19 +1,26 @@
 // import info, { infoFunctions, infoReducer } from './infoReducer';
 
 // This is where we will store all the retrieved database items and use a LRU cache to rid them if necessary
-const ADD_CLIENT = 'ADD_CLIENT';
-const ADD_TRAINER = 'ADD_TRAINER';
-const ADD_GYM = 'ADD_GYM';
-const ADD_WORKOUT = 'ADD_WORKOUT';
-const ADD_REVIEW = 'ADD_REVIEW';
-const ADD_EVENT = 'ADD_EVENT';
+const FETCH_CLIENT = 'FETCH_CLIENT';
+const FETCH_TRAINER = 'FETCH_TRAINER';
+const FETCH_GYM = 'FETCH_GYM';
+const FETCH_WORKOUT = 'FETCH_WORKOUT';
+const FETCH_REVIEW = 'FETCH_REVIEW';
+const FETCH_EVENT = 'FETCH_EVENT';
 
-const READ_CLIENT = 'READ_CLIENT';
-const READ_TRAINER = 'READ_TRAINER';
-const READ_GYM = 'READ_GYM';
-const READ_WORKOUT = 'READ_WORKOUT';
-const READ_REVIEW = 'READ_REVIEW';
-const READ_EVENT = 'READ_EVENT';
+// const READ_CLIENT = 'READ_CLIENT';
+// const READ_TRAINER = 'READ_TRAINER';
+// const READ_GYM = 'READ_GYM';
+// const READ_WORKOUT = 'READ_WORKOUT';
+// const READ_REVIEW = 'READ_REVIEW';
+// const READ_EVENT = 'READ_EVENT';
+
+const FETCH_CLIENT_QUERY = 'FETCH_CLIENT_QUERY';
+const FETCH_TRAINER_QUERY = 'FETCH_TRAINER_QUERY';
+const FETCH_GYM_QUERY = 'FETCH_GYM_QUERY';
+const FETCH_WORKOUT_QUERY = 'FETCH_WORKOUT_QUERY';
+const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
+const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
 
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
@@ -24,7 +31,7 @@ const reviewCacheSize = 100;
 const eventCacheSize = 2000;
 
 const initialState = {
-    // info,
+    // ID --> DatabaseObject
     clients: {},
     trainers: {},
     gyms: {},
@@ -32,12 +39,21 @@ const initialState = {
     reviews: {},
     events: {},
 
+    // List of IDs in order of least recently used
     clientLRUHandler: [],
     trainerLRUHandler: [],
     gymLRUHandler: [],
     workoutLRUHandler: [],
     reviewLRUHandler: [],
-    eventLRUHandler: []
+    eventLRUHandler: [],
+
+    // Cached queries.
+    clientQueries: {},
+    trainerQueries: {},
+    gymQueries: {},
+    workoutQueries: {},
+    reviewQueries: {},
+    eventQueries: {},
 };
 
 export default (state = initialState, action) => {
@@ -45,49 +61,108 @@ export default (state = initialState, action) => {
     //     return infoReducer(state, action);
     // }
     switch (action.type) {
-        case ADD_CLIENT:
+        case FETCH_CLIENT:
             // TODO Also make sure that the item to get also has all the attributes we desire?
             state = addObjectToCache(state, "clients", clientCacheSize, "clientLRUHandler", action.payload);
             break;
-        case ADD_TRAINER:
+        case FETCH_TRAINER:
             state = addObjectToCache(state, "trainers", trainerCacheSize, "trainerLRUHandler", action.payload);
             break;
-        case ADD_GYM:
+        case FETCH_GYM:
             state = addObjectToCache(state, "gyms", gymCacheSize, "gymLRUHandler", action.payload);
             break;
-        case ADD_WORKOUT:
+        case FETCH_WORKOUT:
             state = addObjectToCache(state, "workouts", workoutCacheSize, "workoutLRUHandler", action.payload);
             break;
-        case ADD_REVIEW:
+        case FETCH_REVIEW:
             state = addObjectToCache(state, "reviews", reviewCacheSize, "reviewLRUHandler", action.payload);
             break;
-        case ADD_EVENT:
+        case FETCH_EVENT:
             state = addObjectToCache(state, "events", eventCacheSize, "eventLRUHandler", action.payload);
             break;
-        case READ_CLIENT:
-            state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);
+        case FETCH_CLIENT_QUERY:
+            state = {
+                ...state,
+                clientQueries: {
+                    ...state.clientQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
-        case READ_TRAINER:
-            state = updateReadObject(state, "trainers", "trainerLRUHandler", action.payload);
+        case FETCH_TRAINER_QUERY:
+            state = {
+                ...state,
+                trainerQueries: {
+                    ...state.trainerQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
-        case READ_GYM:
-            state = updateReadObject(state, "gyms", "gymLRUHandler", action.payload);
+        case FETCH_GYM_QUERY:
+            state = {
+                ...state,
+                gymQueries: {
+                    ...state.gymQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
-        case READ_WORKOUT:
-            state = updateReadObject(state, "workouts", "workoutLRUHandler", action.payload);
+        case FETCH_WORKOUT_QUERY:
+            state = {
+                ...state,
+                workoutQueries: {
+                    ...state.workoutQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
-        case READ_REVIEW:
-            state = updateReadObject(state, "reviews", "reviewLRUHandler", action.payload);
+        case FETCH_REVIEW_QUERY:
+            state = {
+                ...state,
+                reviewQueries: {
+                    ...state.reviewQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
-        case READ_EVENT:
-            state = updateReadObject(state, "events", "eventLRUHandler", action.payload);
+        case FETCH_EVENT_QUERY:
+            state = {
+                ...state,
+                eventQueries: {
+                    ...state.eventQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        default:
+            state = {
+                ...state
+            };
+            break;
+        // case READ_CLIENT:
+        //     state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);
+        //     break;
+        // case READ_TRAINER:
+        //     state = updateReadObject(state, "trainers", "trainerLRUHandler", action.payload);
+        //     break;
+        // case READ_GYM:
+        //     state = updateReadObject(state, "gyms", "gymLRUHandler", action.payload);
+        //     break;
+        // case READ_WORKOUT:
+        //     state = updateReadObject(state, "workouts", "workoutLRUHandler", action.payload);
+        //     break;
+        // case READ_REVIEW:
+        //     state = updateReadObject(state, "reviews", "reviewLRUHandler", action.payload);
+        //     break;
+        // case READ_EVENT:
+        //     state = updateReadObject(state, "events", "eventLRUHandler", action.payload);
     }
     return state;
 };
 
 function addObjectToCache(state, cacheName, maxCacheSize, LRUHandlerName, object) {
     // TODO Check to see that this is all well-formed?
-    if (object.id) {
+    if (!object.id) {
         alert("Adding object to cache does not include the id!!!");
     }
     if (!state[cacheName][object.id]) {
@@ -109,7 +184,7 @@ function addObjectToCache(state, cacheName, maxCacheSize, LRUHandlerName, object
     }
     else {
         // TODO Update the object
-        updateReadObject(state, cacheName, LRUHandlerName, object);
+        return updateReadObject(state, cacheName, LRUHandlerName, object);
     }
 }
 
@@ -122,6 +197,7 @@ function updateReadObject(state, cacheName, LRUHandlerName, object) {
     if (index > -1) {
         LRUHandler.splice(index, 1);
     }
+    LRUHandler.unshift(object.id);
     state[LRUHandlerName] = LRUHandler;
     // Then we update the object with the additional fields that it may have (if this came from the other function)
     state[cacheName][object.id] = {

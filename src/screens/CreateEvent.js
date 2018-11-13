@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { API, graphqlOperation, Auth } from 'aws-amplify';
-import { Checkbox, Modal, Button, Input, Form, Segment, TextArea } from 'semantic-ui-react';
+import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Popup, Dropdown } from 'semantic-ui-react';
 import {
     DateInput,
     TimeInput,
@@ -12,7 +12,6 @@ import {connect} from "react-redux";
 import setupAWS from "../AppConfig";
 
 // setupAWS();
-
 
 function convertDateTimeToISO8601(dateAndTime) {
     let dateTimeString = String(dateAndTime);
@@ -69,6 +68,25 @@ class CreateEventProp extends Component {
         description: "",
         access: "public"
     };
+
+    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
+    monthOptions = [ { key: 'JAN', value: 'JAN', text: 'January' },
+                    { key: 'FEB', value: 'FEB', text: 'February' },
+                    { key: 'MAR', value: 'MAR', text: 'March' },
+                    { key: 'APR', value: 'APR', text: 'April' },
+                    { key: 'MAY', value: 'MAY', text: 'May' },
+                    { key: 'JUN', value: 'JUN', text: 'June' },
+                    { key: 'JUL', value: 'JUL', text: 'July' },
+                    { key: 'AUG', value: 'AUG', text: 'August' },
+                    { key: 'SEP', value: 'SEP', text: 'September' },
+                    { key: 'OCT', value: 'OCT', text: 'October' },
+                    { key: 'NOV', value: 'NOV', text: 'November' },
+                    { key: 'DEC', value: 'DEC', text: 'December' },];
+    yearOptions = [ { key: '18', value: '18', text: '2018' }, { key: '19', value: '19', text: '2019' }  ];
+
+    handleDateChangeRaw = (e) => {
+        e.preventDefault();
+    }
 
     handleStartTimeChange = (event, {name, value}) => {
         if (this.state.hasOwnProperty(name)) {
@@ -148,43 +166,21 @@ class CreateEventProp extends Component {
                                 <Form.Input label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
                                 <Form.Input label="Location" type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
                             </Form.Group>
-                            <Form.Group unstackable widths={2}>
-                                <Form.Field>
-                                    <label>Start Date and Time</label>
-                                    <DateTimeInput
-                                        name="dateTime"
-                                        placeholder="Start"
-                                        value={this.state.dateTime}
-                                        readonly="true"
-                                        iconPosition="left"
-                                        onChange={this.handleStartTimeChange}
-                                        timeFormat={this.state.timeFormat} />
-                                </Form.Field>
-
-                                <Form.Field>
-                                    <label>End Date and Time</label>
-                                    <DateTimeInput
-                                        name="dateTimeEnd"
-                                        placeholder="End"
-                                        value={this.state.dateTimeEnd}
-                                        touchReadonly="true"
-                                        iconPosition="left"
-                                        onChange={this.handleEndTimeChange}
-                                        timeFormat={this.state.timeFormat}/>
-                                </Form.Field>
+                            <Form.Group unstackable widths={3}>
+                                <Input type="date" label="Event Date" />
+                                <Input type="time" label="Start Time" />
+                                <Input type="time" label="End Time" />
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
                                 <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
                                 <Form.Input label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
                             </Form.Group>
-
                             <Form.Group>
                                 <Form.Field width={12}>
                                     <label>Event Description</label>
                                     <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
                                 </Form.Field>
                             </Form.Group>
-
                             <Form.Group>
                                 <Form.Field width={12}>
                                     <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />

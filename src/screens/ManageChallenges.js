@@ -1,4 +1,4 @@
-import {Tab, Card, Label, Icon, Menu, Item} from "semantic-ui-react";
+import { Tab } from "semantic-ui-react";
 import React, { Component } from "react";
 import ScheduledChallengesProp from "./ScheduledEventList";
 import OwnedChallengesProp from "./OwnedEventList";

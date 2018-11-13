@@ -1,18 +1,17 @@
-import React, { Component } from 'react'
-import {Button, Card, Modal, Checkbox, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
-import { Storage, Auth } from 'aws-amplify';
+import React, {  } from 'react'
+import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
+import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
-import TrophyCaseProp from "./TrophyCase";
+// import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
-import ChallengeManagerProp from "./ManageChallenges";
+// import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
-import proPic from '../img/roundProfile.png';
 import ScheduledEventList from "./ScheduledEventList";
 import OwnedEventList from "./OwnedEventList";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-import AWSSetup from "../AppConfig";
+// import AWSSetup from "../AppConfig";
 import {logOut} from "../redux_helpers/actions/authActions";
 
 // AWSSetup();
@@ -44,7 +43,7 @@ class Profile extends React.PureComponent {
         // alert("constructor");
         // alert("constructor props: " + JSON.stringify(props));
         super(props);
-        this.setState({isLoading: true, checked: false, error: null});
+        // this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
         this.setPicture = this.setPicture.bind(this);
         this.update = this.update.bind(this);
@@ -123,7 +122,7 @@ class Profile extends React.PureComponent {
                     (data) => {
                         //alert("successfully editted client");
                         //alert(JSON.stringify(data));
-                        this.props.fetchUserAttributes(this.props.user.id, ["profileImagePath", "profilePicture"]);
+                        this.props.forceFetchUserAttributes(this.props.user.id, ["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         alert("Failed edit client attribute");
@@ -285,6 +284,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchUserAttributes: (id, attributesList) => {
             dispatch(fetchUserAttributes(id, attributesList));
+        },
+        forceFetchUserAttributes: (id, variablesList) => {
+            dispatch(forceFetchUserAttributes(id, variablesList));
         },
         logOut: () => {
             dispatch(logOut());
