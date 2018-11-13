@@ -80,7 +80,7 @@ class OwnedEventsList extends Component {
                     //alert(JSON.stringify(events[key]));
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={row[key]}/>
+                            <EventCard eventID={row[key].id}/>
                         </Grid.Row>
                     );
                 }

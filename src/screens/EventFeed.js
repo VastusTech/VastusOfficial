@@ -5,6 +5,7 @@ import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 import ScheduledEventsList from "./ScheduledEventList";
+import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -42,16 +43,23 @@ class EventFeed extends Component {
 
     queryEvents() {
         this.setState({isLoading: true});
-
+        // alert("Queryin events. State = " + JSON.stringify(this.state));
         if (!this.state.ifFinished) {
-            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members", "capacity"], QL.generateFilter("and",
+            // alert(JSON.stringify(this.props.cache.eventQueries));
+            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"], QL.generateFilter("and",
                 {"access": "eq"}, {"access": "public"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (data.items) {
+                        // alert(JSON.stringify(data.items));
+                        // alert(JSON.stringify(this.state));
+                        this.setState({events: [...this.state.events, ...data.items]});
                         for (let i = 0; i < data.items.length; i++) {
                             //alert(data.items[i].time_created);
-                            this.setState({events: [...this.state.events, data.items[i]]});
+                            // alert("Putting in event: " + JSON.stringify(data.items[i]));
+                            // this.setState({events: [...this.state.events, data.items[i]]});
+                            this.props.putEvent(data.items[i]);
                         }
+                        // alert("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
                         if (!data.nextToken) {
                             this.setState({ifFinished: true});
@@ -66,7 +74,7 @@ class EventFeed extends Component {
                     console.log(error);
                     alert(error);
                     this.setState({isLoading: false, error: error});
-                });
+                }, this.props.cache.eventQueries, this.props.putEventQuery);
         }
     }
 
@@ -91,11 +99,13 @@ class EventFeed extends Component {
          * @returns {*}
          */
         function rows(events) {
-            //if(events != null)
-                //alert(JSON.stringify(events[0]));
+            // if(events != null && events.length > 0)
+            //     alert(JSON.stringify(events[0].id));
+            // alert("EVENTS TO PRINT: ");
+            // alert(JSON.stringify(events));
             return _.times(events.length, i => (
                 <Fragment key={i}>
-                    <EventCard event={events[i]}/>
+                    <EventCard eventID={events[i].id}/>
                 </Fragment>
             ));
         }
@@ -111,7 +121,22 @@ class EventFeed extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache
 });
 
-export default connect(mapStateToProps)(EventFeed);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        },
+        putEvent: (event) => {
+            dispatch(putEvent(event));
+        },
+        putEventQuery: (queryString, queryResult) => {
+            dispatch(putEventQuery(queryString, queryResult));
+        },
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(EventFeed);

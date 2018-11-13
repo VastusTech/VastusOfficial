@@ -113,3 +113,94 @@ export function fetchReview(id, variablesList) {
 export function fetchEvent(id, variablesList) {
     return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT");
 }
+// TODO Consider how this might scale? Another LRU Cache here?
+export function putClientQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_CLIENT_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putTrainerQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_TRAINER_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putGymQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_GYM_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putWorkoutQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_WORKOUT_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putReviewQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_REVIEW_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putEventQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_EVENT_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putClient(client) {
+    return {
+        type: "FETCH_EVENT",
+        payload: client
+    };
+}
+export function putTrainer(trainer) {
+    return {
+        type: "FETCH_EVENT",
+        payload: trainer
+    };
+}
+export function putGym(gym) {
+    return {
+        type: "FETCH_EVENT",
+        payload: gym
+    };
+}
+export function putWorkout(workout) {
+    return {
+        type: "FETCH_EVENT",
+        payload: workout
+    };
+}
+export function putReview(review) {
+    return {
+        type: "FETCH_EVENT",
+        payload: review
+    };
+}
+export function putEvent(event) {
+    return {
+        type: "FETCH_EVENT",
+        payload: event
+    };
+}

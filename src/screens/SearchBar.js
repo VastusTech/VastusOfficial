@@ -7,6 +7,7 @@ import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
 import ClientModal from "./ClientModal";
 import {connect} from "react-redux";
+import {putClientQuery, putEventQuery} from "../redux_helpers/actions/cacheActions";
 
 // setupAWS();
 
@@ -61,9 +62,7 @@ class SearchBarProp extends Component {
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));
                     if (data.items && data.items.length) {
-                        for (let i = 0; i < data.items.length; i++) {
-                            this.addResult(data.items[i]);
-                        }
+                        this.addResults(data.items);
                     }
                     this.setState({
                         nextEventQueryToken: data.nextToken,
@@ -80,7 +79,7 @@ class SearchBarProp extends Component {
                         nextEventQueryToken: null,
                         eventsLoading: false
                     });
-                });
+                }, this.props.cache.eventQueries, this.props.putEventQuery);
         }
     }
     loadMoreClientResults(searchQuery) {
@@ -102,9 +101,10 @@ class SearchBarProp extends Component {
                 (data) => {
                     console.log("Received clients query: " + JSON.stringify(data));
                     if (data.items && data.items.length) {
-                        for (let i = 0; i < data.items.length; i++) {
-                            this.addResult(data.items[i]);
-                        }
+                        // if (searchQuery === "Blake") {
+                        //     alert(JSON.stringify(data.items));
+                        // }
+                        this.addResults(data.items);
                     }
                     this.setState({
                         nextClientQueryToken: data.nextToken,
@@ -121,44 +121,51 @@ class SearchBarProp extends Component {
                         nextClientQueryToken: null,
                         clientsLoading: false
                     });
-                });
+                }, this.props.cache.clientQueries, this.props.putClientQuery);
         }
     }
-    addResult(item) {
-        if (item) {
-            if (item.hasOwnProperty("item_type")) {
-                var result;
-                if (item.item_type === "Client") {
-                    result = {
-                        title: item.name,
-                        description: item.username,
-                        content: item
-                    };
+    addResults(items) {
+        const results = [];
+        for (let i = 0; i < items.length; i++) {
+            const item = items[i];
+            if (item) {
+                if (item.hasOwnProperty("item_type")) {
+                    var result;
+                    if (item.item_type === "Client") {
+                        result = {
+                            title: item.username,
+                            description: item.name,
+                            resultcontent: item
+                        };
+                    }
+                    else if (item.item_type === "Event") {
+                        result = {
+                            title: (item.title + " ~ (" + item.id + ")"),
+                            description: item.goal,
+                            resultcontent: item
+                        };
+                    }
+                    else {
+                        alert("item has item_type of " + item.item_type + " for some reason?");
+                        return;
+                    }
+                    results.push(result);
                 }
-                else if (item.item_type === "Event") {
-                    result = {
-                        title: (item.title + " ~ (" + item.id + ")"),
-                        description: item.goal,
-                        content: item
-                    };
-                }
-                else {
-                    alert("item has item_type of " + item.item_type + " for some reason?");
-                    return;
-                }
-                this.setState({searchResults: [...this.state.searchResults, result]})
             }
         }
+        this.setState({searchResults: [...this.state.searchResults, ...results]});
     }
 
     handleResultSelect = (e, { result }) => {
         // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        this.setState({result: result.content, resultModalOpen: true});
+        this.setState({result: result.resultcontent, resultModalOpen: true});
     };
 
     handleSearchChange = (e, { value }) => {
         console.log(value);
         this.resetComponent();
+        //this.setState({searchResults: []});
+        this.state.searchResults = [];
         this.setState({ searchQuery: value });
         console.log("Handling search change, state = " + JSON.stringify(this.state));
         if (value.length < 1) return;
@@ -226,7 +233,19 @@ class SearchBarProp extends Component {
 }
 
 const mapStateToProps = state => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache
 });
 
-export default connect(mapStateToProps)(SearchBarProp);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        putClientQuery: (queryString, queryResult) => {
+            dispatch(putClientQuery(queryString, queryResult));
+        },
+        putEventQuery: (queryString, queryResult) => {
+            dispatch(putEventQuery(queryString, queryResult));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchBarProp);

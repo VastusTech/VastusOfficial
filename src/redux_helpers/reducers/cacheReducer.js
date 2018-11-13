@@ -15,6 +15,13 @@ const FETCH_EVENT = 'FETCH_EVENT';
 // const READ_REVIEW = 'READ_REVIEW';
 // const READ_EVENT = 'READ_EVENT';
 
+const FETCH_CLIENT_QUERY = 'FETCH_CLIENT_QUERY';
+const FETCH_TRAINER_QUERY = 'FETCH_TRAINER_QUERY';
+const FETCH_GYM_QUERY = 'FETCH_GYM_QUERY';
+const FETCH_WORKOUT_QUERY = 'FETCH_WORKOUT_QUERY';
+const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
+const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
+
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
 const trainerCacheSize = 100;
@@ -24,7 +31,7 @@ const reviewCacheSize = 100;
 const eventCacheSize = 2000;
 
 const initialState = {
-    // info,
+    // ID --> DatabaseObject
     clients: {},
     trainers: {},
     gyms: {},
@@ -32,12 +39,21 @@ const initialState = {
     reviews: {},
     events: {},
 
+    // List of IDs in order of least recently used
     clientLRUHandler: [],
     trainerLRUHandler: [],
     gymLRUHandler: [],
     workoutLRUHandler: [],
     reviewLRUHandler: [],
-    eventLRUHandler: []
+    eventLRUHandler: [],
+
+    // Cached queries.
+    clientQueries: {},
+    trainerQueries: {},
+    gymQueries: {},
+    workoutQueries: {},
+    reviewQueries: {},
+    eventQueries: {},
 };
 
 export default (state = initialState, action) => {
@@ -63,6 +79,60 @@ export default (state = initialState, action) => {
             break;
         case FETCH_EVENT:
             state = addObjectToCache(state, "events", eventCacheSize, "eventLRUHandler", action.payload);
+            break;
+        case FETCH_CLIENT_QUERY:
+            state = {
+                ...state,
+                clientQueries: {
+                    ...state.clientQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_TRAINER_QUERY:
+            state = {
+                ...state,
+                trainerQueries: {
+                    ...state.trainerQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_GYM_QUERY:
+            state = {
+                ...state,
+                gymQueries: {
+                    ...state.gymQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_WORKOUT_QUERY:
+            state = {
+                ...state,
+                workoutQueries: {
+                    ...state.workoutQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_REVIEW_QUERY:
+            state = {
+                ...state,
+                reviewQueries: {
+                    ...state.reviewQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_EVENT_QUERY:
+            state = {
+                ...state,
+                eventQueries: {
+                    ...state.eventQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
             break;
         // case READ_CLIENT:
         //     state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);

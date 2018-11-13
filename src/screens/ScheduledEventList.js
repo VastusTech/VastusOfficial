@@ -85,7 +85,7 @@ class ScheduledEventsList extends Component {
                 if (row.hasOwnProperty(key) === true) {
                     rowProps.push(
                         <Grid.Row className="ui one column stackable center aligned page grid">
-                            <EventCard event={row[key]}/>
+                            <EventCard eventID={row[key].id}/>
                         </Grid.Row>
                     );
                 }

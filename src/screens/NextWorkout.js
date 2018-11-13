@@ -72,7 +72,7 @@ class NextEventProp extends Component {
             return (
                 <div>
                     <Label>Next Scheduled Event</Label>
-                    <EventCard owner={row[0].id} event={row[0]}/>
+                    <EventCard eventID={row[0].id}/>
                 </div>
             );
         }

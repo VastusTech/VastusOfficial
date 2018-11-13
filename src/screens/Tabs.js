@@ -14,7 +14,7 @@ import ScheduledEventsList from "./ScheduledEventList";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 3, size: "medium", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 3, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:

@@ -25,7 +25,7 @@ class ClientModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
-            if (!this.state.clientID) {
+            if (this.state.clientID !== newProps.clientID) {
                 this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                 this.setState({clientID: newProps.clientID});
             }
