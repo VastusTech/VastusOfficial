@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Button, List, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
+import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "./ScheduledEventList";
@@ -70,7 +70,7 @@ class ClientModal extends Component {
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
             return(
-                <div className="u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}/>
+                <Image wrapped size="small" circular src={this.getClientAttribute("profilePicture")} />
             );
         }
         else {
@@ -129,12 +129,12 @@ class ClientModal extends Component {
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
-                <Modal.Content>
+                <Modal.Content image>
+                    {this.profilePicture()}
                     <Modal.Description>
                         <List relaxed>
                             {/* Bio */}
                             <List.Item>
-                                {this.profilePicture()}
                                 <List.Icon name='user' />
                                 <List.Content>
                                     {}
