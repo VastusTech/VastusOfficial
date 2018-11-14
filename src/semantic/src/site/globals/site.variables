@@ -5,6 +5,7 @@
 // Out of scope vars (not in Semantic)
 
 @primaryGradient: linear-gradient(135deg, #7F47AE, #7D82B8);
+@bgColor: #49465f;
 
 /** In-scope Vars
   * Inverted state is poorly supported in Semantic UI React,
