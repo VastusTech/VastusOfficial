@@ -6,7 +6,7 @@
 
 @primaryGradient: linear-gradient(135deg, #7F47AE, #7D82B8);
 
-/**
+/** In-scope Vars
   * Inverted state is poorly supported in Semantic UI React,
   * so we have to set our dark theme based on not using
   * inverted. 🤦‍
