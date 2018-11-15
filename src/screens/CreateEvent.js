@@ -144,60 +144,43 @@ class CreateEventProp extends Component {
 
                         <Form onSubmit={this.handleSubmit}>
                             <Form.Group unstackable widths={2}>
-
-                                <div className="field">
-                                    <label>Title</label>
-                                    <Input type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Location</label>
-                                    <Input type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
-                                </div>
-
+                                <Form.Input label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
+                                <Form.Input label="Location" type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
+                            </Form.Group>
+                            <Form.Group unstackable widths={3}>
                                 <div className="field">
                                     <label>Event Date</label>
                                     <input type="date"/>
                                 </div>
-
                                 <div className="field">
                                     <label>Start Time</label>
                                     <input type="time"/>
                                 </div>
-
                                 <div className="field">
                                     <label>End Time</label>
                                     <input type="time"/>
                                 </div>
-
-                                <div className="field">
-                                    <label>Capacity</label>
-                                    <Input type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Goal</label>
-                                    <Input type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                </div>
-
                             </Form.Group>
-
-                            <div className="Event Description">
-                                <label>Event Description</label>
-                                <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
-                            </div>
-
-                            <div className="Submit Button">
-                                <Button type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
-                            </div>
-
-                            <div className="Privacy Switch">
-                                <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked}/>
-                                <div>{this.eventState.access}</div>
-                            </div>
-
+                            <Form.Group unstackable widths={2}>
+                                <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
+                                <Form.Input label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Field width={12}>
+                                    <label>Event Description</label>
+                                    <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
+                                </Form.Field>
+                            </Form.Group>
+                            <Form.Group>
+                                <Form.Field width={12}>
+                                    <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
+                                </Form.Field>
+                            </Form.Group>
                         </Form>
                     </Modal.Content>
+                    <Modal.Actions>
+                        <Button primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
+                    </Modal.Actions>
                 </Modal>
             </Segment>
         );

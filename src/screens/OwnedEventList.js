@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import {Grid, Message} from 'semantic-ui-react';
+import { Message, List } from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from '../GraphQL';
 import { connect } from 'react-redux';
@@ -93,9 +93,9 @@ class OwnedEventsList extends Component {
             for (const key in row) {
                 if (row.hasOwnProperty(key) === true) {
                     rowProps.push(
-                        <Grid.Row key={key} className="ui one column stackable center aligned page grid">
+                        <List.Item>
                             <EventCard eventID={row[key]}/>
-                        </Grid.Row>
+                        </List.Item>
                     );
                 }
             }
@@ -109,7 +109,7 @@ class OwnedEventsList extends Component {
             )
         }
         return(
-            <Grid>{rows(this.props.user.ownedEvents)}</Grid>
+            <List>{rows(this.props.user.ownedEvents)}</List>
         );
     }
 }

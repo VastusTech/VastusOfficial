@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Dimmer, Loader, Grid} from 'semantic-ui-react'
 // import { Operation } from "aws-amplify";
@@ -95,8 +95,10 @@ class NotificationFeed extends Component {
             }
         }
         return(
-            <Grid>{friendRows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate.bind(this))}
-            {challengeRows(this.props.user.invitedEvents, this.props.user.id)}</Grid>
+            <Fragment>
+                {friendRows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate.bind(this))}
+                {challengeRows(this.props.user.invitedEvents, this.props.user.id)}
+            </Fragment>
         );
     }
 }

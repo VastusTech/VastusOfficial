@@ -3,7 +3,7 @@
 *******************************/
 
 body {
-  background-color: #49465f; // Refactor into var
+  background-color: @bgColor;
 }
 
 // **
@@ -25,6 +25,8 @@ body {
   background-size: cover;
   background-position: center;
   border-radius: 50%;
+  border: 2px solid @bgColor;
+  position: relative;
 }
 
 .u-margin-top--1 {

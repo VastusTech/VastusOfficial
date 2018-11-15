@@ -1,11 +1,12 @@
 import React, { Component } from 'react'
-import {Button, Grid, Message} from 'semantic-ui-react';
+import { Button, List, Message, Image } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import Lambda from "../Lambda";
 import { inspect } from 'util';
+import proPic from '../img/BlakeProfilePic.jpg';
 
 class BuddyListProp extends Component {
     state = {
@@ -80,20 +81,24 @@ class BuddyListProp extends Component {
                 if (friends.hasOwnProperty(key) === true) {
                     //alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
-                            <ClientModal open={openBool} onClose={closeModal} clientID={friends[key].id}/>
-                            <Button basic color='purple' onClick={openModal}>{friends[key].id}</Button>
-                            <div>
-                                <Button basic color='purple' onClick={() => {
+                        <List.Item>
+                            <List.Content floated="right">
+                                <Button inverted onClick={() => {
                                     Lambda.removeFriend(userID, userID, friends[key].id,
                                         (data) => {
                                             alert("Successfully declined " + friends[key].id + " as a friend!");
                                         }, (error) => {
                                             alert(JSON.stringify(error));
                                             this.setState({error: error});
-                                        })}}>Remove Buddy</Button>
-                            </div>
-                        </Grid.Row>
+                                        })}}>Remove Buddy
+                                </Button>
+                            </List.Content>
+                            <Image avatar src={proPic} circular/>
+                            <List.Content as="a" onClick={openModal}>
+                                <ClientModal open={openBool} onClose={closeModal} clientID={friends[key].id}/>
+                                {friends[key].id}
+                            </List.Content>
+                        </List.Item>
                     );
                 }
             }
@@ -106,9 +111,9 @@ class BuddyListProp extends Component {
             )
         }
         return(
-            <div>
-                <Grid>{rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id)}</Grid>
-            </div>
+            <List relaxed divided verticalAlign="middle">
+                {rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id)}
+            </List>
         );
     }
 }

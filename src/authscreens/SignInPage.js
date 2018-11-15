@@ -5,7 +5,7 @@ import Semantic, { Input, Grid, Form, Header, Button, Image, Segment, Message, M
 import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import Logo from '../img/vt_on_black.png';
+import Logo from '../img/vt_on_black_new.png';
 import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
 import {setError} from "../redux_helpers/actions/infoActions";
 

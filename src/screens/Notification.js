@@ -1,6 +1,6 @@
 import React, {Component} from 'react'
 import _ from 'lodash'
-import {Image, Modal, Button, Dimmer, Loader, Card, Feed, Icon, Divider, Grid} from 'semantic-ui-react'
+import {Image, Modal, Grid, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
 import { API, Auth, graphqlOperation } from "aws-amplify";
 import setupAWS from '../AppConfig';
 import proPic from "../img/BlakeProfilePic.jpg";
@@ -157,7 +157,7 @@ class Notification extends Component {
                                     </Feed.Summary>
                                     <Divider/>
                                     <Feed.Extra>
-                                        <Button floated="right" size="small" onClick={() => {
+                                        <Button inverted floated="right" size="small" onClick={() => {
                                             this.handleDeclineFriendRequestButton(this.state.userID, this.state.friendRequestID)
                                         }}>Deny</Button>
                                         <Button primary floated="right" size="small" onClick={() => {
