@@ -167,9 +167,18 @@ class CreateEventProp extends Component {
                                 <Form.Input label="Location" type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
                             </Form.Group>
                             <Form.Group unstackable widths={3}>
-                                <Input type="date" label="Event Date" />
-                                <Input type="time" label="Start Time" />
-                                <Input type="time" label="End Time" />
+                                <div className="field">
+                                    <label>Event Date</label>
+                                    <input type="date"/>
+                                </div>
+                                <div className="field">
+                                    <label>Start Time</label>
+                                    <input type="time"/>
+                                </div>
+                                <div className="field">
+                                    <label>End Time</label>
+                                    <input type="time"/>
+                                </div>
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
                                 <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>

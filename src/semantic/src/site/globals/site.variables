@@ -13,6 +13,11 @@
   * inverted. 🤦‍
  **/
 
+@fontName          : 'Source Sans Pro';
+
+@emSize   : 15px;
+@fontSize : 15px;
+
 @primaryColor        : #7F47AE;
 @secondaryColor      : @black;
 
