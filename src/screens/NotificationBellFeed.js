@@ -30,7 +30,7 @@ class NotificationFeed extends Component {
 
     componentDidMount() {
         //this.setState({isLoading: true});
-        this.update();
+        // this.update();
         this._isMounted = true;
     }
 
@@ -40,7 +40,6 @@ class NotificationFeed extends Component {
 
     componentWillReceiveProps(newProps) {
         //this.setState({isLoading: true});
-        this.props = newProps;
         this.update();
     }
 

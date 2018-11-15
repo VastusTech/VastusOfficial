@@ -95,6 +95,64 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         dispatch(setIsNotLoading());
     }
 }
+function batchFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
+    // TODO Check to see if this has already been fulfilled
+    // TODO Check to see if we have already called the same batch fetch query (add a set in the cache?)
+    // TODO Maybe also try to remove variables based on that
+}
+function batchForceFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
+    return (dispatch) => {
+        dispatch(setIsLoading());
+        batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch);
+    };
+}
+function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch) {
+    const profilePictureIndex = variablesList.indexOf("profilePicture");
+    if (profilePictureIndex !== -1) {
+        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        variablesList.splice(profilePictureIndex, 1);
+        // Add
+        if (!variablesList.includes("profileImagePath")) {
+            alert("lmao you forgot to include the profile image path, I'll include it tho, no worries");
+            variablesList = [
+                ...variablesList,
+                "profileImagePath"
+            ]
+        }
+    }
+    QL[QLFunctionName](ids, variablesList, (data) => {
+        if (data.hasOwnProperty("items") && data.items && data.items.length) {
+            if (profilePictureIndex !== -1) {
+                for (let i = 0; i < data.items.length; i++) {
+                    const item = data.items[i];
+                    addProfilePictureToData(item, item.profileImagePath, (updatedData) => {
+                        dispatch({
+                            type: fetchDispatchType,
+                            payload: updatedData
+                        });
+                    });
+
+                }
+            }
+            else {
+                for (let i = 0; i < data.items.length; i++) {
+                    dispatch({
+                        type: fetchDispatchType,
+                        payload: data.items[i]
+                    });
+                }
+            }
+            dispatch(setIsNotLoading());
+        }
+        if (data.hasOwnProperty("unprocessedItems") && data.unprocessedItems) {
+            // TODO Load it in again until you get the whole thing? Might be dangerous with large lists though...
+            alert("We have unprocessed items in the batch get!");
+        }
+    }, (error) => {
+        dispatch(setError(error));
+        dispatch(setIsNotLoading());
+    })
+}
 export function fetchClient(id, variablesList) {
     return fetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT");
 }
@@ -113,14 +171,15 @@ export function fetchReview(id, variablesList) {
 export function fetchEvent(id, variablesList) {
     return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT");
 }
+export function fetchClients(ids, variablesList) {
+
+}
 // TODO Consider how this might scale? Another LRU Cache here?
 export function putClientQuery(queryString, queryResult) {
-    return {
-        type: "FETCH_CLIENT_QUERY",
-        payload: {
-            queryString,
-            queryResult
-        }
+    return (dispatch) => {
+        dispatch(putQuery(queryString, queryResult, "FETCH_CLIENT_QUERY"));
+        // dispatch(setIsLoading());
+        // TODO Should we take the time to put all the query clients into the cache as well? Is our cache hurting our performance?
     };
 }
 export function putTrainerQuery(queryString, queryResult) {
@@ -162,6 +221,15 @@ export function putReviewQuery(queryString, queryResult) {
 export function putEventQuery(queryString, queryResult) {
     return {
         type: "FETCH_EVENT_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+function putQuery(queryString, queryResult, actionType) {
+    return {
+        type: actionType,
         payload: {
             queryString,
             queryResult

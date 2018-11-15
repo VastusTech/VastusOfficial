@@ -17,6 +17,7 @@ class ClientModal extends Component {
         error: null,
         isLoading: true,
         clientID: null,
+        sentRequest: false
     };
 
     componentDidMount() {
@@ -25,9 +26,10 @@ class ClientModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
-            if (this.state.clientID !== newProps.clientID) {
+            if (this.state.clientID !== newProps.clientID && !this.state.sentRequest) {
                 this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                 this.setState({clientID: newProps.clientID});
+                this.state.sentRequest = true;
             }
             // if (!this.state.client) {
             //     this.setState({isLoading: true});

@@ -30,6 +30,14 @@ const workoutCacheSize = 100;
 const reviewCacheSize = 100;
 const eventCacheSize = 2000;
 
+// TODO The query cache sizes might be important if the user is searching for a lot
+const clientQueryCacheSize = 0;
+const trainerQueryCacheSize = 0;
+const gymQueryCacheSize = 0;
+const workoutQueryCacheSize = 0;
+const reviewQueryCacheSize = 0;
+const eventQueryCacheSize = 0;
+
 const initialState = {
     // ID --> DatabaseObject
     clients: {},
@@ -54,6 +62,15 @@ const initialState = {
     workoutQueries: {},
     reviewQueries: {},
     eventQueries: {},
+
+    // TODO Include LRU Handlers for these as well!
+    // TODO Actually use these
+    clientQueryLRUHandler: [],
+    trainerQueryLRUHandler: [],
+    gymQueryLRUHandler: [],
+    workoutQueryLRUHandler: [],
+    reviewQueryLRUHandler: [],
+    eventQueryLRUHandler: [],
 };
 
 export default (state = initialState, action) => {
@@ -139,23 +156,6 @@ export default (state = initialState, action) => {
                 ...state
             };
             break;
-        // case READ_CLIENT:
-        //     state = updateReadObject(state, "clients", "clientLRUHandler", action.payload);
-        //     break;
-        // case READ_TRAINER:
-        //     state = updateReadObject(state, "trainers", "trainerLRUHandler", action.payload);
-        //     break;
-        // case READ_GYM:
-        //     state = updateReadObject(state, "gyms", "gymLRUHandler", action.payload);
-        //     break;
-        // case READ_WORKOUT:
-        //     state = updateReadObject(state, "workouts", "workoutLRUHandler", action.payload);
-        //     break;
-        // case READ_REVIEW:
-        //     state = updateReadObject(state, "reviews", "reviewLRUHandler", action.payload);
-        //     break;
-        // case READ_EVENT:
-        //     state = updateReadObject(state, "events", "eventLRUHandler", action.payload);
     }
     return state;
 };
