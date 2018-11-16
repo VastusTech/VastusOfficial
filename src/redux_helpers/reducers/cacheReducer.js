@@ -7,6 +7,7 @@ const FETCH_GYM = 'FETCH_GYM';
 const FETCH_WORKOUT = 'FETCH_WORKOUT';
 const FETCH_REVIEW = 'FETCH_REVIEW';
 const FETCH_EVENT = 'FETCH_EVENT';
+const FETCH_INVITE = 'FETCH_INVITE';
 
 // const READ_CLIENT = 'READ_CLIENT';
 // const READ_TRAINER = 'READ_TRAINER';
@@ -21,6 +22,7 @@ const FETCH_GYM_QUERY = 'FETCH_GYM_QUERY';
 const FETCH_WORKOUT_QUERY = 'FETCH_WORKOUT_QUERY';
 const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
 const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
+const FETCH_INVITE_QUERY = 'FETCH_INVITE_QUERY';
 
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
@@ -29,6 +31,7 @@ const gymCacheSize = 100;
 const workoutCacheSize = 100;
 const reviewCacheSize = 100;
 const eventCacheSize = 2000;
+const inviteCacheSize = 100;
 
 // TODO The query cache sizes might be important if the user is searching for a lot
 const clientQueryCacheSize = 0;
@@ -37,6 +40,7 @@ const gymQueryCacheSize = 0;
 const workoutQueryCacheSize = 0;
 const reviewQueryCacheSize = 0;
 const eventQueryCacheSize = 0;
+const inviteQueryCacheSize = 0;
 
 const initialState = {
     // ID --> DatabaseObject
@@ -46,6 +50,7 @@ const initialState = {
     workouts: {},
     reviews: {},
     events: {},
+    invites: {},
 
     // List of IDs in order of least recently used
     clientLRUHandler: [],
@@ -54,6 +59,7 @@ const initialState = {
     workoutLRUHandler: [],
     reviewLRUHandler: [],
     eventLRUHandler: [],
+    inviteLRUHandler: [],
 
     // Cached queries.
     clientQueries: {},
@@ -62,6 +68,7 @@ const initialState = {
     workoutQueries: {},
     reviewQueries: {},
     eventQueries: {},
+    inviteQueries: {},
 
     // TODO Include LRU Handlers for these as well!
     // TODO Actually use these
@@ -71,6 +78,7 @@ const initialState = {
     workoutQueryLRUHandler: [],
     reviewQueryLRUHandler: [],
     eventQueryLRUHandler: [],
+    inviteQueryLRUHandler: [],
 };
 
 export default (state = initialState, action) => {
@@ -97,6 +105,8 @@ export default (state = initialState, action) => {
         case FETCH_EVENT:
             state = addObjectToCache(state, "events", eventCacheSize, "eventLRUHandler", action.payload);
             break;
+        case FETCH_INVITE:
+            state = addObjectToCache(state, "invites", inviteCacheSize, "inviteLRUHandler", action.payload);
         case FETCH_CLIENT_QUERY:
             state = {
                 ...state,
@@ -147,6 +157,15 @@ export default (state = initialState, action) => {
                 ...state,
                 eventQueries: {
                     ...state.eventQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
+        case FETCH_INVITE_QUERY:
+            state = {
+                ...state,
+                inviteQueries: {
+                    ...state.inviteQueries,
                     [action.payload.queryString]: action.payload.queryResult
                 }
             };
