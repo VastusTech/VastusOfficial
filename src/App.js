@@ -6,6 +6,7 @@ import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
+import ItemType, { getItemTypeFromID } from "./ItemType";
 
 AWSConfig();
 
@@ -17,6 +18,7 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+        alert(getItemTypeFromID("CL0123456789"));
     }
 
     // async authenticate(user) {

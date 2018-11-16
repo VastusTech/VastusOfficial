@@ -119,7 +119,7 @@ class EventCard extends Component {
                     <Card.Description>
                         {String(this.getEventAttribute("goal") + ", " + this.getEventAttribute("difficulty"))}
                     </Card.Description>
-                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} members={this.state.members} eventID={this.state.eventID}/>
+                    <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/>
                 </Card.Content>
                 <Card.Content extra>
                     {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}

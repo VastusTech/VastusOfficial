@@ -5,6 +5,7 @@ import {Dimmer, Loader, Grid} from 'semantic-ui-react'
 import Notification from "./Notification";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
+import {fetchInvite} from "../redux_helpers/actions/cacheActions";
 
 /*
 * Notification Feed
@@ -44,23 +45,32 @@ class NotificationFeed extends Component {
     }
 
     update = () => {
-        //alert("Updooting");
         const user = this.props.user;
+        //alert("Updating Scheduled Events");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
         }
-        if (!this.props.user.hasOwnProperty("friendRequests") && !this.props.info.isLoading) {
+
+        if (this.state.isLoading && user.hasOwnProperty("receivedInvites") && user.receivedInvites && user.receivedInvites.length) {
+            this.setState({isLoading: false});
+            for (let i = 0; i < user.receivedInvites.length; i++) {
+                this.props.fetchEvent(user.receivedInvites[i], ["time_created", "from", "inviteType", "about", "description"]);
+                // if (!(user.scheduledEvents[i] in this.state.events)) {
+                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
+                // }
+            }
+        }
+        else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["id", "friendRequests", "invitedEvents"]);
-                //if(this._isMounted)
-                    this.setState({sentRequest: true, isLoading: false});
+                this.props.fetchUserAttributes(user.id, ["receivedInvites"]);
+                this.setState({sentRequest: true});
             }
         }
     };
 
     forceUpdate = () => {
-        this.props.forceFetchUserAttributes(this.props.user.id, ["friendRequests"]);
+        this.props.forceFetchUserAttributes(this.props.user.id, ["receivedInvites"]);
     };
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
@@ -114,6 +124,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         forceFetchUserAttributes: (id, attributeList) => {
             dispatch(forceFetchUserAttributes(id, attributeList));
+        },
+        fetchInvite: (id, variablesList) => {
+            dispatch(fetchInvite(id, variablesList));
         }
     }
 };

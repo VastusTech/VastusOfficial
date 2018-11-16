@@ -72,7 +72,7 @@ class ScheduledEventsList extends Component {
 
     componentWillReceiveProps(newProps) {
         //alert("Receevin props");
-        this.props = newProps;
+        // this.props = newProps;
         this.update();
     }
 
