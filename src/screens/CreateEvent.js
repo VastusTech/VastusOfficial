@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { API, graphqlOperation, Auth } from 'aws-amplify';
-import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Popup, Dropdown } from 'semantic-ui-react';
+import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Dropdown } from 'semantic-ui-react';
 import {
     DateInput,
     TimeInput,
@@ -9,9 +8,6 @@ import {
 } from 'semantic-ui-calendar-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
-import setupAWS from "../AppConfig";
-
-// setupAWS();
 
 function convertDateTimeToISO8601(dateAndTime) {
     let dateTimeString = String(dateAndTime);
@@ -37,6 +33,23 @@ function convertDateTimeToISO8601(dateAndTime) {
     }
 }
 
+const timeOptions = [ { key: '0:15', value: '0:15', text: '0:15' },
+    { key: '0:30', value: '0:30', text: '0:30' },
+    { key: '0:45', value: '0:45', text: '0:45' },
+    { key: '1:00', value: '1:00', text: '1:00' },
+    { key: '1:15', value: '1:15', text: '1:15' },
+    { key: '1:30', value: '1:30', text: '1:30' },
+    { key: '1:45', value: '1:45', text: '1:45' },
+    { key: '2:00', value: '2:00', text: '2:00' },
+    { key: '2:15', value: '2:15', text: '2:15' },
+    { key: '2:30', value: '2:30', text: '2:30' },
+    { key: '2:45', value: '2:45', text: '2:45' },
+    { key: '3:00', value: '3:00', text: '3:00' },
+    { key: '3:00+', value: '3:00+', text: '3:00+' }
+];
+
+alert(timeOptions[1].text);
+
 /*
 * Create Event Prop
 *
@@ -47,9 +60,8 @@ class CreateEventProp extends Component {
 
     state = {
         date: '',
-        time: '',
-        dateTime: '',
-        dateTimeEnd: '',
+        startDateTime: '',
+        duration: '',
         datesRange: '',
         timeFormat: 'AMPM',
         checked: false
@@ -59,7 +71,8 @@ class CreateEventProp extends Component {
 
     eventState = {
         title: "",
-        date: "",
+        startDateTime: "",
+        duration: "",
         location: "",
         time: "",
         time_created: "",
@@ -69,25 +82,16 @@ class CreateEventProp extends Component {
         access: "public"
     };
 
-    handleStartTimeChange = (event, {name, value}) => {
-        if (this.state.hasOwnProperty(name)) {
-            this.setState({ [name]: value });
-            console.log(convertDateTimeToISO8601(value));
-        }
-    }
-
-    handleEndTimeChange = (event, {name, value}) => {
-        if (this.state.hasOwnProperty(name)) {
-            this.setState({ [name]: value });
-            console.log(convertDateTimeToISO8601(value));
-        }
-    }
-
     changeStateText(key, value) {
         // TODO Sanitize this input
         // TODO Check to see if this will, in fact, work.!
         this.eventState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
+    }
+
+    handleDurationChange(event, data) {
+        const { value } = data.options.find(o => o.value === value);
+        console.log(value);
     }
 
     handleAccessSwitch = () => {
@@ -106,8 +110,25 @@ class CreateEventProp extends Component {
     };
 
     handleSubmit = () => {
-        const time = convertDateTimeToISO8601(this.state.dateTime) + "_" +
-            convertDateTimeToISO8601(this.state.dateTimeEnd);
+        let time = '';
+        let endTime;
+
+        let hour = this.eventState.startDateTime.substr(11, 2);
+        let durationHour = this.state.duration.substr(0, 1);
+        let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
+
+        if(endHour >= 24){
+            endTime = this.eventState.startDateTime + "_" +
+                (parseInt(hour, 10) + parseInt(durationHour, 10) - 24);
+        }
+        else {
+            endTime = this.eventState.startDateTime + "_" +
+                (parseInt(hour, 10) + parseInt(durationHour, 10));
+        }
+
+
+
+        alert(endTime);
 
         if(Number.isInteger(+this.eventState.capacity)) {
             Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
@@ -134,6 +155,14 @@ class CreateEventProp extends Component {
         }
     }
 
+    handleDurationChange = (e, data) => {
+        this.setState({
+            duration: data.value,
+        }, () => {
+            console.log('value',this.state.duration);
+        });
+    }
+
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
         return (
@@ -149,16 +178,12 @@ class CreateEventProp extends Component {
                             </Form.Group>
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
-                                    <label>Event Date</label>
-                                    <input type="date"/>
+                                    <label>Start Date and Time</label>
+                                    <input type="datetime-local" name="startDateTime" onChange={value => this.changeStateText("startDateTime", value)}/>
                                 </div>
                                 <div className="field">
-                                    <label>Start Time</label>
-                                    <input type="time"/>
-                                </div>
-                                <div className="field">
-                                    <label>End Time</label>
-                                    <input type="time"/>
+                                    <label>Duration</label>
+                                    <Dropdown placeholder='duration' value = {this.state.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
                                 </div>
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
