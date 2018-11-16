@@ -94,6 +94,7 @@ class BuddyListProp extends Component {
     //         this.setState({error: error});
     //     });
     // }
+
     getClientAttribute(id, attribute) {
         const client = this.props.cache.clients[id];
         if (client) {
@@ -133,7 +134,7 @@ class BuddyListProp extends Component {
                             <Image avatar src={getClientAttribute(friendID, "profilePicture")} circular/>
                             <List.Content as="a" onClick={openModal}>
                                 <ClientModal open={openBool} onClose={closeModal} clientID={friendID}/>
-                                {getClientAttribute("name")}
+                                {getClientAttribute(friendID, "name")}
                             </List.Content>
                         </List.Item>
                     );

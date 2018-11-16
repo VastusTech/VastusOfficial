@@ -126,8 +126,6 @@ class CreateEventProp extends Component {
                 (parseInt(hour, 10) + parseInt(durationHour, 10));
         }
 
-
-
         alert(endTime);
 
         if(Number.isInteger(+this.eventState.capacity)) {
@@ -153,7 +151,7 @@ class CreateEventProp extends Component {
         else {
             alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
         }
-    }
+    };
 
     handleDurationChange = (e, data) => {
         this.setState({
@@ -161,7 +159,7 @@ class CreateEventProp extends Component {
         }, () => {
             console.log('value',this.state.duration);
         });
-    }
+    };
 
     //Inside of render is a modal containing each form input required to create a Event.
     render() {

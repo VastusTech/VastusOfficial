@@ -10,12 +10,14 @@ import ClientModal from "./ClientModal";
 import EventCard from "./EventCard";
 import EventDescriptionModal from "./EventDescriptionModal";
 import { connect } from "react-redux";
+import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
 
 class Notification extends Component {
     state = {
         error: null,
         isLoading: false,
         inviteID: null,
+        sentRequest: false,
         clientModalOpen: false,
         eventModalOpen: false,
     };
@@ -26,9 +28,36 @@ class Notification extends Component {
         // this.update();
     }
 
-    // componentWillReceiveProps(newProps) {
-    //     this.update();
-    // }
+    componentDidMount() {
+        this.update(this.props);
+    }
+
+    componentWillReceiveProps(newProps, nextContext) {
+        this.update(newProps);
+    }
+
+    update(props) {
+        if (props.inviteID) {
+            const invite = props.cache.invites[props.inviteID];
+            if (invite) {
+                if (invite.from && invite.inviteType && invite.about) {
+                    // TODO This sends two requests which is sorta inconsequential but is seriously bugging me :(
+                    if (this.state.inviteID !== props.inviteID && !this.state.sentRequest && !this.props.info.isLoading) {
+                        this.setState({inviteID: props.inviteID});
+                        this.state.sentRequest = true;
+                        props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                        if (invite.inviteType === "eventInvite") {
+                            props.fetchEvent(invite.about, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+                        }
+                    }
+                }
+                else {
+                    alert("Invite only partially gotten?");
+                    alert(JSON.stringify(invite));
+                }
+            }
+        }
+    }
 
     // update = () => {
         // if (this.state.friendRequestID) {
@@ -153,6 +182,14 @@ class Notification extends Component {
         }
     }
 
+    getInviteAttribute(attribute) {
+        const invite = this.props.cache.invites[this.props.inviteID];
+        if (invite) {
+            return invite[attribute];
+        }
+        return null;
+    }
+
     getFromAttribute(attribute) {
         const invite = this.props.cache.invites[this.props.inviteID];
         if (invite && invite.from) {
@@ -167,7 +204,7 @@ class Notification extends Component {
 
     getAboutAttribute(attribute) {
         const invite = this.props.cache.invites[this.props.inviteID];
-        if (invite.about) {
+        if (invite && invite.about) {
             if (invite.inviteType === "friendRequest") {
                 // TODO Itemtype
                 const about = this.props.cache.clients[invite.about];
@@ -186,7 +223,7 @@ class Notification extends Component {
     }
 
     render() {
-        if (this.state.isLoading) {
+        if (!this.getInviteAttribute("id") || !this.getAboutAttribute("id")) {
             return(
                 <Grid.Row className="ui one column stackable center aligned page grid">
                     <Dimmer>
@@ -195,8 +232,8 @@ class Notification extends Component {
                 </Grid.Row>
             );
         }
-        if (this.props.inviteID && this.getAboutAttribute("id")) {
-            if (this.props.inviteID.inviteType === "friendRequest") {
+        else {
+            if (this.getInviteAttribute("inviteType") === "friendRequest") {
                 return (
                     <Card fluid raised>
                         <Card.Content>
@@ -231,7 +268,7 @@ class Notification extends Component {
                     </Card>
                 );
             }
-            else if (this.props.inviteID.inviteID === "eventInvite") {
+            else if (this.getInviteAttribute("inviteType") === "eventInvite") {
                 return (
                     <Card fluid raised>
                         <Card.Content>
@@ -287,7 +324,12 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-
+        fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        }
     };
 };
 

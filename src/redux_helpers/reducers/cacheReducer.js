@@ -107,6 +107,7 @@ export default (state = initialState, action) => {
             break;
         case FETCH_INVITE:
             state = addObjectToCache(state, "invites", inviteCacheSize, "inviteLRUHandler", action.payload);
+            break;
         case FETCH_CLIENT_QUERY:
             state = {
                 ...state,

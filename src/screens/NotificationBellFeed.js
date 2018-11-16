@@ -15,23 +15,30 @@ import {fetchInvite} from "../redux_helpers/actions/cacheActions";
 class NotificationFeed extends Component {
     state = {
         error: null,
-        isLoading: false,
+        isLoading: true,
         sentRequest: false,
-        friendRequests: {}
     };
 
     _isMounted = false;
 
     constructor(props) {
         super(props);
-        this.update();
         this.update = this.update.bind(this);
         this.forceUpdate = this.forceUpdate.bind(this);
+    }
+
+    resetState() {
+        this.setState({
+            error: null,
+            isLoading: true,
+            sentRequest: false,
+        });
     }
 
     componentDidMount() {
         //this.setState({isLoading: true});
         // this.update();
+        this.update(this.props);
         this._isMounted = true;
     }
 
@@ -39,13 +46,16 @@ class NotificationFeed extends Component {
         this._isMounted = false;
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps(newProps, nextContext) {
         //this.setState({isLoading: true});
-        this.update();
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            this.resetState();
+        }
+        this.update(newProps);
     }
 
-    update = () => {
-        const user = this.props.user;
+    update(props) {
+        const user = props.user;
         //alert("Updating Scheduled Events");
         if (!user.id) {
             alert("Pretty bad error");
@@ -55,12 +65,12 @@ class NotificationFeed extends Component {
         if (this.state.isLoading && user.hasOwnProperty("receivedInvites") && user.receivedInvites && user.receivedInvites.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.receivedInvites.length; i++) {
-                this.props.fetchInvite(user.receivedInvites[i], ["time_created", "from", "inviteType", "about", "description"]);
+                props.fetchInvite(user.receivedInvites[i], ["time_created", "from", "inviteType", "about", "description"]);
             }
         }
-        else if (!this.props.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["receivedInvites"]);
+        else if (!props.info.isLoading) {
+            if (!this.state.sentRequest && !props.info.error) {
+                props.fetchUserAttributes(user.id, ["receivedInvites"]);
                 this.setState({sentRequest: true});
             }
         }

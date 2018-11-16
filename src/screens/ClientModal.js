@@ -56,12 +56,12 @@ class ClientModal extends Component {
         }
     }
 
-    handleAddFriendButton(friendID) {
+    handleAddFriendButton() {
         alert("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
-            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClient().id,
+            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
-                    alert("Successfully added " + this.getClient().name + " as a friend!");
+                    alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
