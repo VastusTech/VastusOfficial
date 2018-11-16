@@ -102,14 +102,19 @@ class OwnedEventsList extends Component {
 
             return rowProps;
         }
-        if (this.state.isLoading) {
+        if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message>Loading...</Message>
             )
         }
+        if (this.props.user.ownedEvents && this.props.user.ownedEvents.length && this.props.user.ownedEvents.length > 0) {
+            return(
+                <List>{rows(this.props.user.ownedEvents)}</List>
+            );
+        }
         return(
-            <List>{rows(this.props.user.ownedEvents)}</List>
+            <Message>No owned events yet!</Message>
         );
     }
 }

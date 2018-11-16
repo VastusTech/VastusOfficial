@@ -73,6 +73,9 @@ class ScheduledEventsList extends Component {
     componentWillReceiveProps(newProps) {
         //alert("Receevin props");
         // this.props = newProps;
+        // if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+        //     this.setState(this.state);
+        // }
         this.update();
     }
 
@@ -103,15 +106,22 @@ class ScheduledEventsList extends Component {
 
             return rowProps;
         }
-        if (this.state.isLoading) {
+        if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message>Loading...</Message>
             )
         }
-        return(
-            <List>{rows(this.props.user.scheduledEvents)}</List>
-        );
+        if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
+            return(
+                <List>{rows(this.props.user.scheduledEvents)}</List>
+            );
+        }
+        else {
+            return(
+                <Message>No scheduled events yet!</Message>
+            );
+        }
     }
 }
 

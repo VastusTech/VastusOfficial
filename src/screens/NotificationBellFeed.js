@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Dimmer, Loader, Grid} from 'semantic-ui-react'
+import {Dimmer, Loader, Grid, Message} from 'semantic-ui-react'
 // import { Operation } from "aws-amplify";
 import Notification from "./Notification";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -55,10 +55,7 @@ class NotificationFeed extends Component {
         if (this.state.isLoading && user.hasOwnProperty("receivedInvites") && user.receivedInvites && user.receivedInvites.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.receivedInvites.length; i++) {
-                this.props.fetchEvent(user.receivedInvites[i], ["time_created", "from", "inviteType", "about", "description"]);
-                // if (!(user.scheduledEvents[i] in this.state.events)) {
-                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
-                // }
+                this.props.fetchInvite(user.receivedInvites[i], ["time_created", "from", "inviteType", "about", "description"]);
             }
         }
         else if (!this.props.info.isLoading) {
@@ -76,39 +73,51 @@ class NotificationFeed extends Component {
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
     //To the right of the request is two buttons, one to accept and one to deny the current request.
     render() {
-        if (this.state.isLoading) {
+
+        // function friendRows(friendRequests, userID, feedUpdate)
+        // {
+        //     //alert(friendRequests);
+        //     if (friendRequests != null) {
+        //         return _.times(friendRequests.length, i => (
+        //             <Notification userID={userID} friendRequestID={friendRequests[i]} feedUpdate={feedUpdate}/>
+        //         ));
+        //     }
+        // }
+        //
+        // function challengeRows(eventRequests, userID)
+        // {
+        //     //alert(friendRequests);
+        //     if (eventRequests != null) {
+        //         return _.times(eventRequests.length, i => (
+        //             <Notification userID={userID} eventRequestID={eventRequests[i]}/>
+        //         ));
+        //     }
+        // }
+        function inviteRows(invites, feedUpdate) {
+            return _.times(invites.length, i => (
+                <Notification inviteID={invites[i]} feedUpdate={feedUpdate}/>
+            ));
+        }
+
+        if (this.props.info.isLoading) {
             return(
                 <Dimmer>
                     <Loader/>
                 </Dimmer>
             );
         }
-
-        function friendRows(friendRequests, userID, feedUpdate)
-        {
-            //alert(friendRequests);
-            if (friendRequests != null) {
-                return _.times(friendRequests.length, i => (
-                    <Notification userID={userID} friendRequestID={friendRequests[i]} feedUpdate={feedUpdate}/>
-                ));
-            }
+        if (this.props.user.receivedInvites && this.props.user.receivedInvites.length && this.props.user.receivedInvites.length > 0) {
+            return(
+                <Fragment>
+                    {inviteRows(this.props.user.receivedInvites, this.forceUpdate.bind(this))}
+                </Fragment>
+            );
         }
-
-        function challengeRows(eventRequests, userID)
-        {
-            //alert(friendRequests);
-            if (eventRequests != null) {
-                return _.times(eventRequests.length, i => (
-                    <Notification userID={userID} eventRequestID={eventRequests[i]}/>
-                ));
-            }
+        else {
+            return(
+                <Message>No notifications!</Message>
+            );
         }
-        return(
-            <Fragment>
-                {friendRows(this.props.user.friendRequests, this.props.user.id, this.forceUpdate.bind(this))}
-                {challengeRows(this.props.user.invitedEvents, this.props.user.id)}
-            </Fragment>
-        );
     }
 }
 

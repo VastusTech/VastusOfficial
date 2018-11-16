@@ -18,7 +18,6 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        alert(getItemTypeFromID("CL0123456789"));
     }
 
     // async authenticate(user) {
@@ -54,13 +53,16 @@ class App extends Component {
     //     // this.props.clearUser();
     // }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.props.updateAuth();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.auth) {
-            this.setState();
+    componentWillReceiveProps(newProps, nextContext) {
+        if (newProps.auth) {
+            this.setState(this.state);
+        }
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            this.setState(this.state);
         }
     }
 
@@ -84,7 +86,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    // user: state.user,
+    user: state.user,
     auth: state.auth
     // cache: state.cache,
 });

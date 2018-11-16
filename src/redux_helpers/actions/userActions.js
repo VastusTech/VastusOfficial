@@ -9,6 +9,12 @@ export function setUser(user) {
         payload: user
     };
 }
+export function forceSetUser(user) {
+    return {
+        type: "FORCE_SET_USER",
+        payload: user
+    };
+}
 
 export function forceFetchUserAttributes(id, variablesList) {
     return (dispatch) => {

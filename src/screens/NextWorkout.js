@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Icon, Message, Label} from 'semantic-ui-react';
+import {Icon, Message, Label, Header} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -20,24 +20,28 @@ class NextEventProp extends Component {
         this.update = this.update.bind(this);
     }
 
-    update() {
-        if (!this.props.user.id) {
+    resetState() {
+        this.setState({isLoading: true, sentRequest: false, error: null});
+    }
+
+    update(props) {
+        if (!props.user.id) {
             alert("No user ID...");
             return;
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
-        if (this.props.user.hasOwnProperty("scheduledEvents") && this.state.isLoading) {
+        if (props.user.hasOwnProperty("scheduledEvents") && props.user.scheduledEvents && props.user.scheduledEvents.length && this.state.isLoading) {
             this.setState({isLoading: false});
-            for (var i = 0; i < this.props.user.scheduledEvents.length; i++) {
+            for (var i = 0; i < props.user.scheduledEvents.length; i++) {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                 // }
-                this.props.fetchEvent(this.props.user.scheduledEvents[i], ["id", "time"]);
+                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"]);
             }
         }
-        else if (!this.props.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.info.error && this.props.user.id != null) {
-                this.props.fetchUserAttributes(this.props.user.id, ["scheduledEvents"]);
+        else if (!props.info.isLoading) {
+            if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
+                props.fetchUserAttributes(props.user.id, ["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -66,9 +70,12 @@ class NextEventProp extends Component {
     //     this.update();
     // }
 
-    componentWillReceiveProps(newProps) {
-        this.update();
-        // this.setState();
+    componentWillReceiveProps(newProps, nextContext) {
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            alert("resetting app for new user!");
+            this.resetState();
+        }
+        this.update(newProps);
     }
 
     render() {
@@ -95,18 +102,18 @@ class NextEventProp extends Component {
             if (row.length > 0) {
                 return (
                     <Fragment key={0}>
-                        <Label>Next Scheduled Event</Label>
-                        <EventCard eventID={row[0].id}/>
+                        <Message>
+                            <Header>Next Scheduled Event</Header>
+                            <EventCard eventID={row[0].id}/>
+                        </Message>
                     </Fragment>
                 );
             }
             else {
-                return(
-                    <Message>No scheduled events!</Message>
-                );
+                return(null);
             }
         }
-        if (this.state.isLoading) {
+        if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message icon>
@@ -120,9 +127,17 @@ class NextEventProp extends Component {
                 </Message>
             )
         }
-        return(
-            rows(this.props.user.scheduledEvents, this.getEventTime.bind(this))
-        );
+        if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
+            return(
+                rows(this.props.user.scheduledEvents, this.getEventTime.bind(this))
+            );
+        }
+        else {
+            // Then it's empty, no next scheduled event
+            return(
+                <Message>No scheduled events!</Message>
+            );
+        }
     }
 }
 

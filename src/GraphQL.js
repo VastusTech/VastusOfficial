@@ -310,7 +310,7 @@ class GraphQL {
             successHandler(queryCache[queryString]);
         }
         else {
-            alert("Sending ql = " + query.query);
+            alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {

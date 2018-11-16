@@ -29,11 +29,10 @@ class Profile extends React.PureComponent {
     state = {
         isLoading: true,
         checked: false,
+        sentRequest: false,
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
-        // profilePicture: null,
-        // ifS3: false,
         error: null
     };
 
@@ -57,17 +56,31 @@ class Profile extends React.PureComponent {
         this.handleLogOut = this.handleLogOut.bind(this);
     }
 
+    resetState() {
+        this.setState({
+            isLoading: true,
+            checked: false,
+            sentRequest: false,
+            buddyModalOpen: false,
+            scheduledModalOpen: false,
+            ownedModalOpen: false,
+            error: null,
+        });
+    }
+
     componentDidMount() {
         // alert("componentDidMount");
         this.update();
     }
 
-    componentWillReceiveProps(newProps) {
+    componentWillReceiveProps(newProps, nextContext) {
         // alert("componentWillReceiveProps");
         // alert("receive props: " + JSON.stringify(newProps));
-        this.props = newProps;
         if (newProps.user.profileImagePath) {
             this.setState({isLoading: true});
+        }
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            this.resetState();
         }
         this.update();
     }
@@ -100,7 +113,8 @@ class Profile extends React.PureComponent {
                 // }
             // }
         // }
-        if (!this.props.info.isLoading && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
+        if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
+            this.state.sentRequest = true;
             this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture"]);
         }
         else {
