@@ -68,7 +68,10 @@ class Lambda {
     static sendFriendRequest(fromID, from, to, successHandler, failureHandler) {
         this.createFriendRequest(fromID, from, to, successHandler, failureHandler);
     }
-    // TODO Specific item type functions for this?
+    static clientAcceptFriendRequest(fromID, clientID, friendID, successHandler, failureHandler) {
+        this.acceptFriendRequest(fromID, clientID, "Client", friendID, successHandler, failureHandler);
+    }
+    // TODO Trainer... Gym...
     static acceptFriendRequest(fromID, userID, userItemType, friendID, successHandler, failureHandler) {
         this.updateAddToAttribute(fromID, userID, userItemType, "friends", friendID, successHandler, failureHandler);
     }
@@ -80,7 +83,10 @@ class Lambda {
     static undoFriendRequest(fromID, inviteID, successHandler, failureHandler) {
         this.deleteInvite(fromID, inviteID, successHandler, failureHandler);
     }
-    // TODO Specific item type functions for this?
+    static clientRemoveFriend(fromID, clientID, friendID, successHandler, failureHandler) {
+        this.removeFriend(fromID, clientID, "Client", friendID, successHandler, failureHandler);
+    }
+    // TODO Trainer... Gym...
     static removeFriend(fromID, userID, userItemType, friendID, successHandler, failureHandler) {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "friends", friendID, successHandler, failureHandler);
     }
