@@ -137,6 +137,7 @@ class CreateEventProp extends Component {
         }
 
         alert("Minute: " + minute + " " + "Duration: " + durationMinute);
+        
         if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
             minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
             hour = "0" + (parseInt(hour, 10) + 1);
