@@ -110,7 +110,7 @@ class EventDescriptionModal extends Component {
     handleLeaveEventButton() {
         alert("Handling leaving the event");
         this.setState({isLoading: true});
-        Lambda.leaveEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
+        Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             //alert(JSON.stringify(data));
             this.setState({isLoading: false, isJoined: false});
         }, (error) => {
@@ -122,7 +122,7 @@ class EventDescriptionModal extends Component {
     handleJoinEventButton() {
         alert("Handling joining the event");
         this.setState({isLoading: true});
-        Lambda.joinEvent(this.props.user.id, this.props.user.id, "Client", this.getEventAttribute("id"),
+        Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
             (data) => {
                 this.setState({isLoading: false, isJoined: true});
             }, (error) => {
