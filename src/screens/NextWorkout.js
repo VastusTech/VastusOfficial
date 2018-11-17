@@ -1,5 +1,5 @@
 import React, {Component, Fragment} from 'react'
-import {Grid, Message, Label} from 'semantic-ui-react';
+import {Icon, Message, Label} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -94,12 +94,10 @@ class NextEventProp extends Component {
 
             if (row.length > 0) {
                 return (
-                    <div>
-                        <Fragment key={0}>
-                            <Label>Next Scheduled Event</Label>
-                            <EventCard eventID={row[0].id}/>
-                        </Fragment>
-                    </div>
+                    <Fragment key={0}>
+                        <Label>Next Scheduled Event</Label>
+                        <EventCard eventID={row[0].id}/>
+                    </Fragment>
                 );
             }
             else {
@@ -111,7 +109,15 @@ class NextEventProp extends Component {
         if (this.state.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
-                <Message>Loading...</Message>
+                <Message icon>
+                    <Icon name='spinner' size="small" loading />
+                    <Message.Content>
+                        <Message.Header>
+                            Loading...
+                        </Message.Header>
+                    </Message.Content>
+                    
+                </Message>
             )
         }
         return(

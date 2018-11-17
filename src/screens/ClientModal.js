@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { Label, Icon, Modal, Button, Item, Dimmer, Loader, Message, Grid } from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "./ScheduledEventList";
@@ -17,6 +17,7 @@ class ClientModal extends Component {
         error: null,
         isLoading: true,
         clientID: null,
+        sentRequest: false
     };
 
     componentDidMount() {
@@ -25,9 +26,10 @@ class ClientModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
-            if (this.state.clientID !== newProps.clientID) {
+            if (this.state.clientID !== newProps.clientID && !this.state.sentRequest) {
                 this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                 this.setState({clientID: newProps.clientID});
+                this.state.sentRequest = true;
             }
             // if (!this.state.client) {
             //     this.setState({isLoading: true});
@@ -70,7 +72,7 @@ class ClientModal extends Component {
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
             return(
-                <div className="u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}/>
+                <Image wrapped size="small" circular src={this.getClientAttribute("profilePicture")} />
             );
         }
         else {
@@ -115,9 +117,9 @@ class ClientModal extends Component {
             //if(events != null)
             //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Button basic color='purple'>Invite to Event</Button>
-                </Grid.Row>
+                <Fragment key={i}>
+                    <Button primary>Invite to Event</Button>
+                </Fragment>
             ));
         }
         // <Item.Image size='medium' src={proPic} circular/> TODO
@@ -130,45 +132,52 @@ class ClientModal extends Component {
                 {errorMessage(this.props.info.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
                 <Modal.Content image>
-                    <Item>
-                        <Item.Content>
-                            {this.profilePicture()}
-                        </Item.Content>
-                    </Item>
-                    <Item>
-                        <Item.Content>
-                            <Item.Header as='a'><div>{}</div></Item.Header>
-                            <Item.Description>
-                                <div>{}</div>
-                            </Item.Description>
-                            <Item.Extra>Friends: <div>{}</div></Item.Extra>
-                            <Item.Extra>Event Wins: <div>{}</div></Item.Extra>
-                            <Item.Extra>
-                                <Button basic color='purple'
-                                        type='button'
-                                        onClick={this.handleAddFriendButton.bind(this)}>
-                                    Add Buddy
-                                </Button>
-                            </Item.Extra>
-                            <Item.Extra>
-                                <div>
-                                    <Modal trigger={<Button color='purple'>Invite to Challenge</Button>}>
-                                        <Grid columns='three' divided>
-                                            <Grid.Row>
-                                                <Grid.Column>
-                                                    <ScheduledEventsList/>
-                                                </Grid.Column>
-                                                <Grid.Column>
-                                                    <InviteToScheduledEventsProp friendID={this.getClientAttribute("id")}/>
-                                                </Grid.Column>
-                                            </Grid.Row>
-                                        </Grid>
-                                    </Modal>
-                                </div>
-                            </Item.Extra>
-                        </Item.Content>
-                    </Item>
+                    {this.profilePicture()}
+                    <Modal.Description>
+                        <List relaxed>
+                            {/* Bio */}
+                            <List.Item>
+                                <List.Icon name='user' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                            {/* Friends */}
+                            <List.Item>
+                                <List.Icon name='users' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                            {/* Event Wins */}
+                            <List.Item>
+                                <List.Icon name='trophy' />
+                                <List.Content>
+                                    {}
+                                </List.Content>
+                            </List.Item>
+                        </List>
+                    </Modal.Description>
                 </Modal.Content>
+                <Modal.Actions>
+                    <Modal trigger={<Button primary>Invite to Challenge</Button>}>
+                        <Grid columns='three' divided>
+                            <Grid.Row>
+                                <Grid.Column>
+                                    <ScheduledEventsList/>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <InviteToScheduledEventsProp friendID={this.getClientAttribute("id")}/>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
+                    </Modal>
+                    <Button inverted
+                            type='button'
+                            onClick={this.handleAddFriendButton.bind(this)}>
+                        Add Buddy
+                    </Button>
+                </Modal.Actions>
             </Modal>
         );
     }
