@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import {Grid, Message, Button, Header, Modal} from 'semantic-ui-react';
 import EventCard from "./EventCard";
-import QL from "../GraphQL";
+// import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import { inspect } from 'util';
+// import { inspect } from 'util';
 import Lambda from "../Lambda";
 import {fetchEvent} from "../redux_helpers/actions/cacheActions";
 
@@ -19,8 +19,6 @@ class InviteToScheduledEventsModalProp extends Component {
 
     constructor(props) {
         super(props);
-        //alert("Got into Scheduled Events constructor");
-        // this.state.username = this.props.username;
     }
 
     update() {
@@ -36,9 +34,6 @@ class InviteToScheduledEventsModalProp extends Component {
             this.setState({isLoading: false});
             for (let i = 0; i < user.scheduledEvents.length; i++) {
                 this.props.fetchEvent(user.scheduledEvents[i], ["time", "time_created", "title", "goal", "members"]);
-                // if (!(user.scheduledEvents[i] in this.state.events)) {
-                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
-                // }
             }
         }
         else if (!this.props.info.isLoading) {

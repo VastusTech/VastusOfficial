@@ -165,7 +165,7 @@ class SignUpModal extends Component {
         function loadingProp(isLoading) {
             if (isLoading) {
                 return (
-                    <Dimmer active inverted>
+                    <Dimmer active>
                         <Loader/>
                     </Dimmer>
                 );

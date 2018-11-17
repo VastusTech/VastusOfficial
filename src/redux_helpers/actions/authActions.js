@@ -35,7 +35,12 @@ export function logIn(username, password) {
             QL.getClientByUsername(username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully logged in!");
                 dispatch(authLogIn());
-                dispatch(forceSetUser(user));
+                if (getStore().user.id !== user.id) {
+                    dispatch(forceSetUser(user));
+                }
+                else {
+                    dispatch(setUser(user));
+                }
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");
