@@ -3,7 +3,7 @@ import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'seman
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "./ScheduledEventList";
-import InviteToScheduledEventsProp from "./InviteToScheduledEvents";
+import InviteToScheduledEventsModalProp from "./InviteToScheduledEventsModal";
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 
@@ -17,7 +17,8 @@ class ClientModal extends Component {
         error: null,
         isLoading: true,
         clientID: null,
-        sentRequest: false
+        sentRequest: false,
+        inviteModalOpen: false
     };
 
     componentDidMount() {
@@ -83,6 +84,9 @@ class ClientModal extends Component {
             );
         }
     }
+
+    handleInviteModalOpen = () => {this.setState({inviteModalOpen: true})};
+    handleInviteModalClose = () => {this.setState({inviteModalOpen: false})};
 
     render() {
         function errorMessage(error) {
@@ -160,18 +164,13 @@ class ClientModal extends Component {
                     </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Modal trigger={<Button primary>Invite to Challenge</Button>}>
-                        <Grid columns='three' divided>
-                            <Grid.Row>
-                                <Grid.Column>
-                                    <ScheduledEventsList/>
-                                </Grid.Column>
-                                <Grid.Column>
-                                    <InviteToScheduledEventsProp friendID={this.getClientAttribute("id")}/>
-                                </Grid.Column>
-                            </Grid.Row>
-                        </Grid>
-                    </Modal>
+                    <Button primary onClick={this.handleInviteModalOpen.bind(this)}>Invite to Event</Button>
+                    <InviteToScheduledEventsModalProp
+                        open={this.state.inviteModalOpen}
+                        onOpen={this.handleInviteModalOpen.bind(this)}
+                        onClose={this.handleInviteModalClose.bind(this)}
+                        friendID={this.getClientAttribute("id")}
+                    />
                     <Button inverted
                             type='button'
                             onClick={this.handleAddFriendButton.bind(this)}>
