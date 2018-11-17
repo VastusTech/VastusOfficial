@@ -208,9 +208,8 @@ class CreateEventProp extends Component {
                                     <input type="date"/>
                                 </div>
                                 <div className="field">
-                                    <label>Start Date and Time</label>
-                                    <input type="datetime-local" name="startDateTime" onChange={value => this.changeStateText("startDateTime", value)}/>
-
+                                    <label>Start Time</label>
+                                    <input type="time" name="startTime" placeholder="12:00 AM" onChange={value => this.changeStateText("startTime", value)}/>
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>
