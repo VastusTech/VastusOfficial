@@ -1,6 +1,6 @@
 import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
-import {fetchUser, clearUser, setUser} from "./userActions";
+import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
 import QL from "../../GraphQL";
 import Lambda from "../../Lambda";
 export function updateAuth() {
@@ -35,7 +35,7 @@ export function logIn(username, password) {
             QL.getClientByUsername(username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully logged in!");
                 dispatch(authLogIn());
-                dispatch(setUser(user));
+                dispatch(forceSetUser(user));
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");

@@ -9,7 +9,6 @@ import {
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
 
-/*
 function convertDateTimeToISO8601(dateAndTime) {
     let dateTimeString = String(dateAndTime);
     let day = dateTimeString.substr(0, 2);
@@ -33,7 +32,6 @@ function convertDateTimeToISO8601(dateAndTime) {
         return year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00";
     }
 }
-*/
 
 const timeOptions = [ { key: '0:15', value: '0:15', text: '0:15' },
     { key: '0:30', value: '0:30', text: '0:30' },
@@ -156,6 +154,8 @@ class CreateEventProp extends Component {
         alert("End time substring: " + endTime.substr(0, 28));
         alert(endTime);
 
+        alert(endTime);
+
         if(Number.isInteger(+this.eventState.capacity)) {
             Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
                 String(this.eventState.location), String(this.eventState.title),
@@ -179,7 +179,7 @@ class CreateEventProp extends Component {
         else {
             alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
         }
-    }
+    };
 
     handleDurationChange = (e, data) => {
         this.setState({
@@ -187,7 +187,7 @@ class CreateEventProp extends Component {
         }, () => {
             console.log('value',this.state.duration);
         });
-    }
+    };
 
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
@@ -204,8 +204,13 @@ class CreateEventProp extends Component {
                             </Form.Group>
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
+                                    <label>Event Date</label>
+                                    <input type="date"/>
+                                </div>
+                                <div className="field">
                                     <label>Start Date and Time</label>
                                     <input type="datetime-local" name="startDateTime" onChange={value => this.changeStateText("startDateTime", value)}/>
+
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>

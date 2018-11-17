@@ -1,4 +1,5 @@
 const SET_USER = 'SET_USER';
+const FORCE_SET_USER = 'FORCE_SET_USER';
 const CLEAR_USER = 'CLEAR_USER';
 
 const initialState = {
@@ -16,10 +17,15 @@ export default (state = initialState, action) => {
             };
             // alert("STATE AFTER SET USER = " + JSON.stringify(state));
             break;
-        case CLEAR_USER:
+        case FORCE_SET_USER:
             state = {
                 ...initialState,
-                info: state.info
+                ...action.payload
+            };
+            break;
+        case CLEAR_USER:
+            state = {
+                ...initialState
             };
             break;
         default:

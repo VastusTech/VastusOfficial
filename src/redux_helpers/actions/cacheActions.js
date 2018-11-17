@@ -95,6 +95,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         dispatch(setIsNotLoading());
     }
 }
+// TODO DON'T OPTIMIZE UNLESS THERE'S AN ACTUAL PROBLEM YOU GOBLIN
 function batchFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
     // TODO Check to see if this has already been fulfilled
     // TODO Check to see if we have already called the same batch fetch query (add a set in the cache?)
@@ -171,6 +172,9 @@ export function fetchReview(id, variablesList) {
 export function fetchEvent(id, variablesList) {
     return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT");
 }
+export function fetchInvite(id, variablesList) {
+    return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE");
+}
 export function fetchClients(ids, variablesList) {
 
 }
@@ -227,6 +231,15 @@ export function putEventQuery(queryString, queryResult) {
         }
     };
 }
+export function putInviteQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_INVITE_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
 function putQuery(queryString, queryResult, actionType) {
     return {
         type: actionType,
@@ -238,31 +251,31 @@ function putQuery(queryString, queryResult, actionType) {
 }
 export function putClient(client) {
     return {
-        type: "FETCH_EVENT",
+        type: "FETCH_CLIENT",
         payload: client
     };
 }
 export function putTrainer(trainer) {
     return {
-        type: "FETCH_EVENT",
+        type: "FETCH_TRAINER",
         payload: trainer
     };
 }
 export function putGym(gym) {
     return {
-        type: "FETCH_EVENT",
+        type: "FETCH_GYM",
         payload: gym
     };
 }
 export function putWorkout(workout) {
     return {
-        type: "FETCH_EVENT",
+        type: "FETCH_WORKOUT",
         payload: workout
     };
 }
 export function putReview(review) {
     return {
-        type: "FETCH_EVENT",
+        type: "FETCH_REVIEW",
         payload: review
     };
 }
@@ -270,5 +283,11 @@ export function putEvent(event) {
     return {
         type: "FETCH_EVENT",
         payload: event
+    };
+}
+export function putInvite(invite) {
+    return {
+        type: "FETCH_INVITE",
+        payload: invite
     };
 }

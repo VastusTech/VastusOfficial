@@ -1,16 +1,18 @@
 import React, { Component } from 'react'
-import {List, Message} from 'semantic-ui-react';
+import {Grid, Message, Button, Header, Modal} from 'semantic-ui-react';
 import EventCard from "./EventCard";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
+import Lambda from "../Lambda";
 import {fetchEvent} from "../redux_helpers/actions/cacheActions";
 
-class ScheduledEventsList extends Component {
+class InviteToScheduledEventsModalProp extends Component {
     state = {
         isLoading: true,
         events: {},
+        friendID: null,
         sentRequest: false,
         error: null
     };
@@ -47,59 +49,41 @@ class ScheduledEventsList extends Component {
         }
     }
 
-    // addEventFromGraphQL(eventID) {
-    //     QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
-    //         console.log("successfully got a event");
-    //         this.setState({events: {...this.state.events, [data.id]: data}, isLoading: false});
-    //     }, (error) => {
-    //         console.log("Failed to get a vent");
-    //         console.log(JSON.stringify(error));
-    //         this.setState({error: error});
-    //     });
-    // }
+    handleInviteToEvent(eventID) {
+        Lambda.sendEventInvite(this.props.user.id, this.props.user.id, this.props.friendID, eventID,
+            (data) => {
+                this.handleClose();
+            }, (error) => {
+                alert(JSON.stringify(error));
+            });
+    }
 
-    // getEventAttribute(id, attribute) {
-    //     if (id && attribute) {
-    //         if (this.props.cache.events[id]) {
-    //             return this.props.cache.events[id][attribute];
-    //         }
-    //     }
-    // }
+    handleOpen = () => {this.props.onOpen.bind(this);};
+    handleClose = () => {this.props.onClose.bind(this);};
 
     componentDidMount() {
         this.update();
     }
 
-    componentWillReceiveProps(newProps) {
-        //alert("Receevin props");
-        // this.props = newProps;
-        // if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
-        //     this.setState(this.state);
-        // }
+    componentWillReceiveProps(newProps, nextContext) {
         this.update();
     }
 
     render() {
-        //alert("Redering");
-        function rows(events) {
-            const row = [];
+        function rows(userID, friendID, events, eventInviteHandler) {
             const rowProps = [];
-            for (const key in events) {
-                if (events.hasOwnProperty(key)) {
-                    //alert(JSON.stringify(events[key]));
-                    row.push(
-                        events[key]
-                    );
-                }
-            }
-            // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
-
-            for (const key in row) {
-                if (row.hasOwnProperty(key) === true) {
+            for (let i = 0; i < events.length; i++) {
+                if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
-                        <List.Item>
-                            <EventCard eventID={row[key]}/>
-                        </List.Item>
+                        <Grid.Row className="ui one column stackable center aligned page grid">
+                            <Grid.Column>
+                                    <EventCard eventID={events[i]}/>
+                            </Grid.Column>
+                            <Grid.Column/>
+                            <Grid.Column>
+                                <Button basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to this Event</Button>
+                            </Grid.Column>
+                        </Grid.Row>
                     );
                 }
             }
@@ -109,17 +93,28 @@ class ScheduledEventsList extends Component {
         if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
-                <Message>Loading...</Message>
-            )
+                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                    <Message>Loading...</Message>
+                </Modal>
+            );
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <List>{rows(this.props.user.scheduledEvents)}</List>
+                <Modal size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                    <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
+                    <Modal.Content>
+                        <Grid columns={4}>
+                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.handleInviteToEvent.bind(this))}
+                        </Grid>
+                    </Modal.Content>
+                </Modal>
             );
         }
         else {
             return(
-                <Message>No scheduled events yet!</Message>
+                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                    <Message>No scheduled events...</Message>
+                </Modal>
             );
         }
     }
@@ -127,8 +122,8 @@ class ScheduledEventsList extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    cache: state.cache,
-    info: state.info
+    info: state.info,
+    cache: state.cache
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -142,4 +137,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ScheduledEventsList);
+export default connect(mapStateToProps, mapDispatchToProps)(InviteToScheduledEventsModalProp);

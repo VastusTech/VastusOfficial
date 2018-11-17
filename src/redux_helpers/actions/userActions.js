@@ -3,9 +3,16 @@ import { Storage } from "aws-amplify";
 import {setError, clearError, setIsLoading, setIsNotLoading} from './infoActions';
 import defaultProfilePicture from "../../img/roundProfile.png";
 
+// TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {
     return {
         type: "SET_USER",
+        payload: user
+    };
+}
+export function forceSetUser(user) {
+    return {
+        type: "FORCE_SET_USER",
         payload: user
     };
 }

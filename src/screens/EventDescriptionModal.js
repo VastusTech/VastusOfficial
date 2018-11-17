@@ -122,13 +122,12 @@ class EventDescriptionModal extends Component {
     handleJoinEventButton() {
         alert("Handling joining the event");
         this.setState({isLoading: true});
-        Lambda.joinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
-            // alert(JSON.stringify(data));
-            this.setState({isLoading: false, isJoined: true});
-        }, (error) => {
-            // alert(JSON.stringify(error));
-            this.setState({isLoading: false, error: error});
-        })
+        Lambda.joinEvent(this.props.user.id, this.props.user.id, "Client", this.getEventAttribute("id"),
+            (data) => {
+                this.setState({isLoading: false, isJoined: true});
+            }, (error) => {
+                this.setState({isLoading: false, error: error});
+            })
     }
 
     isJoined() {

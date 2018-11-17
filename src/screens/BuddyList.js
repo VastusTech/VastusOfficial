@@ -7,6 +7,7 @@ import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import Lambda from "../Lambda";
 import { inspect } from 'util';
 import proPic from '../img/BlakeProfilePic.jpg';
+import {fetchClient} from "../redux_helpers/actions/cacheActions";
 
 class BuddyListProp extends Component {
     state = {
@@ -19,55 +20,91 @@ class BuddyListProp extends Component {
 
     constructor(props) {
         super(props);
-        this.update();
         this.openClientModal = this.openClientModal.bind(this);
         this.closeClientModal = this.closeClientModal.bind(this);
     }
 
-    update() {
+    componentDidMount() {
+        this.update(this.props);
+    }
+
+    // update() {
+    //     // TODO Change this if we want to actually be able to do something while it's loading
+    //     const user = this.props.user;
+    //     if (!user.id) {
+    //         alert("Pretty bad error");
+    //         this.setState({isLoading: true});
+    //     }
+    //
+    //     if (user.hasOwnProperty("friends")) {
+    //         //alert("Friends: " + user.friends);
+    //         if(user.friends != null) {
+    //             //alert("getting to friend loupe");
+    //             for (let i = 0; i < user.friends.length; i++) {
+    //                 if (!(user.friends[i] in this.state.friends)) {
+    //                     this.addFriendFromGraphQL(user.friends[i]);
+    //                 }
+    //             }
+    //         }
+    //         else {
+    //             alert("You got no friends you loser");
+    //         }
+    //     }
+    //     else if (!this.props.info.isLoading) {
+    //         if (!this.state.sentRequest && !this.props.info.error) {
+    //             this.props.fetchUserAttributes(user.id, ["friends"]);
+    //             this.setState({sentRequest: true});
+    //         }
+    //     }
+    // }
+
+    update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
-        const user = this.props.user;
+        const user = props.user;
+        //alert("Updating Scheduled Events");
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
         }
 
-        if (user.hasOwnProperty("friends")) {
-            //alert("Friends: " + user.friends);
-            if(user.friends != null) {
-                //alert("getting to friend loupe");
-                for (let i = 0; i < user.friends.length; i++) {
-                    if (!(user.friends[i] in this.state.friends)) {
-                        this.addFriendFromGraphQL(user.friends[i]);
-                    }
-                }
-            }
-            else {
-                alert("You got no friends you loser");
+        if (this.state.isLoading && user.hasOwnProperty("friends") && user.friends && user.friends.length) {
+            this.setState({isLoading: false});
+            for (let i = 0; i < user.friends.length; i++) {
+                props.fetchClient(user.friends[i], ["id", "name", "profileImagePath", "profilePicture"]);
+                // if (!(user.scheduledEvents[i] in this.state.events)) {
+                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
+                // }
             }
         }
-        else if (!this.props.info.isLoading) {
-            if (!this.state.sentRequest && !this.props.info.error) {
+        else if (!props.info.isLoading) {
+            if (!this.state.sentRequest && !props.info.error) {
                 this.props.fetchUserAttributes(user.id, ["friends"]);
                 this.setState({sentRequest: true});
             }
         }
     }
 
-    addFriendFromGraphQL(friendID) {
-        QL.getClient(friendID, ["id"], (data) => {
-            console.log("successfully got a friend");
-            this.setState({friends: {...this.state.friends, [data.id]: data}, isLoading: false});
-        }, (error) => {
-            console.log("Failed to get a vent");
-            console.log(JSON.stringify(error));
-            this.setState({error: error});
-        });
+    // addFriendFromGraphQL(friendID) {
+    //     QL.getClient(friendID, ["id"], (data) => {
+    //         console.log("successfully got a friend");
+    //         this.setState({friends: {...this.state.friends, [data.id]: data}, isLoading: false});
+    //     }, (error) => {
+    //         console.log("Failed to get a vent");
+    //         console.log(JSON.stringify(error));
+    //         this.setState({error: error});
+    //     });
+    // }
+
+    getClientAttribute(id, attribute) {
+        const client = this.props.cache.clients[id];
+        if (client) {
+            return client[attribute];
+        }
+        return null;
     }
 
     componentWillReceiveProps(newProps) {
-        this.props = newProps;
-        this.update();
+        this.update(newProps);
     }
 
     openClientModal = () => { this.setState({clientModalOpen: true}); };
@@ -75,28 +112,29 @@ class BuddyListProp extends Component {
 
     render() {
 
-        function rows(friends, closeModal, openModal, openBool, userID) {
+        function rows(friends, closeModal, openModal, openBool, userID, getClientAttribute) {
             const rowProps = [];
             for (const key in friends) {
                 if (friends.hasOwnProperty(key) === true) {
                     //alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
+                    const friendID = friends[key];
                     rowProps.push(
                         <List.Item>
                             <List.Content floated="right">
                                 <Button inverted onClick={() => {
-                                    Lambda.removeFriend(userID, userID, friends[key].id,
+                                    Lambda.removeFriend(userID, userID, "Client", friendID,
                                         (data) => {
-                                            alert("Successfully declined " + friends[key].id + " as a friend!");
+                                            alert("Successfully removed " + friendID + " as a friend!");
                                         }, (error) => {
                                             alert(JSON.stringify(error));
                                             this.setState({error: error});
                                         })}}>Remove Buddy
                                 </Button>
                             </List.Content>
-                            <Image avatar src={proPic} circular/>
+                            <Image avatar src={getClientAttribute(friendID, "profilePicture")} circular/>
                             <List.Content as="a" onClick={openModal}>
-                                <ClientModal open={openBool} onClose={closeModal} clientID={friends[key].id}/>
-                                {friends[key].id}
+                                <ClientModal open={openBool} onClose={closeModal} clientID={friendID}/>
+                                {getClientAttribute(friendID, "name")}
                             </List.Content>
                         </List.Item>
                     );
@@ -105,28 +143,39 @@ class BuddyListProp extends Component {
             return rowProps;
         }
 
-        if (this.state.isLoading) {
+        if (this.props.info.isLoading) {
             return(
                 <Message>Loading...</Message>
             )
         }
-        return(
-            <List relaxed divided verticalAlign="middle">
-                {rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id)}
-            </List>
-        );
+        if (this.props.user.friends && this.props.user.friends.length && this.props.user.friends.length > 0) {
+            return(
+                <List relaxed divided verticalAlign="middle">
+                    {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this))}
+                </List>
+            );
+        }
+        else {
+            return(
+                <Message>No friends yet!</Message>
+            );
+        }
     }
 }
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    info: state.info
+    cache: state.cache,
+    info: state.info,
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchUserAttributes: (id, attributeList) => {
             dispatch(fetchUserAttributes(id, attributeList));
+        },
+        fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
         }
     };
 };

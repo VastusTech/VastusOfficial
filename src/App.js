@@ -6,6 +6,7 @@ import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
+import ItemType, { getItemTypeFromID } from "./ItemType";
 
 AWSConfig();
 
@@ -52,13 +53,16 @@ class App extends Component {
     //     // this.props.clearUser();
     // }
 
-    async componentDidMount() {
+    componentDidMount() {
         this.props.updateAuth();
     }
 
-    componentWillReceiveProps(nextProps) {
-        if (nextProps.auth) {
-            this.setState();
+    componentWillReceiveProps(newProps, nextContext) {
+        if (newProps.auth) {
+            this.setState(this.state);
+        }
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            this.setState(this.state);
         }
     }
 
@@ -82,7 +86,7 @@ class App extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    // user: state.user,
+    user: state.user,
     auth: state.auth
     // cache: state.cache,
 });
