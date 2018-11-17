@@ -113,18 +113,46 @@ class CreateEventProp extends Component {
         let time = '';
         let endTime;
 
+        let date = this.eventState.startDateTime.substr(0, 11);
+        let nextDate = this.eventState.startDateTime.substr(0, 8) + "0" +
+            (parseInt(this.eventState.startDateTime.substr(8, 2), 10) + 1) +
+            this.eventState.startDateTime.substr(10, 1);
         let hour = this.eventState.startDateTime.substr(11, 2);
         let durationHour = this.state.duration.substr(0, 1);
+        let minute = this.eventState.startDateTime.substr(14, 2);
+        let durationMinute = this.state.duration.substr(2, 2);
         let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
 
-        if(endHour >= 24){
-            endTime = this.eventState.startDateTime + "_" +
-                (parseInt(hour, 10) + parseInt(durationHour, 10) - 24);
+        if(endHour >= 24) {
+            endTime = (this.eventState.startDateTime + "_" + nextDate + "0" + (parseInt(hour, 10) +
+                parseInt(durationHour, 10) - 24));
         }
-        else {
-            endTime = this.eventState.startDateTime + "_" +
+        else if((endHour < 24) && (endHour < 10)) {
+            endTime = this.eventState.startDateTime + "_" + date + "0" +
                 (parseInt(hour, 10) + parseInt(durationHour, 10));
         }
+        else {
+            endTime = this.eventState.startDateTime + "_" + date +
+                (parseInt(hour, 10) + parseInt(durationHour, 10));
+        }
+
+        alert("Minute: " + minute + " " + "Duration: " + durationMinute);
+        if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
+            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
+            hour = "0" + (parseInt(hour, 10) + 1);
+            alert("Min: " + minute);
+            endTime = endTime.substr(0, 28) + (hour + ":" + minute);
+            alert("End: " + endTime);
+        }
+        else {
+            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10));
+            alert("Min: " + minute);
+            endTime += (":" + minute);
+            alert("End: " + endTime);
+        }
+
+        alert("End time substring: " + endTime.substr(0, 28));
+        alert(endTime);
 
         alert(endTime);
 
@@ -176,13 +204,29 @@ class CreateEventProp extends Component {
                             </Form.Group>
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
+                                    <label>Event Date</label>
+                                    <input type="date"/>
+                                </div>
+                                <div className="field">
                                     <label>Start Date and Time</label>
                                     <input type="datetime-local" name="startDateTime" onChange={value => this.changeStateText("startDateTime", value)}/>
+
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>
                                     <Dropdown placeholder='duration' value = {this.state.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
                                 </div>
+
+                                <div className="field">
+                                    <label>Capacity</label>
+                                    <Input type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("goal", value)}/>
+                                </div>
+
+                                <div className="field">
+                                    <label>Goal</label>
+                                    <Input type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
+                                </div>
+
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
                                 <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
