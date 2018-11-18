@@ -275,7 +275,7 @@ class Notification extends Component {
                             <Feed>
                                 <Feed.Event>
                                     <Feed.Label>
-                                        <Image src={this.getAboutAttribute("profilePicture")} circular size="large"/>
+                                        <Image src={this.getFromAttribute("profilePicture")} circular size="large"/>
                                     </Feed.Label>
                                     <Feed.Content>
                                         <Feed.Summary>

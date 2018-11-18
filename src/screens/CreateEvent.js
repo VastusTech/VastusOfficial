@@ -1,54 +1,42 @@
 import React, { Component } from 'react';
 import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Dropdown } from 'semantic-ui-react';
-import {
-    DateInput,
-    TimeInput,
-    DateTimeInput,
-    DatesRangeInput
-} from 'semantic-ui-calendar-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
+import {setError} from "../redux_helpers/actions/infoActions";
 
-function convertDateTimeToISO8601(dateAndTime) {
-    let dateTimeString = String(dateAndTime);
-    let day = dateTimeString.substr(0, 2);
-    let month = dateTimeString.substr(3, 2);
-    let year = dateTimeString.substr(6, 4);
-    let time = dateTimeString.substr(11, 5);
-    let hour = dateTimeString.substr(11, 2);
-    let minute = dateTimeString.substr(13, 3);
-    let amorpm = dateTimeString.substr(16, 3);
+// Take from StackOverflow, nice snippit!
+// https://stackoverflow.com/a/17415677
+Date.prototype.toIsoString = function() {
+    var tzo = -this.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            var norm = Math.floor(Math.abs(num));
+            return (norm < 10 ? '0' : '') + norm;
+        };
+    return this.getFullYear() +
+        '-' + pad(this.getMonth() + 1) +
+        '-' + pad(this.getDate()) +
+        'T' + pad(this.getHours()) +
+        ':' + pad(this.getMinutes()) +
+        ':' + pad(this.getSeconds()) +
+        dif + pad(tzo / 60) +
+        ':' + pad(tzo % 60);
+};
 
-    if(amorpm.trim() === 'AM') {
-        return year + "-" + month + "-" + day + "T" + time + ":00+00:00";
-    }
-    else if(amorpm.trim() === 'PM' && hour == 12) {
-        return year + "-" + month + "-" + day + "T" + "12" + minute + ":00+00:00";
-    }
-    else if(amorpm.trim() === 'AM' && hour == 12) {
-        return year + "-" + month + "-" + day + "T" + "00" + minute + ":00+00:00";
-    }
-    else {
-        return year + "-" + month + "-" + day + "T" + (parseInt(hour, 10) + 12) + minute + ":00+00:00";
-    }
-}
-
-const timeOptions = [ { key: '0:15', value: '0:15', text: '0:15' },
-    { key: '0:30', value: '0:30', text: '0:30' },
-    { key: '0:45', value: '0:45', text: '0:45' },
-    { key: '1:00', value: '1:00', text: '1:00' },
-    { key: '1:15', value: '1:15', text: '1:15' },
-    { key: '1:30', value: '1:30', text: '1:30' },
-    { key: '1:45', value: '1:45', text: '1:45' },
-    { key: '2:00', value: '2:00', text: '2:00' },
-    { key: '2:15', value: '2:15', text: '2:15' },
-    { key: '2:30', value: '2:30', text: '2:30' },
-    { key: '2:45', value: '2:45', text: '2:45' },
-    { key: '3:00', value: '3:00', text: '3:00' },
-    { key: '3:00+', value: '3:00+', text: '3:00+' }
+const timeOptions = [ { key: '0:15', value: '15', text: '0:15' },
+    { key: '0:30', value: '30', text: '0:30' },
+    { key: '0:45', value: '45', text: '0:45' },
+    { key: '1:00', value: '60', text: '1:00' },
+    { key: '1:15', value: '75', text: '1:15' },
+    { key: '1:30', value: '90', text: '1:30' },
+    { key: '1:45', value: '105', text: '1:45' },
+    { key: '2:00', value: '120', text: '2:00' },
+    { key: '2:15', value: '135', text: '2:15' },
+    { key: '2:30', value: '150', text: '2:30' },
+    { key: '2:45', value: '165', text: '2:45' },
+    { key: '3:00', value: '180', text: '3:00' },
+    //{ key: '3:00+', value: '3:00+', text: '3:00+' }
 ];
-
-alert(timeOptions[1].text);
 
 /*
 * Create Event Prop
@@ -59,11 +47,6 @@ alert(timeOptions[1].text);
 class CreateEventProp extends Component {
 
     state = {
-        date: '',
-        startDateTime: '',
-        duration: '',
-        datesRange: '',
-        timeFormat: 'AMPM',
         checked: false
     };
 
@@ -71,8 +54,9 @@ class CreateEventProp extends Component {
 
     eventState = {
         title: "",
-        startDateTime: "",
-        duration: "",
+        eventDate: CreateEventProp.getTodayDateString(),
+        startTime: CreateEventProp.getNowTimeString(),
+        duration: '60',
         location: "",
         time: "",
         time_created: "",
@@ -89,108 +73,155 @@ class CreateEventProp extends Component {
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
-    handleDurationChange(event, data) {
-        const { value } = data.options.find(o => o.value === value);
-        console.log(value);
-    }
-
     handleAccessSwitch = () => {
-        if(this.eventState.access == 'public') {
+        if(this.eventState.access === 'public') {
             this.eventState.access = 'private';
-            //alert(this.eventState.access);
         }
-        else if (this.eventState.access == 'private') {
+        else if (this.eventState.access === 'private') {
             this.eventState.access = 'public';
-            //alert(this.eventState.access);
         }
         else {
             alert("Event access should be public or private");
         }
-
     };
 
     handleSubmit = () => {
-        let time = '';
-        let endTime;
+        // TODO Make sure the dates are well formed?
+        const year = parseInt(this.eventState.eventDate.substr(0, 4));
+        const month = parseInt(this.eventState.eventDate.substr(5, 2)) - 1;
+        const day = parseInt(this.eventState.eventDate.substr(8, 2));
+        const hour = parseInt(this.eventState.startTime.substr(0, 2));
+        const minute = parseInt(this.eventState.startTime.substr(3, 2));
+        let startDate = new Date(year, month, day, hour, minute);
+        let endDate = new Date(year, month, day, hour, minute);
+        endDate.setMinutes(endDate.getMinutes() + this.eventState.duration);
 
-        let date = this.eventState.startDateTime.substr(0, 11);
-        let nextDate = this.eventState.startDateTime.substr(0, 8) + "0" +
-            (parseInt(this.eventState.startDateTime.substr(8, 2), 10) + 1) +
-            this.eventState.startDateTime.substr(10, 1);
-        let hour = this.eventState.startDateTime.substr(11, 2);
-        let durationHour = this.state.duration.substr(0, 1);
-        let minute = this.eventState.startDateTime.substr(14, 2);
-        let durationMinute = this.state.duration.substr(2, 2);
-        let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
+        alert("StartDate = " + startDate.toIsoString());
+        alert("EndDate = " + endDate.toIsoString());
 
-        if(endHour >= 24) {
-            endTime = (this.eventState.startDateTime + "_" + nextDate + "0" + (parseInt(hour, 10) +
-                parseInt(durationHour, 10) - 24));
-        }
-        else if((endHour < 24) && (endHour < 10)) {
-            endTime = this.eventState.startDateTime + "_" + date + "0" +
-                (parseInt(hour, 10) + parseInt(durationHour, 10));
+        const time = startDate.toIsoString() + "_" + endDate.toIsoString();
+
+        // TODO Check to see if valid inputs!
+        if (this.eventState.capacity && this.eventState.location && this.eventState.title && this.eventState.goal) {
+            if (Number.isInteger(+this.eventState.capacity)) {
+                Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, time, this.eventState.capacity,
+                    this.eventState.location, this.eventState.title, this.eventState.goal, this.eventState.description,
+                    "3", [], this.eventState.access, (data) => {
+                        console.log("Successfully created a challenge!");
+                    }, (error) => {
+                        alert(JSON.stringify(error));
+                    });
+            }
+            else {
+                alert("Capacity needs to be an integer!");
+                alert(this.eventState.capacity);
+            }
         }
         else {
-            endTime = this.eventState.startDateTime + "_" + date +
-                (parseInt(hour, 10) + parseInt(durationHour, 10));
+            alert("All fields need to be filled out!");
         }
 
-        alert("Minute: " + minute + " " + "Duration: " + durationMinute);
-        if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
-            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
-            hour = "0" + (parseInt(hour, 10) + 1);
-            alert("Min: " + minute);
-            endTime = endTime.substr(0, 28) + (hour + ":" + minute);
-            alert("End: " + endTime);
-        }
-        else {
-            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10));
-            alert("Min: " + minute);
-            endTime += (":" + minute);
-            alert("End: " + endTime);
-        }
+        // let time = '';
+        // let endTime;
 
-        alert("End time substring: " + endTime.substr(0, 28));
-        alert(endTime);
+        // let date = this.eventState.startDateTime.substr(0, 11);
+        // let nextDate = this.eventState.startDateTime.substr(0, 8) + "0" +
+        //     (parseInt(this.eventState.startDateTime.substr(8, 2), 10) + 1) +
+        //     this.eventState.startDateTime.substr(10, 1);
+        // let hour = this.eventState.startDateTime.substr(11, 2);
+        // let durationHour = this.state.duration.substr(0, 1);
+        // let minute = this.eventState.startDateTime.substr(14, 2);
+        // let durationMinute = this.state.duration.substr(2, 2);
+        // let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
+        //
+        // if(endHour >= 24) {
+        //     endTime = (this.eventState.startDateTime + "_" + nextDate + "0" + (parseInt(hour, 10) +
+        //         parseInt(durationHour, 10) - 24));
+        // }
+        // else if((endHour < 24) && (endHour < 10)) {
+        //     endTime = this.eventState.startDateTime + "_" + date + "0" +
+        //         (parseInt(hour, 10) + parseInt(durationHour, 10));
+        // }
+        // else {
+        //     endTime = this.eventState.startDateTime + "_" + date +
+        //         (parseInt(hour, 10) + parseInt(durationHour, 10));
+        // }
+        //
+        // alert("Minute: " + minute + " " + "Duration: " + durationMinute);
+        // if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
+        //     minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
+        //     hour = "0" + (parseInt(hour, 10) + 1);
+        //     alert("Min: " + minute);
+        //     endTime = endTime.substr(0, 28) + (hour + ":" + minute);
+        //     alert("End: " + endTime);
+        // }
+        // else {
+        //     minute = (parseInt(minute, 10) + parseInt(durationMinute, 10));
+        //     alert("Min: " + minute);
+        //     endTime += (":" + minute);
+        //     alert("End: " + endTime);
+        // }
+        //
+        // alert("End time substring: " + endTime.substr(0, 28));
+        // alert(endTime);
+        //
+        // alert(endTime);
 
-        alert(endTime);
-
-        if(Number.isInteger(+this.eventState.capacity)) {
-            Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
-                String(this.eventState.location), String(this.eventState.title),
-                String(this.eventState.goal), (data) => {
-                    alert(JSON.stringify(data));
-                    // HANDLE WHAT HAPPENS afterwards
-                    if (data.errorMessage) {
-                        // Java error handling
-                        alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
-                    }
-                    else {
-                        alert("ya did it ya filthy animal");
-                    }
-                }, (error) => {
-                    alert(error);
-                    // TODO HANDLE WHAT HAPPENS afterwards
-                    // TODO keep in mind that this is asynchronous
-                }
-            );
-        }
-        else {
-            alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
-        }
+        // if(Number.isInteger(+this.eventState.capacity)) {
+        //     Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
+        //         String(this.eventState.location), String(this.eventState.title),
+        //         String(this.eventState.goal), (data) => {
+        //             alert(JSON.stringify(data));
+        //             // HANDLE WHAT HAPPENS afterwards
+        //             if (data.errorMessage) {
+        //                 // Java error handling
+        //                 alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
+        //             }
+        //             else {
+        //                 alert("ya did it ya filthy animal");
+        //             }
+        //         }, (error) => {
+        //             alert(error);
+        //             // TODO HANDLE WHAT HAPPENS afterwards
+        //             // TODO keep in mind that this is asynchronous
+        //         }
+        //     );
+        // }
+        // else {
+        //     alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
+        // }
     };
 
     handleDurationChange = (e, data) => {
-        this.setState({
-            duration: data.value,
-        }, () => {
-            console.log('value',this.state.duration);
-        });
+        this.eventState.duration = data.value;
+        alert(this.eventState.duration);
+        // this.setState({
+        //     duration: data.value,
+        // }, () => {
+        //     console.log('value',this.state.duration);
+        // });
     };
+
+    static getTodayDateString() {
+        // This is annoying just because we need to work with time zones :(
+        const shortestTimeInterval = 5;
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + (shortestTimeInterval - (date.getMinutes() % shortestTimeInterval)));
+        return date.toIsoString().substr(0, 10);
+    }
+
+    static getNowTimeString() {
+        // Sneaking some modular arithmetic in this ;) This is so that the time shown is always a nice lookin' number
+        const shortestTimeInterval = 5;
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + (shortestTimeInterval - (date.getMinutes() % shortestTimeInterval)));
+        return date.toIsoString().substr(11, 5);
+    }
+
 
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
+
         return (
             <Segment raised inverted>
                 <Modal trigger={<Button primary fluid size="large">+ Create Event</Button>}>
@@ -205,27 +236,16 @@ class CreateEventProp extends Component {
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
                                     <label>Event Date</label>
-                                    <input type="date"/>
+                                    <input type="date" name="eventDate" defaultValue={CreateEventProp.getTodayDateString()} onChange={value => this.changeStateText("eventDate", value)}/>
                                 </div>
                                 <div className="field">
                                     <label>Start Time</label>
-                                    <input type="time" name="startTime" placeholder="12:00 AM" onChange={value => this.changeStateText("startTime", value)}/>
+                                    <input type="time" name="startTime" defaultValue={CreateEventProp.getNowTimeString()} onChange={value => this.changeStateText("startTime", value)}/>
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>
-                                    <Dropdown placeholder='duration' value = {this.state.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
+                                    <Dropdown placeholder='duration' defaultValue={this.eventState.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
                                 </div>
-
-                                <div className="field">
-                                    <label>Capacity</label>
-                                    <Input type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("goal", value)}/>
-                                </div>
-
-                                <div className="field">
-                                    <label>Goal</label>
-                                    <Input type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                </div>
-
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
                                 <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
@@ -257,6 +277,14 @@ const mapStateToProps = (state) => ({
     user: state.user
 });
 
-export default connect(mapStateToProps)(CreateEventProp);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setError: (error) => {
+            dispatch(setError(error));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateEventProp);
 
 
