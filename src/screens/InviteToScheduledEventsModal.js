@@ -38,7 +38,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
+                this.props.fetchUserAttributes(["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -123,8 +123,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));

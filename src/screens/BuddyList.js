@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, {Component, Fragment} from 'react'
 import { Button, List, Message, Image } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import QL from "../GraphQL";
@@ -8,6 +8,7 @@ import Lambda from "../Lambda";
 import { inspect } from 'util';
 import proPic from '../img/BlakeProfilePic.jpg';
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
+import ClientCard from "./ClientCard";
 
 class BuddyListProp extends Component {
     state = {
@@ -70,18 +71,18 @@ class BuddyListProp extends Component {
         if (this.state.isLoading && user.hasOwnProperty("friends") && user.friends && user.friends.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.friends.length; i++) {
-                props.fetchClient(user.friends[i], ["id", "name", "profileImagePath", "profilePicture"]);
+                props.fetchClient(user.friends[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
                 // if (!(user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(user.scheduledEvents[i]);
                 // }
             }
         }
-        else if (!props.info.isLoading) {
-            if (!this.state.sentRequest && !props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["friends"]);
-                this.setState({sentRequest: true});
-            }
-        }
+        // else if (!props.info.isLoading) {
+        //     if (!this.state.sentRequest && !props.info.error) {
+        //         this.props.fetchUserAttributes(["friends"]);
+        //         this.setState({sentRequest: true});
+        //     }
+        // }
     }
 
     // addFriendFromGraphQL(friendID) {
@@ -120,21 +121,8 @@ class BuddyListProp extends Component {
                     const friendID = friends[key];
                     rowProps.push(
                         <List.Item>
-                            <List.Content floated="right">
-                                <Button inverted onClick={() => {
-                                    Lambda.removeFriend(userID, userID, "Client", friendID,
-                                        (data) => {
-                                            alert("Successfully removed " + friendID + " as a friend!");
-                                        }, (error) => {
-                                            alert(JSON.stringify(error));
-                                            this.setState({error: error});
-                                        })}}>Remove Buddy
-                                </Button>
-                            </List.Content>
-                            <Image avatar src={getClientAttribute(friendID, "profilePicture")} circular/>
-                            <List.Content as="a" onClick={openModal}>
-                                <ClientModal open={openBool} onClose={closeModal} clientID={friendID}/>
-                                {getClientAttribute(friendID, "name")}
+                            <List.Content>
+                                <ClientCard clientID={friendID}/>
                             </List.Content>
                         </List.Item>
                     );
@@ -171,8 +159,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchClient: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));

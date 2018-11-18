@@ -115,7 +115,7 @@ class Profile extends React.PureComponent {
         // }
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture"]);
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends"]);
         }
         else {
             this.setState({isLoading: false});
@@ -136,7 +136,7 @@ class Profile extends React.PureComponent {
                     (data) => {
                         //alert("successfully editted client");
                         //alert(JSON.stringify(data));
-                        this.props.forceFetchUserAttributes(this.props.user.id, ["profileImagePath", "profilePicture"]);
+                        this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         alert("Failed edit client attribute");
@@ -297,11 +297,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributesList) => {
-            dispatch(fetchUserAttributes(id, attributesList));
+        fetchUserAttributes: (attributesList) => {
+            dispatch(fetchUserAttributes(attributesList));
         },
-        forceFetchUserAttributes: (id, variablesList) => {
-            dispatch(forceFetchUserAttributes(id, variablesList));
+        forceFetchUserAttributes: (variablesList) => {
+            dispatch(forceFetchUserAttributes(variablesList));
         },
         logOut: () => {
             dispatch(logOut());

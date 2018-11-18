@@ -41,7 +41,7 @@ class NextEventProp extends Component {
         }
         else if (!props.info.isLoading) {
             if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
-                props.fetchUserAttributes(props.user.id, ["scheduledEvents"]);
+                props.fetchUserAttributes(["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -149,8 +149,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));

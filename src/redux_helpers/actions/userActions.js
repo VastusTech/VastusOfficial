@@ -17,10 +17,13 @@ export function forceSetUser(user) {
     };
 }
 
-export function forceFetchUserAttributes(id, variablesList) {
-    return (dispatch) => {
+export function forceFetchUserAttributes(variablesList) {
+    return (dispatch, getStore) => {
         // Just overwrite all the user attributes because we want to process them again
-        overwriteFetchUserAttributes(id, variablesList, dispatch);
+        const userID = getStore().user.id;
+        if (userID) {
+            overwriteFetchUserAttributes(userID, variablesList, dispatch);
+        }
     }
 }
 
@@ -31,15 +34,20 @@ export function forceFetchUserAttributes(id, variablesList) {
  * @param variablesList
  * @returns {Function}
  */
-export function fetchUserAttributes(id, variablesList) {
+export function fetchUserAttributes(variablesList) {
     return (dispatch, getStore) => {
-        // alert("Filtering out results for fetch!");
-        const userKeyList = Object.keys(getStore().user);
-        // alert("Originally asked for variablesList = " + JSON.stringify(variablesList));
-        // alert("UserKeyList = " + JSON.stringify(userKeyList));
-        const filterVariablesList = variablesList.filter((v) => { return !userKeyList.includes(v) });
-        // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
-        overwriteFetchUserAttributes(id, filterVariablesList, dispatch);
+        const user = getStore().user;
+        if (user && user.id) {
+            // alert("Filtering out results for fetch!");
+            const userKeyList = Object.keys(user);
+            // alert("Originally asked for variablesList = " + JSON.stringify(variablesList));
+            // alert("UserKeyList = " + JSON.stringify(userKeyList));
+            const filterVariablesList = variablesList.filter((v) => {
+                return !userKeyList.includes(v)
+            });
+            // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
+            overwriteFetchUserAttributes(user.id, filterVariablesList, dispatch);
+        }
     }
 }
 

@@ -158,6 +158,7 @@ class SearchBarProp extends Component {
 
     handleResultSelect = (e, { result }) => {
         // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        // alert("Popping up result = " + JSON.stringify(result.resultcontent));
         this.setState({result: result.resultcontent, resultModalOpen: true});
     };
 
@@ -179,26 +180,14 @@ class SearchBarProp extends Component {
         }
         const type = this.state.result.item_type;
         if (type === "Client") {
-            // alert("opening client modal");
             return(
                 <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} clientID={this.state.result.id}/>
             );
         }
         else if (type === "Event") {
-            let ifJoined = false;
-            let ifOwned = false;
-            if (this.state.result.owner === this.props.user.id) {
-                ifOwned = true;
-            }
-            if (this.props.user.id in this.state.result.members) {
-                ifJoined = true;
-            }
             return(
                 <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)}
-                                       members={this.state.result.members}
-                                       ifOwned={ifOwned}
-                                       ifJoined={ifJoined}
-                                       event={this.state.result}
+                                       eventID={this.state.result.id}
                 />
             );
         }
