@@ -1,5 +1,6 @@
 // import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
+import {ifDebug} from "./Constants";
 
 // TODO Use this instead?
 // AWSConfig();
@@ -307,7 +308,9 @@ class Lambda {
     }
     static invokeLambda(payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
-        alert("Sending lambda payload: " + JSON.stringify(payload));
+        if (ifDebug) {
+            alert("Sending lambda payload: " + JSON.stringify(payload));
+        }
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
@@ -326,7 +329,9 @@ class Lambda {
                 }
                 else {
                     console.log("Successfully invoked lambda function!");
-                    alert("Successful Lambda, received " + JSON.stringify(payload));
+                    if (ifDebug) {
+                        alert("Successful Lambda, received " + JSON.stringify(payload));
+                    }
                     successHandler(payload);
                 }
             }

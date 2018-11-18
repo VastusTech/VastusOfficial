@@ -1,4 +1,5 @@
 import { API, graphqlOperation} from 'aws-amplify';
+import { ifDebug } from "./Constants";
 import _ from 'lodash';
 
 class GraphQL {
@@ -310,7 +311,9 @@ class GraphQL {
             successHandler(queryCache[queryString]);
         }
         else {
-            alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+            if (ifDebug) {
+                alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+            }
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {
@@ -318,7 +321,9 @@ class GraphQL {
                     failureHandler("Object had returned null");
                 }
                 // alert("Returned!");
-                alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                if (ifDebug) {
+                    alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                }
                 // alert(JSON.stringify(queryCache));
                 if (putQuery) {
                     // alert("Putting the query in!");
