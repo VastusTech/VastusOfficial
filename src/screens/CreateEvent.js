@@ -93,8 +93,12 @@ class CreateEventProp extends Component {
         const hour = parseInt(this.eventState.startTime.substr(0, 2));
         const minute = parseInt(this.eventState.startTime.substr(3, 2));
         let startDate = new Date(year, month, day, hour, minute);
-        let endDate = new Date(year, month, day, hour, minute);
-        endDate.setMinutes(endDate.getMinutes() + this.eventState.duration);
+        let endDate = new Date(startDate.getTime() + (60000 * this.eventState.duration));
+        // alert(endDate.toDateString());
+        // alert(endDate.getMinutes());
+        // endDate.setMinutes(endDate.getMinutes() + this.eventState.duration);
+        // alert(endDate.getMinutes());
+        // alert(endDate.toDateString());
 
         alert("StartDate = " + startDate.toIsoString());
         alert("EndDate = " + endDate.toIsoString());
