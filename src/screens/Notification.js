@@ -45,8 +45,10 @@ class Notification extends Component {
                     if (this.state.inviteID !== props.inviteID && !this.state.sentRequest && !this.props.info.isLoading) {
                         this.setState({inviteID: props.inviteID});
                         this.state.sentRequest = true;
+                        alert("Fetching client = " + invite.from);
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                         if (invite.inviteType === "eventInvite") {
+                            alert("Fetching event = " + invite.about);
                             props.fetchEvent(invite.about, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                         }
                     }
@@ -293,7 +295,7 @@ class Notification extends Component {
                                                 {this.getFromAttribute("name")}
                                             </Feed.User>
                                             <ClientModal
-                                                clientID={this.getAboutAttribute("id")}
+                                                clientID={this.getFromAttribute("id")}
                                                 open={this.state.clientModalOpen}
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleClientModalClose.bind(this)}

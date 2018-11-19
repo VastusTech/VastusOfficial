@@ -45,8 +45,8 @@ class EventFeed extends Component {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"], QL.generateFilter("and",
-                {"access": "eq"}, {"access": "public"}), this.state.eventFeedLength,
+            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "members", "capacity", "difficulty"], QL.generateFilter("and",
+                {"access": "eq", "ifCompleted": "eq"}, {"access": "public", "ifCompleted": "false"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});

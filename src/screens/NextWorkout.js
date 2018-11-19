@@ -75,7 +75,7 @@ class NextEventProp extends Component {
             alert("resetting app for new user!");
             this.resetState();
         }
-        // this.update(newProps);
+        this.update(newProps);
     }
 
     render() {

@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Card, Modal, Button, Header, List, Divider } from 'semantic-ui-react';
+import { Card, Modal, Button, Header, List, Divider, Grid } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
+import CompleteChallengeModal from "./CompleteChallengeModal";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -47,6 +48,7 @@ class EventDescriptionModal extends Component {
         // ownerName: null,
         // members: {},
         clientModalOpen: false,
+        completeModalOpen: false
     };
 
     constructor(props) {
@@ -145,8 +147,15 @@ class EventDescriptionModal extends Component {
         return this.props.user.id === this.getEventAttribute("owner");
     }
 
+    isCompleted() {
+        return this.getEventAttribute("ifCompleted");
+    }
+
     openClientModal() { this.setState({clientModalOpen: true}); }
     closeClientModal() { this.setState({clientModalOpen: false}); }
+
+    openCompleteModal() { this.setState({completeModalOpen: true}); }
+    closeCompleteModal() { this.setState({completeModalOpen: false}); }
 
     render() {
         if (!this.getEventAttribute("id")) {
@@ -157,10 +166,31 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined, joinHandler, leaveHandler, deleteHandler) {
-            if(isOwned) {
+        function createCorrectButton(isOwned, isJoined, ifChallenge, ifCompleted, joinHandler, leaveHandler, deleteHandler, completeHandler) {
+            if (ifCompleted) {
+                return(
+                    <Button fluid inverted size="large">This Event is completed</Button>
+                );
+            }
+            else if(isOwned) {
                 // TODO This should also link the choose winner button
-                return (<Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>)
+                if (ifChallenge) {
+                    return (
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button primary fluid size="large" onClick={completeHandler}>Input the winner!</Button>
+                            </Grid.Column>
+                        </Grid>
+                    )
+                }
+                else {
+                    return(
+                        <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                    );
+                }
             }
             else if(isJoined) {
                 return (<Button inverted fluid size="large" onClick={leaveHandler}>Leave</Button>)
@@ -177,6 +207,7 @@ class EventDescriptionModal extends Component {
                 <Modal.Content>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.getEventAttribute("owner")}/>
+                        <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal.bind(this)} challengeID={this.getEventAttribute("id")}/>
                         <List relaxed>
                             <List.Item>
                                 <List.Icon name='user' />
@@ -208,8 +239,8 @@ class EventDescriptionModal extends Component {
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.isOwned(), this.isJoined(), this.handleJoinEventButton,
-                            this.handleLeaveEventButton, this.handleDeleteEventButton)}
+                            {createCorrectButton(this.isOwned(), this.isJoined(), this.isCompleted(), this.getEventAttribute("ifChallenge"), this.handleJoinEventButton,
+                            this.handleLeaveEventButton, this.handleDeleteEventButton, this.openCompleteModal.bind(this))}
                     </Modal.Description>
                 </Modal.Content>
             </Modal>

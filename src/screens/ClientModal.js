@@ -30,7 +30,7 @@ class ClientModal extends Component {
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
                 // alert("Setting new state to " + newProps.clientID);
-                this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
+                this.props.fetchClient(newProps.clientID, ["id", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
                 // this.state.sentRequest = true;
@@ -188,7 +188,7 @@ class ClientModal extends Component {
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
-                                    {}
+                                    {this.getClientAttribute("birthday") + " / " + this.getClientAttribute("gender")}
                                 </List.Content>
                             </List.Item>
                             {/* Friends */}

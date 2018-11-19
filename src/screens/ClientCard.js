@@ -83,7 +83,7 @@ class ClientCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openClientModal.bind(this)}>
-                <Card.Content image>
+                <Card.Content>
                     <Grid columns={2}>
                         <Grid.Column>{this.profilePicture()}</Grid.Column>
                         <Grid.Column>

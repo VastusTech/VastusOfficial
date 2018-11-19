@@ -36,6 +36,7 @@ class GraphQL {
             "getReview", successHandler, failureHandler);
     }
     static getEvent(id, variableList, successHandler, failureHandler) {
+        alert("ay lmao pt. 2");
         this.execute(this.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
             "getEvent", successHandler, failureHandler);
     }

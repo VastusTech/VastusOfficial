@@ -8,6 +8,7 @@ import { S3Image } from 'aws-amplify-react';
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
 import ScheduledEventList from "./ScheduledEventList";
+import CompletedEventList from "./CompletedEventList";
 import OwnedEventList from "./OwnedEventList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
@@ -63,6 +64,7 @@ class Profile extends React.PureComponent {
             sentRequest: false,
             buddyModalOpen: false,
             scheduledModalOpen: false,
+            completedModalOpen: false,
             ownedModalOpen: false,
             error: null,
         });
@@ -197,6 +199,8 @@ class Profile extends React.PureComponent {
     closeBuddyModal = () => { this.setState({buddyModalOpen: false}); };
     openScheduledModal = () => { this.setState({scheduledModalOpen: true}); };
     closeScheduledModal = () => { this.setState({scheduledModalOpen: false}); };
+    openCompletedModal = () => { this.setState({completedModalOpen: true}); };
+    closeCompletedModal = () => { this.setState({completedModalOpen: false}); };
     openOwnedModal = () => { this.setState({ownedModalOpen: true}); };
     closeOwnedModal = () => { this.setState({ownedModalOpen: false}); };
 
@@ -226,8 +230,8 @@ class Profile extends React.PureComponent {
          */
 
         function numChallengesWon(challengesWon) {
-            if (challengesWon && challengesWon.size()) {
-                return challengesWon.size();
+            if (challengesWon && challengesWon.length) {
+                return challengesWon.length;
             }
             return 0;
         }
@@ -271,6 +275,14 @@ class Profile extends React.PureComponent {
                             <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
                                 <Modal.Content>
                                     <ScheduledEventList/>
+                                </Modal.Content>
+                            </Modal>
+                        </List.Item>
+                        <List.Item>
+                            <Button fluid size="large" onClick={this.openCompletedModal.bind(this)}><Icon name="bookmark outline" />Completed Challenges</Button>
+                            <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)}>
+                                <Modal.Content>
+                                    <CompletedEventList/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>

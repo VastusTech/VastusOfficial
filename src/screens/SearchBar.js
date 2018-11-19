@@ -7,7 +7,7 @@ import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
 import ClientModal from "./ClientModal";
 import {connect} from "react-redux";
-import {putClientQuery, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, fetchEvent, putClientQuery, putEventQuery} from "../redux_helpers/actions/cacheActions";
 
 // setupAWS();
 
@@ -57,6 +57,7 @@ class SearchBarProp extends Component {
                 access: "public"
             };
             this.setState({eventsLoading: true});
+            // TODO Do we need to get this much from GraphQL?
             QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access", "members"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
@@ -159,6 +160,12 @@ class SearchBarProp extends Component {
     handleResultSelect = (e, { result }) => {
         // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
         // alert("Popping up result = " + JSON.stringify(result.resultcontent));
+        // if (result.resultcontent.item_type === "Client") {
+        //     this.props.fetchClient(result.resultcontent.id, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+        // }
+        // else if (result.resultcontent.item_type === "Event") {
+        //     this.props.fetchEvent(result.resultcontent.id, ["time", "time_created", "title", "goal", "members"]);
+        // }
         this.setState({result: result.resultcontent, resultModalOpen: true});
     };
 
@@ -227,6 +234,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        },
         putClientQuery: (queryString, queryResult) => {
             dispatch(putClientQuery(queryString, queryResult));
         },

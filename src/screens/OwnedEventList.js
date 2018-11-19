@@ -32,7 +32,8 @@ class OwnedEventsList extends Component {
         if (this.state.isLoading && user.hasOwnProperty("ownedEvents") && user.ownedEvents && user.ownedEvents.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.ownedEvents.length; i++) {
-                this.props.fetchEvent(user.ownedEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                // this.props.fetchEvent(user.ownedEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                this.props.fetchEvent(user.ownedEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "members", "capacity", "difficulty"]);
                 // if (!(user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(user.scheduledEvents[i]);
                 // }

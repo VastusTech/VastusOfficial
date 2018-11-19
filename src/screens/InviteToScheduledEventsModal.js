@@ -88,14 +88,14 @@ class InviteToScheduledEventsModalProp extends Component {
         if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Message>Loading...</Message>
                 </Modal>
             );
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
@@ -107,7 +107,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         else {
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Message>No scheduled events...</Message>
                 </Modal>
             );
