@@ -60,8 +60,11 @@ class EventDescriptionModal extends Component {
         if (newProps.eventID && !this.state.eventID) {
             this.state.eventID = newProps.eventID;
         }
-        if (!this.props.open && newProps.open && newProps.eventID && !this.getEventAttribute("id")) {
-            // this.props.fetchEvent(newProps.eventID, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+        const members = this.getEventAttribute("members");
+        if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
+            for (let i = 0; i < members.length; i++) {
+                this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+            }
         }
     }
 
@@ -199,7 +202,7 @@ class EventDescriptionModal extends Component {
                                     {this.getEventAttribute("members")}
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>}>
                                         <Modal.Content>
-                                            <EventMemberList challengeID = {this.state.eventID} members = {this.getEventAttribute("members")} ifOwned = {this.state.isOwned}/>
+                                            <EventMemberList eventID={this.state.eventID} />
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>

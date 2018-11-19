@@ -66,16 +66,16 @@ class NextEventProp extends Component {
         return null;
     }
 
-    // componentDidMount() {
-    //     this.update();
-    // }
+    componentDidMount() {
+        this.update(this.props);
+    }
 
     componentWillReceiveProps(newProps, nextContext) {
         if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
             alert("resetting app for new user!");
             this.resetState();
         }
-        this.update(newProps);
+        // this.update(newProps);
     }
 
     render() {

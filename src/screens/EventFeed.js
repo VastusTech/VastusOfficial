@@ -48,6 +48,9 @@ class EventFeed extends Component {
             QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"], QL.generateFilter("and",
                 {"access": "eq"}, {"access": "public"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
+                    if (!data.nextToken) {
+                        this.setState({ifFinished: true});
+                    }
                     if (data.items) {
                         // alert(JSON.stringify(data.items));
                         // alert(JSON.stringify(this.state));
@@ -60,9 +63,6 @@ class EventFeed extends Component {
                         }
                         // alert("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
-                        if (!data.nextToken) {
-                            this.setState({ifFinished: true});
-                        }
                     }
                     else {
                         // TODO Came up with no events
@@ -85,7 +85,7 @@ class EventFeed extends Component {
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
         // console.log(calculations.bottomVisible);
-        if(calculations.bottomVisible) {
+        if (calculations.bottomVisible) {
             console.log("Next Token: " + this.state.nextToken);
             this.queryEvents();
         }

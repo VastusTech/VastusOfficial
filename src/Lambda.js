@@ -1,6 +1,7 @@
 // import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
 import {ifDebug} from "./Constants";
+import _ from "lodash";
 
 // TODO Use this instead?
 // AWSConfig();
@@ -17,12 +18,12 @@ const lambdaFunctionName = "VastusDatabaseLambdaFunction";
 
 class Lambda {
     // All the high-level functions
-    static updateEventToChallenge(fromID, eventID, successHandler, failureHandler) {
+    static updateEventToChallenge = (fromID, eventID, successHandler, failureHandler) => {
         this.editEventAttribute(fromID, eventID, "ifChallenge", "true", successHandler, failureHandler);
-    }
-    static updateEventToEvent(fromID, eventID, successHandler, failureHandler) {
+    };
+    static updateEventToEvent = (fromID, eventID, successHandler, failureHandler) => {
         this.editEventAttribute(fromID, eventID, "ifChallenge", "false", successHandler, failureHandler);
-    }
+    };
     static updateEventToPrivate(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "access", "private", successHandler, failureHandler);
     }
