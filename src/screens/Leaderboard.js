@@ -32,20 +32,34 @@ class Leaderboard extends Component {
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
         if (props.user.hasOwnProperty("friends") && props.user.friends && props.user.friends.length && this.state.isLoading) {
-            this.setState({isLoading: false});
+            this.state.isLoading = false;
+            //this.setState({isLoading: false});
+            alert(JSON.stringify(props.user.friends));
+            alert(JSON.stringify(this.state.friends));
             for (let i = 0; i < props.user.friends.length; i++) {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                 // }
+                // alert("Fetching client = " + props.user.friends[i]);
                 props.fetchClient(props.user.friends[i], ["id", "challengesWon"],
                     (client) => {
                         // Rerender when you get a new scheduled event
+                        // alert("Received client id = " + client.id);
                         for (let i = 0; i < this.state.friends.length; i++) {
                             if (this.state.friends[i].id === client.id) {
                                 return;
                             }
                         }
-                        this.setState({friends: [...this.state.friends, client]});
+                        let challengesWonLength;
+                        if (client.challengesWon) {
+                            challengesWonLength = client.challengesWon.length;
+                        }
+                        else {
+                            challengesWonLength = 0;
+                        }
+                        alert("Client id = " + client.id + " has challenge length = " + challengesWonLength);
+                        this.state.friends.push({id: client.id, challengesWonLength: challengesWonLength});
+                        //this.setState({friends: [...this.state.friends, {id: client.id, challengesWon: client.challengesWon}]});
                     });
             }
         }
@@ -80,14 +94,17 @@ class Leaderboard extends Component {
     render() {
         /**
          * This function takes in a list of events and displays them in a list of Event Card views.
-         * @param events
+         * @param clients
+         * @param getClientAttribute
          * @returns {*}
          */
         function rows(clients, getClientAttribute) {
-            let sortedClients = [...clients];
-            sortedClients.sort(function(a,b) {
-                return (getClientAttribute(a.id, "challengesWonLength") - getClientAttribute(b.id, "challengesWonLength"));
+            //let sortedClients = [...clients];
+            // alert(JSON.stringify(clients));
+            let sortedClients = clients.sort(function(a,b) {
+                return (b.challengesWonLength - a.challengesWonLength);
             });
+            // alert(JSON.stringify(sortedClients));
             // if(events != null && events.length > 0)
             //     alert(JSON.stringify(events[0].id));
             // alert("EVENTS TO PRINT: ");

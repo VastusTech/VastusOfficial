@@ -92,6 +92,7 @@ export function signUp(username, password, name, gender, birthday, email) {
                 console.log("REDUX: Failed sign up...");
                 dispatch(setError(error));
                 dispatch(setIsNotLoading());
+                // TODO DELETE CLIENT THAT WAS CREATED!!!!
             });
         }, (error) => {
             console.log("REDUX: Creating new client failed...");
