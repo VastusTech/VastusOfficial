@@ -86,7 +86,7 @@ class OwnedEventsList extends Component {
         function rows(events) {
             const row = [];
             const rowProps = [];
-            this.forceUpdate();
+            // this.forceUpdate();
             for (const key in events) {
                 if (events.hasOwnProperty(key)) {
                     //alert(JSON.stringify(events[key]));

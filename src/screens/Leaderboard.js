@@ -34,8 +34,8 @@ class Leaderboard extends Component {
         if (props.user.hasOwnProperty("friends") && props.user.friends && props.user.friends.length && this.state.isLoading) {
             this.state.isLoading = false;
             //this.setState({isLoading: false});
-            alert(JSON.stringify(props.user.friends));
-            alert(JSON.stringify(this.state.friends));
+            // alert(JSON.stringify(props.user.friends));
+            // alert(JSON.stringify(this.state.friends));
             for (let i = 0; i < props.user.friends.length; i++) {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
@@ -57,7 +57,7 @@ class Leaderboard extends Component {
                         else {
                             challengesWonLength = 0;
                         }
-                        alert("Client id = " + client.id + " has challenge length = " + challengesWonLength);
+                        // alert("Client id = " + client.id + " has challenge length = " + challengesWonLength);
                         this.state.friends.push({id: client.id, challengesWonLength: challengesWonLength});
                         //this.setState({friends: [...this.state.friends, {id: client.id, challengesWon: client.challengesWon}]});
                     });
