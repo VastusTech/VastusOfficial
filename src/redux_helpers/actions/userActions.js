@@ -17,12 +17,12 @@ export function forceSetUser(user) {
     };
 }
 
-export function forceFetchUserAttributes(variablesList) {
+export function forceFetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         // Just overwrite all the user attributes because we want to process them again
         const userID = getStore().user.id;
         if (userID) {
-            overwriteFetchUserAttributes(userID, variablesList, dispatch);
+            overwriteFetchUserAttributes(userID, variablesList, dataHandler, dispatch);
         }
     }
 }
@@ -32,9 +32,10 @@ export function forceFetchUserAttributes(variablesList) {
  * This assumes that you don't care about refreshing these attributes often. Will use the cache.
  * @param id
  * @param variablesList
+ * @param dataHandler
  * @returns {Function}
  */
-export function fetchUserAttributes(variablesList) {
+export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const user = getStore().user;
         if (user && user.id) {
@@ -46,12 +47,12 @@ export function fetchUserAttributes(variablesList) {
                 return !userKeyList.includes(v)
             });
             // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
-            overwriteFetchUserAttributes(user.id, filterVariablesList, dispatch);
+            overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch);
         }
     }
 }
 
-function overwriteFetchUserAttributes(id, variablesList, dispatch) {
+function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch) {
     dispatch(setIsLoading());
     if (variablesList.length > 0) {
         const pictureIndex = variablesList.indexOf("profilePicture");
@@ -68,11 +69,13 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
                         };
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
+                        if (dataHandler) { dataHandler(data);}
                     }, (error) => {
                         console.log("Failed to get profile image");
                         console.log(error);
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
+                        if (dataHandler) { dataHandler(data);}
                     });
                 }
                 else {
@@ -83,11 +86,13 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
                     };
                     dispatch(setUser(data));
                     dispatch(setIsNotLoading());
+                    if (dataHandler) { dataHandler(data);}
                 }
             }
             else {
                 dispatch(setUser(data));
                 dispatch(setIsNotLoading());
+                if (dataHandler) { dataHandler(data);}
             }
         }, (error) => {
             alert(JSON.stringify(error));

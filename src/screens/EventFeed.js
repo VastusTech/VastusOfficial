@@ -6,6 +6,7 @@ import QL from "../GraphQL";
 import { connect } from 'react-redux';
 import ScheduledEventsList from "./ScheduledEventList";
 import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -21,6 +22,7 @@ import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_help
 class EventFeed extends Component {
     state = {
         isLoading: true,
+        userID: null,
         events: [],
         clientNames: {}, // id to name
         eventFeedLength: 10,
@@ -33,28 +35,62 @@ class EventFeed extends Component {
     };
 
     componentDidMount() {
-        this.queryEvents();
+        // this.componentWillReceiveProps(this.props);
+        // if (this.props.userID) {
+        //     this.setState({userID: this.props.userID});
+        //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
+        //         (data) => {
+        //             // When it has finished
+        //             alert("Finished");
+        //             this.queryEvents();
+        //         });
+        // }
     }
 
     componentWillReceiveProps(newProps) {
         // alert("Set state to userID = " + newProps.userID);
-        this.setState({userID: newProps.userID});
+        if (this.state.userID !== newProps.userID) {
+            this.setState({userID: newProps.userID});
+            // alert("fetchin user attributes");
+            this.props.fetchUserAttributes(["friends", "invitedEvents"],
+                (data) => {
+                    // alert("finished");
+                    this.queryEvents()
+                });
+        }
     }
 
     queryEvents() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty"], QL.generateFilter("and",
-                {"access": "eq", "ifCompleted": "eq"}, {"access": "public", "ifCompleted": "false"}), this.state.eventFeedLength,
+            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"], QL.generateFilter("and",
+                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
                     }
                     if (data.items) {
-                        // alert(JSON.stringify(data.items));
-                        // alert(JSON.stringify(this.state));
-                        this.setState({events: [...this.state.events, ...data.items]});
+                        // TODO We can see private events
+                        // alert("got items");
+                        const newlyQueriedEvents = [];
+                        for (let i = 0; i < data.items.length; i++) {
+                            const event = data.items[i];
+                            // alert(JSON.stringify(event));
+                            if (event.access === 'public') {
+                                newlyQueriedEvents.push(event);
+                            }
+                            else if (this.props.user.id && this.props.user.id === event.owner) {
+                                newlyQueriedEvents.push(event);
+                            }
+                            else if (this.props.user.friends && this.props.user.friends.includes(event.owner)) {
+                                newlyQueriedEvents.push(event);
+                            }
+                            else if (this.props.user.invitedEvents && this.props.user.invitedEvents.includes(event.id)) {
+                                newlyQueriedEvents.push(event);
+                            }
+                        }
+                        this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
                         for (let i = 0; i < data.items.length; i++) {
                             //alert(data.items[i].time_created);
                             // alert("Putting in event: " + JSON.stringify(data.items[i]));
@@ -121,11 +157,15 @@ class EventFeed extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    info: state.info,
     cache: state.cache
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        fetchUserAttributes: (variablesList, dataHandler) => {
+            dispatch(fetchUserAttributes(variablesList, dataHandler));
+        },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));
         },
