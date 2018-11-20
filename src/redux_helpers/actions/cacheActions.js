@@ -178,6 +178,27 @@ export function fetchEvent(id, variablesList, dataHandler) {
 export function fetchInvite(id, variablesList, dataHandler) {
     return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
 }
+export function forceFetchClient(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler);
+}
+export function forceFetchTrainer(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "trainers", "getTrainer", "FETCH_TRAINER", dataHandler);
+}
+export function forceFetchGym(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "gyms", "getGym", "FETCH_GYM", dataHandler);
+}
+export function forceFetchWorkout(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "workouts", "getWorkout", "FETCH_WORKOUT", dataHandler);
+}
+export function forceFetchReview(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "reviews", "getReview", "FETCH_REVIEW", dataHandler);
+}
+export function forceFetchEvent(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "events", "getEvent", "FETCH_EVENT", dataHandler);
+}
+export function forceFetchInvite(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
+}
 export function fetchClients(ids, variablesList) {
 
 }
