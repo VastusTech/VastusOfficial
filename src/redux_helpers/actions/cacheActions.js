@@ -24,7 +24,7 @@ function addProfilePictureToData(data, imageKey, callback) {
         });
     }
 }
-function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
+function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
         const currentObject = getStore().cache[cacheSet][id];
@@ -33,16 +33,16 @@ function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
             variablesList = variablesList.filter((v) => { return !objectKeyList.includes(v) });
             // alert("Final filtered list is = " + JSON.stringify(variablesList));
         }
-        overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch);
+        overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore);
     };
 }
-function forceFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
-    return (dispatch) => {
+function forceFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler) {
+    return (dispatch, getStore) => {
         dispatch(setIsLoading());
-        overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch);
+        overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch);
     };
 }
-function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch) {
+function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
     if (profilePictureIndex !== -1) {
         // alert("The variable list is requesting the profilePicture to be uploaded as well.");
@@ -71,6 +71,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                         payload: updatedData
                     });
                     dispatch(setIsNotLoading());
+                    if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
                 });
             }
             else {
@@ -80,6 +81,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                     payload: data
                 });
                 dispatch(setIsNotLoading());
+                if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
             }
         }, (error) => {
             alert("Error in retrieval");
@@ -93,6 +95,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             payload: {id}
         });
         dispatch(setIsNotLoading());
+        if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
     }
 }
 // TODO DON'T OPTIMIZE UNLESS THERE'S AN ACTUAL PROBLEM YOU GOBLIN
@@ -154,26 +157,26 @@ function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetch
         dispatch(setIsNotLoading());
     })
 }
-export function fetchClient(id, variablesList) {
-    return fetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT");
+export function fetchClient(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler);
 }
-export function fetchTrainer(id, variablesList) {
-    return fetch(id, variablesList, "trainers", "getTrainer", "FETCH_TRAINER");
+export function fetchTrainer(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "trainers", "getTrainer", "FETCH_TRAINER", dataHandler);
 }
-export function fetchGym(id, variablesList) {
-    return fetch(id, variablesList, "gyms", "getGym", "FETCH_GYM");
+export function fetchGym(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "gyms", "getGym", "FETCH_GYM", dataHandler);
 }
-export function fetchWorkout(id, variablesList) {
-    return fetch(id, variablesList, "workouts", "getWorkout", "FETCH_WORKOUT");
+export function fetchWorkout(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "workouts", "getWorkout", "FETCH_WORKOUT", dataHandler);
 }
-export function fetchReview(id, variablesList) {
-    return fetch(id, variablesList, "reviews", "getReview", "FETCH_REVIEW");
+export function fetchReview(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "reviews", "getReview", "FETCH_REVIEW", dataHandler);
 }
-export function fetchEvent(id, variablesList) {
-    return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT");
+export function fetchEvent(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT", dataHandler);
 }
-export function fetchInvite(id, variablesList) {
-    return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE");
+export function fetchInvite(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
 }
 export function fetchClients(ids, variablesList) {
 

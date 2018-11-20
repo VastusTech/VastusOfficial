@@ -180,7 +180,7 @@ class Profile extends React.PureComponent {
     }
 
     handleLogOut() {
-        alert("logging out");
+        // alert("logging out");
         this.props.logOut();
         // this.setState({isLoading: true});
         // Auth.signOut({global: true}).then((data) => {

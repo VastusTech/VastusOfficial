@@ -51,7 +51,7 @@ class ClientModal extends Component {
     }
 
     handleAddFriendButton() {
-        alert("Adding this friend!");
+        // alert("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
@@ -65,7 +65,7 @@ class ClientModal extends Component {
     }
 
     handleRemoveFriendButton() {
-        alert("Removing this friend!");
+        // alert("Removing this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             Lambda.clientRemoveFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {

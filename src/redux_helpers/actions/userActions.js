@@ -22,7 +22,7 @@ export function forceFetchUserAttributes(variablesList, dataHandler) {
         // Just overwrite all the user attributes because we want to process them again
         const userID = getStore().user.id;
         if (userID) {
-            overwriteFetchUserAttributes(userID, variablesList, dataHandler, dispatch);
+            overwriteFetchUserAttributes(userID, variablesList, dataHandler, dispatch, getStore);
         }
     }
 }
@@ -47,12 +47,12 @@ export function fetchUserAttributes(variablesList, dataHandler) {
                 return !userKeyList.includes(v)
             });
             // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
-            overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch);
+            overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch, getStore);
         }
     }
 }
 
-function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch) {
+function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch, getStore) {
     dispatch(setIsLoading());
     if (variablesList.length > 0) {
         const pictureIndex = variablesList.indexOf("profilePicture");
@@ -69,13 +69,13 @@ function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch) 
                         };
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
-                        if (dataHandler) { dataHandler(data);}
+                        if (dataHandler) { dataHandler(getStore().user);}
                     }, (error) => {
                         console.log("Failed to get profile image");
                         console.log(error);
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
-                        if (dataHandler) { dataHandler(data);}
+                        if (dataHandler) { dataHandler(getStore().user);}
                     });
                 }
                 else {
@@ -86,13 +86,13 @@ function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch) 
                     };
                     dispatch(setUser(data));
                     dispatch(setIsNotLoading());
-                    if (dataHandler) { dataHandler(data);}
+                    if (dataHandler) { dataHandler(getStore().user);}
                 }
             }
             else {
                 dispatch(setUser(data));
                 dispatch(setIsNotLoading());
-                if (dataHandler) { dataHandler(data);}
+                if (dataHandler) { dataHandler(getStore().user);}
             }
         }, (error) => {
             alert(JSON.stringify(error));
@@ -102,6 +102,7 @@ function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch) 
     }
     else {
         dispatch(setIsNotLoading());
+        if (dataHandler) { dataHandler(getStore().user);}
     }
 }
 

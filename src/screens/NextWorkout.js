@@ -36,7 +36,11 @@ class NextEventProp extends Component {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                 // }
-                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"]);
+                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"],
+                    () => {
+                        // Rerender when you get a new scheduled event
+                        this.setState({});
+                    });
             }
         }
         else if (!props.info.isLoading) {
@@ -152,8 +156,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (attributeList) => {
             dispatch(fetchUserAttributes(attributeList));
         },
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
+        fetchEvent: (id, variablesList, dataHandler) => {
+            dispatch(fetchEvent(id, variablesList, dataHandler));
         }
     };
 };
