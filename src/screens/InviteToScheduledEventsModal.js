@@ -38,7 +38,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
+                this.props.fetchUserAttributes(["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -88,14 +88,14 @@ class InviteToScheduledEventsModalProp extends Component {
         if (this.props.info.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Message>Loading...</Message>
                 </Modal>
             );
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
@@ -107,7 +107,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         else {
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Message>No scheduled events...</Message>
                 </Modal>
             );
@@ -123,8 +123,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));

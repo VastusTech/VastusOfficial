@@ -5,38 +5,56 @@ import ClientModal from "./ClientModal";
 import proPic from "../img/BlakeProfilePic.jpg";
 import Lambda from "../Lambda";
 import connect from "react-redux/es/connect/connect";
+import ClientCard from "./ClientCard";
 
 class EventMemberList extends Component {
     state = {
         error: null,
-        isLoading: true,
-        members: [],
-        challengeID: null,
-        ifOwned: false,
-        clientModalOpen: false,
-        selectedClientID: null
+        isLoading: false,
+        eventID: null,
+        // members: [],
+        // challengeID: null,
+        // ifOwned: false,
+        // clientModalOpen: false,
+        // selectedClientID: null
     };
 
     constructor(props) {
         super(props);
-        this.openClientModal = this.openClientModal.bind(this);
+        // this.openClientModal = this.openClientModal.bind(this);
     }
 
     componentDidMount() {
+        if (this.props.eventID) {
+            this.setState({eventID: this.props.eventID, isLoading: false});
+        }
         //if (this.props.members) {
         //alert("owned:" + this.props.ifOwned);
-        this.setState({isLoading: false, members: this.props.members, ifOwned: this.props.ifOwned});
+        // this.setState({isLoading: false, members: this.props.members, ifOwned: this.props.ifOwned});
         //}
     }
 
     componentWillReceiveProps(newProps) {
+        if (newProps.eventID !== this.props.eventID) {
+            this.setState({eventID: newProps.eventID, isLoading: false});
+        }
         //if (newProps.members) {
-        this.setState({isLoading: false, members: newProps.members, ifOwned: newProps.ifOwned});
+        // this.setState({isLoading: false, members: newProps.members, ifOwned: newProps.ifOwned});
         //}
     }
 
-    openClientModal = (id) => {this.setState({selectedClientID: id, clientModalOpen: true})};
-    closeClientModal = () => {this.setState({clientModalOpen: false})};
+    getEventAttribute(attribute) {
+        if (this.state.eventID) {
+            const event = this.props.cache.events[this.state.eventID];
+            if (event) {
+                return event[attribute];
+            }
+        }
+        return null;
+    }
+
+    // openClientModal = (id) => {this.setState({selectedClientID: id, clientModalOpen: true})};
+    // closeClientModal = () => {this.setState({clientModalOpen: false})};
 
     render() {
         // function createCorrectButton(userID, winnerID, challengeID, isOwned) {
@@ -60,7 +78,7 @@ class EventMemberList extends Component {
             //alert(members);
             return _.times(members.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <Button onClick={() => {handleClientPress(members[i])}}>{members[i]}</Button>
+                    <ClientCard clientID={members[i]}/>
                 </Grid.Row>
             ));
         }
@@ -69,22 +87,29 @@ class EventMemberList extends Component {
                 <Message>Loading...</Message>
             )
         }
-        if (!this.state.selectedClientID) {
-            return(
-                <Grid>{rows(this.props.user.id, this.state.members, this.openClientModal)}</Grid>
+        // if (!this.state.selectedClientID) {
+        //     return(
+        //         <Grid>{rows(this.props.user.id, this.state.members, this.openClientModal)}</Grid>
+        //     );
+        // }
+        if (this.getEventAttribute("members") && this.getEventAttribute("members").length > 0) {
+            return (
+                <Grid>
+                    {rows(this.props.user.id, this.getEventAttribute("members"), this.openClientModal)}
+                </Grid>
             );
         }
-        return(
-            <Grid>
-                <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.selectedClientID}/>
-                {rows(this.props.user.id, this.state.members, this.openClientModal)}
-            </Grid>
-        );
+        else {
+            return(
+                <Message>No current members!</Message>
+            )
+        }
     }
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    cache: state.cache
 });
 
 export default connect(mapStateToProps)(EventMemberList);

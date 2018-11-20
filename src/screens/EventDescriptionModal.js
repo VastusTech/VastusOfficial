@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
-import { Card, Modal, Button, Header, List, Divider } from 'semantic-ui-react';
+import { Card, Modal, Button, Header, List, Divider, Grid } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
+import CompleteChallengeModal from "./CompleteChallengeModal";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -47,6 +48,7 @@ class EventDescriptionModal extends Component {
         // ownerName: null,
         // members: {},
         clientModalOpen: false,
+        completeModalOpen: false
     };
 
     constructor(props) {
@@ -60,8 +62,11 @@ class EventDescriptionModal extends Component {
         if (newProps.eventID && !this.state.eventID) {
             this.state.eventID = newProps.eventID;
         }
-        if (!this.props.open && newProps.open && newProps.eventID && !this.getEventAttribute("id")) {
-            // this.props.fetchEvent(newProps.eventID, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+        const members = this.getEventAttribute("members");
+        if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
+            for (let i = 0; i < members.length; i++) {
+                this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+            }
         }
     }
 
@@ -99,6 +104,7 @@ class EventDescriptionModal extends Component {
         alert("Handling deleting the event");
         this.setState({isLoading: true});
         Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
+            this.props.feedUpdate();
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
@@ -142,8 +148,15 @@ class EventDescriptionModal extends Component {
         return this.props.user.id === this.getEventAttribute("owner");
     }
 
+    // isCompleted() {
+    //     return this.getEventAttribute("ifCompleted");
+    // }
+
     openClientModal() { this.setState({clientModalOpen: true}); }
     closeClientModal() { this.setState({clientModalOpen: false}); }
+
+    openCompleteModal() { this.setState({completeModalOpen: true}); }
+    closeCompleteModal() { this.setState({completeModalOpen: false}); }
 
     render() {
         if (!this.getEventAttribute("id")) {
@@ -154,10 +167,32 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined, joinHandler, leaveHandler, deleteHandler) {
-            if(isOwned) {
+        function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge, joinHandler, leaveHandler, deleteHandler, completeHandler) {
+            // alert(ifCompleted);
+            if (ifCompleted === "true") {
+                return(
+                    <Button fluid inverted size="large">This Event is completed</Button>
+                );
+            }
+            else if(isOwned) {
                 // TODO This should also link the choose winner button
-                return (<Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>)
+                if (ifChallenge) {
+                    return (
+                        <Grid columns={2}>
+                            <Grid.Column>
+                                <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                            </Grid.Column>
+                            <Grid.Column>
+                                <Button primary fluid size="large" onClick={completeHandler}>Input the winner!</Button>
+                            </Grid.Column>
+                        </Grid>
+                    )
+                }
+                else {
+                    return(
+                        <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                    );
+                }
             }
             else if(isJoined) {
                 return (<Button inverted fluid size="large" onClick={leaveHandler}>Leave</Button>)
@@ -169,11 +204,12 @@ class EventDescriptionModal extends Component {
 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.getEventAttribute("owner")}/>
+                        <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal.bind(this)} challengeID={this.getEventAttribute("id")}/>
                         <List relaxed>
                             <List.Item>
                                 <List.Icon name='user' />
@@ -197,16 +233,16 @@ class EventDescriptionModal extends Component {
                                 <List.Icon name='users' />
                                 <List.Content>
                                     {this.getEventAttribute("members")}
-                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>}>
+                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>} closeIcon>
                                         <Modal.Content>
-                                            <EventMemberList challengeID = {this.state.eventID} members = {this.getEventAttribute("members")} ifOwned = {this.state.isOwned}/>
+                                            <EventMemberList eventID={this.state.eventID} />
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.isOwned(), this.isJoined(), this.handleJoinEventButton,
-                            this.handleLeaveEventButton, this.handleDeleteEventButton)}
+                            {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"), this.getEventAttribute("ifChallenge"), this.handleJoinEventButton,
+                            this.handleLeaveEventButton, this.handleDeleteEventButton, this.openCompleteModal.bind(this))}
                     </Modal.Description>
                 </Modal.Content>
             </Modal>

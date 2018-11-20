@@ -6,7 +6,8 @@ import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
 import NextWorkoutProp from "./NextWorkout";
-import ScheduledEventsList from "./ScheduledEventList";
+// import ScheduledEventsList from "./ScheduledEventList";
+import LeaderBoard from "./Leaderboard";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -14,7 +15,7 @@ import ScheduledEventsList from "./ScheduledEventList";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 3, size: "small", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 4, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -29,9 +30,10 @@ export default () => (
                     </Tab.Pane>
             },
             {
-                menuItem: (<Menu.Item key={1}>
-                    <Icon name='user circle outline' size='large' />
-                </Menu.Item>),
+                menuItem: (
+                    <Menu.Item key={1}>
+                        <Icon name='user circle outline' size='large' />
+                    </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <ProfileProp/>
                 </Tab.Pane>
@@ -39,6 +41,15 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={2}>
+                        <Icon name='winner' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <LeaderBoard />
+                </Tab.Pane>
+            },
+            {
+                menuItem: (
+                    <Menu.Item key={3}>
                         <Icon name='bell outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>

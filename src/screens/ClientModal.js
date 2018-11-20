@@ -6,6 +6,7 @@ import ScheduledEventsList from "./ScheduledEventList";
 import InviteToScheduledEventsModalProp from "./InviteToScheduledEventsModal";
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
+import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 
 /*
 * Client Modal
@@ -27,21 +28,13 @@ class ClientModal extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
-            if (this.state.clientID !== newProps.clientID && !this.state.sentRequest) {
-                this.props.fetchClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
-                this.setState({clientID: newProps.clientID});
-                this.state.sentRequest = true;
+            if (this.state.clientID !== newProps.clientID) {
+                // alert("Setting new state to " + newProps.clientID);
+                this.props.fetchClient(newProps.clientID, ["id", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
+                this.state.clientID = newProps.clientID;
+                //this.setState({clientID: newProps.clientID});
+                // this.state.sentRequest = true;
             }
-            // if (!this.state.client) {
-            //     this.setState({isLoading: true});
-            //     QL.getClient(newProps.clientID, ["id", "name", "friends", "challengesWon", "scheduledEvents"], (data) => {
-            //         console.log("successfully retrieved the client");
-            //         this.setState({isLoading: false, client: data})
-            //     }, (error) => {
-            //         console.log("Failed to receive the client for the modal");
-            //         this.setState({isLoading: false, error: error});
-            //     });
-            // }
         }
     }
 
@@ -58,11 +51,26 @@ class ClientModal extends Component {
     }
 
     handleAddFriendButton() {
-        alert("Adding this friend!");
+        // alert("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
+                    this.props.forceFetchUserAttributes(["friends"]);
+                }, (error) => {
+                    alert(JSON.stringify(error));
+                    this.setState({error: error});
+                });
+        }
+    }
+
+    handleRemoveFriendButton() {
+        // alert("Removing this friend!");
+        if (this.props.user.id && this.getClientAttribute("id")) {
+            Lambda.clientRemoveFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
+                (data) => {
+                    alert("Successfully removed " + this.getClientAttribute("name") + " from friends list");
+                    this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
@@ -83,6 +91,43 @@ class ClientModal extends Component {
                 </Dimmer>
             );
         }
+    }
+
+    getCorrectFriendActionButton() {
+        // alert("getting correct friend action button for " + this.getClientAttribute("id"));
+        if (this.getClientAttribute("id")) {
+            if (this.props.user.friends && this.props.user.friends.length) {
+                if (this.props.user.friends.includes(this.getClientAttribute("id"))) {
+                    // Then they're already your friend
+                    return (
+                        <Button inverted
+                                type='button'
+                                onClick={this.handleRemoveFriendButton.bind(this)}>
+                            Remove Buddy
+                        </Button>
+                    );
+                }
+            }
+            const friendRequests = this.getClientAttribute("friendRequests");
+            if (friendRequests && friendRequests.length) {
+                if (friendRequests.includes(this.props.user.id)) {
+                    // Then you already sent a friend request
+                    return(
+                        <Button inverted
+                                type='button'>
+                            Sent Request!
+                        </Button>
+                    );
+                }
+            }
+        }
+        return(
+            <Button inverted
+                    type='button'
+                    onClick={this.handleAddFriendButton.bind(this)}>
+                Add Buddy
+            </Button>
+        );
     }
 
     handleInviteModalOpen = () => {this.setState({inviteModalOpen: true})};
@@ -131,7 +176,7 @@ class ClientModal extends Component {
         //This render function displays the user's information in a small profile page, and at the
         //bottom there is an add buddy function, which sends out a buddy request (friend request).
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
@@ -143,7 +188,7 @@ class ClientModal extends Component {
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
-                                    {}
+                                    {this.getClientAttribute("birthday") + " / " + this.getClientAttribute("gender")}
                                 </List.Content>
                             </List.Item>
                             {/* Friends */}
@@ -171,11 +216,7 @@ class ClientModal extends Component {
                         onClose={this.handleInviteModalClose.bind(this)}
                         friendID={this.getClientAttribute("id")}
                     />
-                    <Button inverted
-                            type='button'
-                            onClick={this.handleAddFriendButton.bind(this)}>
-                        Add Buddy
-                    </Button>
+                    {this.getCorrectFriendActionButton()}
                 </Modal.Actions>
             </Modal>
         );
@@ -192,6 +233,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchClient: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));
+        },
+        forceFetchUserAttributes: (variablesList) => {
+            dispatch(forceFetchUserAttributes(variablesList));
         }
     }
 };

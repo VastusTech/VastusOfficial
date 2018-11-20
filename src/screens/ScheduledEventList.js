@@ -17,6 +17,7 @@ class ScheduledEventsList extends Component {
 
     constructor(props) {
         super(props);
+        this.forceUpdate = this.forceUpdate.bind(this);
         //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
     }
@@ -33,7 +34,8 @@ class ScheduledEventsList extends Component {
         if (this.state.isLoading && user.hasOwnProperty("scheduledEvents") && user.scheduledEvents && user.scheduledEvents.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.scheduledEvents.length; i++) {
-                this.props.fetchEvent(user.scheduledEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                this.props.fetchEvent(user.scheduledEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "members", "capacity", "difficulty"]);
+                //this.props.fetchEvent(user.scheduledEvent//s[i], ["time", "time_created", "title", "goal", "members"]);
                 // if (!(user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(user.scheduledEvents[i]);
                 // }
@@ -41,7 +43,7 @@ class ScheduledEventsList extends Component {
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["scheduledEvents"]);
+                this.props.fetchUserAttributes(["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -133,8 +135,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));

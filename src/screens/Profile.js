@@ -8,6 +8,7 @@ import { S3Image } from 'aws-amplify-react';
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
 import ScheduledEventList from "./ScheduledEventList";
+import CompletedEventList from "./CompletedEventList";
 import OwnedEventList from "./OwnedEventList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
@@ -63,6 +64,7 @@ class Profile extends React.PureComponent {
             sentRequest: false,
             buddyModalOpen: false,
             scheduledModalOpen: false,
+            completedModalOpen: false,
             ownedModalOpen: false,
             error: null,
         });
@@ -115,7 +117,7 @@ class Profile extends React.PureComponent {
         // }
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(user.id, ["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture"]);
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends"]);
         }
         else {
             this.setState({isLoading: false});
@@ -136,7 +138,7 @@ class Profile extends React.PureComponent {
                     (data) => {
                         //alert("successfully editted client");
                         //alert(JSON.stringify(data));
-                        this.props.forceFetchUserAttributes(this.props.user.id, ["profileImagePath", "profilePicture"]);
+                        this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         alert("Failed edit client attribute");
@@ -178,6 +180,7 @@ class Profile extends React.PureComponent {
     }
 
     handleLogOut() {
+        // alert("logging out");
         this.props.logOut();
         // this.setState({isLoading: true});
         // Auth.signOut({global: true}).then((data) => {
@@ -196,6 +199,8 @@ class Profile extends React.PureComponent {
     closeBuddyModal = () => { this.setState({buddyModalOpen: false}); };
     openScheduledModal = () => { this.setState({scheduledModalOpen: true}); };
     closeScheduledModal = () => { this.setState({scheduledModalOpen: false}); };
+    openCompletedModal = () => { this.setState({completedModalOpen: true}); };
+    closeCompletedModal = () => { this.setState({completedModalOpen: false}); };
     openOwnedModal = () => { this.setState({ownedModalOpen: true}); };
     closeOwnedModal = () => { this.setState({ownedModalOpen: false}); };
 
@@ -225,8 +230,8 @@ class Profile extends React.PureComponent {
          */
 
         function numChallengesWon(challengesWon) {
-            if (challengesWon && challengesWon.size()) {
-                return challengesWon.size();
+            if (challengesWon && challengesWon.length) {
+                return challengesWon.length;
             }
             return 0;
         }
@@ -250,7 +255,7 @@ class Profile extends React.PureComponent {
                     <List id = "profile buttons">
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Friend List</Button>
-                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)}>
+                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
@@ -259,7 +264,7 @@ class Profile extends React.PureComponent {
                         <Divider />
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
-                            <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <OwnedEventList/>
                                 </Modal.Content>
@@ -267,9 +272,17 @@ class Profile extends React.PureComponent {
                         </List.Item>
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
-                            <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <ScheduledEventList/>
+                                </Modal.Content>
+                            </Modal>
+                        </List.Item>
+                        <List.Item>
+                            <Button fluid size="large" onClick={this.openCompletedModal.bind(this)}><Icon name="bookmark outline" />Completed Challenges</Button>
+                            <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)} closeIcon>
+                                <Modal.Content>
+                                    <CompletedEventList/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -296,11 +309,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributesList) => {
-            dispatch(fetchUserAttributes(id, attributesList));
+        fetchUserAttributes: (attributesList) => {
+            dispatch(fetchUserAttributes(attributesList));
         },
-        forceFetchUserAttributes: (id, variablesList) => {
-            dispatch(forceFetchUserAttributes(id, variablesList));
+        forceFetchUserAttributes: (variablesList) => {
+            dispatch(forceFetchUserAttributes(variablesList));
         },
         logOut: () => {
             dispatch(logOut());

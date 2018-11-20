@@ -1,5 +1,7 @@
 // import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
+import {ifDebug} from "./Constants";
+// import _ from "lodash";
 
 // TODO Use this instead?
 // AWSConfig();
@@ -16,12 +18,15 @@ const lambdaFunctionName = "VastusDatabaseLambdaFunction";
 
 class Lambda {
     // All the high-level functions
+    static setEventWinner(fromID, eventID, winnerID, successHandler, failureHandler) {
+        this.editEventAttribute(fromID, eventID, "winner", winnerID, successHandler, failureHandler);
+    };
     static updateEventToChallenge(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "ifChallenge", "true", successHandler, failureHandler);
-    }
-    static updateEventToEvent(fromID, eventID, successHandler, failureHandler) {
+    };
+    static updateEventToEvent (fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "ifChallenge", "false", successHandler, failureHandler);
-    }
+    };
     static updateEventToPrivate(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "access", "private", successHandler, failureHandler);
     }
@@ -307,7 +312,9 @@ class Lambda {
     }
     static invokeLambda(payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
-        alert("Sending lambda payload: " + JSON.stringify(payload));
+        if (ifDebug) {
+            alert("Sending lambda payload: " + JSON.stringify(payload));
+        }
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
@@ -326,7 +333,9 @@ class Lambda {
                 }
                 else {
                     console.log("Successfully invoked lambda function!");
-                    alert("Successful Lambda, received " + JSON.stringify(payload));
+                    if (ifDebug) {
+                        alert("Successful Lambda, received " + JSON.stringify(payload));
+                    }
                     successHandler(payload);
                 }
             }

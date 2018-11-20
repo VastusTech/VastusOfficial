@@ -17,10 +17,13 @@ export function forceSetUser(user) {
     };
 }
 
-export function forceFetchUserAttributes(id, variablesList) {
-    return (dispatch) => {
+export function forceFetchUserAttributes(variablesList, dataHandler) {
+    return (dispatch, getStore) => {
         // Just overwrite all the user attributes because we want to process them again
-        overwriteFetchUserAttributes(id, variablesList, dispatch);
+        const userID = getStore().user.id;
+        if (userID) {
+            overwriteFetchUserAttributes(userID, variablesList, dataHandler, dispatch, getStore);
+        }
     }
 }
 
@@ -29,21 +32,27 @@ export function forceFetchUserAttributes(id, variablesList) {
  * This assumes that you don't care about refreshing these attributes often. Will use the cache.
  * @param id
  * @param variablesList
+ * @param dataHandler
  * @returns {Function}
  */
-export function fetchUserAttributes(id, variablesList) {
+export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
-        // alert("Filtering out results for fetch!");
-        const userKeyList = Object.keys(getStore().user);
-        // alert("Originally asked for variablesList = " + JSON.stringify(variablesList));
-        // alert("UserKeyList = " + JSON.stringify(userKeyList));
-        const filterVariablesList = variablesList.filter((v) => { return !userKeyList.includes(v) });
-        // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
-        overwriteFetchUserAttributes(id, filterVariablesList, dispatch);
+        const user = getStore().user;
+        if (user && user.id) {
+            // alert("Filtering out results for fetch!");
+            const userKeyList = Object.keys(user);
+            // alert("Originally asked for variablesList = " + JSON.stringify(variablesList));
+            // alert("UserKeyList = " + JSON.stringify(userKeyList));
+            const filterVariablesList = variablesList.filter((v) => {
+                return !userKeyList.includes(v)
+            });
+            // alert("Final filtered list is = " + JSON.stringify(filterVariablesList));
+            overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch, getStore);
+        }
     }
 }
 
-function overwriteFetchUserAttributes(id, variablesList, dispatch) {
+function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch, getStore) {
     dispatch(setIsLoading());
     if (variablesList.length > 0) {
         const pictureIndex = variablesList.indexOf("profilePicture");
@@ -60,11 +69,13 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
                         };
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
+                        if (dataHandler) { dataHandler(getStore().user);}
                     }, (error) => {
                         console.log("Failed to get profile image");
                         console.log(error);
                         dispatch(setUser(data));
                         dispatch(setIsNotLoading());
+                        if (dataHandler) { dataHandler(getStore().user);}
                     });
                 }
                 else {
@@ -75,11 +86,13 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
                     };
                     dispatch(setUser(data));
                     dispatch(setIsNotLoading());
+                    if (dataHandler) { dataHandler(getStore().user);}
                 }
             }
             else {
                 dispatch(setUser(data));
                 dispatch(setIsNotLoading());
+                if (dataHandler) { dataHandler(getStore().user);}
             }
         }, (error) => {
             alert(JSON.stringify(error));
@@ -89,6 +102,7 @@ function overwriteFetchUserAttributes(id, variablesList, dispatch) {
     }
     else {
         dispatch(setIsNotLoading());
+        if (dataHandler) { dataHandler(getStore().user);}
     }
 }
 

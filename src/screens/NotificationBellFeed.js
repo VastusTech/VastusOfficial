@@ -70,14 +70,15 @@ class NotificationFeed extends Component {
         }
         else if (!props.info.isLoading) {
             if (!this.state.sentRequest && !props.info.error) {
-                props.fetchUserAttributes(user.id, ["receivedInvites"]);
+                props.fetchUserAttributes(["receivedInvites"]);
                 this.setState({sentRequest: true});
             }
         }
     };
 
+
     forceUpdate = () => {
-        this.props.forceFetchUserAttributes(this.props.user.id, ["receivedInvites"]);
+        this.props.forceFetchUserAttributes(["receivedInvites"]);
     };
 
     //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
@@ -138,11 +139,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributesList) => {
-            dispatch(fetchUserAttributes(id, attributesList));
+        fetchUserAttributes: (attributesList) => {
+            dispatch(fetchUserAttributes(attributesList));
         },
-        forceFetchUserAttributes: (id, attributeList) => {
-            dispatch(forceFetchUserAttributes(id, attributeList));
+        forceFetchUserAttributes: (attributeList) => {
+            dispatch(forceFetchUserAttributes(attributeList));
         },
         fetchInvite: (id, variablesList) => {
             dispatch(fetchInvite(id, variablesList));

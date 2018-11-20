@@ -16,6 +16,7 @@ class OwnedEventsList extends Component {
 
     constructor(props) {
         super(props);
+        this.forceUpdate = this.forceUpdate.bind(this);
         //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
     }
@@ -32,7 +33,8 @@ class OwnedEventsList extends Component {
         if (this.state.isLoading && user.hasOwnProperty("ownedEvents") && user.ownedEvents && user.ownedEvents.length) {
             this.setState({isLoading: false});
             for (let i = 0; i < user.ownedEvents.length; i++) {
-                this.props.fetchEvent(user.ownedEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                // this.props.fetchEvent(user.ownedEvents[i], ["time", "time_created", "title", "goal", "members"]);
+                this.props.fetchEvent(user.ownedEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "members", "capacity", "difficulty"]);
                 // if (!(user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(user.scheduledEvents[i]);
                 // }
@@ -40,10 +42,14 @@ class OwnedEventsList extends Component {
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
-                this.props.fetchUserAttributes(user.id, ["ownedEvents"]);
+                this.props.fetchUserAttributes(["ownedEvents"]);
                 this.setState({sentRequest: true});
             }
         }
+    }
+
+    forceUpdate = () => {
+        this.props.forceFetchUserAttributes(["ownedEvents"]);
     }
 
     // addEventFromGraphQL(eventID) {
@@ -71,7 +77,7 @@ class OwnedEventsList extends Component {
 
     componentWillReceiveProps(newProps) {
         //alert("Receevin props");
-        this.props = newProps;
+        //this.props = newProps;
         this.update();
     }
 
@@ -80,6 +86,7 @@ class OwnedEventsList extends Component {
         function rows(events) {
             const row = [];
             const rowProps = [];
+            this.forceUpdate();
             for (const key in events) {
                 if (events.hasOwnProperty(key)) {
                     //alert(JSON.stringify(events[key]));
@@ -127,8 +134,8 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));

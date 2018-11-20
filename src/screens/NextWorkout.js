@@ -36,12 +36,16 @@ class NextEventProp extends Component {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                 // }
-                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"]);
+                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"],
+                    () => {
+                        // Rerender when you get a new scheduled event
+                        this.setState({});
+                    });
             }
         }
         else if (!props.info.isLoading) {
             if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
-                props.fetchUserAttributes(props.user.id, ["scheduledEvents"]);
+                props.fetchUserAttributes(["scheduledEvents"]);
                 this.setState({sentRequest: true});
             }
         }
@@ -66,9 +70,9 @@ class NextEventProp extends Component {
         return null;
     }
 
-    // componentDidMount() {
-    //     this.update();
-    // }
+    componentDidMount() {
+        this.update(this.props);
+    }
 
     componentWillReceiveProps(newProps, nextContext) {
         if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
@@ -149,11 +153,11 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (id, attributeList) => {
-            dispatch(fetchUserAttributes(id, attributeList));
+        fetchUserAttributes: (attributeList) => {
+            dispatch(fetchUserAttributes(attributeList));
         },
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
+        fetchEvent: (id, variablesList, dataHandler) => {
+            dispatch(fetchEvent(id, variablesList, dataHandler));
         }
     };
 };
