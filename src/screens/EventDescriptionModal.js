@@ -147,9 +147,9 @@ class EventDescriptionModal extends Component {
         return this.props.user.id === this.getEventAttribute("owner");
     }
 
-    isCompleted() {
-        return this.getEventAttribute("ifCompleted");
-    }
+    // isCompleted() {
+    //     return this.getEventAttribute("ifCompleted");
+    // }
 
     openClientModal() { this.setState({clientModalOpen: true}); }
     closeClientModal() { this.setState({clientModalOpen: false}); }
@@ -166,8 +166,9 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined, ifChallenge, ifCompleted, joinHandler, leaveHandler, deleteHandler, completeHandler) {
-            if (ifCompleted) {
+        function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge, joinHandler, leaveHandler, deleteHandler, completeHandler) {
+            // alert(ifCompleted);
+            if (ifCompleted === "true") {
                 return(
                     <Button fluid inverted size="large">This Event is completed</Button>
                 );
@@ -239,7 +240,7 @@ class EventDescriptionModal extends Component {
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.isOwned(), this.isJoined(), this.isCompleted(), this.getEventAttribute("ifChallenge"), this.handleJoinEventButton,
+                            {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"), this.getEventAttribute("ifChallenge"), this.handleJoinEventButton,
                             this.handleLeaveEventButton, this.handleDeleteEventButton, this.openCompleteModal.bind(this))}
                     </Modal.Description>
                 </Modal.Content>
