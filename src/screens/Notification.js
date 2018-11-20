@@ -1,13 +1,13 @@
 import React, {Component} from 'react'
-import _ from 'lodash'
+// import _ from 'lodash'
 import {Image, Modal, Grid, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
-import { API, Auth, graphqlOperation } from "aws-amplify";
-import setupAWS from '../AppConfig';
-import proPic from "../img/BlakeProfilePic.jpg";
-import QL from "../GraphQL";
+// import { API, Auth, graphqlOperation } from "aws-amplify";
+// import setupAWS from '../AppConfig';
+// import proPic from "../img/BlakeProfilePic.jpg";
+// import QL from "../GraphQL";
 import Lambda from "../Lambda";
 import ClientModal from "./ClientModal";
-import EventCard from "./EventCard";
+// import EventCard from "./EventCard";
 import EventDescriptionModal from "./EventDescriptionModal";
 import { connect } from "react-redux";
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
@@ -45,10 +45,10 @@ class Notification extends Component {
                     if (this.state.inviteID !== props.inviteID && !this.state.sentRequest && !this.props.info.isLoading) {
                         this.setState({inviteID: props.inviteID});
                         this.state.sentRequest = true;
-                        alert("Fetching client = " + invite.from);
+                        // alert("Fetching client = " + invite.from);
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                         if (invite.inviteType === "eventInvite") {
-                            alert("Fetching event = " + invite.about);
+                            // alert("Fetching event = " + invite.about);
                             props.fetchEvent(invite.about, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                         }
                     }
@@ -107,13 +107,13 @@ class Notification extends Component {
     handleAcceptFriendRequestButton() {
         const userID = this.props.user.id;
         const friendRequestID = this.state.inviteID;
-        alert("Accepting friend request id = " + friendRequestID);
+        // alert("Accepting friend request id = " + friendRequestID);
         if(userID && friendRequestID) {
             const friendID = this.getAboutAttribute("id");
-            alert("User ID: " + userID + " Friend ID: " + friendID);
+            // alert("User ID: " + userID + " Friend ID: " + friendID);
             Lambda.clientAcceptFriendRequest(userID, userID, friendID,
                 (data) => {
-                    alert("Successfully added " + friendID + " as a friend!");
+                    // alert("Successfully added " + friendID + " as a friend!");
                     this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
@@ -128,13 +128,13 @@ class Notification extends Component {
     handleAcceptEventRequestButton() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        alert("Accepting event invite " + inviteID);
+        // alert("Accepting event invite " + inviteID);
         if(userID && inviteID) {
             const eventID = this.getAboutAttribute("id");
-            alert("User ID: " + userID + " event ID: " + eventID);
+            // alert("User ID: " + userID + " event ID: " + eventID);
             Lambda.clientAcceptEventInvite(userID, userID, eventID,
                 (data) => {
-                    alert("Successfully added " + eventID + " to the schedule!");
+                    // alert("Successfully added " + eventID + " to the schedule!");
                     this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
@@ -149,11 +149,11 @@ class Notification extends Component {
     handleDeclineFriendRequestButton() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
+        // alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
         if(userID && inviteID) {
             Lambda.declineFriendRequest(userID, inviteID,
                 (data) => {
-                    alert("Successfully declined " + inviteID + " friend request!");
+                    // alert("Successfully declined " + inviteID + " friend request!");
                     this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
@@ -168,11 +168,11 @@ class Notification extends Component {
     handleDeclineEventRequestButton() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
+        // alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
         if(userID && inviteID) {
             Lambda.declineEventInvite(userID, inviteID,
                 (data) => {
-                    alert("Successfully declined " + inviteID + " event invite!");
+                    // alert("Successfully declined " + inviteID + " event invite!");
                     this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
