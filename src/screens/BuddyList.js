@@ -113,7 +113,7 @@ class BuddyListProp extends Component {
 
     render() {
 
-        function rows(friends, closeModal, openModal, openBool, userID, getClientAttribute) {
+        function rows(friends, closeModal, openModal, openBool, userID, getClientAttribute, forceUpdate) {
             const rowProps = [];
             for (const key in friends) {
                 if (friends.hasOwnProperty(key) === true) {
@@ -122,7 +122,7 @@ class BuddyListProp extends Component {
                     rowProps.push(
                         <List.Item>
                             <List.Content>
-                                <ClientCard clientID={friendID}/>
+                                <ClientCard clientID={friendID} feedUpdate={forceUpdate}/>
                             </List.Content>
                         </List.Item>
                     );
@@ -139,7 +139,8 @@ class BuddyListProp extends Component {
         if (this.props.user.friends && this.props.user.friends.length && this.props.user.friends.length > 0) {
             return(
                 <List relaxed divided verticalAlign="middle">
-                    {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this))}
+                    {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this),
+                    this.forceUpdate.bind(this))}
                 </List>
             );
         }

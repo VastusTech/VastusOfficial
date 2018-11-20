@@ -104,6 +104,7 @@ class EventDescriptionModal extends Component {
         alert("Handling deleting the event");
         this.setState({isLoading: true});
         Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
+            this.props.feedUpdate();
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
@@ -203,7 +204,7 @@ class EventDescriptionModal extends Component {
 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
@@ -231,7 +232,7 @@ class EventDescriptionModal extends Component {
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>}>
+                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                         <Modal.Content>
                                             <EventMemberList eventID={this.state.eventID} />
                                         </Modal.Content>

@@ -76,6 +76,7 @@ class NotificationFeed extends Component {
         }
     };
 
+
     forceUpdate = () => {
         this.props.forceFetchUserAttributes(["receivedInvites"]);
     };

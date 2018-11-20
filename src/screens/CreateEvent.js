@@ -228,7 +228,7 @@ class CreateEventProp extends Component {
 
         return (
             <Segment raised inverted>
-                <Modal trigger={<Button primary fluid size="large">+ Create Event</Button>}>
+                <Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
 

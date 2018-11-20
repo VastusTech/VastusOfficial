@@ -73,7 +73,7 @@ class CompleteChallengeModal extends Component {
         }
         if (this.getChallengeAttribute("members") && this.getChallengeAttribute("members").length > 0) {
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Grid columns={2}>
                         {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
                     </Grid>
@@ -82,7 +82,7 @@ class CompleteChallengeModal extends Component {
         }
         else {
             return (
-                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Message>No members in the challenge yet!</Message>
                 </Modal>
             );

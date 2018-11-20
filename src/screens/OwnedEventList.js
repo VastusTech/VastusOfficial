@@ -16,6 +16,7 @@ class OwnedEventsList extends Component {
 
     constructor(props) {
         super(props);
+        this.forceUpdate = this.forceUpdate.bind(this);
         //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
     }
@@ -47,6 +48,10 @@ class OwnedEventsList extends Component {
         }
     }
 
+    forceUpdate = () => {
+        this.props.forceFetchUserAttributes(["ownedEvents"]);
+    }
+
     // addEventFromGraphQL(eventID) {
     //     QL.getEvent(eventID, ["id", "time", "time_created", "title", "goal", "owner", "members"], (data) => {
     //         console.log("successfully got a event");
@@ -72,7 +77,7 @@ class OwnedEventsList extends Component {
 
     componentWillReceiveProps(newProps) {
         //alert("Receevin props");
-        this.props = newProps;
+        //this.props = newProps;
         this.update();
     }
 
@@ -81,6 +86,7 @@ class OwnedEventsList extends Component {
         function rows(events) {
             const row = [];
             const rowProps = [];
+            this.forceUpdate();
             for (const key in events) {
                 if (events.hasOwnProperty(key)) {
                     //alert(JSON.stringify(events[key]));

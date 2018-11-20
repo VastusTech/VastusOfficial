@@ -176,7 +176,7 @@ class ClientModal extends Component {
         //This render function displays the user's information in a small profile page, and at the
         //bottom there is an add buddy function, which sends out a buddy request (friend request).
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>

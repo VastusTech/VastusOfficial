@@ -17,6 +17,7 @@ class ScheduledEventsList extends Component {
 
     constructor(props) {
         super(props);
+        this.forceUpdate = this.forceUpdate.bind(this);
         //alert("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
     }

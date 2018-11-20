@@ -34,6 +34,11 @@ class EventFeed extends Component {
         },
     };
 
+    constructor(props) {
+        super(props);
+        this.forceUpdate = this.forceUpdate.bind(this);
+    }
+
     componentDidMount() {
         // this.componentWillReceiveProps(this.props);
         // if (this.props.userID) {
@@ -125,6 +130,10 @@ class EventFeed extends Component {
             console.log("Next Token: " + this.state.nextToken);
             this.queryEvents();
         }
+    };
+
+    forceUpdate = () => {
+        this.props.forceFetchUserAttributes(["ownedEvents", "scheduledEvents"]);
     };
 
     render() {

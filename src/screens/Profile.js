@@ -255,7 +255,7 @@ class Profile extends React.PureComponent {
                     <List id = "profile buttons">
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Friend List</Button>
-                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)}>
+                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
@@ -264,7 +264,7 @@ class Profile extends React.PureComponent {
                         <Divider />
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
-                            <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <OwnedEventList/>
                                 </Modal.Content>
@@ -272,7 +272,7 @@ class Profile extends React.PureComponent {
                         </List.Item>
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
-                            <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <ScheduledEventList/>
                                 </Modal.Content>
@@ -280,7 +280,7 @@ class Profile extends React.PureComponent {
                         </List.Item>
                         <List.Item>
                             <Button fluid size="large" onClick={this.openCompletedModal.bind(this)}><Icon name="bookmark outline" />Completed Challenges</Button>
-                            <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)}>
+                            <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <CompletedEventList/>
                                 </Modal.Content>
