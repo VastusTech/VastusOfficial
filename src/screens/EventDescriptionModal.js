@@ -231,8 +231,7 @@ class EventDescriptionModal extends Component {
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    {this.getEventAttribute("members")}
-                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">(See more)</Button>}>
+                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>}>
                                         <Modal.Content>
                                             <EventMemberList eventID={this.state.eventID} />
                                         </Modal.Content>

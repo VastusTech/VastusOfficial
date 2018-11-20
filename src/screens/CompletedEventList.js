@@ -118,7 +118,7 @@ class ScheduledEventsList extends Component {
         }
         else {
             return(
-                <Message>No scheduled events yet!</Message>
+                <Message>No completed events yet!</Message>
             );
         }
     }

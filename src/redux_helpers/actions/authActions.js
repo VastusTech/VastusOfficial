@@ -3,6 +3,7 @@ import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
 import QL from "../../GraphQL";
 import Lambda from "../../Lambda";
+
 export function updateAuth() {
     return (dispatch) => {
         // TODO This could totally be overkill lol
@@ -83,7 +84,7 @@ export function signUp(username, password, name, gender, birthday, email) {
                 email: email
             }
         };
-        Lambda.createClient("admin", name, gender, birthday, email, username, (data) => {
+        Lambda.createClient("admin", name, gender, birthday, email, username, (clientID) => {
             Auth.signUp(params).then((data) => {
                 console.log("REDUX: Successfully signed up!");
                 dispatch(authSignUp());
@@ -93,6 +94,7 @@ export function signUp(username, password, name, gender, birthday, email) {
                 dispatch(setError(error));
                 dispatch(setIsNotLoading());
                 // TODO DELETE CLIENT THAT WAS CREATED!!!!
+                Lambda.deleteClient("admin", clientID);
             });
         }, (error) => {
             console.log("REDUX: Creating new client failed...");
