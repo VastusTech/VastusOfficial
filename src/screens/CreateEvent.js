@@ -33,6 +33,7 @@ function convertDateTimeToISO8601(dateAndTime) {
     }
 }
 
+/*
 const timeOptions = [ { key: '0:15', value: '0:15', text: '0:15' },
     { key: '0:30', value: '0:30', text: '0:30' },
     { key: '0:45', value: '0:45', text: '0:45' },
@@ -49,6 +50,7 @@ const timeOptions = [ { key: '0:15', value: '0:15', text: '0:15' },
 ];
 
 alert(timeOptions[1].text);
+*/
 
 /*
 * Create Event Prop
@@ -60,7 +62,8 @@ class CreateEventProp extends Component {
 
     state = {
         date: '',
-        startDateTime: '',
+        startDate: "",
+        startTime: "",
         duration: '',
         datesRange: '',
         timeFormat: 'AMPM',
@@ -71,7 +74,8 @@ class CreateEventProp extends Component {
 
     eventState = {
         title: "",
-        startDateTime: "",
+        startDate: "",
+        startTime: "",
         duration: "",
         location: "",
         time: "",
@@ -109,53 +113,193 @@ class CreateEventProp extends Component {
 
     };
 
-    handleSubmit = () => {
-        let time = '';
-        let endTime;
+    /*
+    convertTime(date, hour, minute, nextDate, endHour, endMinute) {
+        let dateTime = "";
 
-        let date = this.eventState.startDateTime.substr(0, 11);
-        let nextDate = this.eventState.startDateTime.substr(0, 8) + "0" +
-            (parseInt(this.eventState.startDateTime.substr(8, 2), 10) + 1) +
-            this.eventState.startDateTime.substr(10, 1);
-        let hour = this.eventState.startDateTime.substr(11, 2);
+        if(endHour < 24) {
+
+            if(endHour < 10) {
+
+                if(endMinute < 60) {
+
+                    //Put a zero in front of minute, put a zero in front of hour
+                    if(endMinute < 10) {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" + endHour + ":" + "0" + endMinute;
+                    }
+                    //Put a zero in front of hour
+                    else {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" + endHour + ":" + endMinute;
+                    }
+
+
+                }
+
+                else if(endMinute >= 60) {
+
+                    //Subtract 60 from minute, and put a zero in front of minute. Add 1 to hour, and put a zero in front of hour.
+                    if((endMinute - 60) < 10) {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" + (endHour + 1) + ":" + "0" + (endMinute - 60);
+                    }
+                    //Subtract 60 from minute. Add 1 to hour and put a zero in front of hour.
+                    else {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" + (endHour + 1) + ":" + (endMinute - 60);
+                    }
+
+
+                }
+            }
+
+            else {
+
+                if(endMinute < 60) {
+
+                    //Put a zero in front of minute
+                    if(endMinute < 10) {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + nextDate + "T" + (endHour - 24) + ":" + "0" + endMinute;
+                    }
+                    //Do nothing
+                    else {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + nextDate + "T" + (endHour - 24) + ":" + endMinute;
+                    }
+
+
+                 }
+
+                 else if(endMinute >= 60) {
+
+                     //Subtract 60 from minute, add a 0 in front of minute. Add 1 to hour.
+                    if((endMinute - 60) < 10) {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + nextDate + "T" + "0" + (endHour - 24 + 1) + ":" + "0" + (endMinute - 60);
+                    }
+                    //Subtract 60 from minute. Add 1 to hour.
+                    else {
+                        dateTime = date + "T" + hour + ":" + minute + "_" + nextDate + "T" + "0" + (endHour - 24 + 1) + ":" + (endMinute - 60);
+                    }
+
+                }
+            }
+
+        }
+
+
+        else if(endHour >= 24) {
+
+            if(endMinute < 60) {
+
+                //Subtract 24 from hour, move to next day.
+                if(endMinute < 10) {
+
+                }
+                //
+                else {
+
+                }
+
+
+            }
+            else if(endMinute >= 60) {
+
+
+                if((endMinute - 60) < 10) {
+
+                }
+                else {
+
+                }
+
+
+            }
+        }
+
+        return dateTime;
+    }
+    */
+
+    handleSubmit = () => {
+        /*
+        let time = '';
+        let dateTime;
+
+        let date = this.eventState.startDate.substr(0, 11);
+        let nextDate = this.eventState.startDate.substr(0, 8) + "0" +
+            (parseInt(this.eventState.startDate.substr(8, 2), 10) + 1) +
+            this.eventState.startDate.substr(10, 1);
+        let hour = this.eventState.startTime.substr(0, 2);
         let durationHour = this.state.duration.substr(0, 1);
-        let minute = this.eventState.startDateTime.substr(14, 2);
+        let minute = this.eventState.startTime.substr(3, 2);
         let durationMinute = this.state.duration.substr(2, 2);
         let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
 
-        if(endHour >= 24) {
-            endTime = (this.eventState.startDateTime + "_" + nextDate + "0" + (parseInt(hour, 10) +
-                parseInt(durationHour, 10) - 24));
-        }
-        else if((endHour < 24) && (endHour < 10)) {
-            endTime = this.eventState.startDateTime + "_" + date + "0" +
-                (parseInt(hour, 10) + parseInt(durationHour, 10));
-        }
-        else {
-            endTime = this.eventState.startDateTime + "_" + date +
-                (parseInt(hour, 10) + parseInt(durationHour, 10));
+        //dateTime = date + "T" + hour + ":" + minute;
+
+        alert("Hour " + hour + " Minute: " + minute + " " + " DurationHour: " + durationHour + " DurationMin: " + durationMinute);
+
+        alert(dateTime + "_" + nextDate + "T" + (parseInt(hour, 10) + parseInt(durationHour, 10)) + ":" + minute);
+        */
+
+        /*
+        if(hour + durationHour < 24 && (hour + durationHour < 10)){
+
+            if(minute + durationMinute < 60 && minute + durationMinute < 10){
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10)) + ":"
+                    + "0" + (parseInt(minute, 10) + parseInt(durationMinute, 10));
+            }
+            else if(minute + durationMinute < 60) {
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10)) + ":"
+                    + (parseInt(minute, 10) + parseInt(durationMinute, 10));
+            }
+            else if((minute + durationMinute >= 60) && ((minute + durationMinute - 60) < 10)) {
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10) + 1) + ":"
+                    + "0" + ((parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60);
+            }
+            else if(minute + durationMinute >= 60) {
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" + "0" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10) + 1) + ":"
+                    + ((parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60);
+            }
+
         }
 
-        alert("Minute: " + minute + " " + "Duration: " + durationMinute);
-        
-        if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
-            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
-            hour = "0" + (parseInt(hour, 10) + 1);
-            alert("Min: " + minute);
-            endTime = endTime.substr(0, 28) + (hour + ":" + minute);
-            alert("End: " + endTime);
-        }
-        else {
-            minute = (parseInt(minute, 10) + parseInt(durationMinute, 10));
-            alert("Min: " + minute);
-            endTime += (":" + minute);
-            alert("End: " + endTime);
+        else if(hour + durationHour < 24) {
+
+            if(minute + durationMinute < 60 && minute + durationMinute < 10){
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10)) + ":"
+                    + "0" + (parseInt(minute, 10) + parseInt(durationMinute, 10));
+            }
+            else if(minute + durationMinute < 60) {
+
+            }
+            else if((minute + durationMinute >= 60) && ((minute + durationMinute - 60) < 10)) {
+                dateTime = date + "T" + hour + ":" + minute + "_" + date + "T" +
+                    (parseInt(hour, 10) + parseInt(durationHour, 10)) + ":"
+                    + "0" + (parseInt(minute, 10) + parseInt(durationMinute, 10));
+            }
+            else if(minute + durationMinute >= 60) {
+
+            }
         }
 
-        alert("End time substring: " + endTime.substr(0, 28));
-        alert(endTime);
+        else if(hour + durationHour >= 24) {
 
-        alert(endTime);
+            if(minute + durationMinute < 60 && minute + durationMinute < 10){
+
+            }
+            else if(minute + durationMinute < 60 && minute + durationMinute < 10) {
+
+            }
+            else if((minute + durationMinute >= 60) && ((minute + durationMinute - 60) < 10)) {
+
+            }
+            else if(minute + durationMinute >= 60) {
+
+            }
+        }
+        */
 
         if(Number.isInteger(+this.eventState.capacity)) {
             Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
@@ -186,7 +330,7 @@ class CreateEventProp extends Component {
         this.setState({
             duration: data.value,
         }, () => {
-            console.log('value',this.state.duration);
+            console.log('value', this.state.duration);
         });
     };
 
@@ -206,15 +350,15 @@ class CreateEventProp extends Component {
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
                                     <label>Event Date</label>
-                                    <input type="date"/>
+                                    <input type="date" name="startDate" placeholder="01/01/2019" onChange={value => this.changeStateText("startDate", value)}/>
                                 </div>
                                 <div className="field">
                                     <label>Start Time</label>
                                     <input type="time" name="startTime" placeholder="12:00 AM" onChange={value => this.changeStateText("startTime", value)}/>
                                 </div>
                                 <div className="field">
-                                    <label>Duration</label>
-                                    <Dropdown placeholder='duration' value = {this.state.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
+                                    <label>Start Time</label>
+                                    <input type="time" name="endTime" placeholder="12:00 AM" onChange={value => this.changeStateText("endTime", value)}/>
                                 </div>
 
                                 <div className="field">
