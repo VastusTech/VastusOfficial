@@ -31,8 +31,16 @@ class Leaderboard extends Component {
             return;
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
-        if (props.user.hasOwnProperty("friends") && props.user.friends && props.user.friends.length && this.state.isLoading) {
+        if (props.user.hasOwnProperty("friends") && props.user.hasOwnProperty("challengesWon") && props.user.friends && props.user.friends.length && this.state.isLoading) {
             this.state.isLoading = false;
+            let challengesWonLength;
+            if (props.user.challengesWon) {
+                challengesWonLength = props.user.challengesWon.length;
+            }
+            else {
+                challengesWonLength = 0;
+            }
+            this.state.friends.push({id: props.user.id, challengesWonLength: challengesWonLength});
             //this.setState({isLoading: false});
             // alert(JSON.stringify(props.user.friends));
             // alert(JSON.stringify(this.state.friends));
@@ -65,7 +73,7 @@ class Leaderboard extends Component {
         }
         else if (!props.info.isLoading) {
             if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
-                props.fetchUserAttributes(["friends"]);
+                props.fetchUserAttributes(["friends", "challengesWon"]);
                 this.setState({sentRequest: true});
             }
         }
