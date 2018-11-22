@@ -70,6 +70,7 @@ class App extends Component {
         if (this.props.auth.loggedIn) {
             // The actual App
             return (
+            
                 <div>
                     <AuthApp/>
                 </div>
@@ -77,6 +78,7 @@ class App extends Component {
         }
         else {
             return (
+            	
                 <div>
                     <UnauthApp/>
                 </div>
