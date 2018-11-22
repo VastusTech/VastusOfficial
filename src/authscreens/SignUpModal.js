@@ -15,12 +15,6 @@ class SignUpModal extends Component {
         // this.authenticate = this.props.authenticate.bind(this);
     }
 
-    // state = {
-    //     error: null,
-    //     isLoading: false,
-    //     isConfirming: false
-    // };
-
     authState = {
         username: "",
         password: "",
@@ -32,77 +26,6 @@ class SignUpModal extends Component {
         confirmationCode: "",
     };
 
-    // async vastusSignUp(successHandler, failureHandler) {
-        // // TODO Check to see if the input fields are put  in correctly
-        // console.log("Starting Auth.signup!");
-        // if (this.authState.password !== this.authState.confirmPassword) {
-        //     console.log("Sign up failed");
-        //     failureHandler("Password and confirm password do not match");
-        //     return;
-        // }
-        //
-        // const attributes = {
-        //     name: this.authState.name,
-        //     gender: this.authState.gender,
-        //     birthdate: this.authState.birthday,
-        //     email: this.authState.email,
-        // };
-        // const params = {
-        //     username: this.authState.username,
-        //     password: this.authState.password,
-        //     attributes: attributes,
-        //     validationData: []
-        // };
-        //
-        // this.setState({isLoading: true});
-        // Lambda.createClient("admin", attributes.name, attributes.gender, attributes.birthdate, attributes.email, params.username,
-        //     (data) => {
-        //         if (data.errorMessage) {
-        //             // Send response with no confirmation
-        //             console.log("Problem with creating a database item!");
-        //             const error = data;
-        //             console.log(error);
-        //             this.setState({isLoading: false});
-        //             failureHandler(error);
-        //         }
-        //         else {
-        //             console.log("Successfully created database item in the database!");
-        //             Auth.signUp(params).then((data) => {
-        //                 console.log("Successfully signed up!");
-        //                 this.setState({isLoading: false});
-        //                 successHandler(data);
-        //             }).catch((error) => {
-        //                 console.log("Sign up has failed :(");
-        //                 console.log(error);
-        //                 this.setState({isLoading: false});
-        //                 failureHandler(error);
-        //             });
-        //         }
-        // }, (error) => {
-        //     console.log("Problem with creating a database item!");
-        //     console.log(error);
-        //     this.setState({isLoading: false});
-        //     failureHandler(error);
-        // });
-
-    // }
-
-    // vastusConfirmSignUp(successHandler, failureHandler) {
-    //     // TODO Check to see if the input fields are put  in correctly
-    //     this.setState({isLoading: true});
-    //     Auth.confirmSignUp(this.authState.username, this.authState.confirmationCode).then((data) => {
-    //         console.log("Successfully confirmed the sign up");
-    //         console.log(data);
-    //         this.setState({isLoading: false});
-    //         successHandler(data);
-    //     }).catch((error) => {
-    //         console.log("Confirm sign up has failed :(");
-    //         console.log(error);
-    //         this.setState({isLoading: false});
-    //         failureHandler(error);
-    //     });
-    // }
-
     changeStateText(key, value) {
         this.authState[key] = value.target.value;
         console.log("New " + key + " is equal to " + value.target.value);
@@ -110,18 +33,31 @@ class SignUpModal extends Component {
 
     handleCreateButton() {
         // alert("Setting state with isConfirming is true");
-        if (this.authState.password !== this.authState.confirmPassword) {
-            this.props.setError(new Error("Password and confirm password do not match!"));
+        // TODO Do extra checking for the specifications of the account!
+        if (this.authState.username && this.authState.password && this.authState.confirmPassword && this.authState.name &&
+        this.authState.birthday && this.authState.gender && this.authState.email) {
+            if (this.authState.password !== this.authState.confirmPassword) {
+                this.props.setError(new Error("Password and confirm password do not match!"));
+            }
+            else if (!this.authState.email.includes("@") || !this.authState.email.includes(".")) {
+                this.props.setError(new Error("Email needs to be properly formed!"));
+            }
+            // Password checking: minLength = 8, needs a number, a lowercase letter, and an uppercase letter
+            else if (!SignUpModal.properlyFormedPassword(this.authState.password)) {
+                this.props.setError(new Error("Password must be longer than 8 characters, must need a number, a lower case letter, and an upper case letter"));
+            }
+            else {
+                this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
+                    this.authState.birthday, this.authState.email);
+            }
         }
         else {
-            this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
-                this.authState.birthday, this.authState.email);
+            this.props.setError(new Error("All fields need to be filled in!"));
         }
-        // this.vastusSignUp((user) => {
-        //     this.setState({isConfirming: true, error: null})
-        // }, (error) => {
-        //     this.setState({isConfirming: false, error: error})
-        // });
+    }
+
+    static properlyFormedPassword(password) {
+        return (password.length > 8 && /\d/.test(password) && (password.toUpperCase() !== password) && (password.toLowerCase() !== password));
     }
 
     handleConfirmButton() {
@@ -132,26 +68,18 @@ class SignUpModal extends Component {
         else {
             this.props.setError(new Error("Confirmation code cannot be empty"));
         }
-        // this.vastusConfirmSignUp((user) => {
-        //     this.setState({isConfirming: false, error: null});
-        //     this.authenticate(user);
-        // }, (error) => {
-        //     this.setState({isConfirming: true, error: error});
-        // });
     }
 
     handleCancelButton() {
         // TODO Have a confirmation like are you sure ya wanna close?
-        // this.setState({error: null});
         this.props.clearError();
         this.props.closeSignUpModal();
-        // this.props.onClose();
     }
 
     render() {
         function errorMessage(error) {
             if (error && error.message) {
-                alert(JSON.stringify(error));
+                // alert(JSON.stringify(error));
                 return (
                     <Modal.Description>
                         <Message color='red'>
@@ -196,7 +124,6 @@ class SignUpModal extends Component {
             );
         }
         return(
-
                 <Modal open={this.props.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.props.info.isLoading)}
                     <Modal.Header>Create your new VASTUS account!</Modal.Header>
@@ -225,7 +152,7 @@ class SignUpModal extends Component {
                             </div>
                             <div className="field">
                                 <label>Birthdate</label>
-                                <Form.Input type="text" name="birthdate" placeholder="YYYY-MM-DD" onChange={value => this.changeStateText("birthday", value)}/>
+                                <Form.Input type="date" name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
                             </div>
                             <div className="field">
                                 <label>Email</label>

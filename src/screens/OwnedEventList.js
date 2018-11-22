@@ -26,7 +26,7 @@ class OwnedEventsList extends Component {
         const user = this.props.user;
         //alert("Updating Scheduled Events");
         if (!user.id) {
-            alert("Pretty bad error");
+            // alert("Pretty bad error");
             this.setState({isLoading: true});
         }
 

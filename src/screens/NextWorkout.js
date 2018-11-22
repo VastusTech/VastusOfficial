@@ -26,7 +26,7 @@ class NextEventProp extends Component {
 
     update(props) {
         if (!props.user.id) {
-            alert("No user ID...");
+            // alert("No user ID...");
             return;
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
@@ -76,7 +76,7 @@ class NextEventProp extends Component {
 
     componentWillReceiveProps(newProps, nextContext) {
         if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
-            alert("resetting app for new user!");
+            // alert("resetting app for new user!");
             this.resetState();
         }
         this.update(newProps);

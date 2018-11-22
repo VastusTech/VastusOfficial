@@ -27,7 +27,7 @@ class Leaderboard extends Component {
 
     update(props) {
         if (!props.user.id) {
-            alert("No user ID...");
+            // alert("No user ID...");
             return;
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
