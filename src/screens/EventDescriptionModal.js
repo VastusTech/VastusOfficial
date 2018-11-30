@@ -94,10 +94,25 @@ class EventDescriptionModal extends Component {
 
     convertFromISO(dateTime) {
         let dateTimeString = String(dateTime);
-        let date = dateTimeString.substr(0, 10);
-        let time = dateTimeString.substr(11, 5);
-        let time1 = dateTimeString.substr(37, 5);
-        return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
+        let dateTimes = String(dateTimeString).split("_");
+        let fromDateString = dateTimes[0];
+        let toDateString = dateTimes[1];
+        let fromDate = new Date(fromDateString);
+        let toDate = new Date(toDateString);
+
+        // Display time logic came from stack over flow
+        // https://stackoverflow.com/a/18537115
+        const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
+        const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
+        const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
+            fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
+            fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
+            tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
+            tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
+            toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
+            months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        return days[fromDate.getDay()]+' '+months[fromDate.getMonth()]+' '+fromDate.getDate()+' '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
     }
 
     handleDeleteEventButton() {
