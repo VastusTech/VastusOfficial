@@ -11,6 +11,7 @@ class NextEventProp extends Component {
     state = {
         isLoading: true,
         sentRequest: false,
+        events: [],
         error: null
     };
 
@@ -36,9 +37,11 @@ class NextEventProp extends Component {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                 // }
-                props.fetchEvent(props.user.scheduledEvents[i], ["id", "time"],
+                props.fetchEvent(props.user.scheduledEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"],
                     () => {
+                        // alert(JSON.stringify(data));
                         // Rerender when you get a new scheduled event
+                        // this.state.events.push(data);
                         this.setState({});
                     });
             }
@@ -117,7 +120,7 @@ class NextEventProp extends Component {
                 return(null);
             }
         }
-        if (this.props.info.isLoading) {
+        if (this.state.isLoading) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message icon>
