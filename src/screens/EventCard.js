@@ -101,14 +101,18 @@ class EventCard extends Component {
 
     getEventAttribute(attribute) {
         if (this.state.eventID) {
-            if (this.props.cache.events[this.state.eventID]) {
-                if (attribute === "membersLength") {
-                    if (this.props.cache.events[this.state.eventID]["members"]) {
-                        return this.props.cache.events[this.state.eventID]["members"].length
+            let event = this.props.cache.events[this.state.eventID];
+            if (event) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (event[attribute] && event[attribute].length) {
+                        return event[attribute].length;
                     }
-                    return 0;
+                    else {
+                        return 0;
+                    }
                 }
-                return this.props.cache.events[this.state.eventID][attribute];
+                return event[attribute];
             }
         }
         return null;

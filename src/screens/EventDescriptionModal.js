@@ -71,8 +71,20 @@ class EventDescriptionModal extends Component {
     }
 
     getEventAttribute(attribute) {
-        if (this.state.eventID && this.props.cache.events[this.state.eventID]) {
-            return this.props.cache.events[this.state.eventID][attribute];
+        if (this.state.eventID) {
+            let event = this.props.cache.events[this.state.eventID];
+            if (event) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (event[attribute] && event[attribute].length) {
+                        return event[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return event[attribute];
+            }
         }
         else {
             return null;
