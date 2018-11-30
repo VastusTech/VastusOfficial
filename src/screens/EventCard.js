@@ -96,7 +96,7 @@ class EventCard extends Component {
             toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
             months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
             days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        return days[fromDate.getDay()]+' '+months[fromDate.getMonth()]+' '+fromDate.getDate()+' '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
+        return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
     }
 
     getEventAttribute(attribute) {
@@ -132,7 +132,7 @@ class EventCard extends Component {
                     <Card.Header>{this.getEventAttribute("title")}</Card.Header>
                     <Card.Meta>{this.convertFromISO(this.getEventAttribute("time"))}</Card.Meta>
                     <Card.Description>
-                        {String(this.getEventAttribute("goal") + ", " + this.getEventAttribute("difficulty"))}
+                        {String(this.getEventAttribute("goal"))}
                     </Card.Description>
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/> </Card.Content> <Card.Content extra> {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */} <Card.Meta>{this.getEventAttribute("membersLength")} out of {this.getEventAttribute("capacity")} people joined</Card.Meta> </Card.Content>
             </Card>
