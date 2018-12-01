@@ -78,22 +78,41 @@ class EventCard extends Component {
 
     convertFromISO(dateTime) {
         let dateTimeString = String(dateTime);
-        let date = dateTimeString.substr(0, 10);
-        let time = dateTimeString.substr(11, 5);
-        let time1 = dateTimeString.substr(37, 5);
-        return convertDate(date) + " from " + convertTime(time) + " to " + convertTime(time1);
+        let dateTimes = String(dateTimeString).split("_");
+        let fromDateString = dateTimes[0];
+        let toDateString = dateTimes[1];
+        let fromDate = new Date(fromDateString);
+        let toDate = new Date(toDateString);
+
+        // Display time logic came from stack over flow
+        // https://stackoverflow.com/a/18537115
+        const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
+        const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
+        const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
+            fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
+            fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
+            tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
+            tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
+            toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
+            months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+            days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
     }
 
     getEventAttribute(attribute) {
         if (this.state.eventID) {
-            if (this.props.cache.events[this.state.eventID]) {
-                if (attribute === "membersLength") {
-                    if (this.props.cache.events[this.state.eventID]["members"]) {
-                        return this.props.cache.events[this.state.eventID]["members"].length
+            let event = this.props.cache.events[this.state.eventID];
+            if (event) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (event[attribute] && event[attribute].length) {
+                        return event[attribute].length;
                     }
-                    return 0;
+                    else {
+                        return 0;
+                    }
                 }
-                return this.props.cache.events[this.state.eventID][attribute];
+                return event[attribute];
             }
         }
         return null;
@@ -117,7 +136,7 @@ class EventCard extends Component {
                     <Card.Header>{this.getEventAttribute("title")}</Card.Header>
                     <Card.Meta>{this.convertFromISO(this.getEventAttribute("time"))}</Card.Meta>
                     <Card.Description>
-                        {String(this.getEventAttribute("goal") + ", " + this.getEventAttribute("difficulty"))}
+                        {String(this.getEventAttribute("goal"))}
                     </Card.Description>
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/> </Card.Content> <Card.Content extra> {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */} <Card.Meta>{this.getEventAttribute("membersLength")} out of {this.getEventAttribute("capacity")} people joined</Card.Meta> </Card.Content>
             </Card>

@@ -30,7 +30,7 @@ class ClientModal extends Component {
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
                 // alert("Setting new state to " + newProps.clientID);
-                this.props.fetchClient(newProps.clientID, ["id", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
+                this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
                 // this.state.sentRequest = true;
@@ -38,11 +38,20 @@ class ClientModal extends Component {
         }
     }
 
-    getClientAttribute(attributeName) {
+    getClientAttribute(attribute) {
         if (this.state.clientID) {
-            const client = this.props.cache.clients[this.state.clientID];
+            let client = this.props.cache.clients[this.state.clientID];
             if (client) {
-                return client[attributeName];
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (client[attribute] && client[attribute].length) {
+                        return client[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return client[attribute];
             }
         }
         else {
@@ -188,21 +197,21 @@ class ClientModal extends Component {
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
-                                    {this.getClientAttribute("birthday") + " / " + this.getClientAttribute("gender")}
+                                    {"Username: " + this.getClientAttribute("username")}
                                 </List.Content>
                             </List.Item>
                             {/* Friends */}
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    {}
+                                    {this.getClientAttribute("friendsLength") + " friends"}
                                 </List.Content>
                             </List.Item>
                             {/* Event Wins */}
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {}
+                                    {this.getClientAttribute("challengesWonLength") + " challenges won"}
                                 </List.Content>
                             </List.Item>
                         </List>
