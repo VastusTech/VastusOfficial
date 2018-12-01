@@ -130,7 +130,7 @@ class EventCard extends Component {
             <Card fluid raised onClick={this.openEventModal.bind(this)}>
                 <Card.Content>
                     <Card.Header textAlign = 'center'>{this.getEventAttribute("title")}</Card.Header>
-                    <Card.Meta textAlign = 'center'>{this.convertFromISO(this.getEventAttribute("time"))}</Card.Meta>
+                    <Card.Meta textAlign = 'center' >{this.convertFromISO(this.getEventAttribute("time"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>Location: {this.getEventAttribute("address")}</Card.Meta>
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/> </Card.Content> <Card.Content extra> {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */} <Card.Meta textAlign = 'center'>{this.getEventAttribute("membersLength")} of {this.getEventAttribute("capacity")} spots taken.</Card.Meta> </Card.Content>
             </Card>

@@ -184,13 +184,7 @@ class ClientModal extends Component {
                     {this.profilePicture()}
                     <Modal.Description>
                         <List relaxed>
-                            {/* Bio */}
-                            <List.Item>
-                                <List.Icon name='user' />
-                                <List.Content>
-                                    {this.getClientAttribute("birthday") + " / " + this.getClientAttribute("gender")}
-                                </List.Content>
-                            </List.Item>
+                           
                             {/* Friends */}
                             <List.Item>
                                 <List.Icon name='users' />
@@ -202,7 +196,7 @@ class ClientModal extends Component {
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {}
+                                    {this.getClientAttribute("challengesWonLength")}
                                 </List.Content>
                             </List.Item>
                         </List>

@@ -1,5 +1,4 @@
 
-
 .App {
   align-content: center;
 }
@@ -55,8 +54,4 @@ body {
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
-}
-
-h6{
-align-content: center;
 }
