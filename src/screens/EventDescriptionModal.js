@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card, Modal, Button, Header, List, Divider, Grid } from 'semantic-ui-react';
+import {Card, Modal, Button, Header, List, Divider, Grid, Icon} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
@@ -264,7 +264,7 @@ class EventDescriptionModal extends Component {
 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+            <Modal closeIcon open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>

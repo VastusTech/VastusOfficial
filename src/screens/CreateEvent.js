@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Checkbox, Modal, Button, Input, Form, Segment, TextArea, Dropdown } from 'semantic-ui-react';
+import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label} from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
@@ -47,7 +47,13 @@ const timeOptions = [ { key: '0:15', value: '15', text: '0:15' },
 class CreateEventProp extends Component {
 
     state = {
-        checked: false
+        checked: false,
+        isSubmitLoading: false,
+        showModal: false,
+        submitError: "",
+        showSuccessModal: false,
+        showSuccessLabel: false,
+        showSuccessLabelTimer: 0
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
@@ -100,10 +106,12 @@ class CreateEventProp extends Component {
         // alert(endDate.getMinutes());
         // alert(endDate.toDateString());
 
-        alert("StartDate = " + startDate.toIsoString());
-        alert("EndDate = " + endDate.toIsoString());
+        //alert("StartDate = " + startDate.toIsoString());
+        //alert("EndDate = " + endDate.toIsoString());
 
         const time = startDate.toIsoString() + "_" + endDate.toIsoString();
+
+        this.setState({isSubmitLoading: true});
 
         // TODO Check to see if valid inputs!
         if (this.eventState.capacity && this.eventState.location && this.eventState.title && this.eventState.goal) {
@@ -112,16 +120,25 @@ class CreateEventProp extends Component {
                     this.eventState.location, this.eventState.title, this.eventState.goal, this.eventState.description,
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");
+                        this.setState({isSubmitLoading: false});
+                        this.closeModal();
+                        this.setState({showSuccessLabel: true});
+                        //this.setState({showSuccessModal: true});
+
                     }, (error) => {
-                        alert(JSON.stringify(error));
+                        //alert(JSON.stringify(error));
+                        this.setState({submitError: "*" + JSON.stringify(error)});
+                        this.setState({isSubmitLoading: false});
                     });
             }
             else {
+                this.setState({isSubmitLoading: false});
                 alert("Capacity needs to be an integer!");
                 alert(this.eventState.capacity);
             }
         }
         else {
+            this.setState({isSubmitLoading: false});
             alert("All fields need to be filled out!");
         }
 
@@ -222,13 +239,49 @@ class CreateEventProp extends Component {
         return date.toIsoString().substr(11, 5);
     }
 
+    closeModal = () => {
+        this.setState({ showModal: false })
+    };
+
+    createSuccessModal() {
+
+        return(
+            <Modal open={this.state.showSuccessModal}>
+                <Modal.Header align='center'>Successfully Created Event!</Modal.Header>
+                <Modal.Content>
+                    <Button fluid negative size="small" onClick={this.closeSuccessModal}>Ok</Button>
+                </Modal.Content>
+            </Modal>
+        );
+    }
+
+    createSuccessLabel() {
+        if(this.state.showSuccessLabel && this.state.showModal) {
+            this.setState({showSuccessLabel: false});
+        }
+        else if(this.state.showSuccessLabel) {
+            return (<Label inverted primary fluid size="massive" color="green">Successfully Created Event!</Label>);
+        }
+        else {
+            return null;
+        }
+    }
+
+    closeSuccessModal = () => {
+        this.setState({showSuccessModal: false});
+    };
+
 
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
 
         return (
+            <div>
+            <div>{this.createSuccessLabel()}</div>
             <Segment raised inverted>
-                <Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>
+                {/*Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>*/}
+                <Modal closeIcon onClose={this.closeModal} open={this.state.showModal} trigger={<div>
+                    <Button primary fluid size="large" onClick={() => this.setState({ showModal: true })}><Icon className='plus' />Create Event</Button></div>}>
                     <Modal.Header align='center'>Create Event</Modal.Header>
                     <Modal.Content>
 
@@ -266,13 +319,15 @@ class CreateEventProp extends Component {
                                     <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                 </Form.Field>
                             </Form.Group>
+                            <div>{this.state.submitError}</div>
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
-                        <Button primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
+                        <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
                     </Modal.Actions>
                 </Modal>
             </Segment>
+            </div>
         );
     }
 }
