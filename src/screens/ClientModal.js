@@ -19,7 +19,10 @@ class ClientModal extends Component {
         isLoading: true,
         clientID: null,
         sentRequest: false,
-        inviteModalOpen: false
+        inviteModalOpen: false,
+        isRemoveFriendLoading: false,
+        isAddFriendLoading: false,
+        requestSent: false
     };
 
     componentDidMount() {
@@ -60,32 +63,49 @@ class ClientModal extends Component {
     }
 
     handleAddFriendButton() {
+        this.setState({isAddFriendLoading: true});
         // alert("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
-                    alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
+                    this.setState({isAddFriendLoading: false, requestSent: true});
+                    //alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
+                    this.setState({isAddFriendLoading: false});
                     alert(JSON.stringify(error));
-                    this.setState({error: error});
+                    this.setState({error: "*" + error});
                 });
         }
     }
 
+    /*
+    handleAddFriendButton() {
+        this.setState({isAddFriendLoading: true});
+        this.handleAddFriend();
+    }*/
+
     handleRemoveFriendButton() {
         // alert("Removing this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
+            this.setState({isRemoveFriendLoading: true});
             Lambda.clientRemoveFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
+                    this.setState({isRemoveFriendLoading: false});
                     alert("Successfully removed " + this.getClientAttribute("name") + " from friends list");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
+                    this.setState({isRemoveFriendLoading: false});
                     alert(JSON.stringify(error));
-                    this.setState({error: error});
+                    this.setState({error: "*" + error});
                 });
         }
     }
+    /*
+    handleRemoveFriendButton() {
+        this.setState({isRemoveFriendLoading: true});
+        this.handleRemoveFriend();
+    }*/
 
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
@@ -110,6 +130,7 @@ class ClientModal extends Component {
                     // Then they're already your friend
                     return (
                         <Button inverted
+                                loading={this.state.isRemoveFriendLoading}
                                 type='button'
                                 onClick={this.handleRemoveFriendButton.bind(this)}>
                             Remove Buddy
@@ -118,20 +139,20 @@ class ClientModal extends Component {
                 }
             }
             const friendRequests = this.getClientAttribute("friendRequests");
-            if (friendRequests && friendRequests.length) {
-                if (friendRequests.includes(this.props.user.id)) {
-                    // Then you already sent a friend request
-                    return(
-                        <Button inverted
-                                type='button'>
-                            Sent Request!
-                        </Button>
-                    );
-                }
+            if (friendRequests && friendRequests.length && friendRequests.includes(this.props.user.id) ||
+            this.state.requestSent) {
+                // Then you already sent a friend request
+                return (
+                    <Button inverted disabled
+                            type='button'>
+                        Sent Request!
+                    </Button>
+                );
             }
         }
         return(
             <Button inverted
+                    loading={this.state.isAddFriendLoading}
                     type='button'
                     onClick={this.handleAddFriendButton.bind(this)}>
                 Add Buddy
@@ -227,6 +248,9 @@ class ClientModal extends Component {
                     />
                     {this.getCorrectFriendActionButton()}
                 </Modal.Actions>
+                <Modal.Content>
+                    <div>{this.state.error}</div>
+                </Modal.Content>
             </Modal>
         );
     }
