@@ -76,7 +76,7 @@ class InviteToScheduledEventsModalProp extends Component {
                             </Grid.Column>
                             <Grid.Column/>
                             <Grid.Column>
-                                <Button basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to this Event</Button>
+                                <Button basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
                             </Grid.Column>
                         </Grid.Row>
                     );
@@ -96,7 +96,7 @@ class InviteToScheduledEventsModalProp extends Component {
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
                 <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
+                    <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
                             {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.handleInviteToEvent.bind(this))}
