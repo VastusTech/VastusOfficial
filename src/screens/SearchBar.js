@@ -87,8 +87,8 @@ class SearchBarProp extends Component {
         console.log("Starting to loading more client results");
         if (!this.state.clientsLoading) {
             const clientsVariableComparisons = {
-                name: "contains",
                 username: "contains",
+                name: "contains",
                 email: "contains"
             };
             const clientsVariableValues = {
@@ -134,8 +134,8 @@ class SearchBarProp extends Component {
                     var result;
                     if (item.item_type === "Client") {
                         result = {
-                            title: item.username,
-                            description: item.name,
+                            title: item.name,
+                            description: item.username,
                             resultcontent: item
                         };
                     }
@@ -216,7 +216,7 @@ class SearchBarProp extends Component {
                 <Search
                     fluid
                     size="large"
-                    defaultValue={"Search for Users and Events!"}
+                    placeholder="Search for Users and Events"
                     loading={isLoading}
                     onResultSelect={this.handleResultSelect}
                     onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}

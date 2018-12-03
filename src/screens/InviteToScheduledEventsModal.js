@@ -14,7 +14,8 @@ class InviteToScheduledEventsModalProp extends Component {
         events: {},
         friendID: null,
         sentRequest: false,
-        error: null
+        error: null,
+        isInviteLoading: false
     };
 
     constructor(props) {
@@ -28,6 +29,7 @@ class InviteToScheduledEventsModalProp extends Component {
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
+            this.setState({isInviteLoading: false});
         }
 
         if (this.state.isLoading && user.hasOwnProperty("scheduledEvents") && user.scheduledEvents && user.scheduledEvents.length) {
@@ -35,6 +37,7 @@ class InviteToScheduledEventsModalProp extends Component {
             for (let i = 0; i < user.scheduledEvents.length; i++) {
                 this.props.fetchEvent(user.scheduledEvents[i], ["time", "time_created", "title", "goal", "members"]);
             }
+            this.setState({isInviteLoading: false});
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
@@ -64,8 +67,13 @@ class InviteToScheduledEventsModalProp extends Component {
         this.update();
     }
 
+    sendInvite(event) {
+        this.setState({isInviteLoading: true});
+        this.handleInviteToEvent(event);
+    }
+
     render() {
-        function rows(userID, friendID, events, eventInviteHandler) {
+        function rows(userID, friendID, events, eventInviteHandler, isInviteLoading) {
             const rowProps = [];
             for (let i = 0; i < events.length; i++) {
                 if (events.hasOwnProperty(i) === true) {
@@ -76,7 +84,7 @@ class InviteToScheduledEventsModalProp extends Component {
                             </Grid.Column>
                             <Grid.Column/>
                             <Grid.Column>
-                                <Button basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
+                                <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to this Event</Button>
                             </Grid.Column>
                         </Grid.Row>
                     );
@@ -99,7 +107,8 @@ class InviteToScheduledEventsModalProp extends Component {
                     <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
-                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.handleInviteToEvent.bind(this))}
+                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.sendInvite.bind(this),
+                            this.state.isInviteLoading)}
                         </Grid>
                     </Modal.Content>
                 </Modal>

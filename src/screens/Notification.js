@@ -20,6 +20,8 @@ class Notification extends Component {
         sentRequest: false,
         clientModalOpen: false,
         eventModalOpen: false,
+        isAcceptInviteLoading: false,
+        isDenyInviteLoading: false,
     };
 
     constructor(props) {
@@ -104,7 +106,7 @@ class Notification extends Component {
     handleEventModalOpen() { this.setState({eventModalOpen: true})};
     handleEventModalClose() { this.setState({eventModalOpen: false})};
 
-    handleAcceptFriendRequestButton() {
+    handleAcceptFriendRequest() {
         const userID = this.props.user.id;
         const friendRequestID = this.state.inviteID;
         // alert("Accepting friend request id = " + friendRequestID);
@@ -113,19 +115,28 @@ class Notification extends Component {
             // alert("User ID: " + userID + " Friend ID: " + friendID);
             Lambda.clientAcceptFriendRequest(userID, userID, friendID,
                 (data) => {
+                    this.setState({isAcceptInviteLoading: false});
                     // alert("Successfully added " + friendID + " as a friend!");
                     this.props.feedUpdate();
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
+                    this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
             alert("user id or invite id not set yet");
+            this.setState({isAcceptInviteLoading: false});
         }
     }
 
+    handleAcceptFriendRequestButton() {
+        this.setState({isAcceptInviteLoading: true});
+        this.handleAcceptFriendRequest();
+    }
+
     handleAcceptEventRequestButton() {
+        this.setState({isAcceptInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
         // alert("Accepting event invite " + inviteID);
@@ -136,9 +147,11 @@ class Notification extends Component {
                 (data) => {
                     // alert("Successfully added " + eventID + " to the schedule!");
                     this.props.feedUpdate();
+                    this.setState({isAcceptInviteLoading: false});
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
+                    this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
@@ -146,7 +159,7 @@ class Notification extends Component {
         }
     }
 
-    handleDeclineFriendRequestButton() {
+    handleDeclineFriendRequest() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
         // alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
@@ -155,32 +168,44 @@ class Notification extends Component {
                 (data) => {
                     // alert("Successfully declined " + inviteID + " friend request!");
                     this.props.feedUpdate();
+                    this.setState({isDenyInviteLoading: false});
                 }, (error) => {
                     alert(JSON.stringify(error));
                     this.setState({error: error});
+                    this.setState({isDenyInviteLoading: false});
                 });
         }
         else {
             alert("user id or invite id not set");
+            this.setState({isDenyInviteLoading: false});
         }
     }
 
+    handleDeclineFriendRequestButton() {
+        this.setState({isDenyInviteLoading: true});
+        this.handleDeclineFriendRequest();
+    }
+
     handleDeclineEventRequestButton() {
+        this.setState({isDenyInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
         // alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
         if(userID && inviteID) {
             Lambda.declineEventInvite(userID, inviteID,
                 (data) => {
+                    this.setState({isDenyInviteLoading: false});
                     // alert("Successfully declined " + inviteID + " event invite!");
                     this.props.feedUpdate();
                 }, (error) => {
+                    this.setState({isDenyInviteLoading: false});
                     alert(JSON.stringify(error));
                     this.setState({error: error});
                 });
         }
         else {
             alert("user id or invite id not set");
+            this.setState({isDenyInviteLoading: false});
         }
     }
 
@@ -224,6 +249,21 @@ class Notification extends Component {
         return null;
     }
 
+    getTimeSinceInvite() {
+        let today = new Date();
+        let time = today.getHours();
+        let date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
+        let inviteTime = this.getInviteAttribute("time");
+
+        if(time > 24) {
+            return date;
+        }
+        else {
+            return inviteTime;
+        }
+
+    }
+
     render() {
         if (!this.getInviteAttribute("id") || !this.getAboutAttribute("id")) {
             return(
@@ -256,7 +296,7 @@ class Notification extends Component {
                                                 onClose={this.handleClientModalClose.bind(this)}
                                             />
                                             {' '}has sent you a buddy request
-                                            <Feed.Date>4 hours ago</Feed.Date>
+                                            <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                         </Feed.Summary>
                                         <Divider/>
                                         <Feed.Extra>
@@ -300,12 +340,12 @@ class Notification extends Component {
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleClientModalClose.bind(this)}
                                             />
-                                            <Feed.Date>4 hours ago</Feed.Date>
+                                            <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                         </Feed.Summary>
                                         <Divider/>
                                         <Feed.Extra>
-                                            <Button inverted floated="right" size="small" onClick={this.handleDeclineEventRequestButton.bind(this)}>Deny</Button>
-                                            <Button primary floated="right" size="small" onClick={this.handleAcceptEventRequestButton.bind(this)}>Accept</Button>
+                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineEventRequestButton.bind(this)}>Deny</Button>
+                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptEventRequestButton.bind(this)}>Accept</Button>
                                         </Feed.Extra>
                                     </Feed.Content>
                                 </Feed.Event>

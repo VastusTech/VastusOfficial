@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
-import { Card, Modal, Button, Header, List, Divider, Grid } from 'semantic-ui-react';
+import {Card, Modal, Button, Header, List, Divider, Grid, Icon} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "./EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
-import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "./CompleteChallengeModal";
+import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -48,7 +49,10 @@ class EventDescriptionModal extends Component {
         // ownerName: null,
         // members: {},
         clientModalOpen: false,
-        completeModalOpen: false
+        completeModalOpen: false,
+        isLeaveLoading: false,
+        isDeleteLoading: false,
+        isJoinLoading: false
     };
 
     constructor(props) {
@@ -56,6 +60,9 @@ class EventDescriptionModal extends Component {
         this.handleJoinEventButton = this.handleJoinEventButton.bind(this);
         this.handleLeaveEventButton = this.handleLeaveEventButton.bind(this);
         this.handleDeleteEventButton = this.handleDeleteEventButton.bind(this);
+        this.handleLeave = this.handleLeave.bind(this);
+        this.handleJoin = this.handleJoin.bind(this);
+        this.handleDelete = this.handleDelete.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -71,8 +78,20 @@ class EventDescriptionModal extends Component {
     }
 
     getEventAttribute(attribute) {
-        if (this.state.eventID && this.props.cache.events[this.state.eventID]) {
-            return this.props.cache.events[this.state.eventID][attribute];
+        if (this.state.eventID) {
+            let event = this.props.cache.events[this.state.eventID];
+            if (event) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (event[attribute] && event[attribute].length) {
+                        return event[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return event[attribute];
+            }
         }
         else {
             return null;
@@ -119,7 +138,7 @@ class EventDescriptionModal extends Component {
         alert("Handling deleting the event");
         this.setState({isLoading: true});
         Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
-            this.props.feedUpdate();
+            this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
@@ -132,6 +151,7 @@ class EventDescriptionModal extends Component {
         alert("Handling leaving the event");
         this.setState({isLoading: true});
         Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
+            this.forceUpdate(data.id);
             //alert(JSON.stringify(data));
             this.setState({isLoading: false, isJoined: false});
         }, (error) => {
@@ -145,6 +165,8 @@ class EventDescriptionModal extends Component {
         this.setState({isLoading: true});
         Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
             (data) => {
+                this.forceUpdate(data.id);
+                //alert(JSON.stringify(data));
                 this.setState({isLoading: false, isJoined: true});
             }, (error) => {
                 this.setState({isLoading: false, error: error});
@@ -163,6 +185,19 @@ class EventDescriptionModal extends Component {
         return this.props.user.id === this.getEventAttribute("owner");
     }
 
+    handleLeave() {
+        this.setState({isLeaveLoading: true});
+        this.handleLeaveEventButton();
+    }
+    handleJoin() {
+        this.setState({isJoinLoading: true});
+        this.handleJoinEventButton();
+    }
+    handleDelete() {
+        this.setState({isDeleteLoading: true});
+        this.handleDeleteEventButton();
+    }
+
     // isCompleted() {
     //     return this.getEventAttribute("ifCompleted");
     // }
@@ -173,6 +208,12 @@ class EventDescriptionModal extends Component {
     openCompleteModal() { this.setState({completeModalOpen: true}); }
     closeCompleteModal() { this.setState({completeModalOpen: false}); }
 
+    forceUpdate = (eventID) => {
+        forceFetchEvent(eventID, ["owner",
+            "time", "capacity", "address", "title", "ifChallenge", "goal", "description", "difficulty", "memberIDs",
+            "access"]);
+    };
+
     render() {
         if (!this.getEventAttribute("id")) {
             return(
@@ -182,7 +223,9 @@ class EventDescriptionModal extends Component {
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
-        function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge, joinHandler, leaveHandler, deleteHandler, completeHandler) {
+        function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
+                                     joinHandler, leaveHandler, deleteHandler, completeHandler,
+                                     isLeaveLoading, isJoinLoading, isDeleteLoading) {
             // alert(ifCompleted);
             if (ifCompleted === "true") {
                 return(
@@ -195,7 +238,7 @@ class EventDescriptionModal extends Component {
                     return (
                         <Grid columns={2}>
                             <Grid.Column>
-                                <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                                <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
                             </Grid.Column>
                             <Grid.Column>
                                 <Button primary fluid size="large" onClick={completeHandler}>Input the winner!</Button>
@@ -205,21 +248,23 @@ class EventDescriptionModal extends Component {
                 }
                 else {
                     return(
-                        <Button fluid negative size="large" onClick={deleteHandler}>Delete</Button>
+                        <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
                     );
                 }
             }
             else if(isJoined) {
-                return (<Button inverted fluid size="large" onClick={leaveHandler}>Leave</Button>)
+                return (<Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>)
             }
             else {
-                return (<Button primary fluid size="large" onClick={joinHandler}>Join</Button>)
+                //alert(isJoinLoading);
+                return (<Button loading={isJoinLoading} fluid negative size="large" disabled={isJoinLoading}
+                        onClick={joinHandler}>Join</Button>)
             }
         }
 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+            <Modal closeIcon open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
@@ -261,15 +306,16 @@ class EventDescriptionModal extends Component {
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"), this.getEventAttribute("ifChallenge"), this.handleJoinEventButton,
-                            this.handleLeaveEventButton, this.handleDeleteEventButton, this.openCompleteModal.bind(this))}
+                            {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"),
+                                this.getEventAttribute("ifChallenge"), this.handleJoin, this.handleLeave,
+                                this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
+                                this.state.isJoinLoading, this.state.isDeleteLoading)}
                     </Modal.Description>
                 </Modal.Content>
             </Modal>
         );
     }
 }
-
 const mapStateToProps = (state) => ({
     user: state.user,
     cache: state.cache,
@@ -281,8 +327,14 @@ const mapDispatchToProps = (dispatch) => {
         fetchClient: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));
         },
+        forceFetchUserAttributes: (attributeList) => {
+            dispatch(forceFetchUserAttributes(attributeList));
+        },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));
+        },
+        forceFetchEvent: (id, variablesList) => {
+            dispatch(forceFetchEvent(id, variablesList));
         }
     };
 };
