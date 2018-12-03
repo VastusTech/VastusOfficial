@@ -106,8 +106,7 @@ class CreateEventProp extends Component {
         // alert(endDate.getMinutes());
         // alert(endDate.toDateString());
 
-        //alert("StartDate = " + startDate.toIsoString());
-        //alert("EndDate = " + endDate.toIsoString());
+        
 
         const time = startDate.toIsoString() + "_" + endDate.toIsoString();
 

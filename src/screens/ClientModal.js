@@ -214,6 +214,7 @@ class ClientModal extends Component {
                     {this.profilePicture()}
                     <Modal.Description>
                         <List relaxed>
+<<<<<<< src/screens/ClientModal.js
                             {/* Bio */}
                             <List.Item>
                                 <List.Icon name='user' />
@@ -221,6 +222,9 @@ class ClientModal extends Component {
                                     {"Username: " + this.getClientAttribute("username")}
                                 </List.Content>
                             </List.Item>
+=======
+                           
+>>>>>>> src/screens/ClientModal.js
                             {/* Friends */}
                             <List.Item>
                                 <List.Icon name='users' />
@@ -232,7 +236,11 @@ class ClientModal extends Component {
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
+<<<<<<< src/screens/ClientModal.js
                                     {this.getClientAttribute("challengesWonLength") + " challenges won"}
+=======
+                                    {this.getClientAttribute("challengesWonLength")}
+>>>>>>> src/screens/ClientModal.js
                                 </List.Content>
                             </List.Item>
                         </List>

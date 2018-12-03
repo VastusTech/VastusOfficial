@@ -19,8 +19,8 @@ body {
 }
 
 .u-avatar {
-  width: 100px;
-  height: 100px;
+  width: 1000px;
+  height: 1000px;
   margin: 0 auto;
   background-size: cover;
   background-position: center;

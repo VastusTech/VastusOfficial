@@ -131,7 +131,7 @@ class EventDescriptionModal extends Component {
             toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
             months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
             days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        return days[fromDate.getDay()]+' '+months[fromDate.getMonth()]+' '+fromDate.getDate()+' '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
+        return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
     }
 
     handleDeleteEventButton() {
@@ -281,6 +281,12 @@ class EventDescriptionModal extends Component {
                                 <List.Icon name='calendar' />
                                 <List.Content>
                                     {this.convertFromISO(this.getEventAttribute("time"))}
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
+                                <List.Icon name='bullseye' />
+                                <List.Content>
+                                    {this.getEventAttribute("address")}
                                 </List.Content>
                             </List.Item>
                             <List.Item>

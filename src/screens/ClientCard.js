@@ -30,7 +30,7 @@ class ClientCard extends Component {
 
     componentWillReceiveProps(newProps, nextContext) {
         if (newProps.clientID && !this.state.clientID) {
-            // this.props.fetchEvent(newProps.eventID, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+           
             this.setState({clientID: newProps.clientID});
         }
     }
@@ -84,19 +84,15 @@ class ClientCard extends Component {
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openClientModal.bind(this)}>
                 <Card.Content>
-                    <Grid columns={2}>
-                        <Grid.Column>{this.profilePicture()}</Grid.Column>
-                        <Grid.Column>
-                            <Card.Header>
+                    
+                            <Card.Header textAlign = 'center'>
+                            {this.profilePicture()}
+                             </Card.Header>
+                              <Card.Header textAlign = 'center'>
                                 {this.getClientAttribute("name")}
                             </Card.Header>
-                            <Card.Meta>{this.getClientAttribute("id")}</Card.Meta>
-                            <Card.Description>
-                                {String(this.getClientAttribute("gender") + ", " + this.getClientAttribute("birthday"))}
-                            </Card.Description>
                             <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.clientID}/>
-                        </Grid.Column>
-                    </Grid>
+                        
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta>

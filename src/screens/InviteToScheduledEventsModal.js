@@ -104,7 +104,7 @@ class InviteToScheduledEventsModalProp extends Component {
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
                 <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
+                    <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
                             {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.sendInvite.bind(this),
