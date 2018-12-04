@@ -264,7 +264,7 @@ class EventDescriptionModal extends Component {
 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal closeIcon open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
