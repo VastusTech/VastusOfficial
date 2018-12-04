@@ -84,7 +84,7 @@ class InviteToScheduledEventsModalProp extends Component {
                             </Grid.Column>
                             <Grid.Column/>
                             <Grid.Column>
-                                <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to this Event</Button>
+                                <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
                             </Grid.Column>
                         </Grid.Row>
                     );

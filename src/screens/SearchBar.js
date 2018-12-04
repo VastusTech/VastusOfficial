@@ -216,7 +216,7 @@ class SearchBarProp extends Component {
                 <Search
                     fluid
                     size="large"
-                    placeholder="Search for Users and Events"
+                    placeholder="Search for Users and Challenges"
                     loading={isLoading}
                     onResultSelect={this.handleResultSelect}
                     onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}

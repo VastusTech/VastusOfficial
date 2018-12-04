@@ -197,7 +197,7 @@ class ClientModal extends Component {
             //alert(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Fragment key={i}>
-                    <Button primary>Invite to Event</Button>
+                    <Button primary>Invite to Challenge</Button>
                 </Fragment>
             ));
         }
@@ -244,7 +244,7 @@ class ClientModal extends Component {
                     </Modal.Description>
                 </Modal.Content>
                 <Modal.Actions>
-                    <Button primary onClick={this.handleInviteModalOpen.bind(this)}>Invite to Event</Button>
+                    <Button primary onClick={this.handleInviteModalOpen.bind(this)}>Invite to Challenge</Button>
                     <InviteToScheduledEventsModalProp
                         open={this.state.inviteModalOpen}
                         onOpen={this.handleInviteModalOpen.bind(this)}

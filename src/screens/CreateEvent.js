@@ -281,7 +281,7 @@ class CreateEventProp extends Component {
                 {/*Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>*/}
                 <Modal closeIcon onClose={this.closeModal} open={this.state.showModal} trigger={<div>
                     <Button primary fluid size="large" onClick={() => this.setState({ showModal: true })}><Icon className='plus' />Post Challenge</Button></div>}>
-                    <Modal.Header align='center'>Create Event</Modal.Header>
+                    <Modal.Header align='center'>Challenge Builder</Modal.Header>
                     <Modal.Content>
 
                         <Form onSubmit={this.handleSubmit}>

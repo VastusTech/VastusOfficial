@@ -110,7 +110,7 @@ class NextEventProp extends Component {
                 return (
                     <Fragment key={0}>
                         <Message>
-                            <Header>Your Next Event:</Header>
+                            <Header>Your Next Challenge:</Header>
                             <EventCard eventID={row[row.length - 1].id}/>
                         </Message>
                     </Fragment>
@@ -142,7 +142,7 @@ class NextEventProp extends Component {
         else {
             // Then it's empty, no next scheduled event
             return(
-                <Message>No scheduled events!</Message>
+                <Message>No scheduled challenges!</Message>
             );
         }
     }
