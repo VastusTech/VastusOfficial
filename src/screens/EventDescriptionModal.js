@@ -241,7 +241,7 @@ class EventDescriptionModal extends Component {
                                 <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
                             </Grid.Column>
                             <Grid.Column>
-                                <Button primary fluid size="large" onClick={completeHandler}>Input the winner!</Button>
+                                <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
                             </Grid.Column>
                         </Grid>
                     )
