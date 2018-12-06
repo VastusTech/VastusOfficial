@@ -19,7 +19,7 @@ class Leaderboard extends Component {
     }
 
     componentDidMount() {
-        alert("Mounted");
+        // alert("Mounted");
         this.update(this.props);
     }
 
@@ -34,7 +34,7 @@ class Leaderboard extends Component {
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
         if (props.user.hasOwnProperty("friends") && props.user.hasOwnProperty("challengesWon") && props.user.friends && props.user.friends.length && this.state.isLoading) {
-            alert("in here + " + this.state.isLoading);
+            // alert("in here + " + this.state.isLoading);
             this.state.isLoading = false;
             let challengesWonLength;
             if (props.user.challengesWon) {
@@ -70,9 +70,9 @@ class Leaderboard extends Component {
                             challengesWonLength = 0;
                         }
                         // alert("Client id = " + client.id + " has challenge length = " + challengesWonLength);
-                        alert("hey " + JSON.stringify(this.state.friends));
+                        // alert("hey " + JSON.stringify(this.state.friends));
                         this.state.friends.push({id: client.id, challengesWonLength: challengesWonLength});
-                        if (i === props.user.friends.length - 1) {
+                        if (this.state.friends.length === props.user.friends.length) {
                             this.setState({isFetching: false})
                         }
                         //this.setState({friends: [...this.state.friends, {id: client.id, challengesWon: client.challengesWon}]});

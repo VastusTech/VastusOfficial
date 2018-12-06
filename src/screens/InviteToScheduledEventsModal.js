@@ -78,7 +78,7 @@ class InviteToScheduledEventsModalProp extends Component {
             for (let i = 0; i < events.length; i++) {
                 if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
+                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                             <Grid.Column>
                                     <EventCard eventID={events[i]}/>
                             </Grid.Column>
@@ -103,7 +103,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                <Modal dimmer='blurring' size='large' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>

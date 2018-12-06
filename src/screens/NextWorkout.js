@@ -10,6 +10,7 @@ import {fetchEvent} from "../redux_helpers/actions/cacheActions";
 class NextEventProp extends Component {
     state = {
         isLoading: true,
+        isFetching: false,
         sentRequest: false,
         events: [],
         error: null
@@ -34,6 +35,8 @@ class NextEventProp extends Component {
         if (props.user.hasOwnProperty("scheduledEvents") && this.state.isLoading) {
             this.setState({isLoading: false});
             if (props.user.scheduledEvents && props.user.scheduledEvents.length) {
+                this.setState({isFetching: true});
+                var n = 0;
                 for (var i = 0; i < props.user.scheduledEvents.length; i++) {
                     // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                     //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
@@ -44,6 +47,10 @@ class NextEventProp extends Component {
                             // Rerender when you get a new scheduled event
                             // this.state.events.push(data);
                             this.setState({});
+                            n++;
+                            if (n === props.user.scheduledEvents.length) {
+                                this.setState({isFetching: false});
+                            }
                         });
                 }
             }
@@ -122,7 +129,7 @@ class NextEventProp extends Component {
                 return(null);
             }
         }
-        if (this.state.isLoading) {
+        if (this.state.isFetching) {
             //alert("loading: " + JSON.stringify(this.state));
             return(
                 <Message icon>
