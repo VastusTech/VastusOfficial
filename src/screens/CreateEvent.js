@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label} from 'semantic-ui-react';
+import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label, Image} from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
+import VTLogo from "../img/vt_new.svg";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -280,7 +281,7 @@ class CreateEventProp extends Component {
             <Segment raised inverted>
                 {/*Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>*/}
                 <Modal closeIcon onClose={this.closeModal} open={this.state.showModal} trigger={<div>
-                    <Button primary fluid size="large" onClick={() => this.setState({ showModal: true })}><Icon className='plus' />Post Challenge</Button></div>}>
+                    <Button primary fluid size="large" onClick={() => this.setState({ showModal: true })}>{<Image src={VTLogo} avatar />}Custom Challenge</Button></div>}>
                     <Modal.Header align='center'>Challenge Builder</Modal.Header>
                     <Modal.Content>
 

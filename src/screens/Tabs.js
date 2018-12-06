@@ -6,6 +6,7 @@ import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
 import NextWorkoutProp from "./NextWorkout";
+import WorkoutSelectionProp from "./WorkoutSelectionList";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
 
@@ -24,7 +25,7 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <CreateEventProp/>
+                        <WorkoutSelectionProp/>
                         <NextWorkoutProp/>
                         <EventFeed/>
                     </Tab.Pane>
