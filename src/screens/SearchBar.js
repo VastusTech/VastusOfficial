@@ -141,7 +141,7 @@ class SearchBarProp extends Component {
                     }
                     else if (item.item_type === "Event") {
                         result = {
-                            title: (item.title + " ~ (" + item.id + ")"),
+                            title: (item.title),
                             description: item.goal,
                             resultcontent: item
                         };
