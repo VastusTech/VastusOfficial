@@ -31,19 +31,21 @@ class NextEventProp extends Component {
             return;
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
-        if (props.user.hasOwnProperty("scheduledEvents") && props.user.scheduledEvents && props.user.scheduledEvents.length && this.state.isLoading) {
+        if (props.user.hasOwnProperty("scheduledEvents") && this.state.isLoading) {
             this.setState({isLoading: false});
-            for (var i = 0; i < props.user.scheduledEvents.length; i++) {
-                // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
-                //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
-                // }
-                props.fetchEvent(props.user.scheduledEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"],
-                    () => {
-                        // alert(JSON.stringify(data));
-                        // Rerender when you get a new scheduled event
-                        // this.state.events.push(data);
-                        this.setState({});
-                    });
+            if (props.user.scheduledEvents && props.user.scheduledEvents.length) {
+                for (var i = 0; i < props.user.scheduledEvents.length; i++) {
+                    // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
+                    //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
+                    // }
+                    props.fetchEvent(props.user.scheduledEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"],
+                        () => {
+                            // alert(JSON.stringify(data));
+                            // Rerender when you get a new scheduled event
+                            // this.state.events.push(data);
+                            this.setState({});
+                        });
+                }
             }
         }
         else if (!props.info.isLoading) {

@@ -9,6 +9,7 @@ import {fetchClient} from "../redux_helpers/actions/cacheActions";
 class Leaderboard extends Component {
     state = {
         isLoading: true,
+        isFetching: true,
         sentRequest: false,
         friends: [],
     };
@@ -18,6 +19,7 @@ class Leaderboard extends Component {
     }
 
     componentDidMount() {
+        alert("Mounted");
         this.update(this.props);
     }
 
@@ -32,6 +34,7 @@ class Leaderboard extends Component {
         }
         //alert("Cur User for grabbing Attributes: " + this.props.user.id);
         if (props.user.hasOwnProperty("friends") && props.user.hasOwnProperty("challengesWon") && props.user.friends && props.user.friends.length && this.state.isLoading) {
+            alert("in here + " + this.state.isLoading);
             this.state.isLoading = false;
             let challengesWonLength;
             if (props.user.challengesWon) {
@@ -40,10 +43,11 @@ class Leaderboard extends Component {
             else {
                 challengesWonLength = 0;
             }
-            this.state.friends.push({id: props.user.id, challengesWonLength: challengesWonLength});
+            // this.state.friends.push({id: props.user.id, challengesWonLength: challengesWonLength});
             //this.setState({isLoading: false});
             // alert(JSON.stringify(props.user.friends));
             // alert(JSON.stringify(this.state.friends));
+            this.state.friends.push({id: this.props.user.id, challengesWonLength});
             for (let i = 0; i < props.user.friends.length; i++) {
                 // if (!(this.props.user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
@@ -66,7 +70,11 @@ class Leaderboard extends Component {
                             challengesWonLength = 0;
                         }
                         // alert("Client id = " + client.id + " has challenge length = " + challengesWonLength);
+                        alert("hey " + JSON.stringify(this.state.friends));
                         this.state.friends.push({id: client.id, challengesWonLength: challengesWonLength});
+                        if (i === props.user.friends.length - 1) {
+                            this.setState({isFetching: false})
+                        }
                         //this.setState({friends: [...this.state.friends, {id: client.id, challengesWon: client.challengesWon}]});
                     });
             }
@@ -117,14 +125,14 @@ class Leaderboard extends Component {
             //     alert(JSON.stringify(events[0].id));
             // alert("EVENTS TO PRINT: ");
             // alert(JSON.stringify(events));
-            return _.times(clients.length, i => (
+            return _.times(sortedClients.length, i => (
                 <Fragment key={i}>
                     <Grid columns={2}>
                         <Grid.Column>
                             <Header>{i + 1}. </Header>
                         </Grid.Column>
                         <Grid.Column>
-                            <ClientCard clientID={clients[i].id}/>
+                            <ClientCard clientID={sortedClients[i].id}/>
                         </Grid.Column>
                     </Grid>
                 </Fragment>
@@ -133,7 +141,7 @@ class Leaderboard extends Component {
 
         //This displays the rows in a grid format, with visibility enabled so that we know when the bottom of the page
         //is hit by the user.
-        if (this.state.isLoading) {
+        if (this.state.isFetching) {
             return(
                 <Message>Loading...</Message>
             );
