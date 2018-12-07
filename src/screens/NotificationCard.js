@@ -12,7 +12,7 @@ import EventDescriptionModal from "./EventDescriptionModal";
 import { connect } from "react-redux";
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
 
-class Notification extends Component {
+class NotificationCard extends Component {
     state = {
         error: null,
         isLoading: false,
@@ -375,4 +375,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notification);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationCard);

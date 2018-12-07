@@ -1,14 +1,28 @@
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { Auth } from 'aws-amplify';
+import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
 import ItemType, { getItemTypeFromID } from "./ItemType";
 
+// const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");
+
 AWSConfig();
+
+function requestNotificationPermission() {
+    // Some browsers don't support Notification yet. I'm looking at you iOS Safari
+    if ("Notification" in window) {
+        if (
+            Notification.permission !== "denied" &&
+            Notification.permission !== "granted"
+        ) {
+            Notification.requestPermission();
+        }
+    }
+}
 
 class App extends Component {
     // This is the function that is called when the sign up button is pressed
@@ -18,6 +32,8 @@ class App extends Component {
 
     constructor(props) {
         super(props);
+        requestNotificationPermission();
+        // myServiceWorker.
     }
 
     // async authenticate(user) {
