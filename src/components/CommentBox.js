@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
+import {Button} from "semantic-ui-react";
 
 class CommentBox extends Component {
+
     constructor(props) {
         super(props);
         this.addComment = this.addComment.bind(this);
@@ -53,7 +55,7 @@ class CommentBox extends Component {
                     </div>
                     <div className="field">
                         <div className="control">
-                            <button className="button is-primary">Submit</button>
+                            <Button className="button is-primary">Submit</Button>
                         </div>
                     </div>
                 </form>
