@@ -4,6 +4,7 @@ import Comments from '../components/Comments';
 
 class CommentScreen extends Component {
     state = {
+        currentChannel: '',
         comments: []
     };
 
@@ -17,14 +18,12 @@ class CommentScreen extends Component {
 
     componentDidMount() {
         /*global Ably*/
-        let pls = {};
 
         const channel = Ably.channels.get('comments');
 
         let self = this;
 
         channel.subscribe(function getMsg(msg) {
-            //alert("Received: " + JSON.stringify(msg.data));
             self.setState({comments: self.state.comments.concat(msg.data)});
         });
 
@@ -33,6 +32,8 @@ class CommentScreen extends Component {
             channel.history((err, page) => {
                 // create a new array with comments only in an reversed order (i.e old to new)
                 const commentArray = Array.from(page.items.reverse(), item => item.data);
+
+                alert(JSON.stringify(commentArray));
 
                 this.setState({comments: commentArray});
             });
@@ -46,18 +47,15 @@ class CommentScreen extends Component {
     }
 
     update() {
-        /*global Ably*/
-
         const channel = Ably.channels.get('comments');
 
-        channel.attach();
-        channel.once('attached', () => {
-            channel.history((err, page) => {
-                // create a new array with comments only in an reversed order (i.e old to new)
-                const commentArray = Array.from(page.items.reverse(), item => item.data)
+        channel.history((err, page) => {
+            // create a new array with comments only in an reversed order (i.e old to new)
+            const commentArray = Array.from(page.items.reverse(), item => item.data);
 
-                this.setState({comments: commentArray });
-            });
+            //alert(JSON.stringify(commentArray));
+
+            this.setState({comments: commentArray});
         });
     }
 

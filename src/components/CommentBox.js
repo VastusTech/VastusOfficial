@@ -41,7 +41,6 @@ class CommentBox extends Component {
     render() {
         return (
             <div>
-                <h1 className="title">Kindly leave your thoughts below</h1>
                 <form onSubmit={this.addComment}>
                     <div className="field">
                         <div className="control">
