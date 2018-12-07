@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Grid, Visibility } from 'semantic-ui-react'
-import EventCard from "./EventCard";
+import EventCard from "../components/EventCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 import ScheduledEventsList from "./ScheduledEventList";

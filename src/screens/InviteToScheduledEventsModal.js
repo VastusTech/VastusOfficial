@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Grid, Message, Button, Header, Modal} from 'semantic-ui-react';
-import EventCard from "./EventCard";
+import EventCard from "../components/EventCard";
 // import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -78,7 +78,7 @@ class InviteToScheduledEventsModalProp extends Component {
             for (let i = 0; i < events.length; i++) {
                 if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
+                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                             <Grid.Column>
                                     <EventCard eventID={events[i]}/>
                             </Grid.Column>
@@ -103,7 +103,7 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                <Modal dimmer='blurring' size='large' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>

@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
-import ScheduledEventsList from "./ScheduledEventList";
-import InviteToScheduledEventsModalProp from "./InviteToScheduledEventsModal";
+import ScheduledEventsList from "../screens/ScheduledEventList";
+import InviteToScheduledEventsModalProp from "../screens/InviteToScheduledEventsModal";
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -169,7 +169,7 @@ class ClientModal extends Component {
                 return (
                     <Message color='red'>
                         <h1>Error!</h1>
-                        <p>{error}</p>
+                        <p>{errorMessage(error)}</p>
                     </Message>
                 );
             }
