@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Message, Grid, Button } from "semantic-ui-react";
-import ClientCard from "./ClientCard";
+import ClientCard from "../components/ClientCard";
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 

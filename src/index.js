@@ -11,6 +11,8 @@ import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
 
+require("./ably");
+
 // ReactDOM.render(<App />, document.getElementById('root'));
 ReactDOM.render(
     <Provider store={store}>

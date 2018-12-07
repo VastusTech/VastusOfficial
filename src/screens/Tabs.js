@@ -5,9 +5,10 @@ import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
-import NextWorkoutProp from "./NextWorkout";
+import NextWorkoutProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
+import CommentScreen from "./CommentScreen";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -15,7 +16,7 @@ import LeaderBoard from "./Leaderboard";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 4, size: "small", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 5, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -45,6 +46,15 @@ export default () => (
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <LeaderBoard />
+                </Tab.Pane>
+            },
+            {
+                menuItem: (
+                    <Menu.Item key={2}>
+                        <Icon name='comment' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <CommentScreen/>
                 </Tab.Pane>
             },
             {

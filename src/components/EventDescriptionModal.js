@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import {Card, Modal, Button, Header, List, Divider, Grid, Icon} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
-import EventMemberList from "./EventMemberList";
+import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 import QL from '../GraphQL';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
-import CompleteChallengeModal from "./CompleteChallengeModal";
+import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 
 function convertTime(time) {
