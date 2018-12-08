@@ -8,6 +8,7 @@ import QL from '../GraphQL';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import CommentScreen from "../screens/CommentScreen";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -311,6 +312,7 @@ class EventDescriptionModal extends Component {
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
                                 this.state.isJoinLoading, this.state.isDeleteLoading)}
                     </Modal.Description>
+                    <CommentScreen/>
                 </Modal.Content>
             </Modal>
         );

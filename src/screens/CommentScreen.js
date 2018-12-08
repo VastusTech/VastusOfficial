@@ -79,10 +79,10 @@ class CommentScreen extends Component {
         return (
             <Card>
                 <Card.Content>
-            <Grid.Row>
-                <Comments comments={this.state.comments} />
-                <CommentBox handleAddComment={this.handleAddComment}/>
-            </Grid.Row>
+                    <Grid.Row>
+                        <Comments comments={this.state.comments} />
+                        <CommentBox handleAddComment={this.handleAddComment}/>
+                    </Grid.Row>
                 </Card.Content>
             </Card>
         );
