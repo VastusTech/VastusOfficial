@@ -1,11 +1,25 @@
 import React, { Component } from 'react';
-import {Button} from "semantic-ui-react";
+import {Button, Input, Grid} from "semantic-ui-react";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import connect from "react-redux/es/connect/connect";
 
 class CommentBox extends Component {
+    state = {
+        sentRequest: false,
+    };
 
     constructor(props) {
         super(props);
         this.addComment = this.addComment.bind(this);
+    }
+
+    componentWillReceiveProps(newProps) {
+
+        if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
+            this.resetState();
+        }
+
+        this.props.fetchUserAttributes(["name"]);
     }
 
     addComment(e) {
@@ -14,11 +28,12 @@ class CommentBox extends Component {
 
         // Get the value of the comment box
         // and make sure it not some empty strings
-        const comment = e.target.elements.comment.value.trim();
-        const name = e.target.elements.name.value.trim();
+        let comment = e.target.elements.comment.value.trim();
+        let name = this.props.user.username;
 
         // Make sure name and comment boxes are filled
-        if (name && comment) {
+        if (comment) {
+            //alert(name);
             const commentObject = { name, comment };
 
             this.props.handleAddComment(commentObject);
@@ -34,7 +49,6 @@ class CommentBox extends Component {
 
             // Clear input fields
             e.target.elements.comment.value = '';
-            e.target.elements.name.value = '';
         }
     }
 
@@ -42,25 +56,38 @@ class CommentBox extends Component {
         return (
             <div>
                 <form onSubmit={this.addComment}>
-                    <div className="field">
-                        <div className="control">
-                            <input type="text" className="input" name="name" placeholder="Your name"/>
+                    <Grid.Row>
+                        <div className="field">
+                            <div className="control">
+                                <Input fluid className="textarea" name="comment" placeholder="Add a comment"></Input>
+                            </div>
                         </div>
-                    </div>
-                    <div className="field">
-                        <div className="control">
-                            <textarea className="textarea" name="comment" placeholder="Add a comment"></textarea>
+                        <div className="field">
+                            <div className="control">
+                                <Button primary className="button is-primary">Submit</Button>
+                            </div>
                         </div>
-                    </div>
-                    <div className="field">
-                        <div className="control">
-                            <Button className="button is-primary">Submit</Button>
-                        </div>
-                    </div>
+                    </Grid.Row>
                 </form>
             </div>
         );
     }
 }
 
-export default CommentBox;
+const mapStateToProps = (state) => ({
+    user: state.user,
+    info: state.info
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchUserAttributes: (attributesList) => {
+            dispatch(fetchUserAttributes(attributesList));
+        },
+        forceFetchUserAttributes: (variablesList) => {
+            dispatch(forceFetchUserAttributes(variablesList));
+        },
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentBox);

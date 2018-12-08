@@ -94,27 +94,6 @@ class Profile extends React.PureComponent {
             // alert("ID is not set inside profile... This means a problem has occurred");
         }
 
-        // if (user.id && user.name && user.username && user.birthday) {
-            // if (this.state.isLoading) {
-                // And start to get the profile image from S3
-                // if (user.profileImagePath) {
-                    // this.setState({profilePicture: user.profileImagePath, isLoading: false, ifS3: true});
-                    // alert("Getting " + user.profileImagePath + " from S3?");
-                    // Storage.get(user.profileImagePath).then((data) => {
-                    //     // alert("Received properly and setting! Data = " + JSON.stringify(data));
-                    //     this.setState({profilePicture: data, isLoading: false, ifS3: true});
-                    // }).catch((error) => {
-                    //     alert("Error getting profile image");
-                    //     alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                    //     this.setState({error: error, isLoading: true});
-                    // });
-                // }
-                // else {
-                //     // Default
-                //     this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
-                // }
-            // }
-        // }
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
             this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends"]);

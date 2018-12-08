@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 import CommentBox from '../components/CommentBox';
 import Comments from '../components/Comments';
+import {Grid, Card} from "semantic-ui-react";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import connect from "react-redux/es/connect/connect";
 
 class CommentScreen extends Component {
     state = {
         currentChannel: '',
+        canCallHistory: true,
         comments: []
     };
 
@@ -33,7 +37,7 @@ class CommentScreen extends Component {
                 // create a new array with comments only in an reversed order (i.e old to new)
                 const commentArray = Array.from(page.items.reverse(), item => item.data);
 
-                alert(JSON.stringify(commentArray));
+                //alert(JSON.stringify(commentArray));
 
                 this.setState({comments: commentArray});
             });
@@ -46,8 +50,10 @@ class CommentScreen extends Component {
         //alert("after: " + JSON.stringify(this.state.comments));
     }
 
-    update() {
+    getHistory() {
         const channel = Ably.channels.get('comments');
+
+        this.setState({canCallHistory: false});
 
         channel.history((err, page) => {
             // create a new array with comments only in an reversed order (i.e old to new)
@@ -60,18 +66,25 @@ class CommentScreen extends Component {
     }
 
     render() {
-        this.update();
+        //Don't call the history multiple times or else Ably will restrict us lol
+        if(this.state.canCallHistory) {
+            //alert("Getting the history");
+            this.getHistory();
+        }
+
+        //alert(JSON.stringify(this.props.user.name));
+
+        //alert(this.props.user.name);
+
         return (
-            <section className="section">
-                <div className="container">
-                    <div className="columns">
-                        <div className="column is-half is-offset-one-quarter">
-                            <Comments comments={this.state.comments} />
-                            <CommentBox handleAddComment={this.handleAddComment}/>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <Card>
+                <Card.Content>
+            <Grid.Row>
+                <Comments comments={this.state.comments} />
+                <CommentBox handleAddComment={this.handleAddComment}/>
+            </Grid.Row>
+                </Card.Content>
+            </Card>
         );
     }
 }
