@@ -8,9 +8,11 @@ import connect from "react-redux/es/connect/connect";
 class CommentScreen extends Component {
     state = {
         currentChannel: '',
-        canCallHistory: false,
+        canCallHistory: true,
         comments: []
     };
+
+    _isMounted = true;
 
     constructor(props) {
         super(props);
@@ -18,18 +20,19 @@ class CommentScreen extends Component {
         this.handleAddComment = this.handleAddComment.bind(this);
     }
 
-
-
     componentDidMount() {
         /*global Ably*/
+
+        this._isMounted = true;
 
         const channel = Ably.channels.get('comments');
 
         let self = this;
 
-
         channel.subscribe(function getMsg(msg) {
-            self.setState({comments: self.state.comments.concat(msg.data)});
+            if(self._isMounted) {
+                self.setState({comments: self.state.comments.concat(msg.data)});
+            }
         });
 
         channel.attach();
@@ -43,20 +46,26 @@ class CommentScreen extends Component {
                 this.setState({comments: commentArray});
             });
         });
-        this.setState({canCallHistory: true});
     }
+
 
     componentDidUpdate() {
         //Don't call the history multiple times or else Ably will restrict us lol
         if(this.state.canCallHistory) {
             //alert("Getting the history");
             this.getHistory();
+           //alert("I should only be called once");
         }
+    }
+
+
+    componentWillUnmount() {
+        this._isMounted = false;
     }
 
     handleAddComment(comment) {
         //alert("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
-        //this.setState({comments: this.state.comments.concat(comment)});
+        this.setState({comments: this.state.comments.concat(comment)});
         //alert("after: " + JSON.stringify(this.state.comments));
     }
 
@@ -71,12 +80,13 @@ class CommentScreen extends Component {
 
             //alert(JSON.stringify(commentArray));
 
-            this.setState({comments: commentArray});
+            if(this._isMounted) {
+                this.setState({comments: commentArray});
+            }
         });
     }
 
     render() {
-
         //alert(JSON.stringify(this.props.user.name));
 
         //alert(this.props.user.name);

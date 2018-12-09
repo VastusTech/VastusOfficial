@@ -26,7 +26,7 @@ export default () => (
                 render: () =>
                     <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
-                        <NextWorkoutProp/>
+
                         <EventFeed/>
                     </Tab.Pane>
             },
@@ -54,7 +54,6 @@ export default () => (
                         <Icon name='comment' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-
                 </Tab.Pane>
             },
             {

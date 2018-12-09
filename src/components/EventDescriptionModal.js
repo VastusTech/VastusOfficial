@@ -312,14 +312,14 @@ class EventDescriptionModal extends Component {
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
                                 this.state.isJoinLoading, this.state.isDeleteLoading)}
                     </Modal.Description>
+                    <CommentScreen/>
                     <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
                         <Grid>
                             <div id="ui center align">
-                                <CommentScreen/>
+
                             </div>
                         </Grid>
                     </Modal>
-
                 </Modal.Content>
             </Modal>
         );

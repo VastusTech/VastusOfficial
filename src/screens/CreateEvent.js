@@ -215,7 +215,7 @@ class CreateEventProp extends Component {
 
     handleDurationChange = (e, data) => {
         this.eventState.duration = data.value;
-        alert(this.eventState.duration);
+        //alert(this.eventState.duration);
         // this.setState({
         //     duration: data.value,
         // }, () => {
