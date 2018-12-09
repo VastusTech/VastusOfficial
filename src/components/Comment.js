@@ -24,11 +24,9 @@ class Comment extends Component {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                        <p>
                             <strong>{this.props.comment.name}</strong>
                             <br />
                             {this.createCorrectMessage()}
-                        </p>
                     </div>
                 </div>
             </article>

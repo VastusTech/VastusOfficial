@@ -8,7 +8,7 @@ import connect from "react-redux/es/connect/connect";
 class CommentScreen extends Component {
     state = {
         currentChannel: '',
-        canCallHistory: true,
+        canCallHistory: false,
         comments: []
     };
 
@@ -27,6 +27,7 @@ class CommentScreen extends Component {
 
         let self = this;
 
+
         channel.subscribe(function getMsg(msg) {
             self.setState({comments: self.state.comments.concat(msg.data)});
         });
@@ -42,6 +43,15 @@ class CommentScreen extends Component {
                 this.setState({comments: commentArray});
             });
         });
+        this.setState({canCallHistory: true});
+    }
+
+    componentDidUpdate() {
+        //Don't call the history multiple times or else Ably will restrict us lol
+        if(this.state.canCallHistory) {
+            //alert("Getting the history");
+            this.getHistory();
+        }
     }
 
     handleAddComment(comment) {
@@ -66,11 +76,6 @@ class CommentScreen extends Component {
     }
 
     render() {
-        //Don't call the history multiple times or else Ably will restrict us lol
-        if(this.state.canCallHistory) {
-            //alert("Getting the history");
-            this.getHistory();
-        }
 
         //alert(JSON.stringify(this.props.user.name));
 
