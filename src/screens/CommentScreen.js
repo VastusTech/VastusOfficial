@@ -58,14 +58,13 @@ class CommentScreen extends Component {
         }
     }
 
-
     componentWillUnmount() {
         this._isMounted = false;
     }
 
     handleAddComment(comment) {
         //alert("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
-        this.setState({comments: this.state.comments.concat(comment)});
+        //this.setState({comments: this.state.comments.concat(comment)});
         //alert("after: " + JSON.stringify(this.state.comments));
     }
 
