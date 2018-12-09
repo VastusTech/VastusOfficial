@@ -42,7 +42,7 @@ class CommentBox extends Component {
             // Publish comment
             /*global Ably*/
 
-            const channel = Ably.channels.get('comments');
+            const channel = Ably.channels.get(this.props.challengeChannel);
             channel.publish('add_comment', commentObject, err => {
                 if (err) {
                     console.log('Unable to publish message; err = ' + err.message);
@@ -61,12 +61,12 @@ class CommentBox extends Component {
                     <Grid.Row>
                         <div className="field">
                             <div className="control">
-                                <Input fluid className="textarea" name="comment" placeholder="Add a comment"></Input>
+                                <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
                             </div>
                         </div>
                         <div className="field">
                             <div className="control">
-                                <Button primary className="button is-primary">Submit</Button>
+                                <Button primary className="button is-primary">Send</Button>
                             </div>
                         </div>
                     </Grid.Row>

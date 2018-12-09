@@ -24,7 +24,9 @@ class CommentScreen extends Component {
 
         this._isMounted = true;
 
-        const channel = Ably.channels.get('comments');
+        //alert(this.props.challengeChannel);
+
+        const channel = Ably.channels.get(this.props.challengeChannel);
 
         let self = this;
 
@@ -69,7 +71,7 @@ class CommentScreen extends Component {
     }
 
     getHistory() {
-        const channel = Ably.channels.get('comments');
+        const channel = Ably.channels.get(this.props.challengeChannel);
 
         this.setState({canCallHistory: false});
 
@@ -96,7 +98,8 @@ class CommentScreen extends Component {
                     <Grid.Row>
                         <div>{/*alert("Comment screen render user: " + this.props.curUser)*/}</div>
                         <Comments comments={this.state.comments}/>
-                        <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}/>
+                        <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}
+                        challengeChannel={this.props.challengeChannel}/>
                     </Grid.Row>
                 </Card.Content>
             </Card>
