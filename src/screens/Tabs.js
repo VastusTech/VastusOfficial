@@ -5,7 +5,7 @@ import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
-import NextWorkoutProp from "../components/NextWorkout";
+import NextEventProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
 import CommentScreen from "./CommentScreen";
@@ -26,7 +26,7 @@ export default () => (
                 render: () =>
                     <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
-                        <NextWorkoutProp/>
+                        <NextEventProp/>
                         <EventFeed/>
                     </Tab.Pane>
             },
@@ -50,16 +50,15 @@ export default () => (
             },
             {
                 menuItem: (
-                    <Menu.Item key={2}>
+                    <Menu.Item key={3}>
                         <Icon name='comment' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <CommentScreen/>
                 </Tab.Pane>
             },
             {
                 menuItem: (
-                    <Menu.Item key={3}>
+                    <Menu.Item key={4}>
                         <Icon name='bell outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>

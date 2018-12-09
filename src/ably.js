@@ -1,3 +1,3 @@
 import { Realtime } from 'ably/browser/static/ably-commonjs.js';
 
-window.Ably = new Realtime('vXE_QQ.8ScwtQ:rXz-Ge8InA_OATgd');
+window.Ably = new Realtime('RP1cGg.4C1fZA:eIFzJY6tq4QTi0uI');

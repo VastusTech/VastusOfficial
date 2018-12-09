@@ -9,7 +9,6 @@ import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
-import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
@@ -227,7 +226,7 @@ class EventDescriptionModal extends Component {
         //to join a challenge.
         function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
                                      joinHandler, leaveHandler, deleteHandler, completeHandler,
-                                     isLeaveLoading, isJoinLoading, isDeleteLoading) {
+                                     isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName) {
             // alert(ifCompleted);
             if (ifCompleted === "true") {
                 return(
@@ -238,24 +237,35 @@ class EventDescriptionModal extends Component {
                 // TODO This should also link the choose winner button
                 if (ifChallenge) {
                     return (
-                        <Grid columns={2}>
-                            <Grid.Column>
-                                <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
-                            </Grid.Column>
-                        </Grid>
+                        <div>
+                            <Grid columns={2}>
+                                <Grid.Column>
+                                    <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
+                                </Grid.Column>
+                            </Grid>
+                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                        </div>
                     )
                 }
                 else {
                     return(
-                        <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                        <div>
+                            <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                        </div>
                     );
                 }
             }
             else if(isJoined) {
-                return (<Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>)
+                return (
+                    <div>
+                        <Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>
+                        <CommentScreen curUser={username} challengeChannel={channelName}/>
+                    </div>
+                )
             }
             else {
                 //alert(isJoinLoading);
@@ -311,8 +321,16 @@ class EventDescriptionModal extends Component {
                             {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"),
                                 this.getEventAttribute("ifChallenge"), this.handleJoin, this.handleLeave,
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
-                                this.state.isJoinLoading, this.state.isDeleteLoading)}
+                                this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
                     </Modal.Description>
+                    <div>{/*alert(this.getEventAttribute("title"))*/}</div>
+                    <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
+                        <Grid>
+                            <div id="ui center align">
+
+                            </div>
+                        </Grid>
+                    </Modal>
                 </Modal.Content>
             </Modal>
         );
