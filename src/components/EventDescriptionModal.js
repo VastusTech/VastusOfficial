@@ -8,6 +8,8 @@ import QL from '../GraphQL';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import CommentScreen from "../screens/CommentScreen";
+import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
