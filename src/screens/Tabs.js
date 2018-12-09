@@ -5,7 +5,7 @@ import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
-import NextWorkoutProp from "../components/NextWorkout";
+import NextEventProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
 import CommentScreen from "./CommentScreen";
@@ -26,7 +26,7 @@ export default () => (
                 render: () =>
                     <Tab.Pane basic attached={false}>
                         <CreateEventProp/>
-
+                        <NextEventProp/>
                         <EventFeed/>
                     </Tab.Pane>
             },

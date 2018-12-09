@@ -14,12 +14,10 @@ class CommentBox extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-
         if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
             this.resetState();
         }
-
-        this.props.fetchUserAttributes(["name"]);
+        //alert("Comment User: " + JSON.stringify(this.props));
     }
 
     addComment(e) {
@@ -29,7 +27,10 @@ class CommentBox extends Component {
         // Get the value of the comment box
         // and make sure it not some empty strings
         let comment = e.target.elements.comment.value.trim();
-        let name = this.props.user.username;
+        //let name = this.props.user.username;
+        let name = this.props.curUser;
+
+        //alert(name);
 
         // Make sure name and comment boxes are filled
         if (comment) {
@@ -40,6 +41,7 @@ class CommentBox extends Component {
 
             // Publish comment
             /*global Ably*/
+
             const channel = Ably.channels.get('comments');
             channel.publish('add_comment', commentObject, err => {
                 if (err) {
@@ -74,20 +76,4 @@ class CommentBox extends Component {
     }
 }
 
-const mapStateToProps = (state) => ({
-    user: state.user,
-    info: state.info
-});
-
-const mapDispatchToProps = (dispatch) => {
-    return {
-        fetchUserAttributes: (attributesList) => {
-            dispatch(fetchUserAttributes(attributesList));
-        },
-        forceFetchUserAttributes: (variablesList) => {
-            dispatch(forceFetchUserAttributes(variablesList));
-        },
-    };
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CommentBox);
+export default CommentBox;

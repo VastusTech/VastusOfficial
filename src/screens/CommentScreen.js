@@ -16,7 +16,6 @@ class CommentScreen extends Component {
 
     constructor(props) {
         super(props);
-
         this.handleAddComment = this.handleAddComment.bind(this);
     }
 
@@ -46,6 +45,7 @@ class CommentScreen extends Component {
                 this.setState({comments: commentArray});
             });
         });
+        //alert("Comment screen user: " + this.props.curUser);
     }
 
 
@@ -95,8 +95,9 @@ class CommentScreen extends Component {
             <Card>
                 <Card.Content>
                     <Grid.Row>
-                        <Comments comments={this.state.comments} />
-                        <CommentBox handleAddComment={this.handleAddComment}/>
+                        <div>{/*alert("Comment screen render user: " + this.props.curUser)*/}</div>
+                        <Comments comments={this.state.comments}/>
+                        <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}/>
                     </Grid.Row>
                 </Card.Content>
             </Card>

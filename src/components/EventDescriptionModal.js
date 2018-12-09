@@ -312,7 +312,8 @@ class EventDescriptionModal extends Component {
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
                                 this.state.isJoinLoading, this.state.isDeleteLoading)}
                     </Modal.Description>
-                    <CommentScreen/>
+                    <div>{/*alert(JSON.stringify(this.props.user.username))*/}</div>
+                    <CommentScreen curUser={this.props.user.username}/>
                     <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
                         <Grid>
                             <div id="ui center align">
