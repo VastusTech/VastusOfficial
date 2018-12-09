@@ -226,7 +226,7 @@ class EventDescriptionModal extends Component {
         //to join a challenge.
         function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
                                      joinHandler, leaveHandler, deleteHandler, completeHandler,
-                                     isLeaveLoading, isJoinLoading, isDeleteLoading) {
+                                     isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName) {
             // alert(ifCompleted);
             if (ifCompleted === "true") {
                 return(
@@ -254,7 +254,12 @@ class EventDescriptionModal extends Component {
                 }
             }
             else if(isJoined) {
-                return (<Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>)
+                return (
+                    <div>
+                        <Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>
+                        <CommentScreen curUser={username} challengeChannel={channelName}/>
+                    </div>
+                )
             }
             else {
                 //alert(isJoinLoading);
@@ -310,10 +315,9 @@ class EventDescriptionModal extends Component {
                             {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"),
                                 this.getEventAttribute("ifChallenge"), this.handleJoin, this.handleLeave,
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
-                                this.state.isJoinLoading, this.state.isDeleteLoading)}
+                                this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
                     </Modal.Description>
                     <div>{/*alert(this.getEventAttribute("title"))*/}</div>
-                    <CommentScreen curUser={this.props.user.username} challengeChannel={this.getEventAttribute("title")}/>
                     <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
                         <Grid>
                             <div id="ui center align">
