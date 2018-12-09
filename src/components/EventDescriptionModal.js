@@ -237,19 +237,25 @@ class EventDescriptionModal extends Component {
                 // TODO This should also link the choose winner button
                 if (ifChallenge) {
                     return (
-                        <Grid columns={2}>
-                            <Grid.Column>
-                                <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
-                            </Grid.Column>
-                            <Grid.Column>
-                                <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
-                            </Grid.Column>
-                        </Grid>
+                        <div>
+                            <Grid columns={2}>
+                                <Grid.Column>
+                                    <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                                </Grid.Column>
+                                <Grid.Column>
+                                    <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
+                                </Grid.Column>
+                            </Grid>
+                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                        </div>
                     )
                 }
                 else {
                     return(
-                        <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                        <div>
+                            <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                        </div>
                     );
                 }
             }
