@@ -41,7 +41,7 @@ class CommentBox extends Component {
 
             // Publish comment
             /*global Ably*/
-
+            //alert(this.props.challengeChannel);
             const channel = Ably.channels.get(this.props.challengeChannel);
             channel.publish('add_comment', commentObject, err => {
                 if (err) {

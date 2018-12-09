@@ -14,6 +14,9 @@ class CommentScreen extends Component {
 
     _isMounted = true;
 
+    channelName = "persisted:" + this.props.challengeChannel;
+    //channelName = this.props.challengeChannel;
+
     constructor(props) {
         super(props);
         this.handleAddComment = this.handleAddComment.bind(this);
@@ -32,6 +35,7 @@ class CommentScreen extends Component {
 
         channel.subscribe(function getMsg(msg) {
             if(self._isMounted) {
+                //alert(JSON.stringify(msg.data));
                 self.setState({comments: self.state.comments.concat(msg.data)});
             }
         });
@@ -66,12 +70,13 @@ class CommentScreen extends Component {
 
     handleAddComment(comment) {
         //alert("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
-        //this.setState({comments: this.state.comments.concat(comment)});
+        this.setState({comments: this.state.comments.concat(comment)});
         //alert("after: " + JSON.stringify(this.state.comments));
     }
 
     getHistory() {
-        const channel = Ably.channels.get(this.props.challengeChannel);
+        //alert(this.channelName);
+        const channel = Ably.channels.get(this.channelName);
 
         this.setState({canCallHistory: false});
 
@@ -99,7 +104,7 @@ class CommentScreen extends Component {
                         <div>{/*alert("Comment screen render user: " + this.props.curUser)*/}</div>
                         <Comments comments={this.state.comments}/>
                         <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}
-                        challengeChannel={this.props.challengeChannel}/>
+                        challengeChannel={this.channelName}/>
                     </Grid.Row>
                 </Card.Content>
             </Card>
