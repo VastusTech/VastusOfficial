@@ -7,6 +7,9 @@ import { connect } from 'react-redux';
 import ScheduledEventsList from "./ScheduledEventList";
 import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import CreateEventProp from "./CreateEvent";
+import NextEventProp from "../components/NextWorkout";
+import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -37,6 +40,7 @@ class EventFeed extends Component {
     constructor(props) {
         super(props);
         this.forceUpdate = this.forceUpdate.bind(this);
+        this.queryEvents = this.queryEvents.bind(this);
     }
 
     componentDidMount() {
@@ -158,6 +162,8 @@ class EventFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
+                <CreateEventProp queryEvents={this.queryEvents}/>
+                <NextEventProp/>
                 {rows(this.state.events)}
             </Visibility>
         );

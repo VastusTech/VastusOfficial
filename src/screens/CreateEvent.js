@@ -4,6 +4,8 @@ import Lambda from "../Lambda";
 import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
 import VTLogo from "../img/vt_new.svg";
+import QL from "../GraphQL";
+import {fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -120,6 +122,8 @@ class CreateEventProp extends Component {
                     this.eventState.location, this.eventState.title, this.eventState.goal, this.eventState.description,
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");
+                        //This is the second call
+                        //this.props.queryEvents();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
@@ -141,76 +145,6 @@ class CreateEventProp extends Component {
             this.setState({isSubmitLoading: false});
             alert("All fields need to be filled out!");
         }
-
-        // let time = '';
-        // let endTime;
-
-        // let date = this.eventState.startDateTime.substr(0, 11);
-        // let nextDate = this.eventState.startDateTime.substr(0, 8) + "0" +
-        //     (parseInt(this.eventState.startDateTime.substr(8, 2), 10) + 1) +
-        //     this.eventState.startDateTime.substr(10, 1);
-        // let hour = this.eventState.startDateTime.substr(11, 2);
-        // let durationHour = this.state.duration.substr(0, 1);
-        // let minute = this.eventState.startDateTime.substr(14, 2);
-        // let durationMinute = this.state.duration.substr(2, 2);
-        // let endHour = (parseInt(hour, 10) + parseInt(durationHour, 10));
-        //
-        // if(endHour >= 24) {
-        //     endTime = (this.eventState.startDateTime + "_" + nextDate + "0" + (parseInt(hour, 10) +
-        //         parseInt(durationHour, 10) - 24));
-        // }
-        // else if((endHour < 24) && (endHour < 10)) {
-        //     endTime = this.eventState.startDateTime + "_" + date + "0" +
-        //         (parseInt(hour, 10) + parseInt(durationHour, 10));
-        // }
-        // else {
-        //     endTime = this.eventState.startDateTime + "_" + date +
-        //         (parseInt(hour, 10) + parseInt(durationHour, 10));
-        // }
-        //
-        // alert("Minute: " + minute + " " + "Duration: " + durationMinute);
-        // if(((parseInt(minute, 10) + parseInt(durationMinute, 10))) >= 60) {
-        //     minute = (parseInt(minute, 10) + parseInt(durationMinute, 10)) - 60;
-        //     hour = "0" + (parseInt(hour, 10) + 1);
-        //     alert("Min: " + minute);
-        //     endTime = endTime.substr(0, 28) + (hour + ":" + minute);
-        //     alert("End: " + endTime);
-        // }
-        // else {
-        //     minute = (parseInt(minute, 10) + parseInt(durationMinute, 10));
-        //     alert("Min: " + minute);
-        //     endTime += (":" + minute);
-        //     alert("End: " + endTime);
-        // }
-        //
-        // alert("End time substring: " + endTime.substr(0, 28));
-        // alert(endTime);
-        //
-        // alert(endTime);
-
-        // if(Number.isInteger(+this.eventState.capacity)) {
-        //     Lambda.createChallenge(this.props.user.id, this.props.user.id, time, String(this.eventState.capacity),
-        //         String(this.eventState.location), String(this.eventState.title),
-        //         String(this.eventState.goal), (data) => {
-        //             alert(JSON.stringify(data));
-        //             // HANDLE WHAT HAPPENS afterwards
-        //             if (data.errorMessage) {
-        //                 // Java error handling
-        //                 alert("ERROR: " + data.errorMessage + "!!! TYPE: " + data.errorType + "!!! STACK TRACE: " + data.stackTrace + "!!!");
-        //             }
-        //             else {
-        //                 alert("ya did it ya filthy animal");
-        //             }
-        //         }, (error) => {
-        //             alert(error);
-        //             // TODO HANDLE WHAT HAPPENS afterwards
-        //             // TODO keep in mind that this is asynchronous
-        //         }
-        //     );
-        // }
-        // else {
-        //     alert("Capacity must be an integer! Instead it is: " + this.eventState.capacity);
-        // }
     };
 
     handleDurationChange = (e, data) => {
@@ -333,15 +267,26 @@ class CreateEventProp extends Component {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
+    info: state.info,
+    cache: state.cache
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
         setError: (error) => {
             dispatch(setError(error));
-        }
-    };
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        },
+        putEvent: (event) => {
+            dispatch(putEvent(event));
+        },
+        putEventQuery: (queryString, queryResult) => {
+            dispatch(putEventQuery(queryString, queryResult));
+        },
+    }
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(CreateEventProp);

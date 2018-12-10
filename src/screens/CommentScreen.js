@@ -113,9 +113,6 @@ class CommentScreen extends Component {
     }
 
     render() {
-        //alert(JSON.stringify(this.props.user.name));
-
-        //alert(this.props.user.name);
 
         return (
             <Card>

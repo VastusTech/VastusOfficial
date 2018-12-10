@@ -25,8 +25,6 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <CreateEventProp/>
-                        <NextEventProp/>
                         <EventFeed/>
                     </Tab.Pane>
             },
