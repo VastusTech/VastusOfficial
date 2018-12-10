@@ -21,7 +21,6 @@ body {
 .u-avatar {
   width: 100px;
   height: 100px;
-  margin: 0 auto;
   background-size: cover;
   background-position: center;
   border-radius: 50%;
@@ -30,8 +29,8 @@ body {
 }
 
 .u-avatar--small {
-  width: 75px;
-  height: 75px;
+  width: 50px;
+  height: 50px;
 }
 
 .u-avatar--large {
@@ -41,6 +40,10 @@ body {
 
 .u-margin-top--neg4 {
   margin-top: -32px !important;
+}
+
+.u-margin-top--0 {
+  margin-top: 0 !important;
 }
 
 .u-margin-top--1 {
@@ -59,8 +62,22 @@ body {
   margin-bottom: 8px !important;
 }
 
+.u-margin-left--2 {
+  margin-left: 16px !important;
+}
+
 .ui.u-padding-left--1 {
   padding-left: 8px !important;
+}
+
+// Flex
+
+.u-flex {
+  display: flex;
+}
+
+.u-flex-align--center {
+  align-items: center;
 }
 
 .u-button--flat {

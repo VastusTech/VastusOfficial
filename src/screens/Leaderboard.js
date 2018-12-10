@@ -127,14 +127,8 @@ class Leaderboard extends Component {
             // alert(JSON.stringify(events));
             return _.times(sortedClients.length, i => (
                 <Fragment key={i}>
-                    <Grid columns={2}>
-                        <Grid.Column>
-                            <Header>{i + 1}. </Header>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <ClientCard clientID={sortedClients[i].id}/>
-                        </Grid.Column>
-                    </Grid>
+                    
+                    <ClientCard rank={i + 1} clientID={sortedClients[i].id}/>
                 </Fragment>
             ));
         }
