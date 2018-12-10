@@ -235,7 +235,7 @@ class CreateEventProp extends Component {
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>
-                                    <Dropdown placeholder='duration' defaultValue={this.eventState.duration} fluid search selection options={timeOptions} onChange={this.handleDurationChange}/>
+                                    <Dropdown placeholder='duration' defaultValue={this.eventState.duration} fluid search selection inverted options={timeOptions} onChange={this.handleDurationChange}/>
                                 </div>
                             </Form.Group>
                             <Form.Group unstackable widths={2}>
