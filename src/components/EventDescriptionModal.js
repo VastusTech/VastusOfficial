@@ -332,14 +332,16 @@ class EventDescriptionModal extends Component {
                                 this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
                     </Modal.Description>
                     <div>{/*alert(this.getEventAttribute("title"))*/}</div>
-                    <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
-                        <Grid>
-                            <div id="ui center align">
+                    {/*
+                        <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
+                            <Grid>
+                                <div id="ui center align">
 
-                            </div>
-                        </Grid>
-                    </Modal>
-                </Modal.Content>
+                                </div>
+                            </Grid>
+                        </Modal>
+                        */}
+                    </Modal.Content>
             </Modal>
         );
     }
