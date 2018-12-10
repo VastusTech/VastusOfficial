@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Grid, Visibility } from 'semantic-ui-react'
+import {Visibility, Header} from 'semantic-ui-react'
 import EventCard from "../components/EventCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
@@ -163,7 +163,9 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <CreateEventProp queryEvents={this.queryEvents}/>
+                <Header size='small'>Your Next Challenge:</Header>
                 <NextEventProp/>
+                <Header size='small'>Upcoming Challenges:</Header>
                 {rows(this.state.events)}
             </Visibility>
         );

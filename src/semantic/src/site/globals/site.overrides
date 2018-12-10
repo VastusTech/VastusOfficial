@@ -29,9 +29,14 @@ body {
   position: relative;
 }
 
+.u-avatar--small {
+  width: 75px;
+  height: 75px;
+}
+
 .u-avatar--large {
-  width: 150px;
-  height: 150px;
+  width: 125px;
+  height: 125px;
 }
 
 .u-margin-top--neg4 {
@@ -48,6 +53,10 @@ body {
 
 .u-margin-right--0 {
   margin-right: 0 !important;
+}
+
+.u-margin-bottom--1 {
+  margin-bottom: 8px !important;
 }
 
 .ui.u-padding-left--1 {

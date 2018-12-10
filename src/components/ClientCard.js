@@ -60,7 +60,7 @@ class ClientCard extends Component {
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
             return(
-                <Image wrapped size="tiny" circular src={this.getClientAttribute("profilePicture")} />
+                <div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
             );
         }
         else {

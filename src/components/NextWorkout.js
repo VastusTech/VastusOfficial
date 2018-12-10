@@ -119,7 +119,6 @@ class NextEventProp extends Component {
                 return (
                     <Fragment key={0}>
                         <Message>
-                            <Header>Your Next Challenge:</Header>
                             <EventCard eventID={row[row.length - 1].id}/>
                         </Message>
                     </Fragment>
