@@ -169,7 +169,7 @@ class ClientModal extends Component {
                 return (
                     <Message color='red'>
                         <h1>Error!</h1>
-                        <p>{errorMessage(error)}</p>
+                        <p>{error.errorMessage}</p>
                     </Message>
                 );
             }

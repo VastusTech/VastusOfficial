@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, List, Divider, Grid, Icon} from 'semantic-ui-react';
+import {Card, Modal, Button, Header, List, Divider, Grid, Message} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "../screens/EventMemberList";
@@ -66,6 +66,14 @@ class EventDescriptionModal extends Component {
         this.handleLeave = this.handleLeave.bind(this);
         this.handleJoin = this.handleJoin.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
+        this.isOwned = this.isOwned.bind(this);
+        this.isJoined = this.isJoined.bind(this);
+    }
+
+    componentDidMount() {
+        this.isJoined();
+        this.isOwned();
+        //alert("Mount Owned: " + this.state.isOwned);
     }
 
     componentWillReceiveProps(newProps) {
@@ -138,7 +146,7 @@ class EventDescriptionModal extends Component {
     }
 
     handleDeleteEventButton() {
-        alert("Handling deleting the event");
+        //alert("Handling deleting the event");
         this.setState({isLoading: true});
         Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
@@ -151,7 +159,7 @@ class EventDescriptionModal extends Component {
     }
 
     handleLeaveEventButton() {
-        alert("Handling leaving the event");
+        //alert("Handling leaving the event");
         this.setState({isLoading: true});
         Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
@@ -164,7 +172,7 @@ class EventDescriptionModal extends Component {
     }
 
     handleJoinEventButton() {
-        alert("Handling joining the event");
+        //alert("Handling joining the event");
         this.setState({isLoading: true});
         Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
             (data) => {
@@ -179,9 +187,14 @@ class EventDescriptionModal extends Component {
     isJoined() {
         const members = this.getEventAttribute("members");
         if (members) {
-            this.setState({isJoined: members.includes(this.props.user.id)});
+            const isMembers = members.includes(this.props.user.id);
+            //alert("Is Members?: " + isMembers);
+            this.setState({isJoined: isMembers});
+            //alert("am I in members?: " + members.includes(this.props.user.id));
         }
-        return this.setState({isJoined: false});
+        else {
+            this.setState({isJoined: false});
+        }
     }
 
     isOwned() {
@@ -217,6 +230,16 @@ class EventDescriptionModal extends Component {
             "access"]);
     };
 
+    displayError() {
+        if(this.state.error === "Error while trying to update an item in the database safely. Error: The item failed the checkHandler: That challenge is already filled up!") {
+            return (<Message negative>
+                <Message.Header>Sorry!</Message.Header>
+                <p>That challenge is already filled up!</p>
+            </Message>);
+        }
+
+    }
+
     render() {
         if (!this.getEventAttribute("id")) {
             return(
@@ -227,7 +250,9 @@ class EventDescriptionModal extends Component {
         if(this.state.canCallChecks) {
             this.isJoined();
             this.isOwned();
+            //alert("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
+            //alert("Members: " + this.getEventAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
@@ -235,10 +260,11 @@ class EventDescriptionModal extends Component {
         function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
                                      joinHandler, leaveHandler, deleteHandler, completeHandler,
                                      isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName) {
+            //alert("Owned: " + isOwned + " Joined: " + isJoined);
             // alert(ifCompleted);
             if (ifCompleted === "true") {
                 return(
-                    <Button fluid inverted size="large">This Event is completed</Button>
+                    <Button disabled fluid inverted size="large">This Event is completed</Button>
                 );
             }
             else if(isOwned) {
@@ -331,7 +357,7 @@ class EventDescriptionModal extends Component {
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
                                 this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
                     </Modal.Description>
-                    <div>{/*alert(this.getEventAttribute("title"))*/}</div>
+                    <div>{this.displayError()}</div>
                     {/*
                         <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
                             <Grid>

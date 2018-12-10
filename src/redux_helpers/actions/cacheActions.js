@@ -84,7 +84,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                 if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
             }
         }, (error) => {
-            alert("Error in retrieval");
+            console.error("Error in retrieval");
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });
@@ -117,7 +117,7 @@ function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetch
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
-            alert("lmao you forgot to include the profile image path, I'll include it tho, no worries");
+            console.error("lmao you forgot to include the profile image path, I'll include it tho, no worries");
             variablesList = [
                 ...variablesList,
                 "profileImagePath"
@@ -150,7 +150,7 @@ function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetch
         }
         if (data.hasOwnProperty("unprocessedItems") && data.unprocessedItems) {
             // TODO Load it in again until you get the whole thing? Might be dangerous with large lists though...
-            alert("We have unprocessed items in the batch get!");
+            console.error("We have unprocessed items in the batch get!");
         }
     }, (error) => {
         dispatch(setError(error));
@@ -264,6 +264,44 @@ export function putInviteQuery(queryString, queryResult) {
         }
     };
 }
+
+export function clearInviteQuery() {
+    return {
+        type: "CLEAR_INVITE_QUERY",
+    };
+}
+
+export function clearEventQuery() {
+    return {
+        type: "CLEAR_EVENT_QUERY",
+    };
+}
+export function clearGymQuery() {
+    return {
+        type: "CLEAR_GYM_QUERY",
+    };
+}
+export function clearClientQuery() {
+    return {
+        type: "CLEAR_CLIENT_QUERY",
+    };
+}
+export function clearTrainerQuery() {
+    return {
+        type: "CLEAR_TRAINER_QUERY",
+    };
+}
+export function clearReviewQuery() {
+    return {
+        type: "CLEAR_REVIEW_QUERY",
+    };
+}
+export function clearWorkoutQuery() {
+    return {
+        type: "CLEAR_WORKOUT_QUERY",
+    };
+}
+
 function putQuery(queryString, queryResult, actionType) {
     return {
         type: actionType,

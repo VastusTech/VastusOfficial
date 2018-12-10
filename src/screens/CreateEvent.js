@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label, Image} from 'semantic-ui-react';
+import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label, Image, Message} from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
 import VTLogo from "../img/vt_new.svg";
 import QL from "../GraphQL";
-import {fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -123,7 +123,8 @@ class CreateEventProp extends Component {
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
-                        //this.props.queryEvents();
+                        this.props.clearEventQuery();
+                        this.props.queryEvents();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
@@ -136,14 +137,11 @@ class CreateEventProp extends Component {
                     });
             }
             else {
-                this.setState({isSubmitLoading: false});
-                alert("Capacity needs to be an integer!");
-                alert(this.eventState.capacity);
+                this.setState({isSubmitLoading: false, submitError: "Capacity needs to be an integer!"});
             }
         }
         else {
-            this.setState({isSubmitLoading: false});
-            alert("All fields need to be filled out!");
+            this.setState({isSubmitLoading: false, submitError: "All fields need to be filled out!"});
         }
     };
 
@@ -205,6 +203,14 @@ class CreateEventProp extends Component {
         this.setState({showSuccessModal: false});
     };
 
+    displayError() {
+        if(this.state.submitError !== "") {
+            return (<Message negative>
+                <Message.Header>Sorry!</Message.Header>
+                <p>{this.state.submitError}</p>
+            </Message>);
+        }
+    }
 
     //Inside of render is a modal containing each form input required to create a Event.
     render() {
@@ -253,7 +259,7 @@ class CreateEventProp extends Component {
                                     <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                 </Form.Field>
                             </Form.Group>
-                            <div>{this.state.submitError}</div>
+                            <div>{this.displayError()}</div>
                         </Form>
                     </Modal.Content>
                     <Modal.Actions>
@@ -286,6 +292,9 @@ const mapDispatchToProps = (dispatch) => {
         putEventQuery: (queryString, queryResult) => {
             dispatch(putEventQuery(queryString, queryResult));
         },
+        clearEventQuery: () => {
+            dispatch(clearEventQuery())
+        }
     }
 };
 

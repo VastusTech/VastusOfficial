@@ -24,6 +24,14 @@ const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
 const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
 const FETCH_INVITE_QUERY = 'FETCH_INVITE_QUERY';
 
+const CLEAR_CLIENT_QUERY = 'CLEAR_CLIENT_QUERY';
+const CLEAR_TRAINER_QUERY = 'CLEAR_TRAINER_QUERY';
+const CLEAR_GYM_QUERY = 'CLEAR_GYM_QUERY';
+const CLEAR_WORKOUT_QUERY = 'CLEAR_WORKOUT_QUERY';
+const CLEAR_REVIEW_QUERY = 'CLEAR_REVIEW_QUERY';
+const CLEAR_EVENT_QUERY = 'CLEAR_EVENT_QUERY';
+const CLEAR_INVITE_QUERY = 'CLEAR_INVITE_QUERY';
+
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
 const trainerCacheSize = 100;
@@ -169,6 +177,55 @@ export default (state = initialState, action) => {
                     ...state.inviteQueries,
                     [action.payload.queryString]: action.payload.queryResult
                 }
+            };
+            break;
+        case CLEAR_CLIENT_QUERY:
+            state = {
+                ...state,
+                clientQueries: {}
+
+            };
+            break;
+        case CLEAR_TRAINER_QUERY:
+            state = {
+                ...state,
+                trainerQueries: {}
+
+            };
+            break;
+        case CLEAR_EVENT_QUERY:
+            state = {
+                ...state,
+                eventQueries: {}
+
+            };
+            break;
+        case CLEAR_GYM_QUERY:
+            state = {
+                ...state,
+                gymQueries: {}
+
+            };
+            break;
+        case CLEAR_INVITE_QUERY:
+            state = {
+                ...state,
+                inviteQueries: {}
+
+            };
+            break;
+        case CLEAR_REVIEW_QUERY:
+            state = {
+                ...state,
+                reviewQueries: {}
+
+            };
+            break;
+        case CLEAR_WORKOUT_QUERY:
+            state = {
+                ...state,
+                workoutQueries: {}
+
             };
             break;
         default:
