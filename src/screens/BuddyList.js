@@ -138,7 +138,7 @@ class BuddyListProp extends Component {
         }
         if (this.props.user.friends && this.props.user.friends.length && this.props.user.friends.length > 0) {
             return(
-                <List relaxed divided verticalAlign="middle">
+                <List relaxed verticalAlign="middle">
                     {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this),
                     this.forceUpdate.bind(this))}
                 </List>

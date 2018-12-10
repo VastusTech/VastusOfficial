@@ -97,8 +97,10 @@ class ClientCard extends Component<Props> {
                     {/* If no rank */}
                     {!rank && (
                         <Fragment>
-                            <Card.Header textAlign = 'center'>
-                                {this.profilePicture()}
+                            <Card.Header>
+                                <div className="u-flex u-flex-justify--center u-margin-bottom--2">
+                                    {this.profilePicture()}
+                                </div>
                             </Card.Header>
                             <Card.Header textAlign = 'center'>
                                 {this.getClientAttribute("name")}

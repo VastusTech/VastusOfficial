@@ -234,7 +234,7 @@ class Profile extends React.PureComponent {
                     <List id = "profile buttons">
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Buddy List</Button>
-                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
+                            <Modal basic size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
