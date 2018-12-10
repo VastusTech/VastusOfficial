@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CommentBox from '../components/CommentBox';
 import Comments from '../components/Comments';
-import {Grid, Card} from "semantic-ui-react";
+import {Grid, Card, Dimmer, Loader, Icon, Message} from "semantic-ui-react";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 
@@ -9,7 +9,8 @@ class CommentScreen extends Component {
     state = {
         currentChannel: '',
         canCallHistory: true,
-        comments: []
+        comments: [],
+        isHistoryLoading: true
     };
 
     _isMounted = true;
@@ -29,15 +30,16 @@ class CommentScreen extends Component {
 
         //alert(this.props.challengeChannel);
 
-        const channel = Ably.channels.get(this.props.challengeChannel);
+        const channel = Ably.channels.get(this.channelName);
 
         let self = this;
 
-        channel.subscribe(function getMsg(msg) {
+        channel.subscribe(function(msg) {
             if(self._isMounted) {
                 //alert(JSON.stringify(msg.data));
                 self.setState({comments: self.state.comments.concat(msg.data)});
             }
+            self.getHistory();
         });
 
         channel.attach();
@@ -70,12 +72,15 @@ class CommentScreen extends Component {
 
     handleAddComment(comment) {
         //alert("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
-        this.setState({comments: this.state.comments.concat(comment)});
+        //this.setState({comments: this.state.comments.concat(comment)});
         //alert("after: " + JSON.stringify(this.state.comments));
+        //this.getHistory();
     }
 
     getHistory() {
         //alert(this.channelName);
+        this.setState({canCallHistory: true});
+
         const channel = Ably.channels.get(this.channelName);
 
         this.setState({canCallHistory: false});
@@ -87,9 +92,24 @@ class CommentScreen extends Component {
             //alert(JSON.stringify(commentArray));
 
             if(this._isMounted) {
-                this.setState({comments: commentArray});
+                this.setState({comments: commentArray, isHistoryLoading: false});
             }
         });
+    }
+
+    loadHistory(historyLoading) {
+        if(historyLoading) {
+            return (
+                    <Message icon>
+                        <Icon name='spinner' size="small" loading />
+                        <Message.Content>
+                            <Message.Header>
+                                Loading...
+                            </Message.Header>
+                        </Message.Content>
+                    </Message>
+            )
+        }
     }
 
     render() {
@@ -102,6 +122,7 @@ class CommentScreen extends Component {
                 <Card.Content>
                     <Grid.Row>
                         <div>{/*alert("Comment screen render user: " + this.props.curUser)*/}</div>
+                        {this.loadHistory(this.state.isHistoryLoading)}
                         <Comments comments={this.state.comments}/>
                         <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}
                         challengeChannel={this.channelName}/>

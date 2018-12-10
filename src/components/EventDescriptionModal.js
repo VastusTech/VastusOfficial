@@ -43,8 +43,8 @@ function convertDate(date) {
 class EventDescriptionModal extends Component {
     state = {
         // isLoading: false,
-        // isOwned: null,
-        // isJoined: null,
+        isOwned: false,
+        isJoined: false,
         eventID: null,
         // event: null,
         // ownerName: null,
@@ -53,7 +53,9 @@ class EventDescriptionModal extends Component {
         completeModalOpen: false,
         isLeaveLoading: false,
         isDeleteLoading: false,
-        isJoinLoading: false
+        isJoinLoading: false,
+        joinRequestSent: false,
+        canCallChecks: true,
     };
 
     constructor(props) {
@@ -141,10 +143,10 @@ class EventDescriptionModal extends Component {
         Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
-            this.setState({isLoading: false, event: null, isOwned: false, isJoined: false});
+            this.setState({isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
             // alert(JSON.stringify(error));
-            this.setState({isLoading: false, error: error});
+            this.setState({isDeleteLoading: false, error: error});
         })
     }
 
@@ -154,10 +156,10 @@ class EventDescriptionModal extends Component {
         Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             //alert(JSON.stringify(data));
-            this.setState({isLoading: false, isJoined: false});
+            this.setState({isLeaveLoading: false, isJoined: false});
         }, (error) => {
             //alert(JSON.stringify(error));
-            this.setState({isLoading: false, error: error});
+            this.setState({isLeaveLoading: false, error: error});
         })
     }
 
@@ -168,22 +170,22 @@ class EventDescriptionModal extends Component {
             (data) => {
                 this.forceUpdate(data.id);
                 //alert(JSON.stringify(data));
-                this.setState({isLoading: false, isJoined: true});
+                this.setState({isJoinLoading: false, isJoined: true});
             }, (error) => {
-                this.setState({isLoading: false, error: error});
+                this.setState({isJoinLoading: false, error: error});
             })
     }
 
     isJoined() {
         const members = this.getEventAttribute("members");
         if (members) {
-            return members.includes(this.props.user.id);
+            this.setState({isJoined: members.includes(this.props.user.id)});
         }
-        return false;
+        return this.setState({isJoined: false});
     }
 
     isOwned() {
-        return this.props.user.id === this.getEventAttribute("owner");
+        this.setState({isOwned: this.props.user.id === this.getEventAttribute("owner")});
     }
 
     handleLeave() {
@@ -220,6 +222,12 @@ class EventDescriptionModal extends Component {
             return(
                 null
             );
+        }
+
+        if(this.state.canCallChecks) {
+            this.isJoined();
+            this.isOwned();
+            this.setState({canCallChecks: false});
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
@@ -269,8 +277,8 @@ class EventDescriptionModal extends Component {
             }
             else {
                 //alert(isJoinLoading);
-                return (<Button loading={isJoinLoading} fluid negative size="large" disabled={isJoinLoading}
-                        onClick={joinHandler}>Join</Button>)
+                return (<Button loading={isJoinLoading} fluid size="large" disabled={isJoinLoading}
+                                onClick={joinHandler}>Join</Button>)
             }
         }
 
@@ -318,7 +326,7 @@ class EventDescriptionModal extends Component {
                                 </List.Content>
                             </List.Item>
                         </List>
-                            {createCorrectButton(this.isOwned(), this.isJoined(), this.getEventAttribute("ifCompleted"),
+                            {createCorrectButton(this.state.isOwned, this.state.isJoined, this.getEventAttribute("ifCompleted"),
                                 this.getEventAttribute("ifChallenge"), this.handleJoin, this.handleLeave,
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
                                 this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
