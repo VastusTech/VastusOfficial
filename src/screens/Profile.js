@@ -94,27 +94,6 @@ class Profile extends React.PureComponent {
             // alert("ID is not set inside profile... This means a problem has occurred");
         }
 
-        // if (user.id && user.name && user.username && user.birthday) {
-            // if (this.state.isLoading) {
-                // And start to get the profile image from S3
-                // if (user.profileImagePath) {
-                    // this.setState({profilePicture: user.profileImagePath, isLoading: false, ifS3: true});
-                    // alert("Getting " + user.profileImagePath + " from S3?");
-                    // Storage.get(user.profileImagePath).then((data) => {
-                    //     // alert("Received properly and setting! Data = " + JSON.stringify(data));
-                    //     this.setState({profilePicture: data, isLoading: false, ifS3: true});
-                    // }).catch((error) => {
-                    //     alert("Error getting profile image");
-                    //     alert("Received an error, so not setting. Error = " + JSON.stringify(error));
-                    //     this.setState({error: error, isLoading: true});
-                    // });
-                // }
-                // else {
-                //     // Default
-                //     this.setState({isLoading: false, profilePicture: proPic, ifS3: false});
-                // }
-            // }
-        // }
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
             this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends"]);
@@ -162,7 +141,7 @@ class Profile extends React.PureComponent {
             //     );
             // }
             return(
-                <div className="u-avatar" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
@@ -247,15 +226,15 @@ class Profile extends React.PureComponent {
         //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
         //and a switch to set the privacy for the user.
         return(
-            <Card fluid raised>
+            <Card fluid raised className="u-margin-top--2">
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
                     <Card.Meta>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Meta>
                     <List id = "profile buttons">
                         <List.Item>
-                            <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Friend List</Button>
-                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
+                            <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Buddy List</Button>
+                            <Modal basic size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
@@ -263,7 +242,7 @@ class Profile extends React.PureComponent {
                         </List.Item>
                         <Divider />
                         <List.Item>
-                            <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Owned Challenges</Button>
+                            <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Created Challenges</Button>
                             <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                 <Modal.Content>
                                     <OwnedEventList/>

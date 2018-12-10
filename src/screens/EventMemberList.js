@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import _ from 'lodash';
 import {Grid, Button, Message, Image, Modal, Item} from 'semantic-ui-react';
-import ClientModal from "./ClientModal";
+import ClientModal from "../components/ClientModal";
 import proPic from "../img/BlakeProfilePic.jpg";
 import Lambda from "../Lambda";
 import connect from "react-redux/es/connect/connect";
-import ClientCard from "./ClientCard";
+import ClientCard from "../components/ClientCard";
 
 class EventMemberList extends Component {
     state = {

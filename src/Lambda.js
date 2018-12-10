@@ -18,6 +18,12 @@ const lambdaFunctionName = "VastusDatabaseLambdaFunction";
 
 class Lambda {
     // All the high-level functions
+    static userAddProfileImagePath(fromID, userID, userItemType, profileImagePath, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, userID, userItemType, "profileImagePaths", profileImagePath, successHandler, failureHandler);
+    }
+    static userRemoveProfileImagePath(fromID, userID, userItemType, profileImagePath, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, userID, userItemType, "profileImagePaths", profileImagePath, successHandler, failureHandler);
+    }
     static setEventWinner(fromID, eventID, winnerID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "winner", winnerID, successHandler, failureHandler);
     };
@@ -32,6 +38,12 @@ class Lambda {
     }
     static updateEventToPublic(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "access", "public", successHandler, failureHandler);
+    }
+    static updateEventAddTag(fromID, eventID, tag, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, eventID, "Event", "tags", tag, successHandler, failureHandler);
+    }
+    static updateEventRemoveTag(fromID, eventID, tag, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, eventID, "Event", "tags", tag, successHandler, failureHandler);
     }
     static clientJoinEvent(fromID, clientID, eventID, successHandler, failureHandler) {
         this.joinEvent(fromID, clientID, "Client", eventID, successHandler, failureHandler);

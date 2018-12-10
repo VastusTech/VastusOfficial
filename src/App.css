@@ -1,5 +1,4 @@
 
-
 .App {
   align-content: center;
 }
@@ -7,14 +6,14 @@
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-  color: #800400;
+  color: #7c7e80;
 }
 
 .App-header {
   background-color: #007926;
   height: 150px;
   padding: 20px;
-  color: #ff0000;
+  color: #555558;
 }
 
 .App-title {
@@ -30,7 +29,7 @@
 }
 
 .m1{
-  color: red;
+  color: #7f7e80;
 }
 
 body {

@@ -5,9 +5,10 @@ import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
 import CreateEventProp from "./CreateEvent";
-import NextWorkoutProp from "./NextWorkout";
+import NextEventProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
+import CommentScreen from "./CommentScreen";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -24,8 +25,6 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <CreateEventProp/>
-                        <NextWorkoutProp/>
                         <EventFeed/>
                     </Tab.Pane>
             },

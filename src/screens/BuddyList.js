@@ -1,14 +1,14 @@
 import React, {Component, Fragment} from 'react'
 import { Button, List, Message, Image } from 'semantic-ui-react';
-import ClientModal from "./ClientModal";
+import ClientModal from "../components/ClientModal";
 import QL from "../GraphQL";
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import Lambda from "../Lambda";
 import { inspect } from 'util';
 import proPic from '../img/BlakeProfilePic.jpg';
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
-import ClientCard from "./ClientCard";
+import ClientCard from "../components/ClientCard";
 
 class BuddyListProp extends Component {
     state = {
@@ -138,7 +138,7 @@ class BuddyListProp extends Component {
         }
         if (this.props.user.friends && this.props.user.friends.length && this.props.user.friends.length > 0) {
             return(
-                <List relaxed divided verticalAlign="middle">
+                <List relaxed verticalAlign="middle">
                     {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this),
                     this.forceUpdate.bind(this))}
                 </List>

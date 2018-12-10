@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import {Grid, Message, Button, Header, Modal} from 'semantic-ui-react';
-import EventCard from "./EventCard";
+import EventCard from "../components/EventCard";
 // import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -14,7 +14,8 @@ class InviteToScheduledEventsModalProp extends Component {
         events: {},
         friendID: null,
         sentRequest: false,
-        error: null
+        error: null,
+        isInviteLoading: false
     };
 
     constructor(props) {
@@ -28,6 +29,7 @@ class InviteToScheduledEventsModalProp extends Component {
         if (!user.id) {
             alert("Pretty bad error");
             this.setState({isLoading: true});
+            this.setState({isInviteLoading: false});
         }
 
         if (this.state.isLoading && user.hasOwnProperty("scheduledEvents") && user.scheduledEvents && user.scheduledEvents.length) {
@@ -35,6 +37,7 @@ class InviteToScheduledEventsModalProp extends Component {
             for (let i = 0; i < user.scheduledEvents.length; i++) {
                 this.props.fetchEvent(user.scheduledEvents[i], ["time", "time_created", "title", "goal", "members"]);
             }
+            this.setState({isInviteLoading: false});
         }
         else if (!this.props.info.isLoading) {
             if (!this.state.sentRequest && !this.props.info.error) {
@@ -64,19 +67,24 @@ class InviteToScheduledEventsModalProp extends Component {
         this.update();
     }
 
+    sendInvite(event) {
+        this.setState({isInviteLoading: true});
+        this.handleInviteToEvent(event);
+    }
+
     render() {
-        function rows(userID, friendID, events, eventInviteHandler) {
+        function rows(userID, friendID, events, eventInviteHandler, isInviteLoading) {
             const rowProps = [];
             for (let i = 0; i < events.length; i++) {
                 if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
-                        <Grid.Row className="ui one column stackable center aligned page grid">
+                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                             <Grid.Column>
                                     <EventCard eventID={events[i]}/>
                             </Grid.Column>
                             <Grid.Column/>
                             <Grid.Column>
-                                <Button basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to this Event</Button>
+                                <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
                             </Grid.Column>
                         </Grid.Row>
                     );
@@ -95,11 +103,12 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal dimmer='blurring' size='huge' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Modal.Header>Invite your friend to one of your scheduled events!</Modal.Header>
+                <Modal dimmer='blurring' size='large' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                    <Modal.Header>Select Challenge</Modal.Header>
                     <Modal.Content>
                         <Grid columns={4}>
-                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.handleInviteToEvent.bind(this))}
+                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.sendInvite.bind(this),
+                            this.state.isInviteLoading)}
                         </Grid>
                     </Modal.Content>
                 </Modal>

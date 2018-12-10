@@ -2,13 +2,13 @@ import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Dimmer, Loader, Grid, Message} from 'semantic-ui-react'
 // import { Operation } from "aws-amplify";
-import Notification from "./Notification";
+import NotificationCard from "../components/NotificationCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 import {fetchInvite} from "../redux_helpers/actions/cacheActions";
 
 /*
-* Notification Feed
+* NotificationCard Feed
 *
 * This is a feed which contains all of the buddy (friend) requests that have been sent to the current user.
  */
@@ -90,7 +90,7 @@ class NotificationFeed extends Component {
         //     //alert(friendRequests);
         //     if (friendRequests != null) {
         //         return _.times(friendRequests.length, i => (
-        //             <Notification userID={userID} friendRequestID={friendRequests[i]} feedUpdate={feedUpdate}/>
+        //             <NotificationCard userID={userID} friendRequestID={friendRequests[i]} feedUpdate={feedUpdate}/>
         //         ));
         //     }
         // }
@@ -100,13 +100,13 @@ class NotificationFeed extends Component {
         //     //alert(friendRequests);
         //     if (eventRequests != null) {
         //         return _.times(eventRequests.length, i => (
-        //             <Notification userID={userID} eventRequestID={eventRequests[i]}/>
+        //             <NotificationCard userID={userID} eventRequestID={eventRequests[i]}/>
         //         ));
         //     }
         // }
         function inviteRows(invites, feedUpdate) {
             return _.times(invites.length, i => (
-                <Notification inviteID={invites[i]} feedUpdate={feedUpdate}/>
+                <NotificationCard inviteID={invites[i]} feedUpdate={feedUpdate}/>
             ));
         }
 

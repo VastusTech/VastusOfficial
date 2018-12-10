@@ -26,7 +26,7 @@ function setupAWS() {
         Auth: {
 
             // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-            identityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222',
+            // identityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222',
 
             // REQUIRED - Amazon Cognito Region
             region: 'us-east-1',

@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
-import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader } from 'semantic-ui-react';
-import Amplify, { Auth } from 'aws-amplify';
-import Lambda from '../Lambda';
-import appConfig from '../AppConfig';
+import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader, Popup, Icon } from 'semantic-ui-react';
+// import Amplify, { Auth } from 'aws-amplify';
+// import Lambda from '../Lambda';
+// import appConfig from '../AppConfig';
 import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux_helpers/actions/authActions";
 import { connect } from "react-redux";
 import {clearError, setError} from "../redux_helpers/actions/infoActions";
@@ -34,26 +34,38 @@ class SignUpModal extends Component {
     handleCreateButton() {
         // alert("Setting state with isConfirming is true");
         // TODO Do extra checking for the specifications of the account!
+        if (this.fieldsAreFilledCorrectly()) {
+            this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
+                    this.authState.birthday, this.authState.email);
+        }
+    }
+
+    fieldsAreFilledCorrectly() {
+        // alert("Setting state with isConfirming is true");
+        // TODO Do extra checking for the specifications of the account!
         if (this.authState.username && this.authState.password && this.authState.confirmPassword && this.authState.name &&
-        this.authState.birthday && this.authState.gender && this.authState.email) {
+            this.authState.birthday && this.authState.gender && this.authState.email) {
             if (this.authState.password !== this.authState.confirmPassword) {
                 this.props.setError(new Error("Password and confirm password do not match!"));
             }
             else if (!this.authState.email.includes("@") || !this.authState.email.includes(".")) {
                 this.props.setError(new Error("Email needs to be properly formed!"));
             }
+            else if (this.authState.username.includes(" ")) {
+                this.props.setError(new Error("Username cannot contain spaces!"));
+            }
             // Password checking: minLength = 8, needs a number, a lowercase letter, and an uppercase letter
             else if (!SignUpModal.properlyFormedPassword(this.authState.password)) {
                 this.props.setError(new Error("Password must be longer than 8 characters, must need a number, a lower case letter, and an upper case letter"));
             }
             else {
-                this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
-                    this.authState.birthday, this.authState.email);
+                return true;
             }
         }
         else {
             this.props.setError(new Error("All fields need to be filled in!"));
         }
+        return false;
     }
 
     static properlyFormedPassword(password) {
@@ -126,7 +138,7 @@ class SignUpModal extends Component {
         return(
                 <Modal open={this.props.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
                     {loadingProp(this.props.info.isLoading)}
-                    <Modal.Header>Create your new VASTUS account!</Modal.Header>
+                    <Modal.Header>Create Account to Join</Modal.Header>
                     {errorMessage(this.props.info.error)}
                     <Modal.Actions>
                         <Form>
@@ -137,6 +149,9 @@ class SignUpModal extends Component {
                             <div className="field">
                                 <label>Password</label>
                                 <Form.Input type="password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>
+                                <Popup position="left center" trigger={<Icon name="info circle"> </Icon>}>
+                                    Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
+                                </Popup>
                             </div>
                             <div className="field">
                                 <label>Confirm Password</label>

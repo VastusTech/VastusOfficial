@@ -1,12 +1,15 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Grid, Visibility } from 'semantic-ui-react'
-import EventCard from "./EventCard";
+import {Visibility, Header} from 'semantic-ui-react'
+import EventCard from "../components/EventCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 import ScheduledEventsList from "./ScheduledEventList";
 import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import CreateEventProp from "./CreateEvent";
+import NextEventProp from "../components/NextWorkout";
+import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -37,6 +40,7 @@ class EventFeed extends Component {
     constructor(props) {
         super(props);
         this.forceUpdate = this.forceUpdate.bind(this);
+        this.queryEvents = this.queryEvents.bind(this);
     }
 
     componentDidMount() {
@@ -69,7 +73,7 @@ class EventFeed extends Component {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryEvents(["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"], QL.generateFilter("and",
+            QL.queryEvents(["id", "title", "goal", "time", "time_created", "address", "owner", "ifChallenge", "ifCompleted", "members", "capacity", "difficulty", "access"], QL.generateFilter("and",
                 {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (!data.nextToken) {
@@ -158,6 +162,10 @@ class EventFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
+                <CreateEventProp queryEvents={this.queryEvents}/>
+                <Header size='small'>Your Next Challenge:</Header>
+                <NextEventProp/>
+                <Header size='small'>Upcoming Challenges:</Header>
                 {rows(this.state.events)}
             </Visibility>
         );
