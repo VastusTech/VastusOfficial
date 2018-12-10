@@ -19,8 +19,8 @@ body {
 }
 
 .u-avatar {
-  width: 1000px;
-  height: 1000px;
+  width: 100px;
+  height: 100px;
   margin: 0 auto;
   background-size: cover;
   background-position: center;
@@ -29,8 +29,21 @@ body {
   position: relative;
 }
 
+.u-avatar--large {
+  width: 150px;
+  height: 150px;
+}
+
+.u-margin-top--neg4 {
+  margin-top: -32px !important;
+}
+
 .u-margin-top--1 {
   margin-top: 8px !important;
+}
+
+.u-margin-top--2 {
+  margin-top: 16px !important;
 }
 
 .u-margin-right--0 {
