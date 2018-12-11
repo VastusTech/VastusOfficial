@@ -169,7 +169,7 @@ class ClientModal extends Component {
                 return (
                     <Message color='red'>
                         <h1>Error!</h1>
-                        <p>{errorMessage(error)}</p>
+                        <p>{error.errorMessage}</p>
                     </Message>
                 );
             }
@@ -235,9 +235,6 @@ class ClientModal extends Component {
                                 <List.Icon name='trophy' />
                                 <List.Content>
 {this.getClientAttribute("challengesWonLength") + " challenges won"}
-
-                                    {this.getClientAttribute("challengesWonLength")}
-
                                 </List.Content>
                             </List.Item>
                         </List>

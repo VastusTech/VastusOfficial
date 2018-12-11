@@ -325,34 +325,34 @@ class Lambda {
     static invokeLambda(payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
-            alert("Sending lambda payload: " + JSON.stringify(payload));
+            console.log("Sending lambda payload: " + JSON.stringify(payload));
         }
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
         }, (error, data) => {
             if (error) {
-                console.log(error);
-                alert("Lambda failure: " + JSON.stringify(error));
+                console.error(error);
+                console.error("Lambda failure: " + JSON.stringify(error));
                 failureHandler(error);
             } else if (data.Payload) {
-                //alert(data.Payload);
+                //console.log(data.Payload);
                 const payload = JSON.parse(data.Payload);
                 if (payload.errorMessage) {
-                    alert("Bad payload!: " + JSON.stringify(payload));
-                    console.log(payload.errorMessage);
+                    console.error("Bad payload!: " + JSON.stringify(payload));
+                    console.error(payload.errorMessage);
                     failureHandler(payload.errorMessage);
                 }
                 else {
                     console.log("Successfully invoked lambda function!");
                     if (ifDebug) {
-                        alert("Successful Lambda, received " + JSON.stringify(payload));
+                        console.log("Successful Lambda, received " + JSON.stringify(payload));
                     }
                     successHandler(payload);
                 }
             }
             else {
-                console.log("Weird error: payload returned with nothing...");
+                console.error("Weird error: payload returned with nothing...");
                 failureHandler("Payload returned with null");
             }
         });

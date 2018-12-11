@@ -9,6 +9,7 @@ import NextEventProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
 import CommentScreen from "./CommentScreen";
+import NotificationBellProp from "../components/NotificationBell";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -16,7 +17,7 @@ import CommentScreen from "./CommentScreen";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 5, size: "small", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 4, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -25,8 +26,6 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <CreateEventProp/>
-                        <NextEventProp/>
                         <EventFeed/>
                     </Tab.Pane>
             },
@@ -51,15 +50,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <Icon name='comment' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                </Tab.Pane>
-            },
-            {
-                menuItem: (
-                    <Menu.Item key={4}>
-                        <Icon name='bell outline' size='large' />
+                        <NotificationBellProp/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>

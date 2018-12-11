@@ -7,7 +7,7 @@ class Comment extends Component {
     createCorrectMessage() {
         if (this.props.user.username === this.props.comment.name){
             return (
-                <Label pointing='right'>{this.props.comment.comment}</Label>
+                <Label className='ui right fluid' pointing='right' color='purple'>{this.props.comment.comment}</Label>
             );
         }
         else {
@@ -24,9 +24,9 @@ class Comment extends Component {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                            <strong>{this.props.comment.name}</strong>
-                            <br />
-                            {this.createCorrectMessage()}
+                        <strong>{this.props.comment.name}</strong>
+                        <br />
+                        {this.createCorrectMessage()}
                     </div>
                 </div>
             </article>
