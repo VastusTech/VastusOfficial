@@ -163,9 +163,9 @@ class EventFeed extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <CreateEventProp queryEvents={this.queryEvents}/>
-                <Header size='small'>Your Next Challenge:</Header>
+                <Header sub>Your Next Challenge:</Header>
                 <NextEventProp/>
-                <Header size='small'>Upcoming Challenges:</Header>
+                <Header sub>Upcoming Challenges:</Header>
                 {rows(this.state.events)}
             </Visibility>
         );
