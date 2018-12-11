@@ -11,7 +11,7 @@ function addProfilePictureToData(data, imageKey, callback) {
                 profilePicture: url
             });
         }).catch((error) => {
-            alert("ERROR IN GETTING PROFILE IMAGE FOR USER");
+            console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
             console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
             console.log(error);
             callback(data);
@@ -49,7 +49,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
-            alert("lmao you forgot to include the profile image path, I'll include it tho, no worries");
+            console.error("lmao you forgot to include the profile image path, I'll include it tho, no worries");
             variablesList = [
                 ...variablesList,
                 "profileImagePath"
