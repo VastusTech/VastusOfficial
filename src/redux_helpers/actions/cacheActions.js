@@ -98,6 +98,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
     }
 }
+// TODO THIS'LL BEE SUPER COOL TO DO IN THE FUTURE
 // TODO DON'T OPTIMIZE UNLESS THERE'S AN ACTUAL PROBLEM YOU GOBLIN
 function batchFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType) {
     // TODO Check to see if this has already been fulfilled
@@ -178,6 +179,9 @@ export function fetchEvent(id, variablesList, dataHandler) {
 export function fetchInvite(id, variablesList, dataHandler) {
     return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
 }
+export function fetchPost(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "posts", "getPost", "FETCH_POST", dataHandler);
+}
 export function forceFetchClient(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler);
 }
@@ -198,6 +202,9 @@ export function forceFetchEvent(id, variablesList, dataHandler) {
 }
 export function forceFetchInvite(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
+}
+export function forceFetchPost(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "posts", "getPost", "FETCH_POST", dataHandler);
 }
 export function fetchClients(ids, variablesList) {
 
@@ -264,21 +271,13 @@ export function putInviteQuery(queryString, queryResult) {
         }
     };
 }
-
-export function clearInviteQuery() {
+export function putPostQuery(queryString, queryResult) {
     return {
-        type: "CLEAR_INVITE_QUERY",
-    };
-}
-
-export function clearEventQuery() {
-    return {
-        type: "CLEAR_EVENT_QUERY",
-    };
-}
-export function clearGymQuery() {
-    return {
-        type: "CLEAR_GYM_QUERY",
+        type: "FETCH_POST_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
     };
 }
 export function clearClientQuery() {
@@ -291,9 +290,9 @@ export function clearTrainerQuery() {
         type: "CLEAR_TRAINER_QUERY",
     };
 }
-export function clearReviewQuery() {
+export function clearGymQuery() {
     return {
-        type: "CLEAR_REVIEW_QUERY",
+        type: "CLEAR_GYM_QUERY",
     };
 }
 export function clearWorkoutQuery() {
@@ -301,7 +300,26 @@ export function clearWorkoutQuery() {
         type: "CLEAR_WORKOUT_QUERY",
     };
 }
-
+export function clearReviewQuery() {
+    return {
+        type: "CLEAR_REVIEW_QUERY",
+    };
+}
+export function clearEventQuery() {
+    return {
+        type: "CLEAR_EVENT_QUERY",
+    };
+}
+export function clearInviteQuery() {
+    return {
+        type: "CLEAR_INVITE_QUERY",
+    };
+}
+export function clearPostQuery() {
+    return {
+        type: "CLEAR_POST_QUERY",
+    };
+}
 function putQuery(queryString, queryResult, actionType) {
     return {
         type: actionType,
@@ -351,5 +369,11 @@ export function putInvite(invite) {
     return {
         type: "FETCH_INVITE",
         payload: invite
+    };
+}
+export function putPost(post) {
+    return {
+        type: "FETCH_POST",
+        payload: post
     };
 }

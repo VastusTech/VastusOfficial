@@ -212,6 +212,17 @@ class Lambda {
             description: message,
         }, successHandler, failureHandler);
     }
+    static createPost(fromID, by, description, access, postType, about, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.create(fromID, "Post", {
+            by,
+            description,
+            access,
+            postType,
+            about,
+            picturePaths,
+            videoPaths,
+        }, successHandler, failureHandler);
+    }
 
     // Update Set Functions
     // This will be used for things like name or birthday
@@ -236,6 +247,9 @@ class Lambda {
     static editInviteAttribute(fromID, inviteID, attributeName, attributeValue, successHandler, failureHandler) {
         this.updateSetAttribute(fromID, inviteID, "Invite", attributeName, attributeValue, successHandler, failureHandler);
     }
+    static editPostAttribute(fromID, postID, attributeName, attributeValue, successHandler, failureHandler) {
+        this.updateSetAttribute(fromID, postID, "Post", attributeName, attributeValue, successHandler, failureHandler);
+    }
 
     // Delete functions
     static deleteClient(fromID, clientID, successHandler, failureHandler) {
@@ -258,6 +272,9 @@ class Lambda {
     }
     static deleteInvite(fromID, inviteID, successHandler, failureHandler) {
         this.delete(fromID, inviteID, "Invite", successHandler, failureHandler);
+    }
+    static deletePost(fromID, postID, successHandler, failureHandler) {
+        this.delete(fromID, postID, "Post", successHandler, failureHandler);
     }
 
     // All the basic CRUD Functions with my own personally defined JSONs

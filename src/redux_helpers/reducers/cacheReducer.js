@@ -8,6 +8,7 @@ const FETCH_WORKOUT = 'FETCH_WORKOUT';
 const FETCH_REVIEW = 'FETCH_REVIEW';
 const FETCH_EVENT = 'FETCH_EVENT';
 const FETCH_INVITE = 'FETCH_INVITE';
+const FETCH_POST = 'FETCH_POST';
 
 // const READ_CLIENT = 'READ_CLIENT';
 // const READ_TRAINER = 'READ_TRAINER';
@@ -23,6 +24,7 @@ const FETCH_WORKOUT_QUERY = 'FETCH_WORKOUT_QUERY';
 const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
 const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
 const FETCH_INVITE_QUERY = 'FETCH_INVITE_QUERY';
+const FETCH_POST_QUERY = 'FETCH_POST_QUERY';
 
 const CLEAR_CLIENT_QUERY = 'CLEAR_CLIENT_QUERY';
 const CLEAR_TRAINER_QUERY = 'CLEAR_TRAINER_QUERY';
@@ -31,6 +33,7 @@ const CLEAR_WORKOUT_QUERY = 'CLEAR_WORKOUT_QUERY';
 const CLEAR_REVIEW_QUERY = 'CLEAR_REVIEW_QUERY';
 const CLEAR_EVENT_QUERY = 'CLEAR_EVENT_QUERY';
 const CLEAR_INVITE_QUERY = 'CLEAR_INVITE_QUERY';
+const CLEAR_POST_QUERY = 'CLEAR_POST_QUERY';
 
 // TODO Play around with these values maybe? How do we decide this?
 const clientCacheSize = 100;
@@ -40,6 +43,7 @@ const workoutCacheSize = 100;
 const reviewCacheSize = 100;
 const eventCacheSize = 2000;
 const inviteCacheSize = 100;
+const postCacheSize = 2000;
 
 // TODO The query cache sizes might be important if the user is searching for a lot
 const clientQueryCacheSize = 0;
@@ -49,6 +53,7 @@ const workoutQueryCacheSize = 0;
 const reviewQueryCacheSize = 0;
 const eventQueryCacheSize = 0;
 const inviteQueryCacheSize = 0;
+const postQueryCacheSize = 0;
 
 const initialState = {
     // ID --> DatabaseObject
@@ -59,6 +64,7 @@ const initialState = {
     reviews: {},
     events: {},
     invites: {},
+    posts: {},
 
     // List of IDs in order of least recently used
     clientLRUHandler: [],
@@ -68,6 +74,7 @@ const initialState = {
     reviewLRUHandler: [],
     eventLRUHandler: [],
     inviteLRUHandler: [],
+    postLRUHandler: [],
 
     // Cached queries.
     clientQueries: {},
@@ -77,6 +84,7 @@ const initialState = {
     reviewQueries: {},
     eventQueries: {},
     inviteQueries: {},
+    postQueries: {},
 
     // TODO Include LRU Handlers for these as well!
     // TODO Actually use these
@@ -87,6 +95,7 @@ const initialState = {
     reviewQueryLRUHandler: [],
     eventQueryLRUHandler: [],
     inviteQueryLRUHandler: [],
+    postQueryLRUHandler: [],
 };
 
 export default (state = initialState, action) => {
@@ -116,6 +125,10 @@ export default (state = initialState, action) => {
         case FETCH_INVITE:
             state = addObjectToCache(state, "invites", inviteCacheSize, "inviteLRUHandler", action.payload);
             break;
+        case FETCH_POST:
+            state = addObjectToCache(state, "posts", postCacheSize, "postLRUHandler", action.payload);
+            break;
+            // TODO Connect these to LRU Handlers... important especially as we scale
         case FETCH_CLIENT_QUERY:
             state = {
                 ...state,
@@ -179,53 +192,61 @@ export default (state = initialState, action) => {
                 }
             };
             break;
+        case FETCH_POST_QUERY:
+            state = {
+                ...state,
+                postQueries: {
+                    ...state.postQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
         case CLEAR_CLIENT_QUERY:
             state = {
                 ...state,
                 clientQueries: {}
-
             };
             break;
         case CLEAR_TRAINER_QUERY:
             state = {
                 ...state,
                 trainerQueries: {}
-
             };
             break;
         case CLEAR_EVENT_QUERY:
             state = {
                 ...state,
                 eventQueries: {}
-
             };
             break;
         case CLEAR_GYM_QUERY:
             state = {
                 ...state,
                 gymQueries: {}
-
             };
             break;
         case CLEAR_INVITE_QUERY:
             state = {
                 ...state,
                 inviteQueries: {}
-
             };
             break;
         case CLEAR_REVIEW_QUERY:
             state = {
                 ...state,
                 reviewQueries: {}
-
             };
             break;
         case CLEAR_WORKOUT_QUERY:
             state = {
                 ...state,
                 workoutQueries: {}
-
+            };
+            break;
+        case CLEAR_POST_QUERY:
+            state = {
+                ...state,
+                postQueries: {}
             };
             break;
         default:
