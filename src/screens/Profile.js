@@ -141,7 +141,7 @@ class Profile extends React.PureComponent {
             //     );
             // }
             return(
-                <div className="u-avatar" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
@@ -226,7 +226,7 @@ class Profile extends React.PureComponent {
         //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
         //and a switch to set the privacy for the user.
         return(
-            <Card fluid raised>
+            <Card fluid raised className="u-margin-top--2">
                 <Card.Content textAlign="center">
                     {this.profilePicture()}
                     <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
@@ -234,7 +234,7 @@ class Profile extends React.PureComponent {
                     <List id = "profile buttons">
                         <List.Item>
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Buddy List</Button>
-                            <Modal size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
+                            <Modal basic size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
                                     <BuddyListProp/>
                                 </Modal.Content>
