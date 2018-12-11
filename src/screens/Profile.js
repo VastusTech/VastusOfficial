@@ -28,6 +28,7 @@ window.LOG_LEVEL='DEBUG';
 * This is the profile page which displays information about the current user.
  */
 class Profile extends React.PureComponent {
+
     state = {
         isLoading: true,
         checked: false,
