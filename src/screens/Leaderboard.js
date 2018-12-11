@@ -127,7 +127,6 @@ class Leaderboard extends Component {
             // alert(JSON.stringify(events));
             return _.times(sortedClients.length, i => (
                 <Fragment key={i}>
-                    
                     <ClientCard rank={i + 1} clientID={sortedClients[i].id}/>
                 </Fragment>
             ));
