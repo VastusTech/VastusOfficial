@@ -1,4 +1,5 @@
 import React, {  } from 'react'
+import { Player } from 'video-react';
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
@@ -109,7 +110,7 @@ class Profile extends React.PureComponent {
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
             //alert("Calling storage put");
             //alert("File = " + JSON.stringify(event.target.files[0]));
-            Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
+            Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 // Now we update the database object to reflect this
                 //alert(JSON.stringify(result));
                 //alert("Successfully put the image, now putting the data into the database!");
@@ -140,12 +141,26 @@ class Profile extends React.PureComponent {
             //         <Item.Image size='medium' src={this.state.profilePicture} circular/>
             //     );
             // }
-            return(
+            /*return(
                 <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
-                    <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                    <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                </div>
+            );*/
+            //alert(this.props.user.profilePicture);
+            return (
+                <div id="theVideo">
+                    <Player
+                        playsInline
+                        poster={`url(${this.props.user.profilePicture})`}
+                        src={this.props.user.profilePicture}
+                    />
+                    <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                        <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                    </Label>
+                    <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                 </div>
             );
         }
