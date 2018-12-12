@@ -121,7 +121,7 @@ class CommentScreen extends Component {
                         <div>{/*alert("Comment screen render user: " + this.props.curUser)*/}</div>
                         {this.loadHistory(this.state.isHistoryLoading)}
                         <Comments comments={this.state.comments}/>
-                        <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser}
+                        <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                         challengeChannel={this.channelName}/>
                     </Grid.Row>
                 </Card.Content>

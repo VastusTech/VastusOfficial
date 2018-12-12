@@ -259,7 +259,7 @@ class EventDescriptionModal extends Component {
         //to join a challenge.
         function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
                                      joinHandler, leaveHandler, deleteHandler, completeHandler,
-                                     isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName) {
+                                     isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName, curUserID) {
             //alert("Owned: " + isOwned + " Joined: " + isJoined);
             // alert(ifCompleted);
             if (ifCompleted === "true") {
@@ -280,7 +280,7 @@ class EventDescriptionModal extends Component {
                                     <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
                                 </Grid.Column>
                             </Grid>
-                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                            <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                         </div>
                     )
                 }
@@ -288,7 +288,7 @@ class EventDescriptionModal extends Component {
                     return(
                         <div>
                             <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
-                            <CommentScreen curUser={username} challengeChannel={channelName}/>
+                            <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                         </div>
                     );
                 }
@@ -297,7 +297,7 @@ class EventDescriptionModal extends Component {
                 return (
                     <div>
                         <Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>
-                        <CommentScreen curUser={username} challengeChannel={channelName}/>
+                        <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                     </div>
                 )
             }
@@ -355,7 +355,8 @@ class EventDescriptionModal extends Component {
                             {createCorrectButton(this.state.isOwned, this.state.isJoined, this.getEventAttribute("ifCompleted"),
                                 this.getEventAttribute("ifChallenge"), this.handleJoin, this.handleLeave,
                                 this.handleDelete, this.openCompleteModal.bind(this), this.state.isLeaveLoading,
-                                this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"))}
+                                this.state.isJoinLoading, this.state.isDeleteLoading, this.props.user.username, this.getEventAttribute("title"),
+                            this.props.user.id)}
                     </Modal.Description>
                     <div>{this.displayError()}</div>
                     {/*
