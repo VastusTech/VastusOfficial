@@ -38,6 +38,10 @@ body {
   height: 125px;
 }
 
+.u-bg--bg {
+  background: @bgColor !important;
+}
+
 .u-margin-top--neg4 {
   margin-top: -32px !important;
 }
