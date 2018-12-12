@@ -153,15 +153,16 @@ class Profile extends React.PureComponent {
             //alert(this.props.user.profilePicture);
             return (
                 <div id="theVideo">
-                    <Player
-                        playsInline
-                        poster={`url(${this.props.user.profilePicture})`}
-                        src={this.props.user.profilePicture}
-                    />
-                    <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                        <Icon name="upload" className='u-margin-right--0' size="large" inverted />
-                    </Label>
-                    <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                    {/*The player has to be in this formatting or else it doesn't work in safari*/}
+                    <Player>
+                        <source src={this.props.user.profilePicture} type="video/mp4" />
+                    </Player>
+                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                            <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                        </Label>
+                        <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                    </div>
                 </div>
             );
         }
