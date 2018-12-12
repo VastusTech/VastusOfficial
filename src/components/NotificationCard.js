@@ -277,9 +277,12 @@ class NotificationCard extends Component {
         else {
             if (this.getInviteAttribute("inviteType") === "friendRequest") {
                 return (
-                    <Card fluid raised>
-                        <Image src={this.getFromAttribute("profilePicture")} />
-                        <Card.Content>
+                    <Card fluid raised centered>
+                        <div className="u-container">
+                        <div className="u-avatar u-avatar--large u-margin-bottom--neg2 u-margin-x--auto" style={{backgroundImage: `url(${this.getFromAttribute("profilePicture")})`}}></div>
+                        </div>
+                        
+                        <Card.Content textAlign='center'>
                             <Card.Header onClick={this.handleClientModalOpen.bind(this)}>
                                 {this.getFromAttribute("name")}
                             </Card.Header>
@@ -287,10 +290,11 @@ class NotificationCard extends Component {
                             has sent you a buddy request {/*Insert Invite Sent Time Here*/}
                             </Card.Description>
                         </Card.Content>
-                        <Card.Content extra>
-                            
-                            <Button inverted floated="right" size="small" onClick={this.handleDeclineFriendRequestButton.bind(this)}>Deny</Button>
-                            <Button primary floated="right" size="small" onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>     
+                        <Card.Content extra textAlign='center'>
+                            <Button.Group fluid>
+                                <Button onClick={this.handleDeclineFriendRequestButton.bind(this)}>Deny</Button>
+                                <Button primary onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>     
+                            </Button.Group>
                         </Card.Content>
                         <ClientModal
                             clientID={this.getAboutAttribute("id")}
