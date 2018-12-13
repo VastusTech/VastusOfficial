@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import {Button, Input, Grid, Label, Icon} from "semantic-ui-react";
 import { Storage } from 'aws-amplify';
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -122,30 +122,22 @@ class CommentBox extends Component {
             this.setState({canAddImage: false});
         }
         return (
-            <div>
-                <form onSubmit={this.addComment}>
-                    <Grid.Row>
-                        <div className="field">
-                            <div className="control">
-                                <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
-                            </div>
-                        </div>
-                    </Grid.Row>
-                    <div className="control">
-                        <Button primary className="button is-primary">Send</Button>
-                    </div>
+            <Fragment>
+                
+                <form onSubmit={this.addComment} className='u-margin-top--3'>
+                    <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
+                    <Button primary className="u-margin-top--2">Send</Button>
                 </form>
-                <div className="field">
-                    <Grid.Row>
-                        <div className="uploadImage">
-                            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                                <Icon name="camera" className='u-margin-right--0' size="large" inverted />
-                            </Label>
-                            <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                        </div>
-                    </Grid.Row>
+                <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
+                    <div>
+                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                            <Icon name="camera" className='u-margin-right--0' size="large" inverted />
+                        </Label>
+                        <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                    </div>
+                    <span>Upload image</span>
                 </div>
-            </div>
+            </Fragment>
         );
     }
 }

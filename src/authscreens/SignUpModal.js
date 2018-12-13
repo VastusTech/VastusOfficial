@@ -136,57 +136,29 @@ class SignUpModal extends Component {
             );
         }
         return(
-                <Modal open={this.props.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
-                    {loadingProp(this.props.info.isLoading)}
-                    <Modal.Header>Create Account to Join</Modal.Header>
-                    {errorMessage(this.props.info.error)}
-                    <Modal.Actions>
-                        <Form>
-                            <div className="field">
-                                <label>Username</label>
-                                <Form.Input type="text" name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Password</label>
-                                <Form.Input type="password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>
-                                <Popup position="left center" trigger={<Icon name="info circle"> </Icon>}>
-                                    Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
-                                </Popup>
-                            </div>
-                            <div className="field">
-                                <label>Confirm Password</label>
-                                <Form.Input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Name</label>
-                                <Form.Input type="text" name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Gender</label>
-                                <Form.Input type="text" name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Birthdate</label>
-                                <Form.Input type="date" name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
-                            </div>
-                            <div className="field">
-                                <label>Email</label>
-                                <Form.Input type="text" name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
-                            </div>
-                            <Grid relaxed columns={4}>
-                                <Grid.Column>
-                                    <Button negative onClick={this.handleCancelButton.bind(this)}>Cancel</Button>
-                                </Grid.Column>
-                                <Grid.Column/>
-                                <Grid.Column/>
-                                <Grid.Column>
-                                    <Button positive color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>
-                                </Grid.Column>
-                            </Grid>
-                        </Form>
-                    </Modal.Actions>
-                </Modal>
-
+            <Modal open={this.props.auth.signUpModalOpen} trigger={<Button size="large" fluid inverted onClick={this.props.openSignUpModal.bind(this)}> Sign Up </Button>} size='tiny'>
+                {loadingProp(this.props.info.isLoading)}
+                <Modal.Header>Create Account to Join</Modal.Header>
+                {errorMessage(this.props.info.error)}
+                <Modal.Actions>
+                    <Form>
+                        <Form.Input type="text" label="Username" name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
+                        <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>
+                        <Popup position="left center" trigger={<Icon name="info circle"> </Icon>}>
+                            Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
+                        </Popup>
+                        <Form.Input type="password" label="Confirm Password" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
+                        <Form.Input type="text" label="Name" name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
+                        <Form.Input type="text" label="Gender" name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
+                        <Form.Input type="date" label="Birthplace" name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
+                        <Form.Input type="text" label="Email" name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
+                        <div className="u-flex u-flex-justify--space-between u-padding-y--2 u-margin-top--2">
+                            <Button negative onClick={this.handleCancelButton.bind(this)}>Cancel</Button>
+                            <Button positive color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>
+                        </div>
+                    </Form>
+                </Modal.Actions>
+            </Modal>
         );
     }
 }

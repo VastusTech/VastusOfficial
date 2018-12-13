@@ -52,7 +52,7 @@ class Comment extends Component {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                        <strong>{this.props.comment.name}</strong>
+                        <strong className='u-margin-bottom--1'>{this.props.comment.name}</strong>
                         <br />
                         {this.createCorrectMessage()}
                     </div>
