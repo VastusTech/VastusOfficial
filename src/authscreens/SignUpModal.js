@@ -143,11 +143,11 @@ class SignUpModal extends Component {
                 <Modal.Actions>
                     <Form>
                         <Form.Input type="text" label="Username" name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
-                        <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>
-                        <Popup position="left center" trigger={<Icon name="info circle"> </Icon>}>
+                        <Popup position="left center" trigger={<Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>}>
                             Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
                         </Popup>
-                        <Form.Input type="password" label="Confirm Password" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
+                        {/* <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/> */}
+                        <Form.Input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
                         <Form.Input type="text" label="Name" name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
                         <Form.Input type="text" label="Gender" name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
                         <Form.Input type="date" label="Birthplace" name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
