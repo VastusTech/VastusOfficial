@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import {Message, Button, Modal} from 'semantic-ui-react';
+import {Message, Button, Modal, Card} from 'semantic-ui-react';
 import EventCard from "../components/EventCard";
 // import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -79,9 +79,12 @@ class InviteToScheduledEventsModalProp extends Component {
                 if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
                         <Fragment>
-                            {/* Need to put Button in card for UI aesthetics */}
-                            <EventCard eventID={events[i]}/>
-                            <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
+                            <Card fluid raised>
+                                <Card.Content>
+                                    <EventCard eventID={events[i]}/>
+                                    <Button loading={isInviteLoading} primary fluid onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
+                                </Card.Content>
+                            </Card>
                         </Fragment>
                     );
                 }

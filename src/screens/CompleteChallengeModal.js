@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Modal, Message, Grid, Button } from "semantic-ui-react";
+import { Modal, Message, Button, Card } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
@@ -52,8 +52,12 @@ class CompleteChallengeModal extends Component {
             for (let i = 0; i < members.length; i++) {
                 rowProps.push(
                     <Fragment key={members[i]}>
-                        <ClientCard clientID={members[i]}/>
-                        <Button primary inverted onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
+                        <Card fluid raised>
+                            <Card.Content>
+                                <ClientCard clientID={members[i]} />
+                                <Button primary fluid onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
+                            </Card.Content>
+                        </Card>
                     </Fragment>
                 );
             }
