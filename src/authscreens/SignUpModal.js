@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Semantic, { Modal, Button, Input, Image, Grid, Form, Message, Dimmer, Loader, Popup, Icon } from 'semantic-ui-react';
+import Semantic, { Modal, Button, Form, Message, Dimmer, Loader, Popup, Divider } from 'semantic-ui-react';
 // import Amplify, { Auth } from 'aws-amplify';
 // import Lambda from '../Lambda';
 // import appConfig from '../AppConfig';
@@ -140,18 +140,20 @@ class SignUpModal extends Component {
                 {loadingProp(this.props.info.isLoading)}
                 <Modal.Header>Create Account to Join</Modal.Header>
                 {errorMessage(this.props.info.error)}
-                <Modal.Actions>
+                <Modal.Actions style={{borderTop: 'none'}}>
                     <Form>
-                        <Form.Input type="text" label="Username" name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
-                        <Popup position="left center" trigger={<Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>}>
+                        <Form.Input type="text" iconPosition='left' icon='user' name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
+                        <Popup position="left center" trigger={<Form.Input iconPosition='left' icon='lock' type="password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>}>
                             Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
                         </Popup>
                         {/* <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/> */}
-                        <Form.Input type="password" name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
-                        <Form.Input type="text" label="Name" name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
-                        <Form.Input type="text" label="Gender" name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
-                        <Form.Input type="date" label="Birthplace" name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
-                        <Form.Input type="text" label="Email" name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
+                        <Form.Input type="password" iconPosition='left' icon='lock' name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
+                        <Divider />
+                        <Form.Input type="text" iconPosition='left' icon='user circle' name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
+                        <Form.Input type="text" iconPosition='left' icon='male' name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
+                        <Divider />
+                        <Form.Input type="date" iconPosition='left' icon='calendar alternate outline' name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
+                        <Form.Input type="text" iconPosition='left' icon='mail' name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
                         <div className="u-flex u-flex-justify--space-between u-padding-y--2 u-margin-top--2">
                             <Button negative onClick={this.handleCancelButton.bind(this)}>Cancel</Button>
                             <Button positive color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>
