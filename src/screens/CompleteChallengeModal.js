@@ -51,14 +51,12 @@ class CompleteChallengeModal extends Component {
             const rowProps = [];
             for (let i = 0; i < members.length; i++) {
                 rowProps.push(
-                    <Fragment key={members[i]}>
-                        <Card fluid raised>
-                            <Card.Content>
-                                <ClientCard clientID={members[i]} />
-                                <Button primary fluid onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
-                            </Card.Content>
-                        </Card>
-                    </Fragment>
+                    <Card raised key={members[i]}>
+                        <Card.Content>
+                            <ClientCard clientID={members[i]} />
+                            <Button primary fluid onClick={() => {buttonHandler(members[i])}}>Select</Button>
+                        </Card.Content>
+                    </Card> 
                 );
             }
             return rowProps;
@@ -76,7 +74,9 @@ class CompleteChallengeModal extends Component {
                 <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                     <Modal.Header className="u-bg--bg">Select Winner</Modal.Header>
                     <Modal.Content className="u-bg--bg">
-                        {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
+                        <Card.Group itemsPerRow={2}>
+                            {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
+                        </Card.Group>
                     </Modal.Content>
                 </Modal>
             );
