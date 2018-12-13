@@ -24,6 +24,7 @@
 @lightPrimaryColor   : #7F47AE;
 @lightSecondaryColor : @lightBlack;
 
+@darkBlack  : #1F1F27;
 @black      : #25252f;
 @lightBlack : #323441;
 

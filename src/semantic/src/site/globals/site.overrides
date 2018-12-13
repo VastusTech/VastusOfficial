@@ -18,13 +18,19 @@ body {
   background-image: @primaryGradient !important;
 }
 
+.u-container {
+  background-color: @darkBlack;
+  margin-bottom: 24px;
+  padding: 24px 24px 0;
+}
+
 .u-avatar {
   width: 100px;
   height: 100px;
   background-size: cover;
   background-position: center;
+  border: 2px solid @black;
   border-radius: 50%;
-  border: 2px solid @bgColor;
   position: relative;
 }
 
@@ -40,6 +46,10 @@ body {
 
 .u-bg--bg {
   background: @bgColor !important;
+}
+
+.u-margin-bottom--neg2 {
+  margin-bottom: -24px !important;
 }
 
 .u-margin-top--neg4 {
