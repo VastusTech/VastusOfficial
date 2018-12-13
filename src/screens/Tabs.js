@@ -9,6 +9,7 @@ import NextEventProp from "../components/NextWorkout";
 // import ScheduledEventsList from "./ScheduledEventList";
 import LeaderBoard from "./Leaderboard";
 import CommentScreen from "./CommentScreen";
+import NotificationBellProp from "../components/NotificationBell";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -49,7 +50,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <Icon name='bell outline' size='large' />
+                        <NotificationBellProp/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>

@@ -36,7 +36,7 @@ class GraphQL {
             "getReview", successHandler, failureHandler);
     }
     static getEvent(id, variableList, successHandler, failureHandler) {
-        // alert("ay lmao pt. 2");
+        // console.log("ay lmao pt. 2");
         this.execute(this.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
             "getEvent", successHandler, failureHandler);
     }
@@ -44,10 +44,14 @@ class GraphQL {
         this.execute(this.constructQuery("GetInvite", "getInvite", {id: id}, variableList),
             "getInvite", successHandler, failureHandler);
     }
+    static getPost(id, variableList, successHandler, failureHandler) {
+        this.execute(this.constructQuery("GetPost", "getPost", {id: id}, variableList),
+            "getPost", successHandler, failureHandler);
+    }
     static getClients(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetClients", "getClients", null, variableList, idList, true),
@@ -56,7 +60,7 @@ class GraphQL {
     static getTrainers(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetTrainers", "getTrainers", null, variableList, idList, true),
@@ -65,7 +69,7 @@ class GraphQL {
     static getGyms(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetGyms", "getGyms", null, variableList, idList, true),
@@ -74,7 +78,7 @@ class GraphQL {
     static getWorkouts(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetWorkouts", "getWorkouts", null, variableList, idList, true),
@@ -83,7 +87,7 @@ class GraphQL {
     static getReviews(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetReviews", "getReviews", null, variableList, idList, true),
@@ -92,7 +96,7 @@ class GraphQL {
     static getEvents(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetEvents", "getEvents", null, variableList, idList, true),
@@ -101,11 +105,20 @@ class GraphQL {
     static getInvites(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test this so that this error will pop up!
-            alert("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetInvites", "getInvites", null, variableList, idList, true),
             "getInvites", successHandler, failureHandler);
+    }
+    static getPosts(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetPosts", "getPosts", null, variableList, idList, true),
+            "getPosts", successHandler, failureHandler);
     }
     static queryClients(variableList, filter, limit, nextToken, successHandler, failureHandler, queryClientCache, putCacheQueryClient) {
         var inputVariables = {};
@@ -184,6 +197,17 @@ class GraphQL {
         this.execute(this.constructQuery("QueryInvites", "queryInvites", inputVariables, variableList, filter, false, true),
             "queryInvites", successHandler, failureHandler, queryInviteCache, putCacheQueryInvite);
     }
+    static queryPosts(variableList, filter, limit, nextToken, successHandler, failureHandler, queryPostCache, putCacheQueryPost) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryPosts", "queryPosts", inputVariables, variableList, filter, false, true),
+            "queryPosts", successHandler, failureHandler, queryPostCache, putCacheQueryPost);
+    }
 
     // TODO Eventually make this work better to allow for more intelligent queries
     // TODO This function is going to be how to filter any query
@@ -203,7 +227,7 @@ class GraphQL {
             parameterString += '            {\n                ';
             parameterString += variableName + ': {\n';
             parameterString += '                    ';
-            // alert(variableComparisons.hasOwnProperty(variableName));
+            // console.log(variableComparisons.hasOwnProperty(variableName));
             const comparison = variableComparisons[variableName];
             const valueName = variableName + comparison;
             const value = variableValues[variableName];
@@ -304,16 +328,16 @@ class GraphQL {
     }
     static async execute(query, queryFunctionName, successHandler, failureHandler, queryCache, putQuery) {
         const queryString = JSON.stringify(query.query) + JSON.stringify(query.variables);
-        // alert(queryString);
+        // console.log(queryString);
         if (queryCache && queryCache[queryString]) {
-            // alert("Received query from the cache");
+            // console.log("Received query from the cache");
             console.log("Received the query from the cache");
-            // alert(JSON.stringify(queryCache[queryString]));
+            // console.log(JSON.stringify(queryCache[queryString]));
             successHandler(queryCache[queryString]);
         }
         else {
             if (ifDebug) {
-                alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+                console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");
@@ -321,13 +345,13 @@ class GraphQL {
                     console.log("Object returned nothing");
                     failureHandler("Object had returned null");
                 }
-                // alert("Returned!");
+                // console.log("Returned!");
                 if (ifDebug) {
-                    alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                    console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 }
-                // alert(JSON.stringify(queryCache));
+                // console.log(JSON.stringify(queryCache));
                 if (putQuery) {
-                    // alert("Putting the query in!");
+                    // console.log("Putting the query in!");
                     putQuery(queryString, data.data[queryFunctionName]);
                 }
                 successHandler(data.data[queryFunctionName]);
@@ -336,7 +360,7 @@ class GraphQL {
                 if (error.message) {
                     error = error.message;
                 }
-                alert(JSON.stringify(error));
+                console.log(JSON.stringify(error));
                 failureHandler(error);
             });
         }

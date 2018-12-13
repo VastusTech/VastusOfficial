@@ -1,16 +1,24 @@
 import React, { Component } from 'react';
-import {Button, Input, Grid} from "semantic-ui-react";
+import {Button, Input, Grid, Label, Icon} from "semantic-ui-react";
+import { Storage } from 'aws-amplify';
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
+import Lambda from "../Lambda";
+import defaultProfilePicture from "../img/roundProfile.png";
 
 class CommentBox extends Component {
     state = {
+        imagePath: '',
+        imageURL: '',
         sentRequest: false,
+        canAddImage: true
     };
 
     constructor(props) {
         super(props);
         this.addComment = this.addComment.bind(this);
+        this.addPicOrVid = this.addPicOrVid.bind(this);
+        this.setPicture = this.setPicture.bind(this);
     }
 
     componentWillReceiveProps(newProps) {
@@ -54,7 +62,65 @@ class CommentBox extends Component {
         }
     }
 
+    addPicOrVid(url) {
+        // Get the value of the comment box
+        // and make sure it not some empty strings
+        let comment = url;
+        //let name = this.props.user.username;
+        let name = this.props.curUser;
+
+        //alert(name);
+        //alert(name);
+        const commentObject = { name, comment };
+
+        this.props.handleAddComment(commentObject);
+
+        // Publish comment
+        /*global Ably*/
+        //alert(this.props.challengeChannel);
+        const channel = Ably.channels.get(this.props.challengeChannel);
+        channel.publish('add_comment', commentObject, err => {
+            alert("Added Comment: " + commentObject.comment);
+            if (err) {
+                console.log('Unable to publish message; err = ' + err.message);
+            }
+        });
+    }
+
+    setPicture(event) {
+        //alert(JSON.stringify(this.props));
+        //alert(this.props.curUserID);
+        if (this.props.curUserID) {
+            const path = "/ClientFiles/" + this.props.curUserID + "/commentImage";
+
+            Storage.get(path).then((url) => {
+                this.setState({imageURL: url})
+            }).catch((error) => {
+                console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
+                console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
+                console.error(error);
+            });
+
+            //alert("Calling storage put");
+            //alert("File = " + JSON.stringify(event.target.files[0]));
+            Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
+                this.setState({imagePath: path});
+                this.setState({isLoading: true});
+            }).catch((error) => {
+                alert("failed storage put");
+                alert(error);
+            });
+        }
+    }
+
+
+
     render() {
+        if(this.state.imageURL && this.state.canAddImage) {
+            alert("Image URL found: " + this.state.imageURL);
+            this.addPicOrVid(this.state.imageURL);
+            this.setState({canAddImage: false});
+        }
         return (
             <div>
                 <form onSubmit={this.addComment}>
@@ -64,13 +130,21 @@ class CommentBox extends Component {
                                 <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
                             </div>
                         </div>
-                        <div className="field">
-                            <div className="control">
-                                <Button primary className="button is-primary">Send</Button>
-                            </div>
+                    </Grid.Row>
+                    <div className="control">
+                        <Button primary className="button is-primary">Send</Button>
+                    </div>
+                </form>
+                <div className="field">
+                    <Grid.Row>
+                        <div className="uploadImage">
+                            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                                <Icon name="camera" className='u-margin-right--0' size="large" inverted />
+                            </Label>
+                            <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                         </div>
                     </Grid.Row>
-                </form>
+                </div>
             </div>
         );
     }
