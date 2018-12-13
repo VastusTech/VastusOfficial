@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import { Modal, Message, Grid, Button } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import Lambda from "../Lambda";
@@ -51,14 +51,10 @@ class CompleteChallengeModal extends Component {
             const rowProps = [];
             for (let i = 0; i < members.length; i++) {
                 rowProps.push(
-                    <Grid.Row key={members[i]}>
-                        <Grid.Column>
-                            <ClientCard clientID={members[i]}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Button primary inverted onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
-                        </Grid.Column>
-                    </Grid.Row>
+                    <Fragment key={members[i]}>
+                        <ClientCard clientID={members[i]}/>
+                        <Button primary inverted onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
+                    </Fragment>
                 );
             }
             return rowProps;
@@ -73,10 +69,11 @@ class CompleteChallengeModal extends Component {
         }
         if (this.getChallengeAttribute("members") && this.getChallengeAttribute("members").length > 0) {
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Grid columns={2}>
+                <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                    <Modal.Header className="u-bg--bg">Select Winner</Modal.Header>
+                    <Modal.Content className="u-bg--bg">
                         {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
-                    </Grid>
+                    </Modal.Content>
                 </Modal>
             );
         }
