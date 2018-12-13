@@ -8,6 +8,7 @@ const ItemType = {
     Review: "Review",
     Event: "Event",
     Invite: "Invite",
+    Post: "Post",
 };
 
 export function getItemTypeFromID(id) {

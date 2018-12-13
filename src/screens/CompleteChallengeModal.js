@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import { Modal, Message, Grid, Button } from "semantic-ui-react";
+import React, { Component, Fragment } from "react";
+import { Modal, Message, Button, Card } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
@@ -51,14 +51,12 @@ class CompleteChallengeModal extends Component {
             const rowProps = [];
             for (let i = 0; i < members.length; i++) {
                 rowProps.push(
-                    <Grid.Row key={members[i]}>
-                        <Grid.Column>
-                            <ClientCard clientID={members[i]}/>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Button primary inverted onClick={() => {buttonHandler(members[i])}}>Declare Winner!</Button>
-                        </Grid.Column>
-                    </Grid.Row>
+                    <Card raised key={members[i]}>
+                        <Card.Content>
+                            <ClientCard clientID={members[i]} />
+                            <Button primary fluid onClick={() => {buttonHandler(members[i])}}>Select</Button>
+                        </Card.Content>
+                    </Card> 
                 );
             }
             return rowProps;
@@ -73,10 +71,13 @@ class CompleteChallengeModal extends Component {
         }
         if (this.getChallengeAttribute("members") && this.getChallengeAttribute("members").length > 0) {
             return(
-                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Grid columns={2}>
-                        {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
-                    </Grid>
+                <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                    <Modal.Header className="u-bg--bg">Select Winner</Modal.Header>
+                    <Modal.Content className="u-bg--bg">
+                        <Card.Group itemsPerRow={2}>
+                            {rows(this.getChallengeAttribute("members"), this.declareWinnerButtonHandler.bind(this))}
+                        </Card.Group>
+                    </Modal.Content>
                 </Modal>
             );
         }

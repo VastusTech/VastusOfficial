@@ -107,6 +107,24 @@ class Lambda {
     static removeFriend(fromID, userID, userItemType, friendID, successHandler, failureHandler) {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "friends", friendID, successHandler, failureHandler);
     }
+    static updatePostDescription(fromID, postID, description, successHandler, failureHandler) {
+        this.editPostAttribute(fromID, postID, "description", description, successHandler, failureHandler);
+    }
+    static updatePostAccess(fromID, postID, access, successHandler, failureHandler) {
+        this.editPostAttribute(fromID, postID, "access", access, successHandler, failureHandler);
+    }
+    static postAddPicturePath(fromID, postID, picturePath, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, postID, "Post", "picturePaths", picturePath, successHandler, failureHandler);
+    }
+    static postAddVideoPath(fromID, postID, videoPath, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, postID, "Post", "videoPaths", videoPath, successHandler, failureHandler);
+    }
+    static postRemovePicturePath(fromID, postID, picturePath, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, postID, "Post", "picturePaths", picturePath, successHandler, failureHandler);
+    }
+    static postRemoveVideoPath(fromID, postID, videoPath, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, postID, "Post", "videoPaths", videoPath, successHandler, failureHandler);
+    }
     // Create Functions
     // These may serve a bigger purpose than just creating something. Often times, they will send as well as create!
     static createClient(fromID, name, gender, birthday, email, username, successHandler, failureHandler) {
@@ -212,6 +230,32 @@ class Lambda {
             description: message,
         }, successHandler, failureHandler);
     }
+    static createBarePost(fromID, by, description, access, successHandler, failureHandler) {
+        this.createNormalPost(fromID, by, description, access, null, null, successHandler, failureHandler);
+    }
+    static createNewEventPost(fromID, by, description, access, eventID, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.createNewItemPost(fromID, by, description, access, "Event", eventID, picturePaths, videoPaths, successHandler, failureHandler);
+    }
+    static createNormalPost(fromID, by, description, access, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.createPost(fromID, by, description, access, null, null, picturePaths, videoPaths, successHandler, failureHandler);
+    }
+    static createShareItemPost(fromID, by, description, access, itemType, itemID, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.createPost(fromID, by, description, access, itemType, itemID, picturePaths, videoPaths, successHandler, failureHandler);
+    }
+    static createNewItemPost(fromID, by, description, access, itemType, itemID, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.createPost(fromID, by, description, access, "new" + itemType, itemID, picturePaths, videoPaths, successHandler, failureHandler);
+    }
+    static createPost(fromID, by, description, access, postType, about, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.create(fromID, "Post", {
+            by,
+            description,
+            access,
+            postType,
+            about,
+            picturePaths,
+            videoPaths,
+        }, successHandler, failureHandler);
+    }
 
     // Update Set Functions
     // This will be used for things like name or birthday
@@ -236,6 +280,9 @@ class Lambda {
     static editInviteAttribute(fromID, inviteID, attributeName, attributeValue, successHandler, failureHandler) {
         this.updateSetAttribute(fromID, inviteID, "Invite", attributeName, attributeValue, successHandler, failureHandler);
     }
+    static editPostAttribute(fromID, postID, attributeName, attributeValue, successHandler, failureHandler) {
+        this.updateSetAttribute(fromID, postID, "Post", attributeName, attributeValue, successHandler, failureHandler);
+    }
 
     // Delete functions
     static deleteClient(fromID, clientID, successHandler, failureHandler) {
@@ -258,6 +305,9 @@ class Lambda {
     }
     static deleteInvite(fromID, inviteID, successHandler, failureHandler) {
         this.delete(fromID, inviteID, "Invite", successHandler, failureHandler);
+    }
+    static deletePost(fromID, postID, successHandler, failureHandler) {
+        this.delete(fromID, postID, "Post", successHandler, failureHandler);
     }
 
     // All the basic CRUD Functions with my own personally defined JSONs
@@ -325,34 +375,34 @@ class Lambda {
     static invokeLambda(payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
-            alert("Sending lambda payload: " + JSON.stringify(payload));
+            console.log("Sending lambda payload: " + JSON.stringify(payload));
         }
         lambda.invoke({
             FunctionName : lambdaFunctionName,
             Payload: JSON.stringify(payload)
         }, (error, data) => {
             if (error) {
-                console.log(error);
-                alert("Lambda failure: " + JSON.stringify(error));
+                console.error(error);
+                console.error("Lambda failure: " + JSON.stringify(error));
                 failureHandler(error);
             } else if (data.Payload) {
-                //alert(data.Payload);
+                //console.log(data.Payload);
                 const payload = JSON.parse(data.Payload);
                 if (payload.errorMessage) {
-                    alert("Bad payload!: " + JSON.stringify(payload));
-                    console.log(payload.errorMessage);
+                    console.error("Bad payload!: " + JSON.stringify(payload));
+                    console.error(payload.errorMessage);
                     failureHandler(payload.errorMessage);
                 }
                 else {
                     console.log("Successfully invoked lambda function!");
                     if (ifDebug) {
-                        alert("Successful Lambda, received " + JSON.stringify(payload));
+                        console.log("Successful Lambda, received " + JSON.stringify(payload));
                     }
                     successHandler(payload);
                 }
             }
             else {
-                console.log("Weird error: payload returned with nothing...");
+                console.error("Weird error: payload returned with nothing...");
                 failureHandler("Payload returned with null");
             }
         });
