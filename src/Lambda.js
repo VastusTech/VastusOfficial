@@ -1,7 +1,6 @@
 // import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
 import {ifDebug} from "./Constants";
-// import _ from "lodash";
 
 // TODO Use this instead?
 // AWSConfig();
@@ -12,9 +11,6 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us
 
 // Prepare to call Lambda function
 let lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
-
-// The lambda function to invoke
-const lambdaFunctionName = "VastusDatabaseLambdaFunction";
 
 class Lambda {
     // All the high-level functions
@@ -313,7 +309,7 @@ class Lambda {
     // All the basic CRUD Functions with my own personally defined JSONs
     // TODO Is there a case where we would need specify action yet?
     static create(fromID, itemType, createRequest, successHandler, failureHandler) {
-        this.invokeLambda({
+        this.invokeDatabaseLambda({
             fromID: fromID,
             action: "CREATE",
             itemType: itemType,
@@ -321,7 +317,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static updateSetAttribute(fromID, objectID, objectItemType, attributeName, attributeValue, successHandler, failureHandler) {
-        this.invokeLambda({
+        this.invokeDatabaseLambda({
             fromID: fromID,
             action: "UPDATESET",
             itemType: objectItemType,
@@ -335,7 +331,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static updateAddToAttribute(fromID, objectID, objectItemType, attributeName, attributeValue, successHandler, failureHandler) {
-        this.invokeLambda({
+        this.invokeDatabaseLambda({
             fromID,
             action: "UPDATEADD",
             itemType: objectItemType,
@@ -349,7 +345,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static updateRemoveFromAttribute(fromID, objectID, objectItemType, attributeName, attributeValue, successHandler, failureHandler) {
-        this.invokeLambda({
+        this.invokeDatabaseLambda({
             fromID,
             action: "UPDATEREMOVE",
             itemType: objectItemType,
@@ -363,7 +359,7 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     static delete(fromID, objectID, objectItemType, successHandler, failureHandler) {
-        this.invokeLambda({
+        this.invokeDatabaseLambda({
             fromID,
             action: "DELETE",
             itemType: objectItemType,
@@ -372,13 +368,19 @@ class Lambda {
             ],
         }, successHandler, failureHandler)
     }
-    static invokeLambda(payload, successHandler, failureHandler) {
+    static invokeDatabaseLambda(payload, successHandler, failureHandler) {
+        this.invokeLambda("VastusDatabaseLambdaFunction", payload, successHandler, failureHandler);
+    }
+    static invokePaymentLambda(payload, successHandler, failureHandler) {
+        this.invokeLambda("VastusPaymentLambdaFunction", payload, successHandler, failureHandler);
+    }
+    static invokeLambda(functionName, payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
             console.log("Sending lambda payload: " + JSON.stringify(payload));
         }
         lambda.invoke({
-            FunctionName : lambdaFunctionName,
+            FunctionName : functionName,
             Payload: JSON.stringify(payload)
         }, (error, data) => {
             if (error) {

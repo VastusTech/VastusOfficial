@@ -4,11 +4,11 @@ import EventFeed from "./EventFeed";
 import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
-import CreateEventProp from "./CreateEvent";
-import NextEventProp from "../components/NextWorkout";
-// import ScheduledEventsList from "./ScheduledEventList";
+// import CreateEventProp from "./CreateEvent";
+// import NextEventProp from "../components/NextWorkout";
 import LeaderBoard from "./Leaderboard";
-import CommentScreen from "./CommentScreen";
+// import CommentScreen from "./CommentScreen";
+import PaymentScreen from "./PaymentScreen";
 import NotificationBellProp from "../components/NotificationBell";
 
 /**
@@ -17,7 +17,7 @@ import NotificationBellProp from "../components/NotificationBell";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 4, size: "small", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 5, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -50,6 +50,15 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
+                        <Icon name='payment' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <PaymentScreen />
+                </Tab.Pane>
+            },
+            {
+                menuItem: (
+                    <Menu.Item key={4}>
                         <NotificationBellProp/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>

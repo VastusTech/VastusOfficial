@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import './App.css';
 import { connect } from 'react-redux';
-import { ServiceWorker } from 'aws-amplify';
+// import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
-import ItemType, { getItemTypeFromID } from "./ItemType";
+// import ItemType, { getItemTypeFromID } from "./ItemType";
 
 // const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");
 
