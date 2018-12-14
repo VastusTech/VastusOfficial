@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
+import './video-react-copy.css';
 import { connect } from 'react-redux';
 // import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
