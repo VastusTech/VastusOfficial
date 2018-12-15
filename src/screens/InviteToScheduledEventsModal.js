@@ -1,5 +1,5 @@
-import React, { Component } from 'react'
-import {Grid, Message, Button, Header, Modal} from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react'
+import {Message, Button, Modal, Card} from 'semantic-ui-react';
 import EventCard from "../components/EventCard";
 // import QL from "../GraphQL";
 import { connect } from "react-redux";
@@ -78,15 +78,14 @@ class InviteToScheduledEventsModalProp extends Component {
             for (let i = 0; i < events.length; i++) {
                 if (events.hasOwnProperty(i) === true) {
                     rowProps.push(
-                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                            <Grid.Column>
+                        <Fragment>
+                            <Card fluid raised>
+                                <Card.Content>
                                     <EventCard eventID={events[i]}/>
-                            </Grid.Column>
-                            <Grid.Column/>
-                            <Grid.Column>
-                                <Button loading={isInviteLoading} basic color='purple' onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
-                            </Grid.Column>
-                        </Grid.Row>
+                                    <Button loading={isInviteLoading} primary fluid onClick={() => {eventInviteHandler(events[i])}}>Invite to Challenge</Button>
+                                </Card.Content>
+                            </Card>
+                        </Fragment>
                     );
                 }
             }
@@ -103,13 +102,11 @@ class InviteToScheduledEventsModalProp extends Component {
         }
         if (this.props.user.scheduledEvents && this.props.user.scheduledEvents.length && this.props.user.scheduledEvents.length > 0) {
             return(
-                <Modal dimmer='blurring' size='large' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
-                    <Modal.Header>Select Challenge</Modal.Header>
-                    <Modal.Content>
-                        <Grid columns={4}>
-                            {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.sendInvite.bind(this),
+                <Modal centered dimmer='blurring' size='large' open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
+                    <Modal.Header className="u-bg--bg">Select Challenge</Modal.Header>
+                    <Modal.Content className="u-bg--bg">
+                        {rows(this.props.user.id, this.props.friendID, this.props.user.scheduledEvents, this.sendInvite.bind(this),
                             this.state.isInviteLoading)}
-                        </Grid>
                     </Modal.Content>
                 </Modal>
             );
