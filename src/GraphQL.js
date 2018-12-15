@@ -40,6 +40,11 @@ class GraphQL {
         this.execute(this.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
             "getEvent", successHandler, failureHandler);
     }
+    static getChallenge(id, variableList, successHandler, failureHandler) {
+        // console.log("ay lmao pt. 2");
+        this.execute(this.constructQuery("GetChallenge", "getChallenge", {id: id}, variableList),
+            "getChallenge", successHandler, failureHandler);
+    }
     static getInvite(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetInvite", "getInvite", {id: id}, variableList),
             "getInvite", successHandler, failureHandler);
@@ -101,6 +106,15 @@ class GraphQL {
         const idList = this.generateIDList(ids);
         this.execute(this.constructQuery("GetEvents", "getEvents", null, variableList, idList, true),
             "getEvents", successHandler, failureHandler);
+    }
+    static getChallenges(ids, variableList, successHandler, failureHandler) {
+        if (ids && ids.length > 100) {
+            // TODO Make sure we actually test this so that this error will pop up!
+            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+        }
+        const idList = this.generateIDList(ids);
+        this.execute(this.constructQuery("GetChallenges", "getChallenges", null, variableList, idList, true),
+            "getChallenges", successHandler, failureHandler);
     }
     static getInvites(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
@@ -185,6 +199,17 @@ class GraphQL {
         }
         this.execute(this.constructQuery("QueryEvents", "queryEvents", inputVariables, variableList, filter, false, true),
             "queryEvents", successHandler, failureHandler, queryEventCache, putCacheQueryEvent);
+    }
+    static queryChallenges(variableList, filter, limit, nextToken, successHandler, failureHandler, queryEventCache, putCacheQueryEvent) {
+        var inputVariables = {};
+        if (limit) {
+            inputVariables.limit = limit;
+        }
+        if (nextToken) {
+            inputVariables.nextToken = nextToken;
+        }
+        this.execute(this.constructQuery("QueryChallenges", "queryChallenges", inputVariables, variableList, filter, false, true),
+            "queryChallenges", successHandler, failureHandler, queryEventCache, putCacheQueryEvent);
     }
     static queryInvites(variableList, filter, limit, nextToken, successHandler, failureHandler, queryInviteCache, putCacheQueryInvite) {
         var inputVariables = {};

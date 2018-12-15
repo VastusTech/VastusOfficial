@@ -7,15 +7,9 @@ const FETCH_GYM = 'FETCH_GYM';
 const FETCH_WORKOUT = 'FETCH_WORKOUT';
 const FETCH_REVIEW = 'FETCH_REVIEW';
 const FETCH_EVENT = 'FETCH_EVENT';
+const FETCH_CHALLENGE = 'FETCH_CHALLENGE';
 const FETCH_INVITE = 'FETCH_INVITE';
 const FETCH_POST = 'FETCH_POST';
-
-// const READ_CLIENT = 'READ_CLIENT';
-// const READ_TRAINER = 'READ_TRAINER';
-// const READ_GYM = 'READ_GYM';
-// const READ_WORKOUT = 'READ_WORKOUT';
-// const READ_REVIEW = 'READ_REVIEW';
-// const READ_EVENT = 'READ_EVENT';
 
 const FETCH_CLIENT_QUERY = 'FETCH_CLIENT_QUERY';
 const FETCH_TRAINER_QUERY = 'FETCH_TRAINER_QUERY';
@@ -23,6 +17,7 @@ const FETCH_GYM_QUERY = 'FETCH_GYM_QUERY';
 const FETCH_WORKOUT_QUERY = 'FETCH_WORKOUT_QUERY';
 const FETCH_REVIEW_QUERY = 'FETCH_REVIEW_QUERY';
 const FETCH_EVENT_QUERY = 'FETCH_EVENT_QUERY';
+const FETCH_CHALLENGE_QUERY = 'FETCH_CHALLENGE_QUERY';
 const FETCH_INVITE_QUERY = 'FETCH_INVITE_QUERY';
 const FETCH_POST_QUERY = 'FETCH_POST_QUERY';
 
@@ -32,6 +27,7 @@ const CLEAR_GYM_QUERY = 'CLEAR_GYM_QUERY';
 const CLEAR_WORKOUT_QUERY = 'CLEAR_WORKOUT_QUERY';
 const CLEAR_REVIEW_QUERY = 'CLEAR_REVIEW_QUERY';
 const CLEAR_EVENT_QUERY = 'CLEAR_EVENT_QUERY';
+const CLEAR_CHALLENGE_QUERY = 'CLEAR_CHALLENGE_QUERY';
 const CLEAR_INVITE_QUERY = 'CLEAR_INVITE_QUERY';
 const CLEAR_POST_QUERY = 'CLEAR_POST_QUERY';
 
@@ -42,6 +38,7 @@ const gymCacheSize = 100;
 const workoutCacheSize = 100;
 const reviewCacheSize = 100;
 const eventCacheSize = 2000;
+const challengeCacheSize = 2000;
 const inviteCacheSize = 100;
 const postCacheSize = 2000;
 
@@ -51,7 +48,8 @@ const trainerQueryCacheSize = 0;
 const gymQueryCacheSize = 0;
 const workoutQueryCacheSize = 0;
 const reviewQueryCacheSize = 0;
-const eventQueryCacheSize = 0;
+const eventQueryCacheSize = 10;
+const challengeQueryCacheSize = 0;
 const inviteQueryCacheSize = 0;
 const postQueryCacheSize = 0;
 
@@ -63,6 +61,7 @@ const initialState = {
     workouts: {},
     reviews: {},
     events: {},
+    challenges: {},
     invites: {},
     posts: {},
 
@@ -73,6 +72,7 @@ const initialState = {
     workoutLRUHandler: [],
     reviewLRUHandler: [],
     eventLRUHandler: [],
+    challengeLRUHandler: [],
     inviteLRUHandler: [],
     postLRUHandler: [],
 
@@ -83,6 +83,7 @@ const initialState = {
     workoutQueries: {},
     reviewQueries: {},
     eventQueries: {},
+    challengeQueries: {},
     inviteQueries: {},
     postQueries: {},
 
@@ -94,6 +95,7 @@ const initialState = {
     workoutQueryLRUHandler: [],
     reviewQueryLRUHandler: [],
     eventQueryLRUHandler: [],
+    challengeQueryLRUHandler: [],
     inviteQueryLRUHandler: [],
     postQueryLRUHandler: [],
 };
@@ -122,6 +124,9 @@ export default (state = initialState, action) => {
         case FETCH_EVENT:
             state = addObjectToCache(state, "events", eventCacheSize, "eventLRUHandler", action.payload);
             break;
+        case FETCH_CHALLENGE:
+            state = addObjectToCache(state, "challenges", challengeCacheSize, "challengeLRUHandler", action.payload);
+            break;
         case FETCH_INVITE:
             state = addObjectToCache(state, "invites", inviteCacheSize, "inviteLRUHandler", action.payload);
             break;
@@ -130,6 +135,7 @@ export default (state = initialState, action) => {
             break;
             // TODO Connect these to LRU Handlers... important especially as we scale
         case FETCH_CLIENT_QUERY:
+            // state = addObjectToCache(state, "clientQueries", clientQueryCacheSize, "clientQueryLRUHandler", action.payload);
             state = {
                 ...state,
                 clientQueries: {
@@ -183,6 +189,15 @@ export default (state = initialState, action) => {
                 }
             };
             break;
+        case FETCH_CHALLENGE_QUERY:
+            state = {
+                ...state,
+                challengeQueries: {
+                    ...state.challengeQueries,
+                    [action.payload.queryString]: action.payload.queryResult
+                }
+            };
+            break;
         case FETCH_INVITE_QUERY:
             state = {
                 ...state,
@@ -213,16 +228,28 @@ export default (state = initialState, action) => {
                 trainerQueries: {}
             };
             break;
+        case CLEAR_GYM_QUERY:
+            state = {
+                ...state,
+                gymQueries: {}
+            };
+            break;
+        case CLEAR_WORKOUT_QUERY:
+            state = {
+                ...state,
+                workoutQueries: {}
+            };
+            break;
         case CLEAR_EVENT_QUERY:
             state = {
                 ...state,
                 eventQueries: {}
             };
             break;
-        case CLEAR_GYM_QUERY:
+        case CLEAR_CHALLENGE_QUERY:
             state = {
                 ...state,
-                gymQueries: {}
+                eventQueries: {}
             };
             break;
         case CLEAR_INVITE_QUERY:
@@ -235,12 +262,6 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 reviewQueries: {}
-            };
-            break;
-        case CLEAR_WORKOUT_QUERY:
-            state = {
-                ...state,
-                workoutQueries: {}
             };
             break;
         case CLEAR_POST_QUERY:
