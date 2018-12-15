@@ -21,12 +21,15 @@ class Lambda {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "profileImagePaths", profileImagePath, successHandler, failureHandler);
     }
     static setEventWinner(fromID, eventID, winnerID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "winner", winnerID, successHandler, failureHandler);
     };
     static updateEventToChallenge(fromID, eventID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "ifChallenge", "true", successHandler, failureHandler);
     };
     static updateEventToEvent (fromID, eventID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "ifChallenge", "false", successHandler, failureHandler);
     };
     static updateEventToPrivate(fromID, eventID, successHandler, failureHandler) {
@@ -56,7 +59,8 @@ class Lambda {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "scheduledEvents", eventID, successHandler, failureHandler);
     }
     static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
-        this.updateSetAttribute(fromID, challengeID, "Event", "winner", winnerID, successHandler, failureHandler);
+        alert("Don't use this lambda");
+        this.updateSetAttribute(fromID, challengeID, "Challenge", "winner", winnerID, successHandler, failureHandler);
     }
     static sendEventInvite(fromID, from, to, eventID, successHandler, failureHandler) {
         this.createEventInvite(fromID, from, to, eventID, successHandler, failureHandler);
@@ -150,7 +154,6 @@ class Lambda {
             capacity,
             address,
             title,
-            ifChallenge: "false",
         }, successHandler, failureHandler);
     }
     static createEventOptional(fromID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
@@ -163,33 +166,53 @@ class Lambda {
             description,
             memberIDs,
             access,
-            ifChallenge: "false",
         }, successHandler, failureHandler);
     }
-    static createChallenge(fromID, owner, time, capacity, address, title, goal, successHandler, failureHandler) {
+    static createChallengeEvent(fromID, challengeID, owner, time, capacity, address, title, successHandler, failureHandler) {
         this.create(fromID, "Event", {
             owner,
             time,
             capacity,
             address,
             title,
-            goal,
-            ifChallenge: "true",
+            challenge: challengeID
         }, successHandler, failureHandler);
     }
-    static createChallengeOptional(fromID, owner, time, capacity, address, title, goal, description, difficulty, memberIDs, access, successHandler, failureHandler) {
+    static createChallengeEventOptional(fromID, challengeID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
         this.create(fromID, "Event", {
-            owner: owner,
-            time: time,
-            capacity: capacity,
-            address: address,
-            title: title,
-            ifChallenge: "true",
-            goal: goal,
-            description: description,
-            difficulty: difficulty,
-            memberIDs: memberIDs,
-            access: access
+            owner,
+            time,
+            capacity,
+            address,
+            title,
+            description,
+            memberIDs,
+            access,
+            challenge: challengeID
+        }, successHandler, failureHandler);
+    }
+    static createChallenge(fromID, owner, endTime, capacity, title, goal, successHandler, failureHandler) {
+        this.create(fromID, "Challenge", {
+            owner,
+            endTime,
+            capacity,
+            title,
+            goal,
+        }, successHandler, failureHandler);
+    }
+    static createChallengeOptional(fromID, owner, endTime, capacity, address, title, goal, description, difficulty, memberIDs, access, restriction, prize, successHandler, failureHandler) {
+        this.create(fromID, "Challenge", {
+            owner,
+            endTime,
+            capacity,
+            title,
+            goal,
+            description,
+            difficulty,
+            memberIDs,
+            access,
+            restriction,
+            prize,
         }, successHandler, failureHandler);
     }
     static createFriendRequest(fromID, from, to, successHandler, failureHandler) {
@@ -226,11 +249,65 @@ class Lambda {
             description: message,
         }, successHandler, failureHandler);
     }
+    static createChallengeInvite(fromID, from, to, challengeID, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to,
+            inviteType: "challengeInvite",
+            about: challengeID,
+        }, successHandler, failureHandler);
+    }
+    static createChallengeInviteOptional(fromID, from, to, challengeID, message, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to,
+            inviteType: "challengeInvite",
+            about: challengeID,
+            description: message,
+        }, successHandler, failureHandler);
+    }
+    static createEventRequest(fromID, from, eventID, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to: eventID,
+            inviteType: "eventRequest",
+            about: from,
+        }, successHandler, failureHandler);
+    }
+    static createEventRequestOptional(fromID, from, eventID, message, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to: eventID,
+            inviteType: "eventRequest",
+            about: from,
+            description: message,
+        }, successHandler, failureHandler);
+    }
+    static createChallengeRequest(fromID, from, challengeID, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to: challengeID,
+            inviteType: "challengeRequest",
+            about: from,
+        }, successHandler, failureHandler);
+    }
+    static createChallengeRequestOptional(fromID, from, challengeID, message, successHandler, failureHandler) {
+        this.create(fromID, "Invite", {
+            from,
+            to: challengeID,
+            inviteType: "challengeRequest",
+            about: from,
+            description: message,
+        }, successHandler, failureHandler);
+    }
     static createBarePost(fromID, by, description, access, successHandler, failureHandler) {
         this.createNormalPost(fromID, by, description, access, null, null, successHandler, failureHandler);
     }
     static createNewEventPost(fromID, by, description, access, eventID, picturePaths, videoPaths, successHandler, failureHandler) {
         this.createNewItemPost(fromID, by, description, access, "Event", eventID, picturePaths, videoPaths, successHandler, failureHandler);
+    }
+    static createNewChallengePost(fromID, by, description, access, challengeID, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.createNewItemPost(fromID, by, description, access, "Challenge", challengeID, picturePaths, videoPaths, successHandler, failureHandler);
     }
     static createNormalPost(fromID, by, description, access, picturePaths, videoPaths, successHandler, failureHandler) {
         this.createPost(fromID, by, description, access, null, null, picturePaths, videoPaths, successHandler, failureHandler);
@@ -273,6 +350,9 @@ class Lambda {
     static editEventAttribute(fromID, eventID, attributeName, attributeValue, successHandler, failureHandler) {
         this.updateSetAttribute(fromID, eventID, "Event", attributeName, attributeValue, successHandler, failureHandler);
     }
+    static editChallengeAttribute(fromID, challengeID, attributeName, attributeValue, successHandler, failureHandler) {
+        this.updateSetAttribute(fromID, challengeID, "Challenge", attributeName, attributeValue, successHandler, failureHandler);
+    }
     static editInviteAttribute(fromID, inviteID, attributeName, attributeValue, successHandler, failureHandler) {
         this.updateSetAttribute(fromID, inviteID, "Invite", attributeName, attributeValue, successHandler, failureHandler);
     }
@@ -298,6 +378,9 @@ class Lambda {
     }
     static deleteEvent(fromID, eventID, successHandler, failureHandler) {
         this.delete(fromID, eventID, "Event", successHandler, failureHandler);
+    }
+    static deleteChallenge(fromID, challengeID, successHandler, failureHandler) {
+        this.delete(fromID, challengeID, "Challenge", successHandler, failureHandler);
     }
     static deleteInvite(fromID, inviteID, successHandler, failureHandler) {
         this.delete(fromID, inviteID, "Invite", successHandler, failureHandler);

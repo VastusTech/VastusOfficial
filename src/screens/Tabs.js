@@ -41,7 +41,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='winner' size='large' />
+                        <Icon name='stripe' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <LeaderBoard />
@@ -50,7 +50,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <Icon name='payment' size='large' />
+                        <Icon name='search' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <PaymentScreen />

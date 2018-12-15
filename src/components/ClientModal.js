@@ -8,12 +8,18 @@ import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 
+type Props = {
+    open: boolean,
+    onClose: any,
+    clientID: string
+}
+
 /*
 * Client Modal
 *
 * This is the generic profile view for any user that the current logged in user clicks on.
  */
-class ClientModal extends Component {
+class ClientModal extends Component<Props> {
     state = {
         error: null,
         isLoading: true,

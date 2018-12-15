@@ -6,6 +6,8 @@ class Stripe {
             token
         });
     }
+
+    static create
 }
 
 export default Stripe;
