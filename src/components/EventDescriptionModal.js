@@ -4,34 +4,16 @@ import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
-import QL from '../GraphQL';
+// import QL from '../GraphQL';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
 
-function convertTime(time) {
-    if (parseInt(time, 10) > 12) {
-        return "0" + (parseInt(time, 10) - 12) + time.substr(2, 3) + "pm";
-    }
-    else if (parseInt(time, 10) === 12) {
-        return time + "pm";
-    }
-    else if (parseInt(time, 10) === 0) {
-        return "0" + (parseInt(time, 10) + 12) + time.substr(2, 3) + "am"
-    }
-    else {
-        return time + "am"
-    }
-}
-
-function convertDate(date) {
-    let dateString = String(date);
-    let year = dateString.substr(0, 4);
-    let month = dateString.substr(5, 2);
-    let day = dateString.substr(8, 2);
-
-    return month + "/" + day + "/" + year;
+type Props = {
+    open: boolean,
+    onClose: any,
+    eventID: string
 }
 
 /*
@@ -40,7 +22,7 @@ function convertDate(date) {
 * This is the event description which displays more in depth information about a challenge, and allows the user
 * to join the challenge.
  */
-class EventDescriptionModal extends Component {
+class EventDescriptionModal extends Component<Props> {
     state = {
         // isLoading: false,
         isOwned: false,

@@ -12,12 +12,17 @@ import { fetchClient } from "../redux_helpers/actions/cacheActions";
  */
 
 type Props = {
-    rank: number
+    rank: number,
+    clientID: string
 }
 
 class ClientCard extends Component<Props> {
     constructor(props) {
         super(props);
+        this.openClientModal = this.openClientModal.bind(this);
+        this.closeClientModal = this.closeClientModal.bind(this);
+        this.profilePicture = this.profilePicture.bind(this);
+        this.getClientAttribute = this.getClientAttribute.bind(this);
     }
 
     state = {
@@ -92,7 +97,7 @@ class ClientCard extends Component<Props> {
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <Card fluid raised onClick={this.openClientModal.bind(this)}>
+            <Card fluid raised onClick={this.openClientModal}>
                 <Card.Content>
                     {/* If no rank */}
                     {!rank && (
@@ -122,7 +127,7 @@ class ClientCard extends Component<Props> {
                             </Grid.Row>
                         </Grid>
                     )}
-                    <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.state.clientID}/>
+                    <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.state.clientID}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta>
