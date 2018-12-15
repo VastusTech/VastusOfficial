@@ -3,11 +3,10 @@ import _ from 'lodash';
 import {Grid, Button, Message, Image, Modal, Item, Segment, Dropdown, TextArea, Checkbox, Icon} from 'semantic-ui-react';
 import CreateEventProp from "./CreateEvent";
 import VTLogo from "../img/vt_new.svg"
-import ClientCard from "./ClientCard";
 import {connect} from "react-redux";
 import {Form} from "semantic-ui-react/dist/commonjs/collections/Form/Form";
 
-class EventMemberList extends Component {
+class WorkoutSelectionList extends Component {
     state = {
         error: null,
         isLoading: false,
@@ -29,35 +28,31 @@ class EventMemberList extends Component {
         return (
             <Modal closeIcon trigger={<Button primary fluid size="large"> <Icon name='plus' /> Post Challenge</Button>}>
                 <Modal.Header align='center'>Select Challenge</Modal.Header>
-                <Modal.Content>
+                <Modal.Content align='center'>
                     <Grid>
-                            <Grid.Row>
-                                <Button primary fluid>
-                                    <Image src={require('../img/weightsWorkout.png')} avatar />
-                                    Lifting Challenge
-                                </Button>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Button primary fluid>
-                                    <Image src={require('../img/timeTrialWorkout.png')} avatar />
-                                    Timed Challenge
-                                </Button>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Button primary fluid>
-                                    <Image src={require('../img/runningWorkout.png')} avatar />
-                                    Cardio Challenge
-                                </Button>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <Button primary fluid>
-                                    <Image src={require('../img/bikingWorkout.png')} avatar />
-                                    Bike Challenge
-                                </Button>
-                            </Grid.Row>
-                            <Grid.Row>
-                                <CreateEventProp/>
-                            </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/HIIT_icon.png')} />
+                                    HIIT
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/Strength_icon.png')} />
+                                    Strength
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/Performance_Icon.png')} />
+                                    Performance
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/endurance_icon.png')} />
+                                    Endurance
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <CreateEventProp/>
+                        </Grid.Row>
                     </Grid>
                 </Modal.Content>
             </Modal>
@@ -70,4 +65,4 @@ const mapStateToProps = (state) => ({
     cache: state.cache
 });
 
-export default connect(mapStateToProps)(EventMemberList);
+export default connect(mapStateToProps)(WorkoutSelectionList);

@@ -232,12 +232,8 @@ class CreateEventProp extends Component {
                             </Form.Group>
                             <Form.Group unstackable widths={3}>
                                 <div className="field">
-                                    <label>Event Date</label>
+                                    <label>End Date</label>
                                     <input type="date" name="eventDate" defaultValue={CreateEventProp.getTodayDateString()} onChange={value => this.changeStateText("eventDate", value)}/>
-                                </div>
-                                <div className="field">
-                                    <label>Start Time</label>
-                                    <input type="time" name="startTime" defaultValue={CreateEventProp.getNowTimeString()} onChange={value => this.changeStateText("startTime", value)}/>
                                 </div>
                                 <div className="field">
                                     <label>Duration</label>
