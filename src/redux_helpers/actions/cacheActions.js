@@ -176,6 +176,9 @@ export function fetchReview(id, variablesList, dataHandler) {
 export function fetchEvent(id, variablesList, dataHandler) {
     return fetch(id, variablesList, "events", "getEvent", "FETCH_EVENT", dataHandler);
 }
+export function fetchChallenge(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "challenges", "getChallenge", "FETCH_CHALLENGE", dataHandler);
+}
 export function fetchInvite(id, variablesList, dataHandler) {
     return fetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
 }
@@ -199,6 +202,9 @@ export function forceFetchReview(id, variablesList, dataHandler) {
 }
 export function forceFetchEvent(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "events", "getEvent", "FETCH_EVENT", dataHandler);
+}
+export function forceFetchChallenge(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "challenges", "getChallenge", "FETCH_CHALLENGE", dataHandler);
 }
 export function forceFetchInvite(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "invites", "getInvite", "FETCH_INVITE", dataHandler);
@@ -262,6 +268,15 @@ export function putEventQuery(queryString, queryResult) {
         }
     };
 }
+export function putChallengeQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_CHALLENGE_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
 export function putInviteQuery(queryString, queryResult) {
     return {
         type: "FETCH_INVITE_QUERY",
@@ -308,6 +323,11 @@ export function clearReviewQuery() {
 export function clearEventQuery() {
     return {
         type: "CLEAR_EVENT_QUERY",
+    };
+}
+export function clearChallengeQuery() {
+    return {
+        type: "CLEAR_CHALLENGE_QUERY",
     };
 }
 export function clearInviteQuery() {
@@ -362,6 +382,12 @@ export function putReview(review) {
 export function putEvent(event) {
     return {
         type: "FETCH_EVENT",
+        payload: event
+    };
+}
+export function putChallenge(event) {
+    return {
+        type: "FETCH_CHALLENGE",
         payload: event
     };
 }
