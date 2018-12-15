@@ -21,12 +21,15 @@ class Lambda {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "profileImagePaths", profileImagePath, successHandler, failureHandler);
     }
     static setEventWinner(fromID, eventID, winnerID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "winner", winnerID, successHandler, failureHandler);
     };
     static updateEventToChallenge(fromID, eventID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "ifChallenge", "true", successHandler, failureHandler);
     };
     static updateEventToEvent (fromID, eventID, successHandler, failureHandler) {
+        alert("Don't use this lambda");
         this.editEventAttribute(fromID, eventID, "ifChallenge", "false", successHandler, failureHandler);
     };
     static updateEventToPrivate(fromID, eventID, successHandler, failureHandler) {
@@ -56,7 +59,8 @@ class Lambda {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "scheduledEvents", eventID, successHandler, failureHandler);
     }
     static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
-        this.updateSetAttribute(fromID, challengeID, "Event", "winner", winnerID, successHandler, failureHandler);
+        alert("Don't use this lambda");
+        this.updateSetAttribute(fromID, challengeID, "Challenge", "winner", winnerID, successHandler, failureHandler);
     }
     static sendEventInvite(fromID, from, to, eventID, successHandler, failureHandler) {
         this.createEventInvite(fromID, from, to, eventID, successHandler, failureHandler);

@@ -7,6 +7,7 @@ const ItemType = {
     Workout: "Workout",
     Review: "Review",
     Event: "Event",
+    Challenge: "Challenge",
     Invite: "Invite",
     Post: "Post",
 };
