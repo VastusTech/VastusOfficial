@@ -58,7 +58,7 @@ class SearchBarProp extends Component {
             };
             this.setState({eventsLoading: true});
             // TODO Do we need to get this much from GraphQL?
-            QL.queryEvents(["id", "item_type", "title", "goal", "owner", "access", "members"], QL.generateFilter("and",
+            QL.queryEvents(["id", "item_type", "title", "owner", "access", "members"], QL.generateFilter("and",
                 eventsVariableComparisons, eventsVariableValues), this.state.eventsLimit, this.state.nextEventQueryToken,
                 (data) => {
                     console.log("Received events query: " + JSON.stringify(data));
