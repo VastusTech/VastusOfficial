@@ -226,7 +226,7 @@ class EventDescriptionModal extends Component {
 
     forceUpdate = (eventID) => {
         forceFetchEvent(eventID, ["owner",
-            "time", "capacity", "address", "title", "ifChallenge", "goal", "description", "difficulty", "memberIDs",
+            "time", "capacity", "address", "title", "ifChallenge", "description", "difficulty", "memberIDs",
             "access"]);
     };
 
@@ -338,7 +338,7 @@ class EventDescriptionModal extends Component {
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {this.getEventAttribute("goal")}
+                                    {/*this.getEventAttribute("goal")*/}
                                 </List.Content>
                             </List.Item>
                             <List.Item>

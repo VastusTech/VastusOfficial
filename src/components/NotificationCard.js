@@ -51,7 +51,7 @@ class NotificationCard extends Component {
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                         if (invite.inviteType === "eventInvite") {
                             // alert("Fetching event = " + invite.about);
-                            props.fetchEvent(invite.about, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+                            props.fetchEvent(invite.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                         }
                     }
                 }
