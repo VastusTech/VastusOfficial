@@ -10,7 +10,7 @@ import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CreateEventProp from "./CreateEvent";
 import WorkoutSelectionList from "./WorkoutSelectionList";
 import CreateChallengeProp from "./CreateChallenge"
-import NextEventProp from "../components/NextWorkout";
+import NextEventProp from "../components/NextEvent";
 import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 

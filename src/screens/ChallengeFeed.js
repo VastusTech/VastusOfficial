@@ -7,8 +7,10 @@ import { connect } from 'react-redux';
 // import ScheduledEventsList from "./ScheduledEventList";
 import {fetchChallenge, putClientQuery, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import CreateEventProp from "./CreateEvent";
-import NextEventProp from "../components/NextWorkout";
+// import CreateEventProp from "./CreateEvent";
+import CreateChallengeProp from "./CreateChallenge"
+// import NextEventProp from "../components/NextEvent";
+import NextChallengeProp from "../components/NextChallenge";
 import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 
@@ -26,9 +28,9 @@ class ChallengeFeed extends Component {
     state = {
         isLoading: true,
         userID: null,
-        events: [],
+        challenges: [],
         clientNames: {}, // id to name
-        eventFeedLength: 10,
+        challengeFeedLength: 10,
         nextToken: null,
         ifFinished: false,
         calculations: {
@@ -40,7 +42,7 @@ class ChallengeFeed extends Component {
     constructor(props) {
         super(props);
         this.forceUpdate = this.forceUpdate.bind(this);
-        this.queryEvents = this.queryEvents.bind(this);
+        this.queryChallenges = this.queryChallenges.bind(this);
     }
 
     componentDidMount() {
@@ -61,20 +63,20 @@ class ChallengeFeed extends Component {
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
             // alert("fetchin user attributes");
-            this.props.fetchUserAttributes(["friends", "invitedEvents"],
+            this.props.fetchUserAttributes(["friends", "invitedChallenges"],
                 (data) => {
                     // alert("finished");
-                    this.queryEvents()
+                    this.queryChallenges()
                 });
         }
     }
 
-    queryEvents() {
+    queryChallenges() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryEvents(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
-                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
+            QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "access", "restriction"], QL.generateFilter("and",
+                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
                 this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
@@ -82,29 +84,29 @@ class ChallengeFeed extends Component {
                     if (data.items) {
                         // TODO We can see private events
                         // alert("got items");
-                        const newlyQueriedEvents = [];
+                        const newlyQueriedChallenges = [];
                         for (let i = 0; i < data.items.length; i++) {
-                            const event = data.items[i];
-                            // alert(JSON.stringify(event));
-                            if (event.access === 'public') {
-                                newlyQueriedEvents.push(event);
+                            const challenge = data.items[i];
+                            // alert(JSON.stringify(challenge));
+                            if (challenge.access === 'public') {
+                                newlyQueriedChallenges.push(challenge);
                             }
-                            else if (this.props.user.id && this.props.user.id === event.owner) {
-                                newlyQueriedEvents.push(event);
+                            else if (this.props.user.id && this.props.user.id === challenge.owner) {
+                                newlyQueriedChallenges.push(challenge);
                             }
-                            else if (this.props.user.friends && this.props.user.friends.includes(event.owner)) {
-                                newlyQueriedEvents.push(event);
+                            else if (this.props.user.friends && this.props.user.friends.includes(challenge.owner)) {
+                                newlyQueriedChallenges.push(challenge);
                             }
-                            else if (this.props.user.invitedEvents && this.props.user.invitedEvents.includes(event.id)) {
-                                newlyQueriedEvents.push(event);
+                            else if (this.props.user.invitedChallenges && this.props.user.invitedChallenges.includes(challenge.id)) {
+                                newlyQueriedChallenges.push(challenge);
                             }
                         }
-                        this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
+                        this.setState({challenges: [...this.state.challenges, ...newlyQueriedChallenges]});
                         for (let i = 0; i < data.items.length; i++) {
                             //alert(data.items[i].time_created);
                             // alert("Putting in event: " + JSON.stringify(data.items[i]));
                             // this.setState({events: [...this.state.events, data.items[i]]});
-                            this.props.putEvent(data.items[i]);
+                            this.props.putChallenge(data.items[i]);
                         }
                         // alert("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
@@ -114,11 +116,11 @@ class ChallengeFeed extends Component {
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
-                    console.log("Querying events failed!");
+                    console.log("Querying challenges failed!");
                     console.log(error);
                     alert(error);
                     this.setState({isLoading: false, error: error});
-                }, this.props.cache.eventQueries, this.props.putEventQuery);
+                }, this.props.cache.challengeQueries, this.props.putChallengeQuery);
         }
     }
 
@@ -132,28 +134,28 @@ class ChallengeFeed extends Component {
         // console.log(calculations.bottomVisible);
         if (calculations.bottomVisible) {
             console.log("Next Token: " + this.state.nextToken);
-            this.queryEvents();
+            this.queryChallenges();
         }
     };
 
     forceUpdate = () => {
-        this.props.forceFetchUserAttributes(["ownedEvents", "scheduledEvents"]);
+        this.props.forceFetchUserAttributes(["ownedChallenges", "challenges"]);
     };
 
     render() {
         /**
-         * This function takes in a list of events and displays them in a list of Event Card views.
-         * @param events
+         * This function takes in a list of challenges and displays them in a list of Event Card views.
+         * @param challenges
          * @returns {*}
          */
-        function rows(events) {
-            // if(events != null && events.length > 0)
-            //     alert(JSON.stringify(events[0].id));
+        function rows(challenges) {
+            // if(challenges != null && challenges.length > 0)
+            //     alert(JSON.stringify(challenges[0].id));
             // alert("EVENTS TO PRINT: ");
-            // alert(JSON.stringify(events));
-            return _.times(events.length, i => (
+            // alert(JSON.stringify(challenges));
+            return _.times(challenges.length, i => (
                 <Fragment key={i + 1}>
-                    <EventCard eventID={events[i].id}/>
+                    <ChallengeCard challengeID={challenges[i].id}/>
                 </Fragment>
             ));
         }
@@ -162,11 +164,11 @@ class ChallengeFeed extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                <CreateEventProp queryEvents={this.queryEvents}/>
+                <CreateChallengeProp queryChallenges={this.queryChallenges}/>
                 <Header sub>Your Next Challenge:</Header>
-                <NextEventProp/>
+                <NextChallengeProp/>
                 <Header sub>Upcoming Challenges:</Header>
-                {rows(this.state.events)}
+                {rows(this.state.challenges)}
             </Visibility>
         );
     }
@@ -195,4 +197,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventFeed);
+export default connect(mapStateToProps, mapDispatchToProps)(ChallengeFeed);

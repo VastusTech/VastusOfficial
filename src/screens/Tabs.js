@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import {Tab, Menu, Icon, Header, Feed } from "semantic-ui-react";
-import EventFeed from "./EventFeed";
+// import EventFeed from "./EventFeed";
 import NotificationFeed from "./NotificationBellFeed";
 import ProfileProp from "./Profile";
 import React from "react";
@@ -10,6 +10,7 @@ import LeaderBoard from "./Leaderboard";
 // import CommentScreen from "./CommentScreen";
 import PaymentScreen from "./PaymentScreen";
 import NotificationBellProp from "../components/NotificationBell";
+import ChallengeFeed from "./ChallengeFeed";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -26,7 +27,7 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <EventFeed/>
+                        <ChallengeFeed/>
                     </Tab.Pane>
             },
             {
@@ -41,7 +42,7 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='stripe' size='large' />
+                        <Icon name='winner' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <LeaderBoard />
