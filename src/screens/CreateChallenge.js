@@ -231,7 +231,7 @@ class CreateChallengeProp extends Component {
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='medium' src={require('../img/Performance_Icon.png')} onClick={() => {this.handleTag("Performance")}}/>
+                                <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
                                 Performance
                             </Grid.Column>
                             <Grid.Column width={8}>
