@@ -98,7 +98,7 @@ class CommentScreen extends Component {
     }
 
     loadHistory(historyLoading) {
-        if(historyLoading) {
+        if (historyLoading) {
             return (
                     <Message icon>
                         <Icon name='spinner' size="small" loading />

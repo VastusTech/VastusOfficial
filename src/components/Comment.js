@@ -1,61 +1,133 @@
 import React, { Component } from 'react';
-import { Label } from 'semantic-ui-react'
+import { Label, Icon } from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 import {Player} from "video-react";
 import { Storage } from 'aws-amplify';
 
-class Comment extends Component {
+type Props = {
+    comment: {
+        name: string,
+        comment: string
+    }
+}
+
+class Comment extends Component<Props> {
     state = {
-        imageUrl: null
+        username: null,
+        sentRequest: false,
+        videoURL: null,
+        imageURL: null
     };
 
     createCorrectMessage() {
-        if (this.props.user.username === this.props.comment.name){
-            //alert(this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/');
-            //alert(this.props.comment.comment.substr(0, 40));
-            //if (this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/') {
-                Storage.get(this.props.comment.comment).then((url) => {
-                    this.setState({imageURL: url})
-                }).catch((error) => {
-                    console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
-                    console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
-                    console.error(error);
-                });
-
-                if(this.state.imageUrl) {
-                    return (
-                        <Label className='ui right fluid' pointing='right' color='purple'>
-                            <Player preload>
-                                <source src={this.state.imageUrl} type="video/mp4"/>
-                            </Player>
-                        </Label>
-                    );
+        if (this.props.comment && this.props.comment.name) {
+            const comment = this.props.comment.comment;
+            const titleAttributes = this.props.comment.name.split("_");
+            if (titleAttributes.length > 0) {
+                const name = titleAttributes[0];
+                if (this.state.username !== name) {
+                    this.setState({username: name});
                 }
-            //}
-
-            /*{
-                return (
-                    <Label className='ui right fluid' pointing='right'
-                           color='purple'>{this.props.comment.comment}</Label>
-                );
-            }*/
-        }
-        else {
-            if (this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/') {
-                return (
-                    <Label className='ui left fluid' pointing='left'>
-                        <Player>
-                            <source src={this.props.comment.comment} type="video/mp4" />
-                        </Player>
-                    </Label>
-                );
+                const ifSelf = name === this.props.user.username;
+                if (titleAttributes.length === 1) {
+                    // Regular message
+                    if (ifSelf) {
+                        return(
+                            <Label className='ui right fluid' pointing='right' color='purple'>
+                                {this.props.comment.comment}
+                            </Label>
+                        );
+                    }
+                    else {
+                        return(
+                            <Label pointing='left'>
+                                {this.props.comment.comment}
+                            </Label>
+                        );
+                    }
+                }
+                else if (titleAttributes.length === 2) {
+                    // Then this is going to include a link
+                    const type = titleAttributes[1];
+                    switch (type) {
+                        case "videoLink":
+                            if (!this.state.sentRequest) {
+                                this.state.sentRequest = true;
+                                Storage.get(comment).then((url) => {
+                                    this.setState({videoURL: url})
+                                }).catch((error) => {
+                                    console.error("ERROR IN GETTING VIDEO FOR COMMENT");
+                                    console.error(error);
+                                });
+                            }
+                            if (ifSelf) {
+                                return(
+                                    <Label className='ui right fluid' pointing='right' color='purple'>
+                                        <Player>
+                                            <source src={this.state.videoURL} type="video/mp4"/>
+                                        </Player>
+                                    </Label>
+                                );
+                            }
+                            else {
+                                return (
+                                    <Label className='ui left fluid' pointing='left'>
+                                        <Player>
+                                            <source src={this.state.videoURL} type="video/mp4" />
+                                        </Player>
+                                    </Label>
+                                );
+                            }
+                        case "pictureLink":
+                            if (!this.state.sentRequest) {
+                                this.state.sentRequest = true;
+                                Storage.get(comment).then((url) => {
+                                    this.setState({imageURL: url})
+                                }).catch((error) => {
+                                    console.error("ERROR IN GETTING IMAGE FOR COMMENT");
+                                    console.error(error);
+                                });
+                            }
+                            if (ifSelf) {
+                                return(
+                                    <Label className='ui right fluid' pointing='right' color='purple'>
+                                        <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                                            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                                                <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                                            </Label>
+                                            <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                                        </div>
+                                    </Label>
+                                );
+                            }
+                            else {
+                                return(
+                                    <Label className='ui left fluid' pointing='left'>
+                                        <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                                            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                                                <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                                            </Label>
+                                            <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                                        </div>
+                                    </Label>
+                                );
+                            }
+                        default:
+                            alert("Comment type = " + type + " not recognized!");
+                            break;
+                    }
+                }
+                else {
+                    // Improperly formatted message?
+                }
             }
             else {
-                return (
-                    <Label pointing='left'>{this.props.comment.comment}</Label>
-                );
+                // Received empty message?
             }
+        }
+        else {
+            // Error'ed comment received
         }
     }
 
@@ -66,7 +138,7 @@ class Comment extends Component {
                 </figure>
                 <div className="media-content">
                     <div className="content">
-                        <strong className='u-margin-bottom--1'>{this.props.comment.name}</strong>
+                        <strong className='u-margin-bottom--1'>{this.state.username}</strong>
                         <br />
                         {this.createCorrectMessage()}
                     </div>

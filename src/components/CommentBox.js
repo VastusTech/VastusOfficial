@@ -6,7 +6,11 @@ import connect from "react-redux/es/connect/connect";
 import Lambda from "../Lambda";
 import defaultProfilePicture from "../img/roundProfile.png";
 
-class CommentBox extends Component {
+type Props = {
+
+}
+
+class CommentBox extends Component<Props> {
     state = {
         imagePath: '',
         imageURL: '',
@@ -67,7 +71,7 @@ class CommentBox extends Component {
         // and make sure it not some empty strings
         let comment = path;
         //let name = this.props.user.username;
-        let name = this.props.curUser;
+        let name = this.props.curUser + "_videoLink";
 
         //alert(name);
         //alert(name);
@@ -96,6 +100,7 @@ class CommentBox extends Component {
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 this.setState({imagePath: path});
                 this.setState({isLoading: true});
+                this.addPicOrVid(path);
             }).catch((error) => {
                 alert("failed storage put");
                 alert(error);
@@ -109,14 +114,13 @@ class CommentBox extends Component {
 
 
     render() {
-        if(this.state.imageURL && this.state.canAddImage) {
-            alert("Image URL found: " + this.state.imageURL);
-            this.addPicOrVid(this.state.path);
-            this.setState({canAddImage: false});
-        }
+        // if(this.state.imageURL && this.state.canAddImage) {
+        //     alert("Image URL found: " + this.state.imageURL);
+        //     this.addPicOrVid(this.state.path);
+        //     this.setState({canAddImage: false});
+        // }
         return (
             <Fragment>
-                
                 <form onSubmit={this.addComment} className='u-margin-top--3'>
                     <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
                     <Button primary className="u-margin-top--2">Send</Button>
