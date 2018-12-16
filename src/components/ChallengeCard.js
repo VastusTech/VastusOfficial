@@ -52,7 +52,7 @@ class ChallengeCard extends Component {
         return null;
     }
 
-    openChallengeModal = () => { this.setState({challengeModalOpen: true})};
+    openChallengeModal = () => {this.setState({challengeModalOpen: true})};
     closeChallengeModal = () => {this.setState({challengeModalOpen: false})};
 
     render() {
@@ -70,7 +70,7 @@ class ChallengeCard extends Component {
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{convertFromIntervalISO(this.getChallengeAttribute("endTime"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>Location: {this.getChallengeAttribute("goal")}</Card.Meta>
-                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} eventID={this.state.challengeID}/>
+                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} eventID={this.getChallengeAttribute("id")}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta>Created on {convertFromISO(this.getChallengeAttribute("time_created"))}</Card.Meta>
