@@ -48,7 +48,7 @@ class CreateChallengeProp extends Component {
 
     eventState = {
         title: "",
-        eventDate: CreateChallengeProp.getTodayDateString(),
+        eventDate: null,
         startTime: CreateChallengeProp.getNowTimeString(),
         duration: '60',
         location: "",
@@ -81,6 +81,7 @@ class CreateChallengeProp extends Component {
 
     handleSubmit = () => {
         // TODO Make sure the dates are well formed?
+        /*
         const year = parseInt(this.eventState.eventDate.substr(0, 4));
         const month = parseInt(this.eventState.eventDate.substr(5, 2)) - 1;
         const day = parseInt(this.eventState.eventDate.substr(8, 2));
@@ -97,14 +98,14 @@ class CreateChallengeProp extends Component {
 
 
         const time = startDate.toIsoString() + "_" + endDate.toIsoString();
-
+        */
         this.setState({isSubmitLoading: true});
 
         // TODO Check to see if valid inputs!
-        if (this.eventState.capacity && this.eventState.location && this.eventState.title && this.eventState.goal) {
+        if (this.eventState.capacity && this.eventState.title && this.eventState.goal) {
             if (Number.isInteger(+this.eventState.capacity)) {
-                Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, time, this.eventState.capacity,
-                    this.eventState.title, this.eventState.goal, this.eventState.description,
+                Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
+                    this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
@@ -206,21 +207,21 @@ class CreateChallengeProp extends Component {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/HIIT_icon.png')} />
-                                HIIT
+                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {alert("call hiit tag handler")}}/>
+                                    HIIT
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/Strength_icon.png')} />
+                                <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {alert("call strength tag handler")}}/>
                                 Strength
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/Performance_Icon.png')} />
+                                <Image size='medium' src={require('../img/Performance_Icon.png')} onClick={() => {alert("call performance tag handler")}}/>
                                 Performance
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/endurance_icon.png')} />
+                                <Image size='medium' src={require('../img/endurance_icon.png')} onClick={() => {alert("call endurance tag handler")}}/>
                                 Endurance
                             </Grid.Column>
                         </Grid.Row>
@@ -233,20 +234,16 @@ class CreateChallengeProp extends Component {
                                         <Form.Input width={5} label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
                                         <div className="field" width={5}>
                                             <label>End Date & Time</label>
-                                            <input width={5} type="datetime-local" name="challengeDate" defaultValue={CreateChallengeProp.getTodayDateString()} onChange={value => this.changeStateText("eventDate", value)}/>
+                                            <input width={5} type="datetime-local" name="challengeDate" onChange={value => this.changeStateText("eventDate", value)}/>
                                         </div>
                                         <Form.Input width={5} label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
                                         <Form.Input width={5} label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                        <Form.Field>
+                                        {/*<Form.Field>
                                             <div className="field" width={5}>
                                                 <label>Difficulty</label>
                                                 <Rating icon='star' defaultRating={1} maxRating={3} />
                                             </div>
-                                        </Form.Field>
-                                        <Form.Field width={10}>
-                                            <label>Description</label>
-                                            <TextArea type="text" name="description" placeholder="Describe Challenge here... " onChange={value => this.changeStateText("description", value)}/>
-                                        </Form.Field>
+                                        </Form.Field>*/}
                                         <Form.Field width={12}>
                                             <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                         </Form.Field>
