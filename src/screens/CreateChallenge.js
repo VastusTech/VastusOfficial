@@ -1,11 +1,10 @@
-import React, { Component } from 'react';
-import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label, Image, Message} from 'semantic-ui-react';
-import Lambda from "../Lambda";
+import React, { Component } from 'react'
+import _ from 'lodash';
+import {Grid, Button, Message, Image, Modal, Label, Icon, Form, Container, TextArea, Checkbox, Rating} from 'semantic-ui-react';
+import CreateEventProp from "./CreateEvent";
+import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
-import {setError} from "../redux_helpers/actions/infoActions";
-import VTLogo from "../img/vt_new.svg";
-import QL from "../GraphQL";
-import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import Lambda from "../Lambda";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -26,28 +25,13 @@ Date.prototype.toIsoString = function() {
         ':' + pad(tzo % 60);
 };
 
-const timeOptions = [ { key: '0:15', value: '15', text: '0:15' },
-    { key: '0:30', value: '30', text: '0:30' },
-    { key: '0:45', value: '45', text: '0:45' },
-    { key: '1:00', value: '60', text: '1:00' },
-    { key: '1:15', value: '75', text: '1:15' },
-    { key: '1:30', value: '90', text: '1:30' },
-    { key: '1:45', value: '105', text: '1:45' },
-    { key: '2:00', value: '120', text: '2:00' },
-    { key: '2:15', value: '135', text: '2:15' },
-    { key: '2:30', value: '150', text: '2:30' },
-    { key: '2:45', value: '165', text: '2:45' },
-    { key: '3:00', value: '180', text: '3:00' },
-    //{ key: '3:00+', value: '3:00+', text: '3:00+' }
-];
-
 /*
 * Create Event Prop
 *
 * This is the modal for creating events. Every input is in the form of a normal text input.
 * Inputting the time and date utilizes the Semantic-ui Calendar React library which isn't vanilla Semantic.
  */
-class CreateEventProp extends Component {
+class CreateChallengeProp extends Component {
 
     state = {
         checked: false,
@@ -56,15 +40,16 @@ class CreateEventProp extends Component {
         submitError: "",
         showSuccessModal: false,
         showSuccessLabel: false,
-        showSuccessLabelTimer: 0
+        showSuccessLabelTimer: 0,
+        challengeType: ""
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
     eventState = {
         title: "",
-        eventDate: CreateEventProp.getTodayDateString(),
-        startTime: CreateEventProp.getNowTimeString(),
+        eventDate: CreateChallengeProp.getTodayDateString(),
+        startTime: CreateChallengeProp.getNowTimeString(),
         duration: '60',
         location: "",
         time: "",
@@ -109,7 +94,7 @@ class CreateEventProp extends Component {
         // alert(endDate.getMinutes());
         // alert(endDate.toDateString());
 
-        
+
 
         const time = startDate.toIsoString() + "_" + endDate.toIsoString();
 
@@ -119,7 +104,7 @@ class CreateEventProp extends Component {
         if (this.eventState.capacity && this.eventState.location && this.eventState.title && this.eventState.goal) {
             if (Number.isInteger(+this.eventState.capacity)) {
                 Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, time, this.eventState.capacity,
-                    this.eventState.location, this.eventState.title, this.eventState.goal, this.eventState.description,
+                    this.eventState.title, this.eventState.goal, this.eventState.description,
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
@@ -212,88 +197,76 @@ class CreateEventProp extends Component {
         }
     }
 
-    //Inside of render is a modal containing each form input required to create a Event.
     render() {
 
         return (
-            <div>
-            <div>{this.createSuccessLabel()}</div>
-            <Segment raised inverted>
-                {/*Modal trigger={<Button primary fluid size="large" closeIcon>+ Create Event</Button>} closeIcon>*/}
-                <Modal closeIcon onClose={this.closeModal} open={this.state.showModal} trigger={<div>
-                    <Button primary fluid size="large" onClick={() => this.setState({ showModal: true })}>{<Image src={VTLogo} avatar />}Custom Challenge</Button></div>}>
-                    <Modal.Header align='center'>Challenge Builder</Modal.Header>
-                    <Modal.Content>
+            <Modal closeIcon trigger={<Button primary fluid size="large"> <Icon name='plus' /> Post Challenge</Button>}>
+                <Modal.Header align='center'>Challenge Builder</Modal.Header>
+                <Modal.Content align='center'>
+                    <Grid>
+                        <Grid.Row>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/HIIT_icon.png')} />
+                                HIIT
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/Strength_icon.png')} />
+                                Strength
+                            </Grid.Column>
+                        </Grid.Row>
+                        <Grid.Row>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/Performance_Icon.png')} />
+                                Performance
+                            </Grid.Column>
+                            <Grid.Column width={8}>
+                                <Image size='small' src={require('../img/endurance_icon.png')} />
+                                Endurance
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Grid>
 
-                        <Form onSubmit={this.handleSubmit}>
-                            <Form.Group unstackable widths={2}>
-                                <Form.Input label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
-                                <Form.Input label="Location" type="text" name="location" placeholder="Address for Event" onChange={value => this.changeStateText("location", value)}/>
-                            </Form.Group>
-                            <Form.Group unstackable widths={3}>
-                                <div className="field">
-                                    <label>End Date</label>
-                                    <input type="date" name="eventDate" defaultValue={CreateEventProp.getTodayDateString()} onChange={value => this.changeStateText("eventDate", value)}/>
-                                </div>
-                                <div className="field">
-                                    <label>Duration</label>
-                                    <Dropdown placeholder='duration' defaultValue={this.eventState.duration} fluid search selection inverted options={timeOptions} onChange={this.handleDurationChange}/>
-                                </div>
-                            </Form.Group>
-                            <Form.Group unstackable widths={2}>
-                                <Form.Input label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
-                                <Form.Input label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Field width={12}>
-                                    <label>Event Description</label>
-                                    <TextArea type="text" name="description" placeholder="Describe Event here... " onChange={value => this.changeStateText("description", value)}/>
-                                </Form.Field>
-                            </Form.Group>
-                            <Form.Group>
-                                <Form.Field width={12}>
-                                    <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
-                                </Form.Field>
-                            </Form.Group>
-                            <div>{this.displayError()}</div>
-                        </Form>
-                    </Modal.Content>
-                    <Modal.Actions>
-                        <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
-                    </Modal.Actions>
-                </Modal>
-            </Segment>
-            </div>
+                    <Container>
+                        <Grid.Row centered>
+                            <Grid.Column width={2} className="segment centered">
+                                <Form onSubmit={this.handleSubmit}>
+                                        <Form.Input width={5} label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
+                                        <div className="field" width={5}>
+                                            <label>End Date & Time</label>
+                                            <input width={5} type="datetime-local" name="challengeDate" defaultValue={CreateChallengeProp.getTodayDateString()} onChange={value => this.changeStateText("eventDate", value)}/>
+                                        </div>
+                                        <Form.Input width={5} label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
+                                        <Form.Input width={5} label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
+                                        <Form.Field>
+                                            <div className="field" width={5}>
+                                                <label>Difficulty</label>
+                                                <Rating icon='star' defaultRating={1} maxRating={3} />
+                                            </div>
+                                        </Form.Field>
+                                        <Form.Field width={10}>
+                                            <label>Description</label>
+                                            <TextArea type="text" name="description" placeholder="Describe Challenge here... " onChange={value => this.changeStateText("description", value)}/>
+                                        </Form.Field>
+                                        <Form.Field width={12}>
+                                            <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
+                                        </Form.Field>
+                                    <div>{this.displayError()}</div>
+                                </Form>
+                            </Grid.Column>
+                        </Grid.Row>
+                    </Container>
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
+                </Modal.Actions>
+            </Modal>
         );
     }
 }
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    info: state.info,
     cache: state.cache
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        setError: (error) => {
-            dispatch(setError(error));
-        },
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
-        },
-        putEvent: (event) => {
-            dispatch(putEvent(event));
-        },
-        putEventQuery: (queryString, queryResult) => {
-            dispatch(putEventQuery(queryString, queryResult));
-        },
-        clearEventQuery: () => {
-            dispatch(clearEventQuery())
-        }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(CreateEventProp);
-
-
+export default connect(mapStateToProps)(CreateChallengeProp);
