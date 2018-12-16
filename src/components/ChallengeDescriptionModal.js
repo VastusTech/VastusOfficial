@@ -14,7 +14,7 @@ import CommentScreen from "../screens/CommentScreen";
 type Props = {
     open: boolean,
     onClose: any,
-    eventID: string
+    challengeID: string
 }
 
 /*
@@ -319,19 +319,19 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='calendar' />
                                 <List.Content>
-                                    {this.convertFromISO(this.getChallengeAttribute("time"))}
+                                    {convertFromISO(this.getChallengeAttribute("endTime"))}
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Icon name='bullseye' />
                                 <List.Content>
-                                    {this.getChallengeAttribute("address")}
+                                    {this.getChallengeAttribute("goal")}
                                 </List.Content>
                             </List.Item>
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {/*this.getChallengeAttribute("goal")*/}
+                                    {this.getChallengeAttribute("prize")}
                                 </List.Content>
                             </List.Item>
                             <List.Item>

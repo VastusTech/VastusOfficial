@@ -61,6 +61,13 @@ class Lambda {
     static removeUserFromEvent(fromID, userID, userItemType, eventID, successHandler, failureHandler) {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "scheduledEvents", eventID, successHandler, failureHandler);
     }
+    static removeClientFromChallenge(fromID, clientID, challengeID, successHandler, failureHandler) {
+        this.removeUserFromChallenge(fromID, clientID, "Client", challengeID, successHandler, failureHandler);
+    }
+    // TODO Trainer leave challenge and gym remove from Challenge
+    static removeUserFromChallenge(fromID, userID, userItemType, challengeID, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, userID, userItemType, "challenges", challengeID, successHandler, failureHandler);
+    }
     static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
         this.updateSetAttribute(fromID, challengeID, "Challenge", "winner", winnerID, successHandler, failureHandler);
     }

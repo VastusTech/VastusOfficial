@@ -68,9 +68,9 @@ class ChallengeCard extends Component {
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
                 <Card.Content>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
-                    <Card.Meta textAlign = 'center' >{convertFromIntervalISO(this.getChallengeAttribute("endTime"))}</Card.Meta>
-                    <Card.Meta textAlign = 'center'>Location: {this.getChallengeAttribute("goal")}</Card.Meta>
-                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} eventID={this.getChallengeAttribute("id")}/>
+                    <Card.Meta textAlign = 'center' >Finishes on {convertFromISO(this.getChallengeAttribute("endTime"))}</Card.Meta>
+                    <Card.Meta textAlign = 'center'>Goal: {this.getChallengeAttribute("goal")}</Card.Meta>
+                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta>Created on {convertFromISO(this.getChallengeAttribute("time_created"))}</Card.Meta>
