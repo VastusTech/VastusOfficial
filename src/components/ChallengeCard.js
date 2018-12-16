@@ -92,7 +92,8 @@ class ChallengeCard extends Component {
         }
         else {
             return (
-                "There ain't no tags round these parts partner " + tags
+                // "There ain't no tags round these parts partner " + tags
+                null
             );
         }
     }
@@ -108,10 +109,10 @@ class ChallengeCard extends Component {
                 </Card>
             );
         }
-        if(this.getChallengeAttribute("tags")) {
-            alert("There be tags!");
-            alert(this.getChallengeAttribute("tags"));
-        }
+        // if(this.getChallengeAttribute("tags")) {
+        //     // alert("There be tags!");
+        //     // alert(this.getChallengeAttribute("tags"));
+        // }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>

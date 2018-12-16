@@ -278,15 +278,16 @@ class ChallengeDescriptionModal extends Component<Props> {
     render() {
         if (!this.getChallengeAttribute("id")) {
             return(
-                <Message icon>
-                    <Icon name='spinner' size="small" loading />
-                    <Message.Content>
-                        <Message.Header>
-                            Loading...
-                        </Message.Header>
-                    </Message.Content>
-
-                </Message>
+                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                    <Message icon>
+                        <Icon name='spinner' size="small" loading />
+                        <Message.Content>
+                            <Message.Header>
+                                Loading...
+                            </Message.Header>
+                        </Message.Content>
+                    </Message>
+                </Modal>
             );
         }
 

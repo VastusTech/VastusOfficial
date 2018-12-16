@@ -8,9 +8,10 @@ import { S3Image } from 'aws-amplify-react';
 // import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
-import ScheduledEventList from "./ScheduledEventList";
-import CompletedEventList from "./CompletedEventList";
-import OwnedEventList from "./OwnedEventList";
+// import ScheduledEventList from "./ScheduledEventList";
+// import CompletedEventList from "./CompletedEventList";
+// import OwnedEventList from "./OwnedEventList";
+import ChallengeList from "../components/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 // import AWSSetup from "../AppConfig";
@@ -98,7 +99,7 @@ class Profile extends React.PureComponent {
 
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends"]);
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges"]);
         }
         else {
             this.setState({isLoading: false});
@@ -258,7 +259,7 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Created Challenges</Button>
                             <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <OwnedEventList/>
+                                    <ChallengeList challengeIDs={this.props.user.ownedChallenges}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -266,7 +267,7 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
                             <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <ScheduledEventList/>
+                                    <ChallengeList challengeIDs={this.props.user.challenges}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -274,7 +275,7 @@ class Profile extends React.PureComponent {
                             <Button fluid size="large" onClick={this.openCompletedModal.bind(this)}><Icon name="bookmark outline" />Completed Challenges</Button>
                             <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <CompletedEventList/>
+                                    <ChallengeList challengeIDs={this.props.user.completedChallenges}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
