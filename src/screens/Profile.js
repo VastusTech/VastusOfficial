@@ -152,7 +152,6 @@ class Profile extends React.PureComponent {
             //console.log("PROPICIMAGE!!!!: " + this.props.user.profilePicture);
             return (
                 <div>
-                    
                     <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                         <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                             <Icon name="upload" className='u-margin-right--0' size="large" inverted />
