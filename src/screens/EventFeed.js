@@ -4,7 +4,7 @@ import {Visibility, Header} from 'semantic-ui-react'
 import EventCard from "../components/EventCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
-import ScheduledEventsList from "./ScheduledEventList";
+// import ScheduledEventsList from "./ScheduledEventList";
 import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CreateEventProp from "./CreateEvent";

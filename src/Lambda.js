@@ -20,23 +20,20 @@ class Lambda {
     static userRemoveProfileImagePath(fromID, userID, userItemType, profileImagePath, successHandler, failureHandler) {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "profileImagePaths", profileImagePath, successHandler, failureHandler);
     }
-    static setEventWinner(fromID, eventID, winnerID, successHandler, failureHandler) {
-        alert("Don't use this lambda");
-        this.editEventAttribute(fromID, eventID, "winner", winnerID, successHandler, failureHandler);
-    };
-    static updateEventToChallenge(fromID, eventID, successHandler, failureHandler) {
-        alert("Don't use this lambda");
-        this.editEventAttribute(fromID, eventID, "ifChallenge", "true", successHandler, failureHandler);
-    };
-    static updateEventToEvent (fromID, eventID, successHandler, failureHandler) {
-        alert("Don't use this lambda");
-        this.editEventAttribute(fromID, eventID, "ifChallenge", "false", successHandler, failureHandler);
+    static setChallengeWinner(fromID, challengeID, winnerID, successHandler, failureHandler) {
+        this.editEventAttribute(fromID, challengeID, "winner", winnerID, successHandler, failureHandler);
     };
     static updateEventToPrivate(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "access", "private", successHandler, failureHandler);
     }
     static updateEventToPublic(fromID, eventID, successHandler, failureHandler) {
         this.editEventAttribute(fromID, eventID, "access", "public", successHandler, failureHandler);
+    }
+    static updateEventToInviteOnly(fromID, eventID, successHandler, failureHandler) {
+        this.editEventAttribute(fromID, eventID, "restriction", "invite", successHandler, failureHandler);
+    }
+    static updateEventToUnrestricted(fromID, eventID, successHandler, failureHandler) {
+        this.editEventAttribute(fromID, eventID, "restriction", null, successHandler, failureHandler);
     }
     static updateEventAddTag(fromID, eventID, tag, successHandler, failureHandler) {
         this.updateAddToAttribute(fromID, eventID, "Event", "tags", tag, successHandler, failureHandler);
@@ -47,9 +44,15 @@ class Lambda {
     static clientJoinEvent(fromID, clientID, eventID, successHandler, failureHandler) {
         this.joinEvent(fromID, clientID, "Client", eventID, successHandler, failureHandler);
     }
+    static clientJoinChallenge(fromID, clientID, challengeID, successHandler, failureHandler) {
+        this.joinChallenge(fromID, clientID, "Client", challengeID, successHandler, failureHandler);
+    }
     // TODO Trainer join event and gym join event
     static joinEvent(fromID, userID, userItemType, eventID, successHandler, failureHandler) {
         this.updateAddToAttribute(fromID, userID, userItemType, "scheduledEvents", eventID, successHandler, failureHandler);
+    }
+    static joinChallenge(fromID, userID, userItemType, challengeID, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, userID, userItemType, "challenges", challengeID, successHandler, failureHandler);
     }
     static removeClientFromEvent(fromID, clientID, eventID, successHandler, failureHandler) {
         this.removeUserFromEvent(fromID, clientID, "Client", eventID, successHandler, failureHandler);
@@ -59,7 +62,6 @@ class Lambda {
         this.updateRemoveFromAttribute(fromID, userID, userItemType, "scheduledEvents", eventID, successHandler, failureHandler);
     }
     static completeChallenge(fromID, winnerID, challengeID, successHandler, failureHandler) {
-        alert("Don't use this lambda");
         this.updateSetAttribute(fromID, challengeID, "Challenge", "winner", winnerID, successHandler, failureHandler);
     }
     static sendEventInvite(fromID, from, to, eventID, successHandler, failureHandler) {
@@ -404,9 +406,7 @@ class Lambda {
             fromID: fromID,
             action: "UPDATESET",
             itemType: objectItemType,
-            identifiers: [
-                objectID
-            ],
+            identifiers: [ objectID ] ? objectID != null : [],
             attributeName: attributeName,
             attributeValues: [
                 attributeValue
