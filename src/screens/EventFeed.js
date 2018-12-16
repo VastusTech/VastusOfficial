@@ -155,7 +155,7 @@ class EventFeed extends Component {
                                 newlyQueriedChallenges.push(challenge);
                             }
                         }
-                        this.setState({challenges: [...this.state.events, ...newlyQueriedEvents]});
+                        this.setState({challenges: [...this.state.events, ...newlyQueriedChallenges]});
                         for (let i = 0; i < data.items.length; i++) {
                             //alert(data.items[i].time_created);
                             // alert("Putting in event: " + JSON.stringify(data.items[i]));

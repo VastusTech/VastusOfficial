@@ -5,16 +5,17 @@ import { connect } from 'react-redux';
 import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO, convertFromIntervalISO } from "../logic/TimeHelper";
 
-type Props = {
+/*type Props = {
     challengeID: string
-}
+}*/
+
 /*
 * Challenge Card
 *
 * This is the generic view for how a challenge shows up in any feeds or lists.
 * It is used as a modal trigger in the feed.
  */
-class ChallengeCard extends Component<Props> {
+class ChallengeCard extends Component {
     state = {
         error: null,
         challengeID: null,
@@ -71,7 +72,7 @@ class ChallengeCard extends Component<Props> {
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} eventID={this.state.challengeID}/>
                 </Card.Content>
                 <Card.Content extra>
-                    <Card.Meta>Created on {convertFromISO(this.state.event.time_created)}</Card.Meta>
+                    {/*<Card.Meta>Created on {convertFromISO(this.state.challenge.time_created)}</Card.Meta>*/}
                     <Card.Meta textAlign = 'center'>
                         {this.getChallengeAttribute("membersLength")} of {this.getChallengeAttribute("capacity")} spots taken.
                     </Card.Meta>

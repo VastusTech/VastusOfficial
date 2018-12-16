@@ -41,9 +41,9 @@ const timeOptions = [ { key: '0:15', value: '15', text: '0:15' },
     //{ key: '3:00+', value: '3:00+', text: '3:00+' }
 ];
 
-type Props = {
+/*type Props = {
     queryEvents: any
-}
+}*/
 
 /*
 * Create Event Prop
