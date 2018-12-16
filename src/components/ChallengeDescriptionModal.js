@@ -25,7 +25,7 @@ type Props = {
  */
 class ChallengeDescriptionModal extends Component<Props> {
     state = {
-        // isLoading: false,
+        isLoading: false,
         isOwned: false,
         isJoined: false,
         isCompleted: false,

@@ -24,6 +24,7 @@ class ChallengeCard extends Component {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        fetchChallenge(this.state.challengeID, ["time_created"])
     }
 
     componentWillReceiveProps(newProps) {
@@ -72,7 +73,7 @@ class ChallengeCard extends Component {
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} eventID={this.state.challengeID}/>
                 </Card.Content>
                 <Card.Content extra>
-                    {/*<Card.Meta>Created on {convertFromISO(this.state.challenge.time_created)}</Card.Meta>*/}
+                    <Card.Meta>Created on {convertFromISO(this.getChallengeAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>
                         {this.getChallengeAttribute("membersLength")} of {this.getChallengeAttribute("capacity")} spots taken.
                     </Card.Meta>

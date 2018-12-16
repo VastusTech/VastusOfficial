@@ -73,7 +73,7 @@ class EventCard extends Component<Props> {
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/>
                 </Card.Content>
                 <Card.Content extra>
-                    <Card.Meta>{convertFromISO(this.state.event.time_created)}</Card.Meta>
+                    <Card.Meta>{convertFromISO(this.getEventAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>
                         {this.getEventAttribute("membersLength")} of {this.getEventAttribute("capacity")} spots taken.
                     </Card.Meta>
