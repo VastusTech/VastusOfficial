@@ -27,14 +27,17 @@ Date.prototype.toIsoString = function() {
         ':' + pad(tzo % 60);
 };
 
+type Props = {
+    queryChallenges: any
+}
+
 /*
 * Create Event Prop
 *
 * This is the modal for creating events. Every input is in the form of a normal text input.
 * Inputting the time and date utilizes the Semantic-ui Calendar React library which isn't vanilla Semantic.
  */
-class CreateChallengeProp extends Component {
-
+class CreateChallengeProp extends Component<Props> {
     state = {
         checked: false,
         isSubmitLoading: false,
@@ -111,8 +114,8 @@ class CreateChallengeProp extends Component {
                     "3", [], [], this.eventState.access, null, "n/a", (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
-                        this.props.clearEventQuery();
-                        this.props.queryEvents();
+                        this.props.clearChallengeQuery();
+                        this.props.queryChallenges();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});

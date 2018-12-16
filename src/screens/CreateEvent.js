@@ -41,13 +41,17 @@ const timeOptions = [ { key: '0:15', value: '15', text: '0:15' },
     //{ key: '3:00+', value: '3:00+', text: '3:00+' }
 ];
 
+type Props = {
+    queryEvents: any
+}
+
 /*
 * Create Event Prop
 *
 * This is the modal for creating events. Every input is in the form of a normal text input.
 * Inputting the time and date utilizes the Semantic-ui Calendar React library which isn't vanilla Semantic.
  */
-class CreateEventProp extends Component {
+class CreateEventProp extends Component<Props> {
 
     state = {
         checked: false,
