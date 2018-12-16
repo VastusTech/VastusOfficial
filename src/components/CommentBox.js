@@ -123,20 +123,17 @@ class CommentBox extends Component {
         }
         return (
             <Fragment>
-                
                 <form onSubmit={this.addComment} className='u-margin-top--3'>
-                    <Input fluid className="textarea" name="comment" placeholder="Write Message..."></Input>
-                    <Button primary className="u-margin-top--2">Send</Button>
-                </form>
-                <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
-                    <div>
-                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                            <Icon name="camera" className='u-margin-right--0' size="large" inverted />
+                    <Input type='text' action fluid className="textarea" name="comment" placeholder="Write Message...">
+                        <input />
+                        <Label as='label' for='proPicUpload' basic className='u-bg--input u-margin--0 u-border-x--0 u-border-y--1 u-border-color--border u-radius--0 u-flex u-flex-justify--center u-flex-align--center'>
+                            <Icon name='camera' className='u-margin--0' />
+                            <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden='true' onChange={this.setPicture}/>
                         </Label>
-                        <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                    </div>
-                    <span>Upload image</span>
-                </div>
+                        <Button primary>Send</Button>
+                    </Input>
+                    
+                </form>
             </Fragment>
         );
     }

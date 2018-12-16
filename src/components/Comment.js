@@ -12,7 +12,7 @@ class Comment extends Component {
             //alert(this.props.comment.comment.substr(0, 40));
             if (this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/') {
                 return (
-                    <Label className='ui right fluid' pointing='right' color='purple'>
+                    <Label fluid pointing='right' className='u-bg--primary'>
                         <Player>
                             <source src={this.props.comment.comment} type="video/mp4" />
                         </Player>
@@ -22,15 +22,18 @@ class Comment extends Component {
             else
             {
                 return (
-                    <Label className='ui right fluid' pointing='right'
-                           color='purple'>{this.props.comment.comment}</Label>
+                    <div className='u-text-align--right'>
+                        <strong className='u-display--block u-margin-bottom--1'>{this.props.comment.name}</strong>
+                        <Label pointing='right' size='large' className='u-bg--primary u-color--white u-font-weight--normal'>{this.props.comment.comment}
+                        </Label>
+                    </div>
                 );
             }
         }
         else {
             if (this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/') {
                 return (
-                    <Label className='ui left fluid' pointing='left'>
+                    <Label fluid pointing='left'>
                         <Player>
                             <source src={this.props.comment.comment} type="video/mp4" />
                         </Player>
@@ -39,7 +42,10 @@ class Comment extends Component {
             }
             else {
                 return (
-                    <Label pointing='left'>{this.props.comment.comment}</Label>
+                    <div className='u-text-align--left'>
+                        <strong className='u-display--block u-margin-bottom--1'>{this.props.comment.name}</strong>
+                        <Label pointing='left' size='large' className='u-font-weight--normal'>{this.props.comment.comment}</Label>
+                    </div>
                 );
             }
         }
@@ -47,17 +53,9 @@ class Comment extends Component {
 
     render() {
         return (
-            <article className="media">
-                <figure className="media-left">
-                </figure>
-                <div className="media-content">
-                    <div className="content">
-                        <strong className='u-margin-bottom--1'>{this.props.comment.name}</strong>
-                        <br />
-                        {this.createCorrectMessage()}
-                    </div>
-                </div>
-            </article>
+            <div className='u-margin-bottom--2'>
+                {this.createCorrectMessage()}
+            </div>
         );
     }
 }

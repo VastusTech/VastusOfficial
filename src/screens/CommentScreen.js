@@ -115,15 +115,13 @@ class CommentScreen extends Component {
     render() {
 
         return (
-            <Card fluid raised>
-                <Card.Content>
-                    {/*alert("Comment screen render user: " + this.props.curUser)*/}
-                    {this.loadHistory(this.state.isHistoryLoading)}
-                    <Comments comments={this.state.comments}/>
-                    <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
-                        challengeChannel={this.channelName}/>
-                </Card.Content>
-            </Card>
+            <div className='u-margin-top--4'>
+                {/*alert("Comment screen render user: " + this.props.curUser)*/}
+                {this.loadHistory(this.state.isHistoryLoading)}
+                <Comments comments={this.state.comments}/>
+                <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
+                    challengeChannel={this.channelName}/>
+            </div>
         );
     }
 }
