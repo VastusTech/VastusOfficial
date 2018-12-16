@@ -48,6 +48,7 @@ function arrayRemove(arr, value) {
 class CreateChallengeProp extends Component {
     state = {
         checked: false,
+        checkedRest: false,
         isSubmitLoading: false,
         showModal: false,
         submitError: "",
@@ -59,10 +60,12 @@ class CreateChallengeProp extends Component {
         performancePressed: false,
         endurancePressed: false,
         hiitPressed: false,
-        strengthPressed: false
+        strengthPressed: false,
+        restriction: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
+    toggleRest = () => this.setState({ checkedRest: !this.state.checkedRest });
 
     eventState = {
         title: "",
@@ -94,9 +97,27 @@ class CreateChallengeProp extends Component {
             this.eventState.access = 'public';
         }
         else {
-            alert("Event access should be public or private");
+            console.error("Event access should be public or private");
         }
     };
+
+    handleRestrictionSwitch = () => {
+        if(this.state.restriction === 'invite') {
+            this.setState({restriction: null});
+        }
+        else {
+            this.setState({restriction: 'invite'});
+        }
+    };
+
+    showRestriction() {
+        if(!this.state.restriction) {
+            return 'unrestricted';
+        }
+        else {
+            return this.state.restriction;
+        }
+    }
 
     handleTag(tag) {
         if(tag === "HIIT" && !this.state.hiitPressed) {
@@ -168,7 +189,7 @@ class CreateChallengeProp extends Component {
             if (Number.isInteger(+this.eventState.capacity)) {
                 Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
                     "n/a", this.eventState.title, this.eventState.goal, "n/a",
-                    "3", [], this.state.tags, this.eventState.access, null, this.eventState.prize, (data) => {
+                    "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
                         this.props.clearChallengeQuery();
@@ -318,6 +339,9 @@ class CreateChallengeProp extends Component {
                                         <Form.Field width={12}>
                                             <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                         </Form.Field>
+                                    <Form.Field width={12}>
+                                        <Checkbox toggle onClick={this.handleRestrictionSwitch} onChange={this.toggleRest} checked={this.state.checkedRest} label={this.showRestriction()} />
+                                    </Form.Field>
                                     <div>{this.displayError()}</div>
                                 </Form>
                             </Grid.Column>
