@@ -9,7 +9,7 @@ import {fetchChallenge, putClientQuery, putChallenge, putChallengeQuery} from ".
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CreateEventProp from "./CreateEvent";
 import NextEventProp from "../components/NextWorkout";
-import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
+import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -22,7 +22,7 @@ import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
  * This is the main feed in the home page, it currently displays all public events inside of the database for
  * the user to see.
  */
-class EventFeed extends Component {
+class ChallengeFeed extends Component {
     state = {
         isLoading: true,
         userID: null,
@@ -183,14 +183,14 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (variablesList, dataHandler) => {
             dispatch(fetchUserAttributes(variablesList, dataHandler));
         },
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
+        fetchChallenge: (id, variablesList) => {
+            dispatch(fetchChallenge(id, variablesList));
         },
-        putEvent: (event) => {
-            dispatch(putEvent(event));
+        putChallenge: (event) => {
+            dispatch(putChallenge(event));
         },
-        putEventQuery: (queryString, queryResult) => {
-            dispatch(putEventQuery(queryString, queryResult));
+        putChallengeQuery: (queryString, queryResult) => {
+            dispatch(putChallengeQuery(queryString, queryResult));
         },
     }
 };

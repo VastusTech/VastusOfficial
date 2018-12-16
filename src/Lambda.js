@@ -127,6 +127,18 @@ class Lambda {
     static postRemoveVideoPath(fromID, postID, videoPath, successHandler, failureHandler) {
         this.updateRemoveFromAttribute(fromID, postID, "Post", "videoPaths", videoPath, successHandler, failureHandler);
     }
+    static eventAddTag(fromID, eventID, tag, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, eventID, "Event", "tags", tag, successHandler, failureHandler);
+    }
+    static eventRemoveTag(fromID, eventID, tag, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, eventID, "Event", "tags", tag, successHandler, failureHandler);
+    }
+    static challengeAddTag(fromID, challengeID, tag, successHandler, failureHandler) {
+        this.updateAddToAttribute(fromID, challengeID, "Challenge", "tags", tag, successHandler, failureHandler);
+    }
+    static challengeRemoveTag(fromID, challengeID, tag, successHandler, failureHandler) {
+        this.updateRemoveFromAttribute(fromID, challengeID, "Challenge", "tags", tag, successHandler, failureHandler);
+    }
     // Create Functions
     // These may serve a bigger purpose than just creating something. Often times, they will send as well as create!
     static createClient(fromID, name, gender, birthday, email, username, successHandler, failureHandler) {
@@ -149,38 +161,17 @@ class Lambda {
         }, successHandler, failureHandler);
     }
     // TODO createTrainer, createGym, createWorkout, and createReview
-    static createEvent(fromID, owner, time, capacity, address, title, successHandler, failureHandler) {
+    static createEvent(fromID, owner, time, capacity, address, title, tags, successHandler, failureHandler) {
         this.create(fromID, "Event", {
             owner,
             time,
             capacity,
             address,
             title,
+            tags,
         }, successHandler, failureHandler);
     }
-    static createEventOptional(fromID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
-        this.create(fromID, "Event", {
-            owner,
-            time,
-            capacity,
-            address,
-            title,
-            description,
-            memberIDs,
-            access,
-        }, successHandler, failureHandler);
-    }
-    static createChallengeEvent(fromID, challengeID, owner, time, capacity, address, title, successHandler, failureHandler) {
-        this.create(fromID, "Event", {
-            owner,
-            time,
-            capacity,
-            address,
-            title,
-            challenge: challengeID
-        }, successHandler, failureHandler);
-    }
-    static createChallengeEventOptional(fromID, challengeID, owner, time, capacity, address, title, description, memberIDs, access, successHandler, failureHandler) {
+    static createEventOptional(fromID, owner, time, capacity, address, title, description, memberIDs, access, tags, successHandler, failureHandler) {
         this.create(fromID, "Event", {
             owner,
             time,
@@ -190,19 +181,45 @@ class Lambda {
             description,
             memberIDs,
             access,
+            tags,
+        }, successHandler, failureHandler);
+    }
+    static createChallengeEvent(fromID, challengeID, owner, time, capacity, address, title, tags, successHandler, failureHandler) {
+        this.create(fromID, "Event", {
+            owner,
+            time,
+            capacity,
+            address,
+            title,
+            tags,
             challenge: challengeID
         }, successHandler, failureHandler);
     }
-    static createChallenge(fromID, owner, endTime, capacity, title, goal, successHandler, failureHandler) {
+    static createChallengeEventOptional(fromID, challengeID, owner, time, capacity, address, title, description, memberIDs, access, tags, successHandler, failureHandler) {
+        this.create(fromID, "Event", {
+            owner,
+            time,
+            capacity,
+            address,
+            title,
+            description,
+            memberIDs,
+            access,
+            tags,
+            challenge: challengeID
+        }, successHandler, failureHandler);
+    }
+    static createChallenge(fromID, owner, endTime, capacity, title, goal, tags, successHandler, failureHandler) {
         this.create(fromID, "Challenge", {
             owner,
             endTime,
             capacity,
             title,
             goal,
+            tags,
         }, successHandler, failureHandler);
     }
-    static createChallengeOptional(fromID, owner, endTime, capacity, address, title, goal, description, difficulty, memberIDs, access, restriction, prize, successHandler, failureHandler) {
+    static createChallengeOptional(fromID, owner, endTime, capacity, address, title, goal, description, difficulty, memberIDs, tags, access, restriction, prize, successHandler, failureHandler) {
         this.create(fromID, "Challenge", {
             owner,
             endTime,
@@ -212,6 +229,7 @@ class Lambda {
             description,
             difficulty,
             memberIDs,
+            tags,
             access,
             restriction,
             prize,
