@@ -291,7 +291,7 @@ function addObjectToCache(state, cacheName, maxCacheSize, LRUHandlerName, object
         const cache = { ...state[cacheName] };
         const LRUHandler = [ ...state[LRUHandlerName] ];
         LRUHandler.unshift(object.id);
-        cache[object.id] = object;
+        cache[object.id] = object.data;
         // TODO If the ID is not already in the cache
         if (LRUHandler.length >= maxCacheSize) {
             // Then we have to pop something out
@@ -321,7 +321,7 @@ function updateReadObject(state, cacheName, LRUHandlerName, object) {
     // Then we update the object with the additional fields that it may have (if this came from the other function)
     state[cacheName][object.id] = {
         ...state[cacheName][object.id],
-        ...object
+        ...object.data
     };
     return state;
 }

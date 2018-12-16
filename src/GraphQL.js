@@ -367,8 +367,10 @@ class GraphQL {
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {
-                    console.log("Object returned nothing");
-                    failureHandler("Object had returned null");
+                    console.log("Object returned nothing!!! Something wrong?");
+                    // failureHandler("Object had returned null");
+                    successHandler(null);
+                    return;
                 }
                 // console.log("Returned!");
                 if (ifDebug) {

@@ -3,19 +3,28 @@ import QL from "../../GraphQL";
 import { Storage } from "aws-amplify";
 import defaultProfilePicture from "../../img/roundProfile.png";
 
-function addProfilePictureToData(data, imageKey, callback) {
-    if (imageKey) {
-        Storage.get(imageKey).then((url) => {
+function addProfilePictureToData(data, callback) {
+    if (data && data.hasOwnProperty("profileImagePath")) {
+        const imageKey = data.profileImagePath;
+        if (imageKey) {
+            Storage.get(imageKey).then((url) => {
+                callback({
+                    ...data,
+                    profilePicture: url
+                });
+            }).catch((error) => {
+                console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
+                console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
+                console.log(error);
+                callback(data);
+            });
+        }
+        else {
             callback({
                 ...data,
-                profilePicture: url
+                profilePicture: defaultProfilePicture
             });
-        }).catch((error) => {
-            console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
-            console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
-            console.log(error);
-            callback(data);
-        });
+        }
     }
     else {
         callback({
@@ -64,11 +73,14 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             // alert("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {
                 // alert("Adding profile image to the data");
-                addProfilePictureToData(data, data.profileImagePath, (updatedData) => {
+                addProfilePictureToData(data, (updatedData) => {
                     // alert("Dispatching the profile image + data");
                     dispatch({
                         type: fetchDispatchType,
-                        payload: updatedData
+                        payload: {
+                            id,
+                            data: updatedData
+                        }
                     });
                     dispatch(setIsNotLoading());
                     if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
@@ -78,7 +90,10 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                 // alert("Just dispatching the normal data");
                 dispatch({
                     type: fetchDispatchType,
-                    payload: data
+                    payload: {
+                        id,
+                        data
+                    }
                 });
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
@@ -92,7 +107,10 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
     else {
         dispatch({
             type: fetchDispatchType,
-            payload: {id}
+            payload: {
+                id,
+                data: null
+            }
         });
         dispatch(setIsNotLoading());
         if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
@@ -130,7 +148,7 @@ function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetch
             if (profilePictureIndex !== -1) {
                 for (let i = 0; i < data.items.length; i++) {
                     const item = data.items[i];
-                    addProfilePictureToData(item, item.profileImagePath, (updatedData) => {
+                    addProfilePictureToData(item, (updatedData) => {
                         dispatch({
                             type: fetchDispatchType,
                             payload: updatedData
@@ -350,56 +368,110 @@ function putQuery(queryString, queryResult, actionType) {
     };
 }
 export function putClient(client) {
-    return {
-        type: "FETCH_CLIENT",
-        payload: client
-    };
+    if (client && client.id) {
+        return {
+            type: "FETCH_CLIENT",
+            payload: {
+                id: client.id,
+                data: client
+            }
+        };
+    }
+    return null;
 }
 export function putTrainer(trainer) {
-    return {
-        type: "FETCH_TRAINER",
-        payload: trainer
-    };
+    if (trainer && trainer.id) {
+        return {
+            type: "FETCH_TRAINER",
+            payload: {
+                id: trainer.id,
+                data: trainer
+            }
+        };
+    }
+    return null;
 }
 export function putGym(gym) {
-    return {
-        type: "FETCH_GYM",
-        payload: gym
-    };
+    if (gym && gym.id) {
+        return {
+            type: "FETCH_GYM",
+            payload: {
+                id: gym.id,
+                data: gym
+            }
+        };
+    }
+    return null;
 }
 export function putWorkout(workout) {
-    return {
-        type: "FETCH_WORKOUT",
-        payload: workout
-    };
+    if (workout && workout.id) {
+        return {
+            type: "FETCH_WORKOUT",
+            payload: {
+                id: workout.id,
+                data: workout
+            }
+        };
+    }
+    return null;
 }
 export function putReview(review) {
-    return {
-        type: "FETCH_REVIEW",
-        payload: review
-    };
+    if (review && review.id) {
+        return {
+            type: "FETCH_REVIEW",
+            payload: {
+                id: review.id,
+                data: review
+            }
+        };
+    }
+    return null;
 }
 export function putEvent(event) {
-    return {
-        type: "FETCH_EVENT",
-        payload: event
-    };
+    if (event && event.id) {
+        return {
+            type: "FETCH_EVENT",
+            payload: {
+                id: event.id,
+                data: event
+            }
+        };
+    }
+    return null;
 }
-export function putChallenge(event) {
-    return {
-        type: "FETCH_CHALLENGE",
-        payload: event
-    };
+export function putChallenge(challenge) {
+    if (challenge && challenge.id) {
+        return {
+            type: "FETCH_CHALLENGE",
+            payload: {
+                id: challenge.id,
+                data: challenge
+            }
+        };
+    }
+    return null;
 }
 export function putInvite(invite) {
-    return {
-        type: "FETCH_INVITE",
-        payload: invite
-    };
+    if (invite && invite.id) {
+        return {
+            type: "FETCH_INVITE",
+            payload: {
+                id: invite.id,
+                data: invite
+            }
+        };
+    }
+    return null;
 }
 export function putPost(post) {
-    return {
-        type: "FETCH_POST",
-        payload: post
-    };
+    if (post && post.id) {
+        return {
+            type: "FETCH_POST",
+            payload: {
+                id: post.id,
+                data: post
+            }
+        };
+    }
+    return null;
 }

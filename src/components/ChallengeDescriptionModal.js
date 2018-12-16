@@ -6,7 +6,7 @@ import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
 import { convertFromISO } from "../logic/TimeHelper";
-import {fetchClient, forceFetchChallenge, fetchChallenge} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
@@ -237,7 +237,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                 <div>
                     <Grid columns={2}>
                         <Grid.Column>
-                            <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDelete}>Delete</Button>
+                            <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
                         </Grid.Column>
                         <Grid.Column>
                             <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
@@ -250,7 +250,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         else if (this.state.isJoined) {
             return (
                 <div>
-                    <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.state.handleLeave}>Leave</Button>
+                    <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
                     <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
                 </div>
             )
@@ -381,6 +381,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         forceFetchChallenge: (id, variablesList) => {
             dispatch(forceFetchChallenge(id, variablesList));
+        },
+        clearChallengeQuery: () => {
+            dispatch(clearChallengeQuery());
         }
     };
 };
