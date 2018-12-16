@@ -234,7 +234,7 @@ class EventDescriptionModal extends Component<Props> {
             this.isOwned();
             //alert("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //alert("Members: " + this.getEventAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
@@ -320,7 +320,7 @@ class EventDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='trophy' />
                                 <List.Content>
-                                    {/*this.getEventAttribute("goal")*/}
+                                    {/*this.getChallengeAttribute("goal")*/}
                                 </List.Content>
                             </List.Item>
                             <List.Item>

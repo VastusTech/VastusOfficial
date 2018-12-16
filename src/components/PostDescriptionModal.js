@@ -58,8 +58,8 @@ class EventDescriptionModal extends Component {
 
     constructor(props) {
         super(props);
-        // this.handleJoinEventButton = this.handleJoinEventButton.bind(this);
-        // this.handleLeaveEventButton = this.handleLeaveEventButton.bind(this);
+        // this.handleJoinChallengeButton = this.handleJoinChallengeButton.bind(this);
+        // this.handleLeaveChallengeButton = this.handleLeaveChallengeButton.bind(this);
         this.handleDeletePostButton = this.handleDeletePostButton.bind(this);
         // this.handleLeave = this.handleLeave.bind(this);
         // this.handleJoin = this.handleJoin.bind(this);
@@ -131,10 +131,10 @@ class EventDescriptionModal extends Component {
         })
     }
 
-    // handleLeaveEventButton() {
+    // handleLeaveChallengeButton() {
     //     //alert("Handling leaving the event");
     //     this.setState({isLoading: true});
-    //     Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
+    //     Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"), (data) => {
     //         this.forceUpdate(data.id);
     //         //alert(JSON.stringify(data));
     //         this.setState({isLeaveLoading: false, isJoined: false});
@@ -144,10 +144,10 @@ class EventDescriptionModal extends Component {
     //     })
     // }
 
-    // handleJoinEventButton() {
+    // handleJoinChallengeButton() {
     //     //alert("Handling joining the event");
     //     this.setState({isLoading: true});
-    //     Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
+    //     Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
     //         (data) => {
     //             this.forceUpdate(data.id);
     //             //alert(JSON.stringify(data));
@@ -158,7 +158,7 @@ class EventDescriptionModal extends Component {
     // }
 
     // isJoined() {
-    //     const members = this.getEventAttribute("members");
+    //     const members = this.getChallengeAttribute("members");
     //     if (members) {
     //         const isMembers = members.includes(this.props.user.id);
     //         //alert("Is Members?: " + isMembers);
@@ -176,11 +176,11 @@ class EventDescriptionModal extends Component {
 
     // handleLeave() {
     //     this.setState({isLeaveLoading: true});
-    //     this.handleLeaveEventButton();
+    //     this.handleLeaveChallengeButton();
     // }
     // handleJoin() {
     //     this.setState({isJoinLoading: true});
-    //     this.handleJoinEventButton();
+    //     this.handleJoinChallengeButton();
     // }
     handleDelete() {
         this.setState({isDeleteLoading: true});
@@ -188,7 +188,7 @@ class EventDescriptionModal extends Component {
     }
 
     // isCompleted() {
-    //     return this.getEventAttribute("ifCompleted");
+    //     return this.getChallengeAttribute("ifCompleted");
     // }
 
     openClientModal() { this.setState({clientModalOpen: true}); }
@@ -244,7 +244,7 @@ class EventDescriptionModal extends Component {
             this.isOwned();
             //alert("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //alert("Members: " + this.getEventAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user

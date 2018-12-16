@@ -63,7 +63,7 @@ class OwnedEventsList extends Component {
     //     });
     // }
 
-    // getEventAttribute(id, attribute) {
+    // getChallengeAttribute(id, attribute) {
     //     if (id && attribute) {
     //         if (this.props.cache.events[id]) {
     //             return this.props.cache.events[id][attribute];

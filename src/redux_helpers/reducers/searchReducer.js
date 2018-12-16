@@ -6,6 +6,7 @@ const SET_TYPE_NEXT_TOKEN = 'SET_TYPE_NEXT_TOKEN';
 
 // At most how many objects should be grabbed from a query at one time
 const queryLimit = 100;
+// This will determine the ratios of which objects to get out of the 
 const typeRatios = {
 
 };
