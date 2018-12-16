@@ -62,10 +62,10 @@ class CommentBox extends Component {
         }
     }
 
-    addPicOrVid(url) {
+    addPicOrVid(path) {
         // Get the value of the comment box
         // and make sure it not some empty strings
-        let comment = url;
+        let comment = path;
         //let name = this.props.user.username;
         let name = this.props.curUser;
 
@@ -93,16 +93,6 @@ class CommentBox extends Component {
         if (this.props.curUserID) {
             const path = "/ClientFiles/" + this.props.curUserID + "/" + Math.floor((Math.random() * 10000000000000) + 1);
 
-            Storage.get(path).then((url) => {
-                this.setState({imageURL: url})
-            }).catch((error) => {
-                console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
-                console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
-                console.error(error);
-            });
-
-            //alert("Calling storage put");
-            //alert("File = " + JSON.stringify(event.target.files[0]));
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 this.setState({imagePath: path});
                 this.setState({isLoading: true});
@@ -110,6 +100,9 @@ class CommentBox extends Component {
                 alert("failed storage put");
                 alert(error);
             });
+
+            //alert("Calling storage put");
+            //alert("File = " + JSON.stringify(event.target.files[0]));
         }
     }
 
@@ -118,7 +111,7 @@ class CommentBox extends Component {
     render() {
         if(this.state.imageURL && this.state.canAddImage) {
             alert("Image URL found: " + this.state.imageURL);
-            this.addPicOrVid(this.state.imageURL);
+            this.addPicOrVid(this.state.path);
             this.setState({canAddImage: false});
         }
         return (
