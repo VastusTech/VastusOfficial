@@ -69,7 +69,6 @@ class EventCard extends Component<Props> {
                 <Card.Content>
                     <Card.Header textAlign = 'center'>{this.getEventAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{this.convertFromISO(this.getEventAttribute("time"))}</Card.Meta>
-                    <Card.Meta textAlign = 'center'>Location: {this.getEventAttribute("address")}</Card.Meta>
                     <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.closeEventModal.bind(this)} eventID={this.state.eventID}/>
                 </Card.Content>
                 <Card.Content extra>

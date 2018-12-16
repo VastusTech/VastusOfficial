@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Card } from 'semantic-ui-react';
+import {Card, Image} from 'semantic-ui-react';
 import ChallengeDescriptionModal from './ChallengeDescriptionModal';
 import { connect } from 'react-redux';
 import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
@@ -46,10 +46,55 @@ class ChallengeCard extends Component {
                         return 0;
                     }
                 }
+                /*if(attribute === "tags") {
+                    alert(challenge[attribute]);
+                }*/
                 return challenge[attribute];
             }
         }
         return null;
+    }
+
+    displayTagIcons(tags) {
+        if(tags) {
+            if (tags.length === 1) {
+                return (
+                    <Image size='small' src={require('../img/' + tags[0] + '_icon.png')}/>
+                );
+            }
+            else if (tags.length === 2) {
+                return (
+                    <div>
+                        <Image size='small' src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image size='small' src={require('../img/' + tags[1] + '_icon.png')}/>
+                    </div>
+                );
+            }
+            else if (tags.length === 3) {
+                return(
+                    <div>
+                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                    </div>
+                    );
+            }
+            else if (tags.length === 4) {
+                return(
+                    <div>
+                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[3] + '_icon.png')}/>
+                    </div>
+                );
+            }
+        }
+        else {
+            return (
+                "There ain't no tags round these parts partner " + tags
+            );
+        }
     }
 
     openChallengeModal = () => {this.setState({challengeModalOpen: true})};
@@ -63,17 +108,20 @@ class ChallengeCard extends Component {
                 </Card>
             );
         }
+        if(this.getChallengeAttribute("tags")) {
+            alert("There be tags!");
+            alert(this.getChallengeAttribute("tags"));
+        }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
                 <Card.Content>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
-                    <Card.Meta textAlign = 'center' >Finishes on {convertFromISO(this.getChallengeAttribute("endTime"))}</Card.Meta>
-                    <Card.Meta textAlign = 'center'>Goal: {this.getChallengeAttribute("goal")}</Card.Meta>
+                    <Card.Meta textAlign = 'center' >{convertFromISO(this.getChallengeAttribute("endTime"))} days left</Card.Meta>
+                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}/>
                 </Card.Content>
                 <Card.Content extra>
-                    <Card.Meta>Created on {convertFromISO(this.getChallengeAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>
                         {this.getChallengeAttribute("membersLength")} of {this.getChallengeAttribute("capacity")} spots taken.
                     </Card.Meta>

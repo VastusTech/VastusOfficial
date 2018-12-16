@@ -6,7 +6,7 @@ import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
 import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
-import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -46,7 +46,8 @@ class CreateChallengeProp extends Component {
         showSuccessModal: false,
         showSuccessLabel: false,
         showSuccessLabelTimer: 0,
-        challengeType: ""
+        challengeType: "",
+        tags: []
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
@@ -84,6 +85,14 @@ class CreateChallengeProp extends Component {
         }
     };
 
+    handleTag(tag) {
+        if(tag === "HIIT" || tag === "Strength" || tag === "Performance" || tag === "Endurance") {
+            this.setState({tags: this.state.tags.concat(tag)},
+            () => console.log(JSON.stringify(this.state.tags)));
+
+        }
+    }
+
     handleSubmit = () => {
         // TODO Make sure the dates are well formed?
         /*
@@ -107,11 +116,11 @@ class CreateChallengeProp extends Component {
         this.setState({isSubmitLoading: true});
 
         // TODO Check to see if valid inputs!
-        if (this.eventState.capacity && this.eventState.title && this.eventState.goal) {
+        if (this.eventState.capacity && this.eventState.title && this.eventState.goal && this.state.tags) {
             if (Number.isInteger(+this.eventState.capacity)) {
                 Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
                     "n/a", this.eventState.title, this.eventState.goal, "n/a",
-                    "3", [], [], this.eventState.access, null, "n/a", (data) => {
+                    "3", [], this.state.tags, this.eventState.access, null, "n/a", (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
                         this.props.clearChallengeQuery();
@@ -212,21 +221,21 @@ class CreateChallengeProp extends Component {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {alert("call hiit tag handler")}}/>
+                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
                                     HIIT
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {alert("call strength tag handler")}}/>
+                                <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
                                 Strength
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='medium' src={require('../img/Performance_Icon.png')} onClick={() => {alert("call performance tag handler")}}/>
+                                <Image size='medium' src={require('../img/Performance_Icon.png')} onClick={() => {this.handleTag("Performance")}}/>
                                 Performance
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='medium' src={require('../img/endurance_icon.png')} onClick={() => {alert("call endurance tag handler")}}/>
+                                <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
                                 Endurance
                             </Grid.Column>
                         </Grid.Row>
@@ -277,17 +286,17 @@ const mapDispatchToProps = (dispatch) => {
         setError: (error) => {
             dispatch(setError(error));
         },
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
+        fetchChallenge: (id, variablesList) => {
+            dispatch(fetchChallenge(id, variablesList));
         },
-        putEvent: (event) => {
-            dispatch(putEvent(event));
+        putChallenge: (event) => {
+            dispatch(putChallenge(event));
         },
-        putEventQuery: (queryString, queryResult) => {
-            dispatch(putEventQuery(queryString, queryResult));
+        putChallengeQuery: (queryString, queryResult) => {
+            dispatch(putChallengeQuery(queryString, queryResult));
         },
-        clearEventQuery: () => {
-            dispatch(clearEventQuery())
+        clearChallengeQuery: () => {
+            dispatch(clearChallengeQuery());
         }
     }
 };

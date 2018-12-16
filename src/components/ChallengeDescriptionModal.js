@@ -335,6 +335,13 @@ class ChallengeDescriptionModal extends Component<Props> {
                                 </List.Content>
                             </List.Item>
                             <List.Item>
+                                <List.Icon name='plus' />
+                                <List.Content>
+                                    {/*alert(JSON.stringify(this.getChallengeAttribute("tags")))*/}
+                                    {JSON.stringify(this.getChallengeAttribute("tags"))}
+                                </List.Content>
+                            </List.Item>
+                            <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>

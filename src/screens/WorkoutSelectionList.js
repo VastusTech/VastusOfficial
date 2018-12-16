@@ -46,7 +46,7 @@ class WorkoutSelectionList extends Component {
                                     Performance
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/endurance_icon.png')} />
+                                <Image size='small' src={require('../img/Endurance_icon.png')} />
                                     Endurance
                             </Grid.Column>
                         </Grid.Row>
