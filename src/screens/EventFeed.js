@@ -29,6 +29,7 @@ class EventFeed extends Component {
         isLoading: true,
         userID: null,
         events: [],
+        challenges: [],
         clientNames: {}, // id to name
         eventFeedLength: 10,
         nextToken: null,
@@ -102,6 +103,59 @@ class EventFeed extends Component {
                             }
                         }
                         this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
+                        for (let i = 0; i < data.items.length; i++) {
+                            //alert(data.items[i].time_created);
+                            // alert("Putting in event: " + JSON.stringify(data.items[i]));
+                            // this.setState({events: [...this.state.events, data.items[i]]});
+                            this.props.putEvent(data.items[i]);
+                        }
+                        // alert("events in the end: " + JSON.stringify(this.state.events));
+                        this.setState({nextToken: data.nextToken});
+                    }
+                    else {
+                        // TODO Came up with no events
+                    }
+                    this.setState({isLoading: false});
+                }, (error) => {
+                    console.log("Querying events failed!");
+                    console.log(error);
+                    alert(error);
+                    this.setState({isLoading: false, error: error});
+                }, this.props.cache.eventQueries, this.props.putEventQuery);
+        }
+    }
+
+    queryChallenges() {
+        this.setState({isLoading: true});
+        if (!this.state.ifFinished) {
+            // alert(JSON.stringify(this.props.cache.eventQueries));
+            QL.queryChallenges(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
+                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
+                this.state.nextToken, (data) => {
+                    if (!data.nextToken) {
+                        this.setState({ifFinished: true});
+                    }
+                    if (data.items) {
+                        // TODO We can see private events
+                        // alert("got items");
+                        const newlyQueriedChallenges = [];
+                        for (let i = 0; i < data.items.length; i++) {
+                            const challenge = data.items[i];
+                            // alert(JSON.stringify(event));
+                            if (challenge.access === 'public') {
+                                newlyQueriedChallenges.push(challenge);
+                            }
+                            else if (this.props.user.id && this.props.user.id === challenge.owner) {
+                                newlyQueriedChallenges.push(challenge);
+                            }
+                            else if (this.props.user.friends && this.props.user.friends.includes(challenge.owner)) {
+                                newlyQueriedChallenges.push(challenge);
+                            }
+                            else if (this.props.user.invitedEvents && this.props.user.invitedEvents.includes(challenge.id)) {
+                                newlyQueriedChallenges.push(challenge);
+                            }
+                        }
+                        this.setState({challenges: [...this.state.events, ...newlyQueriedEvents]});
                         for (let i = 0; i < data.items.length; i++) {
                             //alert(data.items[i].time_created);
                             // alert("Putting in event: " + JSON.stringify(data.items[i]));

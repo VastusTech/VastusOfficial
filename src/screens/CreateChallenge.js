@@ -5,6 +5,8 @@ import CreateEventProp from "./CreateEvent";
 import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
 import Lambda from "../Lambda";
+import {setError} from "../redux_helpers/actions/infoActions";
+import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -105,8 +107,8 @@ class CreateChallengeProp extends Component {
         if (this.eventState.capacity && this.eventState.title && this.eventState.goal) {
             if (Number.isInteger(+this.eventState.capacity)) {
                 Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
-                    this.eventState.title, this.eventState.goal, "n/a",
-                    "3", [], this.eventState.access, (data) => {
+                    "n/a", this.eventState.title, this.eventState.goal, "n/a",
+                    "3", [], [], this.eventState.access, null, "n/a", (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
                         this.props.clearEventQuery();
@@ -263,7 +265,28 @@ class CreateChallengeProp extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
+    info: state.info,
     cache: state.cache
 });
 
-export default connect(mapStateToProps)(CreateChallengeProp);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        setError: (error) => {
+            dispatch(setError(error));
+        },
+        fetchEvent: (id, variablesList) => {
+            dispatch(fetchEvent(id, variablesList));
+        },
+        putEvent: (event) => {
+            dispatch(putEvent(event));
+        },
+        putEventQuery: (queryString, queryResult) => {
+            dispatch(putEventQuery(queryString, queryResult));
+        },
+        clearEventQuery: () => {
+            dispatch(clearEventQuery())
+        }
+    }
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreateChallengeProp);
