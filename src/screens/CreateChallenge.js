@@ -189,7 +189,7 @@ class CreateChallengeProp extends Component {
         if (this.eventState.capacity && this.eventState.title && this.eventState.goal && this.state.tags) {
             if (Number.isInteger(+this.eventState.capacity)) {
                 ChallengeFunctions.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
-                    "n/a", this.eventState.title, this.eventState.goal, "n/a",
+                    this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call

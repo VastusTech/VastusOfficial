@@ -20,7 +20,7 @@ class Comment extends Component<Props> {
         imageURL: null
     };
 
-    createCorrectMessage() {
+  createCorrectMessage() {
         if (this.props.comment && this.props.comment.name) {
             const comment = this.props.comment.comment;
             const titleAttributes = this.props.comment.name.split("_");
@@ -35,8 +35,9 @@ class Comment extends Component<Props> {
                     if (ifSelf) {
                         return(
                             <div className='u-text-align--right'>
-                                <strong className='u-display--block u-margin-bottom--1'>{name}</strong>
-                                <Label pointing='right' size='large' className='u-bg--primary u-color--white u-font-weight--normal'>{comment}
+                                <strong className='u-margin-bottom--half u-display--block'>{this.state.username}</strong>
+                                <Label fluid className='u-bg--primary u-color--white u-overflow-wrap--break u-max-width--full' pointing='right' size='large'>
+                                    {this.props.comment.comment}
                                 </Label>
                             </div>
                         );
@@ -44,8 +45,10 @@ class Comment extends Component<Props> {
                     else {
                         return(
                             <div className='u-text-align--left'>
-                                <strong className='u-display--block u-margin-bottom--1'>{name}</strong>
-                                <Label pointing='left' size='large' className='u-font-weight--normal'>{comment}</Label>
+                                <strong className='u-margin-bottom--half u-display--block'>{this.state.username}</strong>
+                                <Label pointing='left' size='large' className='u-overflow-wrap--break u-max-width--full'>
+                                    {this.props.comment.comment}
+                                </Label>
                             </div>
                         );
                     }
@@ -66,24 +69,20 @@ class Comment extends Component<Props> {
                             }
                             if (ifSelf) {
                                 return(
-                                    <div className='u-text-align--right'>
-                                        <Label fluid pointing='right' className='u-bg--primary'>
-                                            <Player>
-                                                <source src={this.state.videoURL} type="video/mp4" />
-                                            </Player>
-                                        </Label>
-                                    </div>
+                                    <Label className='ui right fluid' pointing='right' color='purple'>
+                                        <Player>
+                                            <source src={this.state.videoURL} type="video/mp4"/>
+                                        </Player>
+                                    </Label>
                                 );
                             }
                             else {
                                 return (
-                                    <div className='u-text-align--left'>
-                                        <Label fluid className='u-bg--primary' pointing='left'>
-                                            <Player>
-                                                <source src={this.state.videoURL} type="video/mp4" />
-                                            </Player>
-                                        </Label>
-                                    </div>
+                                    <Label className='ui left fluid' pointing='left'>
+                                        <Player>
+                                            <source src={this.state.videoURL} type="video/mp4" />
+                                        </Player>
+                                    </Label>
                                 );
                             }
                         case "pictureLink":
@@ -143,9 +142,11 @@ class Comment extends Component<Props> {
             <div className='u-margin-bottom--2'>
                 {this.createCorrectMessage()}
             </div>
+
         );
     }
 }
+
 
 const mapStateToProps = (state) => ({
     user: state.user,

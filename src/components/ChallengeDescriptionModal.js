@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image} from 'semantic-ui-react';
+import React, { Component, Fragment } from 'react';
+import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image, Tab } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 // import Lambda from '../Lambda';
 // import EventMemberList from "../screens/EventMemberList";
@@ -9,7 +9,7 @@ import { convertFromISO } from "../logic/TimeHelper";
 import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-// import VideoUploadScreen from "../screens/VideoUploadScreen";
+import VideoUploadScreen from "../screens/VideoUploadScreen";
 import CommentScreen from "../screens/CommentScreen";
 import ChallengeMemberList from "../screens/ChallengeMemberList";
 import UserFunctions from "../databaseFunctions/UserFunctions";
@@ -273,6 +273,19 @@ class ChallengeDescriptionModal extends Component<Props> {
     //This modal displays the challenge information and at the bottom contains a button which allows the user
     //to join a challenge.
     createCorrectButton() {
+        const panes = [
+            { menuItem: 'Submissions', render: () => (
+                <Tab.Pane basic className='u-border--0 u-padding--0 u-margin-top--3'>
+                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                </Tab.Pane>
+            )},
+            { menuItem: 'Challenge Chat', render: () => (
+                <Tab.Pane basic className='u-border--0 u-padding--0 u-margin-top--3'>
+                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                </Tab.Pane> 
+            )},
+        ]
+
         //alert("Owned: " + isOwned + " Joined: " + isJoined);
         // alert(ifCompleted);
         if (this.state.isCompleted) {
@@ -292,16 +305,18 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
                         </Grid.Column>
                     </Grid>
-                    {/*<VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>*/}
+                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
                 </div>
             )
         }
         else if (this.state.isJoined) {
             return (
-                <div>
+                <Fragment>
+                    <Button primary fluid className='u-margin-bottom--1'>Submit Your Entry</Button>
                     <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
-                    {/*<VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>*/}
-                </div>
+                    <Divider className='u-margin-top--4' />
+                    <Tab menu={{ widths: 2, inverted: true }} panes={panes} className='u-challenge u-margin-top--2' />
+                </Fragment>
             )
         }
         else if (this.state.isRestricted) {
