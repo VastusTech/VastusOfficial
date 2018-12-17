@@ -340,15 +340,7 @@ class ChallengeDescriptionModal extends Component<Props> {
     }
 
     createChallengeChatButton() {
-        if (this.state.isOwned || this.state.isJoined) {
-            return(
-                <List.Item>
-                    <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
-                        <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
-                    </Modal>
-                </List.Item>
-            );
-        }
+        
         return null;
     }
 
@@ -382,8 +374,8 @@ class ChallengeDescriptionModal extends Component<Props> {
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
-                <div>{this.getChallengeAttribute("title")}</div>
+                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))} {this.getChallengeAttribute("title")}</div>
+                
                     <List relaxed>
                     <List.Item>
                         <List.Icon name='bullseye' />
@@ -419,11 +411,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
-                                        <Modal.Content>
-                                            <ChallengeMemberList challengeID={this.state.challengeID} />
-                                        </Modal.Content>
-                                    </Modal>
+                                   
                                 </List.Content>
                             </List.Item>
                         </List>
