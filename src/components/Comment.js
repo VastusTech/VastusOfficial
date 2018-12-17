@@ -34,16 +34,19 @@ class Comment extends Component<Props> {
                     // Regular message
                     if (ifSelf) {
                         return(
-                            <Label className='ui right fluid' pointing='right' color='purple'>
-                                {this.props.comment.comment}
-                            </Label>
+                            <div className='u-text-align--right'>
+                                <strong className='u-display--block u-margin-bottom--1'>{name}</strong>
+                                <Label pointing='right' size='large' className='u-bg--primary u-color--white u-font-weight--normal'>{comment}
+                                </Label>
+                            </div>
                         );
                     }
                     else {
                         return(
-                            <Label pointing='left'>
-                                {this.props.comment.comment}
-                            </Label>
+                            <div className='u-text-align--left'>
+                                <strong className='u-display--block u-margin-bottom--1'>{name}</strong>
+                                <Label pointing='left' size='large' className='u-font-weight--normal'>{comment}</Label>
+                            </div>
                         );
                     }
                 }
@@ -63,16 +66,16 @@ class Comment extends Component<Props> {
                             }
                             if (ifSelf) {
                                 return(
-                                    <Label className='ui right fluid' pointing='right' color='purple'>
+                                    <Label fluid pointing='right' className='u-bg--primary'>
                                         <Player>
-                                            <source src={this.state.videoURL} type="video/mp4"/>
+                                            <source src={this.state.videoURL} type="video/mp4" />
                                         </Player>
                                     </Label>
                                 );
                             }
                             else {
                                 return (
-                                    <Label className='ui left fluid' pointing='left'>
+                                    <Label fluid className='u-bg--primary' pointing='left'>
                                         <Player>
                                             <source src={this.state.videoURL} type="video/mp4" />
                                         </Player>
@@ -133,17 +136,9 @@ class Comment extends Component<Props> {
 
     render() {
         return (
-            <article className="media">
-                <figure className="media-left">
-                </figure>
-                <div className="media-content">
-                    <div className="content">
-                        <strong className='u-margin-bottom--1'>{this.state.username}</strong>
-                        <br />
-                        {this.createCorrectMessage()}
-                    </div>
-                </div>
-            </article>
+            <div className='u-margin-bottom--2'>
+                {this.createCorrectMessage()}
+            </div>
         );
     }
 }

@@ -44,8 +44,78 @@ body {
   height: 125px;
 }
 
+// display
+
+.u-display--block {
+  display: block !important;
+}
+
+.u-display--inline-block {
+  display: inline-block !important;
+}
+
+// Color
+
+.u-color--white {
+  color: @white !important;
+}
+
+// Font Weights
+
+.u-font-weight--normal {
+  font-weight: normal !important;
+}
+
+// Backgrounds
+
 .u-bg--bg {
   background: @bgColor !important;
+}
+
+.u-bg--primary {
+  background: @primaryColor !important;
+}
+
+.u-bg--input {
+  background: @inputBackground !important;
+}
+
+.u-bg--none {
+  background: none !important;
+}
+
+// Borders
+
+.u-border--0 {
+  border: none !important;
+}
+
+.u-border-x--0 {
+  border-left: none !important;
+  border-right: none !important;
+}
+
+.u-border-y--1 {
+  border-top: 1px solid !important;
+  border-bottom: 1px solid !important
+}
+
+// Border Color
+
+.u-border-color--border {
+  border-color: @borderColor !important;
+}
+
+// Border Radius
+
+.u-radius--0 {
+  border-radius: 0 !important;
+}
+
+// Margins
+
+.u-margin--0 {
+  margin: 0 !important;
 }
 
 .u-margin-bottom--neg2 {
@@ -70,6 +140,10 @@ body {
 
 .u-margin-top--3 {
   margin-top: 24px !important;
+}
+
+.u-margin-top--4 {
+  margin-top: 32px !important;
 }
 
 .u-margin-right--0 {
@@ -98,6 +172,8 @@ body {
   margin-left: 16px !important;
 }
 
+// Padding
+
 .ui.u-padding-left--1 {
   padding-left: 8px !important;
 }
@@ -107,22 +183,33 @@ body {
   padding-bottom: 16px !important;
 }
 
+// Text align
+
+.u-text-align--left {
+  text-align: left !important;
+}
+
+
+.u-text-align--right {
+  text-align: right !important;
+}
+
 // Flex
 
 .u-flex {
-  display: flex;
+  display: flex !important;
 }
 
 .u-flex-align--center {
-  align-items: center;
+  align-items: center !important;
 }
 
 .u-flex-justify--center {
-  justify-content: center;
+  justify-content: center !important;
 }
 
 .u-flex-justify--space-between {
-  justify-content: space-between;
+  justify-content: space-between !important;
 }
 
 .u-button--flat {
