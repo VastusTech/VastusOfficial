@@ -198,6 +198,18 @@ body {
   text-align: right !important;
 }
 
+// Overflow
+
+.u-overflow-wrap--break {
+  overflow-wrap: break-word !important;
+}
+
+// width
+
+.u-max-width--full {
+  max-width: 100% !important;
+}
+
 // Flex
 
 .u-flex {
