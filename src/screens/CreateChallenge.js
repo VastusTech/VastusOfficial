@@ -27,6 +27,14 @@ Date.prototype.toIsoString = function() {
         ':' + pad(tzo % 60);
 };
 
+function arrayRemove(arr, value) {
+
+    return arr.filter(function(ele){
+        return ele !== value;
+    });
+
+}
+
 /*type Props = {
     queryChallenges: any
 }*/
@@ -40,6 +48,7 @@ Date.prototype.toIsoString = function() {
 class CreateChallengeProp extends Component {
     state = {
         checked: false,
+        checkedRest: false,
         isSubmitLoading: false,
         showModal: false,
         submitError: "",
@@ -47,10 +56,16 @@ class CreateChallengeProp extends Component {
         showSuccessLabel: false,
         showSuccessLabelTimer: 0,
         challengeType: "",
-        tags: []
+        tags: [],
+        performancePressed: false,
+        endurancePressed: false,
+        hiitPressed: false,
+        strengthPressed: false,
+        restriction: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
+    toggleRest = () => this.setState({ checkedRest: !this.state.checkedRest });
 
     eventState = {
         title: "",
@@ -62,6 +77,7 @@ class CreateChallengeProp extends Component {
         time_created: "",
         capacity: "",
         goal: "",
+        prize: "",
         description: "",
         access: "public"
     };
@@ -81,15 +97,68 @@ class CreateChallengeProp extends Component {
             this.eventState.access = 'public';
         }
         else {
-            alert("Event access should be public or private");
+            console.error("Event access should be public or private");
         }
     };
 
+    handleRestrictionSwitch = () => {
+        if(this.state.restriction === 'invite') {
+            this.setState({restriction: null});
+        }
+        else {
+            this.setState({restriction: 'invite'});
+        }
+    };
+
+    showRestriction() {
+        if(!this.state.restriction) {
+            return 'unrestricted';
+        }
+        else {
+            return this.state.restriction;
+        }
+    }
+
     handleTag(tag) {
-        if(tag === "HIIT" || tag === "Strength" || tag === "Performance" || tag === "Endurance") {
+        if(tag === "HIIT" && !this.state.hiitPressed) {
             this.setState({tags: this.state.tags.concat(tag)},
             () => console.log(JSON.stringify(this.state.tags)));
-
+            this.setState({hiitPressed: true});
+        }
+        else if(tag === "Performance" && !this.state.performancePressed) {
+            this.setState({tags: this.state.tags.concat(tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({performancePressed: true});
+        }
+        else if(tag === "Endurance" && !this.state.endurancePressed) {
+            this.setState({tags: this.state.tags.concat(tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({endurancePressed: true});
+        }
+        else if(tag === "Strength" && !this.state.strengthPressed) {
+            this.setState({tags: this.state.tags.concat(tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({strengthPressed: true});
+        }
+        else if(tag === "HIIT" && this.state.hiitPressed) {
+            this.setState({tags: arrayRemove(this.state.tags, tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({hiitPressed: false});
+        }
+        else if(tag === "Performance" && this.state.performancePressed) {
+            this.setState({tags: arrayRemove(this.state.tags, tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({performancePressed: false});
+        }
+        else if(tag === "Endurance" && this.state.endurancePressed) {
+            this.setState({tags: arrayRemove(this.state.tags, tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({endurancePressed: false});
+        }
+        else if(tag === "Strength" && this.state.strengthPressed) {
+            this.setState({tags: arrayRemove(this.state.tags, tag)},
+                () => console.log(JSON.stringify(this.state.tags)));
+            this.setState({strengthPressed: false});
         }
     }
 
@@ -120,7 +189,7 @@ class CreateChallengeProp extends Component {
             if (Number.isInteger(+this.eventState.capacity)) {
                 Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
                     "n/a", this.eventState.title, this.eventState.goal, "n/a",
-                    "3", [], this.state.tags, this.eventState.access, null, "n/a", (data) => {
+                    "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call
                         this.props.clearChallengeQuery();
@@ -176,7 +245,6 @@ class CreateChallengeProp extends Component {
     };
 
     createSuccessModal() {
-
         return(
             <Modal open={this.state.showSuccessModal}>
                 <Modal.Header align='center'>Successfully Created Event!</Modal.Header>
@@ -221,22 +289,30 @@ class CreateChallengeProp extends Component {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
+                                <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
+                                    <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
                                     HIIT
+                                </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
+                                <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
                                 <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
                                 Strength
+                                </Button>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
+                                <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
                                 <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
                                 Performance
+                                </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
+                                <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
                                 <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
                                 Endurance
+                                </Button>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
@@ -252,6 +328,7 @@ class CreateChallengeProp extends Component {
                                         </div>
                                         <Form.Input width={5} label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
                                         <Form.Input width={5} label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
+                                    <Form.Input width={5} label="Prize" type="text" name="prize" placeholder="Prize for winning the event..." onChange={value => this.changeStateText("prize", value)}/>
                                         {/*<Form.Field>
                                             <div className="field" width={5}>
                                                 <label>Difficulty</label>
@@ -261,6 +338,9 @@ class CreateChallengeProp extends Component {
                                         <Form.Field width={12}>
                                             <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                         </Form.Field>
+                                    <Form.Field width={12}>
+                                        <Checkbox toggle onClick={this.handleRestrictionSwitch} onChange={this.toggleRest} checked={this.state.checkedRest} label={this.showRestriction()} />
+                                    </Form.Field>
                                     <div>{this.displayError()}</div>
                                 </Form>
                             </Grid.Column>

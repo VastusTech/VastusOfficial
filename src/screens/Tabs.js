@@ -7,7 +7,7 @@ import React from "react";
 // import CreateEventProp from "./CreateEvent";
 // import NextEventProp from "../components/NextWorkout";
 import LeaderBoard from "./Leaderboard";
-// import CommentScreen from "./CommentScreen";
+// import VideoUploadScreen from "./VideoUploadScreen";
 import PaymentScreen from "./PaymentScreen";
 import NotificationBellProp from "../components/NotificationBell";
 import ChallengeFeed from "./ChallengeFeed";

@@ -9,6 +9,23 @@ import { convertFromISO, convertFromIntervalISO } from "../logic/TimeHelper";
     challengeID: string
 }*/
 
+Date.prototype.toIsoString = function() {
+    var tzo = -this.getTimezoneOffset(),
+        dif = tzo >= 0 ? '+' : '-',
+        pad = function(num) {
+            var norm = Math.floor(Math.abs(num));
+            return (norm < 10 ? '0' : '') + norm;
+        };
+    return this.getFullYear() +
+        '-' + pad(this.getMonth() + 1) +
+        '-' + pad(this.getDate()) +
+        'T' + pad(this.getHours()) +
+        ':' + pad(this.getMinutes()) +
+        ':' + pad(this.getSeconds()) +
+        dif + pad(tzo / 60) +
+        ':' + pad(tzo % 60);
+};
+
 /*
 * Challenge Card
 *
@@ -19,8 +36,14 @@ class ChallengeCard extends Component {
     state = {
         error: null,
         challengeID: null,
-        challengeModalOpen: false
+        challengeModalOpen: false,
     };
+
+    constructor(props) {
+        super(props);
+        this.getDaysLeft = this.getDaysLeft.bind(this);
+        this.getTodayDateString = this.getTodayDateString.bind(this);
+    }
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
@@ -53,6 +76,25 @@ class ChallengeCard extends Component {
             }
         }
         return null;
+    }
+
+    getTodayDateString() {
+        // This is annoying just because we need to work with time zones :(
+        const shortestTimeInterval = 5;
+        const date = new Date();
+        date.setMinutes(date.getMinutes() + (shortestTimeInterval - (date.getMinutes() % shortestTimeInterval)));
+        return String(date);
+    }
+
+    getDaysLeft(curDate) {
+        let endTime = this.getChallengeAttribute("endTime");
+        //alert(endTime + " vs " + curDate + "and substr " + curDate.substr(8, 2));
+        if(endTime && curDate) {
+            endTime = endTime.substr(8, 2);
+            curDate = curDate.substr(8, 2);
+            //alert(endTime - curDate);
+            return (endTime - curDate);
+        }
     }
 
     displayTagIcons(tags) {
@@ -117,10 +159,10 @@ class ChallengeCard extends Component {
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
                 <Card.Content>
-                    <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
-                    <Card.Meta textAlign = 'center' >{convertFromISO(this.getChallengeAttribute("endTime"))} days left</Card.Meta>
-                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}
-                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}/>
+                    <Card.Header textAlign = 'center'>{this.displayTagIcons(this.getChallengeAttribute("tags"))}{this.getChallengeAttribute("title")}</Card.Header>
+                    <Card.Meta textAlign = 'center' >{this.getDaysLeft(this.getTodayDateString())} days left</Card.Meta>
+                    <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
+                    daysLeft={this.getDaysLeft(this.getTodayDateString())}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta textAlign = 'center'>
