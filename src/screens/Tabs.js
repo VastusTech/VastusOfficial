@@ -18,7 +18,7 @@ import ChallengeFeed from "./ChallengeFeed";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 5, size: "small", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 4, size: "small", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -46,15 +46,6 @@ export default () => (
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <LeaderBoard />
-                </Tab.Pane>
-            },
-            {
-                menuItem: (
-                    <Menu.Item key={3}>
-                        <Icon name='search' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                    <PaymentScreen />
                 </Tab.Pane>
             },
             {
