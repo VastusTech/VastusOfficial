@@ -4,9 +4,10 @@ import {Grid, Button, Message, Image, Modal, Label, Icon, Form, Container, TextA
 import CreateEventProp from "./CreateEvent";
 import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
-import Lambda from "../Lambda";
+// import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
 import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -187,8 +188,8 @@ class CreateChallengeProp extends Component {
         // TODO Check to see if valid inputs!
         if (this.eventState.capacity && this.eventState.title && this.eventState.goal && this.state.tags) {
             if (Number.isInteger(+this.eventState.capacity)) {
-                Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
-                    "n/a", this.eventState.title, this.eventState.goal, "n/a",
+                ChallengeFunctions.createChallengeOptional(this.props.user.id, this.props.user.id, this.eventState.eventDate, this.eventState.capacity,
+                    this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
                         //This is the second call

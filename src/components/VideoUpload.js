@@ -71,7 +71,7 @@ class VideoUpload extends Component<Props> {
         // and make sure it not some empty strings
         let comment = path;
         //let name = this.props.user.username;
-        let name = this.props.curUser + "_videoLink";
+        let name = this.props.curUser;
 
         //console.error(name);
         //console.error(name);

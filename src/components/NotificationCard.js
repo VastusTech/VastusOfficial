@@ -11,6 +11,8 @@ import ClientModal from "./ClientModal";
 import EventDescriptionModal from "./EventDescriptionModal";
 import { connect } from "react-redux";
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
+import UserFunctions from "../databaseFunctions/UserFunctions";
+import InviteFunctions from "../databaseFunctions/InviteFunctions";
 
 class NotificationCard extends Component {
     state = {
@@ -113,7 +115,7 @@ class NotificationCard extends Component {
         if(userID && friendRequestID) {
             const friendID = this.getAboutAttribute("id");
             // alert("User ID: " + userID + " Friend ID: " + friendID);
-            Lambda.clientAcceptFriendRequest(userID, userID, friendID,
+            UserFunctions.addFriend(userID, userID, friendID,
                 (data) => {
                     this.setState({isAcceptInviteLoading: false});
                     // alert("Successfully added " + friendID + " as a friend!");
@@ -143,7 +145,7 @@ class NotificationCard extends Component {
         if(userID && inviteID) {
             const eventID = this.getAboutAttribute("id");
             // alert("User ID: " + userID + " event ID: " + eventID);
-            Lambda.clientAcceptEventInvite(userID, userID, eventID,
+            UserFunctions.addEvent(userID, userID, eventID,
                 (data) => {
                     // alert("Successfully added " + eventID + " to the schedule!");
                     this.props.feedUpdate();
@@ -164,7 +166,7 @@ class NotificationCard extends Component {
         const inviteID = this.state.inviteID;
         // alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
         if(userID && inviteID) {
-            Lambda.declineFriendRequest(userID, inviteID,
+            InviteFunctions.delete(userID, inviteID,
                 (data) => {
                     // alert("Successfully declined " + inviteID + " friend request!");
                     this.props.feedUpdate();
@@ -192,7 +194,7 @@ class NotificationCard extends Component {
         const inviteID = this.state.inviteID;
         // alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
         if(userID && inviteID) {
-            Lambda.declineEventInvite(userID, inviteID,
+            InviteFunctions.delete(userID, inviteID,
                 (data) => {
                     this.setState({isDenyInviteLoading: false});
                     // alert("Successfully declined " + inviteID + " event invite!");
