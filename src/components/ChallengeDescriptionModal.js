@@ -397,10 +397,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
                         <List relaxed>
-<<<<<<< src/components/ChallengeDescriptionModal.js
-=======
                             {this.createChallengeChatButton()}
->>>>>>> src/components/ChallengeDescriptionModal.js
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
