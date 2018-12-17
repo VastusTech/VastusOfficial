@@ -75,9 +75,22 @@ class ChallengeFeed extends Component {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
             // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
-                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
-                this.state.nextToken, (data) => {
+            const filter = QL.generateFilter({
+                and: [
+                    {
+                        ifCompleted: {
+                            eq: "$ifCompleted"
+                        }
+                    }
+                ]
+            }, {
+                ifCompleted: "false"
+            });
+            // QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
+            //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
+            //     this.state.nextToken, (data) => {
+            QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"],
+                filter, this.state.challengeFeedLength, this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
                     }

@@ -2,6 +2,7 @@ import { setIsNotLoading, setError, setIsLoading } from "./infoActions";
 import QL from "../../GraphQL";
 import { Storage } from "aws-amplify";
 import defaultProfilePicture from "../../img/roundProfile.png";
+import {switchReturnItemType} from "../../logic/ItemType";
 
 function addProfilePictureToData(data, callback) {
     if (data && data.hasOwnProperty("profileImagePath")) {
@@ -474,4 +475,23 @@ export function putPost(post) {
         };
     }
     return null;
+}
+export function getCache(itemType, getStore) {
+    const cache = getStore().cache;
+    return switchReturnItemType(itemType, cache.clients, cache.trainers, cache.gyms, cache.workouts, cache.reviews,
+        cache.events, cache.challenges, cache.invites, cache.posts, "Retrieve cache not implemented");
+}
+export function getQueryCache(itemType, getStore) {
+    const cache = getStore().cache;
+    return switchReturnItemType(itemType, cache.clientQueries, cache.trainerQueries, cache.gymQueries, cache.workoutQueries,
+        cache.reviewQueries, cache.eventQueries, cache.challengeQueries, cache.inviteQueries, cache.postQueries,
+        "Retrieve query cache not implemented");
+}
+export function getPutQueryFunction(itemType) {
+    return switchReturnItemType(itemType, putClientQuery, putTrainerQuery, putGymQuery, putWorkoutQuery, putReviewQuery,
+        putEventQuery, putChallengeQuery, putInviteQuery, putPostQuery, "Retrieve Put Query Function not implemented");
+}
+export function getClearQueryFunction(itemType) {
+    return switchReturnItemType(itemType, clearClientQuery, clearTrainerQuery, clearGymQuery, clearWorkoutQuery, clearReviewQuery,
+        clearEventQuery, clearChallengeQuery, clearInviteQuery, clearPostQuery, "Retrieve Clear Query Function not implemented");
 }
