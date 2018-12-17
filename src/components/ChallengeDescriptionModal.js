@@ -292,7 +292,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
                         </Grid.Column>
                     </Grid>
-                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    {/*<VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>*/}
                 </div>
             )
         }
@@ -300,7 +300,7 @@ class ChallengeDescriptionModal extends Component<Props> {
             return (
                 <div>
                     <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
-                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    {/*<VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>*/}
                 </div>
             )
         }

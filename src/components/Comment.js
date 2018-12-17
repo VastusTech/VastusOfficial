@@ -66,20 +66,24 @@ class Comment extends Component<Props> {
                             }
                             if (ifSelf) {
                                 return(
-                                    <Label fluid pointing='right' className='u-bg--primary'>
-                                        <Player>
-                                            <source src={this.state.videoURL} type="video/mp4" />
-                                        </Player>
-                                    </Label>
+                                    <div className='u-text-align--right'>
+                                        <Label fluid pointing='right' className='u-bg--primary'>
+                                            <Player>
+                                                <source src={this.state.videoURL} type="video/mp4" />
+                                            </Player>
+                                        </Label>
+                                    </div>
                                 );
                             }
                             else {
                                 return (
-                                    <Label fluid className='u-bg--primary' pointing='left'>
-                                        <Player>
-                                            <source src={this.state.videoURL} type="video/mp4" />
-                                        </Player>
-                                    </Label>
+                                    <div className='u-text-align--left'>
+                                        <Label fluid className='u-bg--primary' pointing='left'>
+                                            <Player>
+                                                <source src={this.state.videoURL} type="video/mp4" />
+                                            </Player>
+                                        </Label>
+                                    </div>
                                 );
                             }
                         case "pictureLink":
