@@ -362,7 +362,7 @@ class GraphQL {
         }
         else {
             if (ifDebug) {
-                console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+                alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 console.log("GraphQL operation succeeded!");

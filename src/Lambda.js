@@ -82,7 +82,7 @@ class Lambda {
     static invokeLambda(functionName, payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
-            console.log("Sending lambda payload: " + JSON.stringify(payload));
+            alert("Sending lambda payload: " + JSON.stringify(payload));
         }
         lambda.invoke({
             FunctionName : functionName,
@@ -103,7 +103,7 @@ class Lambda {
                 else {
                     console.log("Successfully invoked lambda function!");
                     if (ifDebug) {
-                        console.log("Successful Lambda, received " + JSON.stringify(payload));
+                        alert("Successful Lambda, received " + JSON.stringify(payload));
                     }
                     successHandler(payload);
                 }

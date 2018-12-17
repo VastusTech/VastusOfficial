@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
 import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-import Lambda from '../Lambda';
-import EventMemberList from "../screens/EventMemberList";
+// import Lambda from '../Lambda';
+// import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
 import { convertFromISO } from "../logic/TimeHelper";
 import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import VideoUploadScreen from "../screens/VideoUploadScreen";
+// import VideoUploadScreen from "../screens/VideoUploadScreen";
 import CommentScreen from "../screens/CommentScreen";
 import ChallengeMemberList from "../screens/ChallengeMemberList";
 import UserFunctions from "../databaseFunctions/UserFunctions";
@@ -324,6 +324,19 @@ class ChallengeDescriptionModal extends Component<Props> {
         }
     }
 
+    createChallengeChatButton() {
+        if (this.state.isOwned || this.state.isJoined) {
+            return(
+                <List.Item>
+                    <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
+                        <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    </Modal>
+                </List.Item>
+            );
+        }
+        return null;
+    }
+
     render() {
         if (!this.getChallengeAttribute("id")) {
             return(
@@ -369,11 +382,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
                         <List relaxed>
-                            <List.Item>
-                                <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
-                                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
-                                </Modal>
-                            </List.Item>
+                            {this.createChallengeChatButton()}
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
