@@ -1,4 +1,4 @@
-import { numPrefix } from "./Constants";
+import { numPrefix } from "../Constants";
 
 const ItemType = {
     Client: "Client",

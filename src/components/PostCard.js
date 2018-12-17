@@ -3,7 +3,7 @@ import { Card } from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
 import { connect } from 'react-redux';
 import { fetchPost } from "../redux_helpers/actions/cacheActions";
-import ItemType from "../ItemType";
+import ItemType from "../logic/ItemType";
 
 // function convertTime(time) {
 //     if (parseInt(time, 10) > 12) {

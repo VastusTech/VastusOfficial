@@ -10,6 +10,7 @@ import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} f
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
+import ChallengeMemberList from "../screens/ChallengeMemberList";
 
 type Props = {
     open: boolean,
@@ -347,7 +348,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                                 <List.Content>
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                         <Modal.Content>
-                                            <EventMemberList eventID={this.state.eventID} />
+                                            <ChallengeMemberList challengeID={this.state.challengeID} />
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>
