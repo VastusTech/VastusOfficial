@@ -48,6 +48,21 @@ class EventFunctions {
     static removeMember(fromID, eventID, userID, successHandler, failureHandler) {
         UserFunctions.removeEvent(fromID, userID, eventID, successHandler, failureHandler);
     }
+    static updateChallenge(fromID, eventID, challengeID, successHandler, failureHandler) {
+        this.updateSet(fromID, eventID, "challenge", challengeID, successHandler, failureHandler);
+    }
+    static updateAddress(fromID, eventID, address, successHandler, failureHandler) {
+        this.updateSet(fromID, eventID, "address", address, successHandler, failureHandler);
+    }
+    static updateCapacity(fromID, eventID, capacity, successHandler, failureHandler) {
+        this.updateSet(fromID, eventID, "capacity", capacity, successHandler, failureHandler);
+    }
+    static updateTitle(fromID, eventID, title, successHandler, failureHandler) {
+        this.updateSet(fromID, eventID, "title", title, successHandler, failureHandler);
+    }
+    static updateDescription(fromID, eventID, description, successHandler, failureHandler) {
+        this.updateSet(fromID, eventID, "description", description, successHandler, failureHandler);
+    }
 
     // TODO THESE ARE THE LOW-LEVEL DATABASE ACTION FUNCTIONS
     // =============================================================================

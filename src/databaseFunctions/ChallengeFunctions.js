@@ -42,6 +42,30 @@ class ChallengeFunctions {
     static removeMember(fromID, challengeID, userID, successHandler, failureHandler) {
         UserFunctions.removeChallenge(fromID, userID, challengeID, successHandler, failureHandler);
     }
+    static addEvent(fromID, challengeID, eventID, successHandler, failureHandler) {
+        this.updateAdd(fromID, challengeID, "events", eventID, successHandler, failureHandler);
+    }
+    static updateEndTime(fromID, challengeID, endTime, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "endTime", endTime, successHandler, failureHandler);
+    }
+    static updateCapacity(fromID, challengeID, capacity, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "capacity", capacity, successHandler, failureHandler);
+    }
+    static updateGoal(fromID, challengeID, goal, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "goal", goal, successHandler, failureHandler);
+    }
+    static updatePrize(fromID, challengeID, prize, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "prize", prize, successHandler, failureHandler);
+    }
+    static updateTitle(fromID, challengeID, title, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "title", title, successHandler, failureHandler);
+    }
+    static updateDescription(fromID, challengeID, description, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "description", description, successHandler, failureHandler);
+    }
+    static updateDifficulty(fromID, challengeID, difficulty, successHandler, failureHandler) {
+        this.updateSet(fromID, challengeID, "difficulty", difficulty, successHandler, failureHandler);
+    }
 
     // TODO THESE ARE THE LOW-LEVEL DATABASE ACTION FUNCTIONS
     // =============================================================================
