@@ -21,6 +21,38 @@ class Comment extends Component<Props> {
     };
 
     createCorrectMessage() {
+<<<<<<< src/components/Comment.js
+        if (this.props.comment && this.props.comment.name) {
+            const comment = this.props.comment.comment;
+            const titleAttributes = this.props.comment.name.split("_");
+            if (titleAttributes.length > 0) {
+                const name = titleAttributes[0];
+                if (this.state.username !== name) {
+                    this.setState({username: name});
+                }
+                const ifSelf = name === this.props.user.username;
+                if (titleAttributes.length === 1) {
+                    // Regular message
+                    if (ifSelf) {
+                        return(
+                            <div className='u-text-align--right'>
+                                <strong className='u-margin-bottom--half u-display--block'>{this.state.username}</strong>
+                                <Label fluid className='u-bg--primary u-color--white u-overflow-wrap--break u-max-width--full' pointing='right' size='large'>
+                                    {this.props.comment.comment}
+                                </Label>
+                            </div>
+                        );
+                    }
+                    else {
+                        return(
+                            <div className='u-text-align--left'>
+                                <strong className='u-margin-bottom--half u-display--block'>{this.state.username}</strong>
+                                <Label pointing='left' size='large' className='u-overflow-wrap--break u-max-width--full'>
+                                    {this.props.comment.comment}
+                                </Label>
+                            </div>
+                        );
+=======
         if (this.props.user.username === this.props.comment.name){
             //alert(this.props.comment.comment.substr(0, 40) === 'https://vastusofficial.s3.amazonaws.com/');
             //alert(this.props.comment.comment.substr(0, 12));
@@ -70,6 +102,7 @@ class Comment extends Component<Props> {
                     const name = titleAttributes[0];
                     if (this.state.username !== name) {
                         this.setState({username: name});
+>>>>>>> src/components/Comment.js
                     }
                     const ifSelf = name === this.props.user.username;
                     if (titleAttributes.length === 1) {
@@ -198,6 +231,10 @@ class Comment extends Component<Props> {
             <div className='u-margin-bottom--2'>
                 {this.createCorrectMessage()}
             </div>
+<<<<<<< src/components/Comment.js
+
+=======
+>>>>>>> src/components/Comment.js
         );
     }
 }

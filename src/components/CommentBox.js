@@ -1,5 +1,5 @@
-import React, { Component, Fragment } from 'react';
-import {Button, Input, Grid, Label, Icon} from "semantic-ui-react";
+import React, { Component } from 'react';
+import {Button, Input, Label, Icon} from "semantic-ui-react";
 import { Storage } from 'aws-amplify';
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
@@ -120,6 +120,18 @@ class VideoUpload extends Component<Props> {
         //     this.setState({canAddImage: false});
         // }
         return (
+<<<<<<< src/components/CommentBox.js
+            <form onSubmit={this.addComment} className='u-margin-top--2'>
+                <Input type='text' action fluid className="textarea" name="comment" placeholder="Write Message...">
+                    <input />
+                    <Label as='label' for='proPicUpload' basic className='u-bg--input u-margin--0 u-border-x--0 u-border-y--1 u-border-color--border u-radius--0 u-flex u-flex-justify--center u-flex-align--center'>
+                        <Icon name='camera' className='u-margin--0' />
+                        <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden='true' onChange={this.setPicture}/>
+                    </Label>
+                    <Button primary>Send</Button>
+                </Input> 
+            </form>
+=======
             <Fragment>
                 <form onSubmit={this.addComment} className='u-margin-top--3'>
                     <Input type='text' action fluid className="textarea" name="comment" placeholder="Write Message...">
@@ -132,6 +144,7 @@ class VideoUpload extends Component<Props> {
                     </Input>
                 </form>
             </Fragment>
+>>>>>>> src/components/CommentBox.js
         );
     }
 }
