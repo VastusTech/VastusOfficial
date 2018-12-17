@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import VideoUpload from '../components/VideoUpload';
 import Comments from '../components/Comments';
 import {Grid, Card, Dimmer, Loader, Icon, Message} from "semantic-ui-react";
@@ -115,15 +115,14 @@ class VideoUploadScreen extends Component {
     render() {
 
         return (
-            <Card fluid raised>
-                <Card.Content>
-                    {/*console.error("Comment screen render user: " + this.props.curUser)*/}
-                    {this.loadHistory(this.state.isHistoryLoading)}
-                    <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
-                                 challengeChannel={this.channelName}/>
-                    <Comments comments={this.state.comments}/>
-                </Card.Content>
-            </Card>
+            <Fragment>
+                {/*console.error("Comment screen render user: " + this.props.curUser)*/}
+                {this.loadHistory(this.state.isHistoryLoading)}
+                {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}
+                {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
+                                challengeChannel={this.channelName}/> */}
+                <Comments comments={this.state.comments}/>
+            </Fragment>
         );
     }
 }
