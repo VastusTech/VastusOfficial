@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Icon, Modal, Button, Header, List, Divider, Grid, Message} from 'semantic-ui-react';
+import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import Lambda from '../Lambda';
 import EventMemberList from "../screens/EventMemberList";
@@ -9,7 +9,9 @@ import { convertFromISO } from "../logic/TimeHelper";
 import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import VideoUploadScreen from "../screens/VideoUploadScreen";
 import CommentScreen from "../screens/CommentScreen";
+import ChallengeMemberList from "../screens/ChallengeMemberList";
 
 type Props = {
     open: boolean,
@@ -48,6 +50,7 @@ class ChallengeDescriptionModal extends Component<Props> {
     constructor(props) {
         super(props);
         this.handleJoinChallengeButton = this.handleJoinChallengeButton.bind(this);
+        this.handleRequestChallengeButton = this.handleRequestChallengeButton.bind(this);
         this.handleLeaveChallengeButton = this.handleLeaveChallengeButton.bind(this);
         this.handleDeleteChallengeButton = this.handleDeleteChallengeButton.bind(this);
         this.isOwned = this.isOwned.bind(this);
@@ -80,6 +83,49 @@ class ChallengeDescriptionModal extends Component<Props> {
             for (let i = 0; i < members.length; i++) {
                 this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
             }
+        }
+    }
+
+    displayTagIcons(tags) {
+        if(tags) {
+            if (tags.length === 1) {
+                return (
+                    <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                );
+            }
+            else if (tags.length === 2) {
+                return (
+                    <div>
+                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                    </div>
+                );
+            }
+            else if (tags.length === 3) {
+                return(
+                    <div>
+                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                    </div>
+                );
+            }
+            else if (tags.length === 4) {
+                return(
+                    <div>
+                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                        <Image avatar src={require('../img/' + tags[3] + '_icon.png')}/>
+                    </div>
+                );
+            }
+        }
+        else {
+            return (
+                // "There ain't no tags round these parts partner " + tags
+                null
+            );
         }
     }
 
@@ -208,7 +254,7 @@ class ChallengeDescriptionModal extends Component<Props> {
 
     forceUpdate() {
         forceFetchChallenge(this.getChallengeAttribute("id"), ["owner",
-            "time", "capacity", "title", "description", "difficulty", "memberIDs", "memberRequests", "access", "restriction"]);
+            "time", "capacity", "title", "description", "difficulty", "memberIDs", "memberRequests", "access", "restriction", "prize"]);
     };
 
     displayError() {
@@ -243,7 +289,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
                         </Grid.Column>
                     </Grid>
-                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
                 </div>
             )
         }
@@ -251,7 +297,7 @@ class ChallengeDescriptionModal extends Component<Props> {
             return (
                 <div>
                     <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
-                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
                 </div>
             )
         }
@@ -305,12 +351,26 @@ class ChallengeDescriptionModal extends Component<Props> {
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                <Modal.Header>{this.getChallengeAttribute("title")}</Modal.Header>
+                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
+                <div>{this.getChallengeAttribute("title")}</div>
+                    <List relaxed>
+                    <List.Item>
+                        <List.Icon name='bullseye' />
+                        <List.Content>
+                            {this.getChallengeAttribute("goal")}
+                        </List.Content>
+                    </List.Item>
+                    </List></Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
                         <List relaxed>
+                            <List.Item>
+                                <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
+                                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                                </Modal>
+                            </List.Item>
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
@@ -320,13 +380,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='calendar' />
                                 <List.Content>
-                                    {convertFromISO(this.getChallengeAttribute("endTime"))}
-                                </List.Content>
-                            </List.Item>
-                            <List.Item>
-                                <List.Icon name='bullseye' />
-                                <List.Content>
-                                    {this.getChallengeAttribute("goal")}
+                                    {this.props.daysLeft} days left
                                 </List.Content>
                             </List.Item>
                             <List.Item>
@@ -336,18 +390,11 @@ class ChallengeDescriptionModal extends Component<Props> {
                                 </List.Content>
                             </List.Item>
                             <List.Item>
-                                <List.Icon name='plus' />
-                                <List.Content>
-                                    {/*alert(JSON.stringify(this.getChallengeAttribute("tags")))*/}
-                                    {JSON.stringify(this.getChallengeAttribute("tags"))}
-                                </List.Content>
-                            </List.Item>
-                            <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                         <Modal.Content>
-                                            <EventMemberList eventID={this.state.eventID} />
+                                            <ChallengeMemberList challengeID={this.state.challengeID} />
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>

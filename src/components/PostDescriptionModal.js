@@ -8,7 +8,7 @@ import { connect } from 'react-redux';
 import { fetchClient, forceFetchPost, fetchPost } from "../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { forceFetchUserAttributes } from "../redux_helpers/actions/userActions";
-// import CommentScreen from "../screens/CommentScreen";
+// import VideoUploadScreen from "../screens/VideoUploadScreen";
 
 // function convertTime(time) {
 //     if (parseInt(time, 10) > 12) {

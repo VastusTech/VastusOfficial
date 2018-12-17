@@ -114,7 +114,7 @@ class Comment extends Component<Props> {
                                 );
                             }
                         default:
-                            alert("Comment type = " + type + " not recognized!");
+                            console.error("Comment type = " + type + " not recognized!");
                             break;
                     }
                 }

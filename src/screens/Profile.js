@@ -158,7 +158,7 @@ class Profile extends React.PureComponent {
                         <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                             <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                         </Label>
-                        <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                        <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                     </div>
                 </div>
             );

@@ -245,7 +245,6 @@ class CreateChallengeProp extends Component {
     };
 
     createSuccessModal() {
-
         return(
             <Modal open={this.state.showSuccessModal}>
                 <Modal.Header align='center'>Successfully Created Event!</Modal.Header>
