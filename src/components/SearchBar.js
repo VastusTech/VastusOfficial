@@ -317,7 +317,7 @@ class SearchBarProp extends Component {
                     placeholder="Search for Users and Challenges"
                     loading={this.state.isLoading}
                     onResultSelect={this.handleResultSelect}
-                    onSearchChange={_.debounce(this.handleSearchChange, 500, { leading: true })}
+                    onSearchChange={_.debounce(this.handleSearchChange, 1000, { leading: true })}
                     results={this.getFormattedResults()}
                     value={this.props.search.searchQuery}
                 />

@@ -3,7 +3,8 @@ import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'seman
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "../screens/ScheduledEventList";
-import InviteToScheduledEventsModalProp from "../screens/InviteToScheduledEventsModal";
+// import InviteToScheduledEventsModalProp from "../screens/InviteToScheduledEventsModal";
+import InviteToChallengeModalProp from "../screens/InviteToChallengeModal";
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -250,7 +251,7 @@ class ClientModal extends Component<Props> {
                 </Modal.Content>
                 <Modal.Actions>
                     <Button primary onClick={this.handleInviteModalOpen.bind(this)}>Invite to Challenge</Button>
-                    <InviteToScheduledEventsModalProp
+                    <InviteToChallengeModalProp
                         open={this.state.inviteModalOpen}
                         onOpen={this.handleInviteModalOpen.bind(this)}
                         onClose={this.handleInviteModalClose.bind(this)}
