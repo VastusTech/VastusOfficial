@@ -15,51 +15,59 @@ export function newSearch(queryString, dataHandler) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
         // Use the current store settings to actually do the search
+        dispatch(setSearchQuery(queryString));
         if (queryString && queryString.length > 0) {
-            dispatch(setSearchQuery(queryString));
             dispatch(resetQuery());
-            loadMoreResults(queryString, dataHandler);
+            performAllQueries(queryString, dispatch, getStore, dataHandler);
         }
         else {
             console.log("I refuse to search for an empty string");
+            dataHandler([]);
         }
     };
 }
 export function loadMoreResults(searchQuery, dataHandler) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
-        if (searchQuery && searchQuery.length > 0) {
-            let numResults = 0;
-            let results = [];
-            for (const type in getStore().search.typeQueries) {
-                if (getStore().search.typeQueries.hasOwnProperty(type)) {
-                    const numTypesEnabled = getStore().search.numTypesEnabled;
-                    performQuery(type, dispatch, getStore, (data) => {
-                        if (data.items && data.nextToken) {
-                            dispatch(addTypeResults(type, data.items));
-                            dispatch(setTypeNextToken(type, data.nextToken));
-                            results.push(...data.items);
-                        }
-                        else {
-                            console.error("Received a weird value from query in the newSearch search redux function. Value = " + JSON.stringify(data));
-                        }
-                        numResults++;
-                        if (numTypesEnabled <= numResults) {
-                            dataHandler(results);
-                        }
-                    }, () => {
-                        numResults++;
-                        if (getStore().search.numTypesEnabled <= numResults) {
-                            dataHandler(results);
-                        }
-                    })
-                }
-            }
-        }
-        else {
-
+        if (getStore().search.searchQuery === searchQuery) {
+            performAllQueries(searchQuery, dispatch, getStore, dataHandler);
         }
     };
+}
+export function performAllQueries(searchQuery, dispatch, getStore, dataHandler) {
+    if (searchQuery && searchQuery.length > 0) {
+        let numResults = 0;
+        let results = [];
+        for (const type in getStore().search.typeQueries) {
+            if (getStore().search.typeQueries.hasOwnProperty(type)) {
+                const numTypesEnabled = getStore().search.numTypesEnabled;
+                // const typeQuery = getStore().search.typeQueries[type];
+                // if (typeQuery.enabled && (typeQuery.nextToken || typeQuery.ifFirst)) {
+                performQuery(type, dispatch, getStore, (data) => {
+                    if (data.hasOwnProperty("items") && data.hasOwnProperty("nextToken")) {
+                        dispatch(addTypeResults(type, data.items));
+                        dispatch(setTypeNextToken(type, data.nextToken));
+                        results.push(...data.items);
+                    }
+                    else {
+                        console.error("Received a weird value from query in the newSearch search redux function. Value = " + JSON.stringify(data));
+                    }
+                    numResults++;
+                    if (numTypesEnabled <= numResults) {
+                        dataHandler(results);
+                    }
+                }, () => {
+                    numResults++;
+                    if (numTypesEnabled <= numResults) {
+                        dataHandler(results);
+                    }
+                })
+            }
+        }
+    }
+    else {
+
+    }
 }
 function performQuery(itemType, dispatch, getStore, successHandler, failureHandler) {
     const searchQuery = getStore().search.searchQuery;
@@ -73,15 +81,19 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
         };
         const limit = typeQuery.limit;
         const nextToken = typeQuery.nextToken;
-
-        // TODO Will this work?
-        QL.getQueryFunction(itemType)(variableList, QL.generateFilter(filterJSON, filterParameters), limit, nextToken, (data) => {
-            dispatch(setTypeNextToken(itemType, nextToken));
-            successHandler(data);
-        }, (error) => {
-            dispatch(setError(error));
-            failureHandler();
-        }, getCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
+        const ifFirst = typeQuery.ifFirst;
+        if (nextToken || ifFirst) {
+            QL.getQueryFunction(itemType)(variableList, QL.generateFilter(filterJSON, filterParameters), limit, nextToken, (data) => {
+                dispatch(setTypeNextToken(itemType, nextToken));
+                successHandler(data);
+            }, (error) => {
+                dispatch(setError(error));
+                failureHandler();
+            }, getCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
+        }
+        else {
+            successHandler({items: [], nextToken: null});
+        }
     }
 }
 export function enableType(type) {

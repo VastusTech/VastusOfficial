@@ -19,7 +19,7 @@ const typeRatios = {
 
 const initialClientState = {
     enabled: true,
-    variableList: ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", /*"scheduledEvents",*/ "profileImagePath", "profilePicture", /*"friendRequests"*/],
+    variableList: ["id", "item_type", "username", "gender", "birthday", "name", "friends", "challengesWon", /*"scheduledEvents",*/ /*"profileImagePath", /*"profilePicture"*/ /*"friendRequests"*/],
     filterJSON: {
         or: [{
             username: {
@@ -38,12 +38,12 @@ const initialClientState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
 const initialTrainerState = {
-    enabled: true,
+    enabled: false,
     variableList: [],
     filterJSON: {
         or: [{
@@ -63,7 +63,7 @@ const initialTrainerState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -88,7 +88,7 @@ const initialGymState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -99,7 +99,7 @@ const initialWorkoutState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -110,7 +110,7 @@ const initialReviewState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -139,13 +139,13 @@ const initialEventState = {
     },
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
 const initialChallengeState = {
     enabled: true,
-    variableList: [],
+    variableList: ["id", "item_type", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"],
     filterJSON: {
         and: [{
             or: [{
@@ -168,7 +168,7 @@ const initialChallengeState = {
     },
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -179,18 +179,18 @@ const initialInviteState = {
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
 const initialPostState = {
-    enabled: true,
+    enabled: false,
     variableList: [],
     filterJSON: {},
     filterParameters: {},
     nextToken: null,
     ifFirst: true,
-    limit: 10,
+    limit: queryLimit,
     results: [],
 };
 
@@ -198,7 +198,8 @@ const initialState = {
     searchQuery: "",
     results: [],
     limit: 100, // This should be computed dynamically, based on how many types we're querying to maintain a certain number
-    numTypesEnabled: 3,
+    numTypesEnabled: 2,
+    ifFinished: false,
     typeQueries: {
         Client: initialClientState,
         Trainer: initialTrainerState,
@@ -219,6 +220,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload]: {
                         ...state.typeQueries[action.payload],
                         enabled: true
@@ -231,6 +233,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload]: {
                         ...state.typeQueries[action.payload],
                         enabled: false
@@ -249,6 +252,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload.type]: {
                         ...state.typeQueries[action.payload.type],
                         filterJSON: action.payload.filterJSON,
@@ -261,6 +265,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload.type]: {
                         ...state.typeQueries[action.payload.type],
                         nextToken: action.payload.nextToken,
@@ -270,20 +275,24 @@ export default (state = initialState, action) => {
             };
             break;
         case ADD_TYPE_RESULTS:
+            const results = action.payload.results ? action.payload.results : [];
+            // alert(action.payload.type + "\n" + JSON.stringify(results) + "\n" + JSON.stringify(state.typeQueries[action.payload.type].results));
             state = {
                 ...state,
-                results: [...state.results, ...action.payload.results],
+                results: [...state.results, ...results],
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload.type]: {
                         ...state.typeQueries[action.payload.type],
                         results: [
                             ...state.typeQueries[action.payload.type].results,
                             // TODO Spread or nah?
-                            ...action.payload.results
+                            ...results
                         ]
                     }
                 }
             };
+            state.ifFinished = getIfFinished(state);
             break;
         case RESET_QUERY:
             state = {
@@ -302,6 +311,7 @@ export default (state = initialState, action) => {
             state = {
                 ...state,
                 typeQueries: {
+                    ...state.typeQueries,
                     [action.payload]: {
                         ...state.typeQueries[action.payload],
                         results: [],
@@ -331,4 +341,16 @@ function getNumTypesEnabled(state) {
         }
     }
     return numTypesEnabled;
+}
+
+function getIfFinished(state) {
+    for (const key in state.typeQueries) {
+        if (state.typeQueries.hasOwnProperty(key)) {
+            const query = state.typeQueries[key];
+            if (query.enabled && query.ifFirst !== true && query.nextToken !== null) {
+                return false;
+            }
+        }
+    }
+    return true;
 }

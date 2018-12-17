@@ -17,7 +17,8 @@ import {switchReturnItemType} from "../logic/ItemType";
 class SearchBarProp extends Component {
     state = {
         error: null,
-        isLoading: true,
+        isLoading: false,
+        minimumSearchResults: 6,
         // eventsLoading: false,
         // clientsLoading: false,
         // searchResults: [],
@@ -195,10 +196,7 @@ class SearchBarProp extends Component {
 
     handleSearchChange = (e, { value }) => {
         console.log(value);
-        this.setState({isLoading: true});
-        this.props.newSearch(value, () => {
-            this.setState({isLoading: false});
-        });
+        this.retrieveSearchResults(value);
         // this.resetComponent();
         //this.setState({searchResults: []});
         // this.state.searchResults = [];
@@ -208,6 +206,37 @@ class SearchBarProp extends Component {
         // this.loadMoreEventResults(value);
         // this.loadMoreClientResults(value);
     };
+
+    retrieveSearchResults(searchQuery) {
+        this.setState({isLoading: true});
+        this.props.newSearch(searchQuery, (data) => {
+            if (data && data.length) {
+                if (data.length < this.state.minimumSearchResults && !this.props.search.ifFinished) {
+                    this.retrieveMoreResults(searchQuery, data);
+                }
+                else {
+                    this.setState({isLoading: false});
+                }
+            }
+            else {
+                this.setState({isLoading: false});
+            }
+        });
+    }
+
+    retrieveMoreResults(searchQuery, results) {
+        // alert("Retrieving more results!");
+        this.props.loadMoreResults(searchQuery, (data) => {
+            results.push(...data);
+            if (results.length < this.state.minimumSearchResults && !this.props.search.ifFinished) {
+                // alert("Grabbing more results: numResults = " + results.length + ", ifFinished = " + this.props.search.ifFinished);
+                this.retrieveMoreResults(searchQuery, results);
+            }
+            else {
+                this.setState({isLoading: false});
+            }
+        })
+    }
 
     resultModal() {
         if (!this.state.result) {
@@ -278,6 +307,7 @@ class SearchBarProp extends Component {
         // TODO Check to see that this is valid to do?
         // console.log("Showing " + this.state.searchResults.length + " results");
         // const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
+        // alert(this.props.search.results.length);
         return (
             <Fragment>
                 {this.resultModal()}
