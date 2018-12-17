@@ -107,8 +107,8 @@ class ChallengeCard extends Component {
             else if (tags.length === 2) {
                 return (
                     <div>
-                        <Image size='small' src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image size='small' src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image size='tiny' src={require('../img/' + tags[0] + '_icon.png')}/>
+                        <Image size='tiny' src={require('../img/' + tags[1] + '_icon.png')}/>
                     </div>
                 );
             }
@@ -159,8 +159,9 @@ class ChallengeCard extends Component {
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
                 <Card.Content>
-                    <Card.Header textAlign = 'center'>{this.displayTagIcons(this.getChallengeAttribute("tags"))}{this.getChallengeAttribute("title")}</Card.Header>
+                    <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{this.getDaysLeft(this.getTodayDateString())} days left</Card.Meta>
+                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
                     daysLeft={this.getDaysLeft(this.getTodayDateString())}/>
                 </Card.Content>

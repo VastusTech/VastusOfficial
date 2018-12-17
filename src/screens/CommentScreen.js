@@ -87,6 +87,7 @@ class CommentScreen extends Component {
 
         channel.history((err, page) => {
             // create a new array with comments only in an reversed order (i.e old to new)
+            console.log("Received history!");
             const commentArray = Array.from(page.items.reverse(), item => item.data);
 
             //console.error(JSON.stringify(commentArray));

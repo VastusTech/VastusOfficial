@@ -8,6 +8,9 @@ import { connect } from 'react-redux';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import CommentScreen from "../screens/CommentScreen";
+import UserFunctions from "../databaseFunctions/UserFunctions";
+import EventFunctions from "../databaseFunctions/EventFunctions";
 import VideoUploadScreen from "../screens/VideoUploadScreen";
 
 type Props = {
@@ -130,7 +133,7 @@ class EventDescriptionModal extends Component<Props> {
     handleDeleteEventButton() {
         //alert("Handling deleting the event");
         this.setState({isLoading: true});
-        Lambda.deleteEvent(this.props.user.id, this.getEventAttribute("id"), (data) => {
+        EventFunctions.delete(this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
@@ -143,7 +146,7 @@ class EventDescriptionModal extends Component<Props> {
     handleLeaveEventButton() {
         //alert("Handling leaving the event");
         this.setState({isLoading: true});
-        Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
+        UserFunctions.removeEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             //alert(JSON.stringify(data));
             this.setState({isLeaveLoading: false, isJoined: false});
@@ -156,7 +159,7 @@ class EventDescriptionModal extends Component<Props> {
     handleJoinEventButton() {
         //alert("Handling joining the event");
         this.setState({isLoading: true});
-        Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
+        UserFunctions.addEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
             (data) => {
                 this.forceUpdate(data.id);
                 //alert(JSON.stringify(data));

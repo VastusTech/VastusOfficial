@@ -16,6 +16,7 @@ import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/ac
 import { connect } from "react-redux";
 // import AWSSetup from "../AppConfig";
 import {logOut} from "../redux_helpers/actions/authActions";
+import ClientFunctions from "../databaseFunctions/ClientFunctions";
 
 // AWSSetup();
 
@@ -116,7 +117,7 @@ class Profile extends React.PureComponent {
                 // Now we update the database object to reflect this
                 //alert("resulttt:" + JSON.stringify(result));
                 //alert("Successfully put the image, now putting the data into the database!");
-                Lambda.editClientAttribute(this.props.user.id, this.props.user.id, "profileImagePath", path,
+                ClientFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
                     (data) => {
                         //alert("successfully editted client");
                         //alert(JSON.stringify(data));

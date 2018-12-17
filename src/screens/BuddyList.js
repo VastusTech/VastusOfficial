@@ -13,7 +13,7 @@ import ClientCard from "../components/ClientCard";
 class BuddyListProp extends Component {
     state = {
         isLoading: true,
-        friends: {},
+        friends: [],
         sentRequest: false,
         clientModalOpen: false,
         error: null
@@ -68,10 +68,18 @@ class BuddyListProp extends Component {
             this.setState({isLoading: true});
         }
 
-        if (this.state.isLoading && user.hasOwnProperty("friends") && user.friends && user.friends.length) {
+        if (!this.state.sentRequest && this.state.isLoading && user.hasOwnProperty("friends") && user.friends && user.friends.length) {
+            this.state.sentRequest = true;
             this.setState({isLoading: false});
             for (let i = 0; i < user.friends.length; i++) {
-                props.fetchClient(user.friends[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+                if (!this.state.friends.includes(user.friends[i])) {
+                    props.fetchClient(user.friends[i], ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]
+                        , (client) => {
+                            if (client && client.id) {
+                                this.state.friends.push(client.id);
+                            }
+                        });
+                }
                 // if (!(user.scheduledEvents[i] in this.state.events)) {
                 //     this.addEventFromGraphQL(user.scheduledEvents[i]);
                 // }
@@ -136,10 +144,10 @@ class BuddyListProp extends Component {
                 <Message>Loading...</Message>
             )
         }
-        if (this.props.user.friends && this.props.user.friends.length && this.props.user.friends.length > 0) {
+        if (this.props.user.friends && this.props.user.friends.length > 0 && this.state.friends.length > 0) {
             return(
                 <List relaxed verticalAlign="middle">
-                    {rows(this.props.user.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this),
+                    {rows(this.state.friends, this.closeClientModal, this.openClientModal, this.state.clientModalOpen, this.props.user.id, this.getClientAttribute.bind(this),
                     this.forceUpdate.bind(this))}
                 </List>
             );
@@ -163,8 +171,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (attributeList) => {
             dispatch(fetchUserAttributes(attributeList));
         },
-        fetchClient: (id, variablesList) => {
-            dispatch(fetchClient(id, variablesList));
+        fetchClient: (id, variablesList, dataHandler) => {
+            dispatch(fetchClient(id, variablesList, dataHandler));
         }
     };
 };

@@ -8,6 +8,8 @@ import { connect } from 'react-redux';
 import { fetchClient, forceFetchPost, fetchPost } from "../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { forceFetchUserAttributes } from "../redux_helpers/actions/userActions";
+import PostFunctions from "../databaseFunctions/PostFunctions";
+// import CommentScreen from "../screens/CommentScreen";
 // import VideoUploadScreen from "../screens/VideoUploadScreen";
 
 // function convertTime(time) {
@@ -121,7 +123,7 @@ class EventDescriptionModal extends Component {
     handleDeletePostButton() {
         //alert("Handling deleting the event");
         this.setState({isLoading: true});
-        Lambda.deletePost(this.props.user.id, this.getPostAttribute("id"), (data) => {
+        PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false});

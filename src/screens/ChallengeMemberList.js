@@ -7,7 +7,11 @@ import Lambda from "../Lambda";
 import connect from "react-redux/es/connect/connect";
 import ClientCard from "../components/ClientCard";
 
-class ChallengeMemberList extends Component {
+type Props = {
+    challengeID: string
+}
+
+class ChallengeMemberList extends Component<Props> {
     state = {
         error: null,
         isLoading: false,
@@ -45,9 +49,9 @@ class ChallengeMemberList extends Component {
 
     getChallengeAttribute(attribute) {
         if (this.state.challengeID) {
-            const Challenge = this.props.cache.Challenges[this.state.challengeID];
-            if (Challenge) {
-                return Challenge[attribute];
+            const challenge = this.props.cache.challenges[this.state.challengeID];
+            if (challenge) {
+                return challenge[attribute];
             }
         }
         return null;
@@ -78,7 +82,7 @@ class ChallengeMemberList extends Component {
             //alert(members);
             return _.times(members.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <ClientCard clientID={members[i]}/>
+                    <ClientCard rank={i} clientID={members[i]}/>
                 </Grid.Row>
             ));
         }

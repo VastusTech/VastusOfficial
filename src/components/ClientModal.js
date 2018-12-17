@@ -7,6 +7,8 @@ import InviteToScheduledEventsModalProp from "../screens/InviteToScheduledEvents
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import InviteFunctions from "../databaseFunctions/InviteFunctions";
+import UserFunctions from "../databaseFunctions/UserFunctions";
 
 type Props = {
     open: boolean,
@@ -72,7 +74,7 @@ class ClientModal extends Component<Props> {
         this.setState({isAddFriendLoading: true});
         // alert("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
-            Lambda.sendFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
+            InviteFunctions.createFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isAddFriendLoading: false, requestSent: true});
                     //alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
@@ -95,7 +97,7 @@ class ClientModal extends Component<Props> {
         // alert("Removing this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             this.setState({isRemoveFriendLoading: true});
-            Lambda.clientRemoveFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
+            UserFunctions.removeFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isRemoveFriendLoading: false});
                     alert("Successfully removed " + this.getClientAttribute("name") + " from friends list");
