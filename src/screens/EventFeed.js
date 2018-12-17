@@ -7,8 +7,8 @@ import { connect } from 'react-redux';
 // import ScheduledEventsList from "./ScheduledEventList";
 import {fetchEvent, putClientQuery, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import CreateEventProp from "./CreateEvent";
-import WorkoutSelectionList from "./WorkoutSelectionList";
+// import CreateEventProp from "./CreateEvent";
+// import WorkoutSelectionList from "./WorkoutSelectionList";
 import CreateChallengeProp from "./CreateChallenge"
 import NextEventProp from "../components/NextEvent";
 import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
@@ -72,65 +72,70 @@ class EventFeed extends Component {
         }
     }
 
+    // queryEvents() {
+    //     this.setState({isLoading: true});
+    //     if (!this.state.ifFinished) {
+    //         // alert(JSON.stringify(this.props.cache.eventQueries));
+    //         QL.queryEvents(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
+    //             {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
+    //             this.state.nextToken, (data) => {
+    //                 if (!data.nextToken) {
+    //                     this.setState({ifFinished: true});
+    //                 }
+    //                 if (data.items) {
+    //                     // TODO We can see private events
+    //                     // alert("got items");
+    //                     const newlyQueriedEvents = [];
+    //                     for (let i = 0; i < data.items.length; i++) {
+    //                         const event = data.items[i];
+    //                         // alert(JSON.stringify(event));
+    //                         if (event.access === 'public') {
+    //                             newlyQueriedEvents.push(event);
+    //                         }
+    //                         else if (this.props.user.id && this.props.user.id === event.owner) {
+    //                             newlyQueriedEvents.push(event);
+    //                         }
+    //                         else if (this.props.user.friends && this.props.user.friends.includes(event.owner)) {
+    //                             newlyQueriedEvents.push(event);
+    //                         }
+    //                         else if (this.props.user.invitedEvents && this.props.user.invitedEvents.includes(event.id)) {
+    //                             newlyQueriedEvents.push(event);
+    //                         }
+    //                     }
+    //                     this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
+    //                     for (let i = 0; i < data.items.length; i++) {
+    //                         //alert(data.items[i].time_created);
+    //                         // alert("Putting in event: " + JSON.stringify(data.items[i]));
+    //                         // this.setState({events: [...this.state.events, data.items[i]]});
+    //                         this.props.putEvent(data.items[i]);
+    //                     }
+    //                     // alert("events in the end: " + JSON.stringify(this.state.events));
+    //                     this.setState({nextToken: data.nextToken});
+    //                 }
+    //                 else {
+    //                     // TODO Came up with no events
+    //                 }
+    //                 this.setState({isLoading: false});
+    //             }, (error) => {
+    //                 console.log("Querying events failed!");
+    //                 console.log(error);
+    //                 alert(error);
+    //                 this.setState({isLoading: false, error: error});
+    //             }, this.props.cache.eventQueries, this.props.putEventQuery);
+    //     }
+    // }
+
     queryEvents() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
-            // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryEvents(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
-                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
-                this.state.nextToken, (data) => {
-                    if (!data.nextToken) {
-                        this.setState({ifFinished: true});
-                    }
-                    if (data.items) {
-                        // TODO We can see private events
-                        // alert("got items");
-                        const newlyQueriedEvents = [];
-                        for (let i = 0; i < data.items.length; i++) {
-                            const event = data.items[i];
-                            // alert(JSON.stringify(event));
-                            if (event.access === 'public') {
-                                newlyQueriedEvents.push(event);
-                            }
-                            else if (this.props.user.id && this.props.user.id === event.owner) {
-                                newlyQueriedEvents.push(event);
-                            }
-                            else if (this.props.user.friends && this.props.user.friends.includes(event.owner)) {
-                                newlyQueriedEvents.push(event);
-                            }
-                            else if (this.props.user.invitedEvents && this.props.user.invitedEvents.includes(event.id)) {
-                                newlyQueriedEvents.push(event);
-                            }
-                        }
-                        this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
-                        for (let i = 0; i < data.items.length; i++) {
-                            //alert(data.items[i].time_created);
-                            // alert("Putting in event: " + JSON.stringify(data.items[i]));
-                            // this.setState({events: [...this.state.events, data.items[i]]});
-                            this.props.putEvent(data.items[i]);
-                        }
-                        // alert("events in the end: " + JSON.stringify(this.state.events));
-                        this.setState({nextToken: data.nextToken});
-                    }
-                    else {
-                        // TODO Came up with no events
-                    }
-                    this.setState({isLoading: false});
-                }, (error) => {
-                    console.log("Querying events failed!");
-                    console.log(error);
-                    alert(error);
-                    this.setState({isLoading: false, error: error});
-                }, this.props.cache.eventQueries, this.props.putEventQuery);
-        }
-    }
+            // TODO This needs to be rewritten if we want to have any kind of event feed!!!!!
+            const filter = QL.generateFilter({
 
-    queryChallenges() {
-        this.setState({isLoading: true});
-        if (!this.state.ifFinished) {
-            // alert(JSON.stringify(this.props.cache.eventQueries));
-            QL.queryChallenges(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
-                {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
+            },{
+
+            });
+            // const oldFilter = QL.generateFilter("and", {"ifCompleted": "eq"}, {"ifCompleted": "false"});
+            QL.queryEvents(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], filter, this.state.eventFeedLength,
                 this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});

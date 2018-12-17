@@ -8,9 +8,10 @@ import React from "react";
 // import NextEventProp from "../components/NextWorkout";
 import LeaderBoard from "./Leaderboard";
 // import VideoUploadScreen from "./VideoUploadScreen";
-import PaymentScreen from "./PaymentScreen";
+// import PaymentScreen from "./PaymentScreen";
 import NotificationBellProp from "../components/NotificationBell";
 import ChallengeFeed from "./ChallengeFeed";
+import SearchScreen from "./SearchScreen";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -54,7 +55,7 @@ export default () => (
                         <Icon name='search' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <PaymentScreen />
+                    <SearchScreen />
                 </Tab.Pane>
             },
             {

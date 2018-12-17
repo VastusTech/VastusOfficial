@@ -1,8 +1,27 @@
 import { API, graphqlOperation} from 'aws-amplify';
 import { ifDebug } from "./Constants";
 import _ from 'lodash';
+import ItemType, {switchReturnItemType} from "./logic/ItemType";
 
 class GraphQL {
+    static getFetchIDFunction(itemType) {
+        return switchReturnItemType(itemType, this.getClient, this.getTrainer, this.getGym, this.getWorkout, this.getReview,
+            this.getEvent, this.getChallenge, this.getInvite, this.getPost, "GraphQL get Fetch function function not implemented");
+    }
+    static getFetchUsernameFunction(itemType) {
+        return switchReturnItemType(itemType, this.getClientByUsername, this.getTrainerByUsername, this.getGymByUsername,
+            null, null, null, null, null, null, "GraphQL get Fetch Username function function not implemented");
+    }
+    static getBatchFetchIDFunction(itemType) {
+        return switchReturnItemType(itemType, this.getClients, this.getTrainers, this.getGyms, this.getWorkouts,
+            this.getReviews, this.getEvents, this.getChallenges, this.getInvites, this.getPosts,
+            "GraphQL get Batch Fetch function function not implemented");
+    }
+    static getQueryFunction(itemType) {
+        return switchReturnItemType(itemType, this.queryClients, this.queryTrainers, this.queryGyms, this.queryWorkouts,
+            this.queryReviews, this.queryEvents, this.queryChallenges, this.queryInvites, this.queryPosts,
+            "GraphQL get Query function function not implemented");
+    }
     static getClient(id, variableList, successHandler, failureHandler) {
         this.execute(this.constructQuery("GetClient", "getClient", {id: id}, variableList),
             "getClient", successHandler, failureHandler);
@@ -234,37 +253,45 @@ class GraphQL {
             "queryPosts", successHandler, failureHandler, queryPostCache, putCacheQueryPost);
     }
 
-    // TODO Eventually make this work better to allow for more intelligent queries
-    // TODO This function is going to be how to filter any query
-    // TODO include "not"? Also should we make it more flexible so like and { not { or ...
     /**
-     * This is to construct a filter object that we can put into any queryObjects function
-     * @param cohesionOperator Either "and" or "or", depending on how we want to mix the operation
-     * @param variableComparisons The object that determines how we compare the variable { variableName: comparisonFunction }
-     *    The comparison function is string in {"ne","eq","le","lt","ge","gt","contains","notContains","between","beginsWith"}
-     * @param variableValues The object that determines what value we compare the variable with { variableName: variableValue }
-     * @returns {{parameterString: string, parameters: parameters}}
+     *
+     * @param filterJSON The filter in JSON format using $ in front of variable names, and using and, or, and not to consolidate
+     * @param variableValues The exact values for the variables in the JSON
+     * @example
+     *      const filter = generateFilter({
+     *          and: [
+     *              {
+     *                  ifCompleted: {
+     *                      eq: $ifCompleted
+     *                  }
+     *              },
+     *              {
+     *                  or: [
+     *                      {
+     *                          access: {
+     *                              eq: "$access"
+     *                          }
+     *                      },
+     *                      {
+     *                          friends: {
+     *                              contains: "$id"
+     *                          }
+     *                      }
+     *                  ]
+     *              }
+     *          ]
+     *      },{
+     *          ifCompleted: false,
+     *          access: public,
+     *          id: this.props.user.id
+     *      });
      */
-    static generateFilter(cohesionOperator, variableComparisons, variableValues) {
-        var parameterString = 'filter: {\n        ' + cohesionOperator + ': [\n';
-        var parameters = {};
-        for (let variableName in variableComparisons) {
-            parameterString += '            {\n                ';
-            parameterString += variableName + ': {\n';
-            parameterString += '                    ';
-            // console.log(variableComparisons.hasOwnProperty(variableName));
-            const comparison = variableComparisons[variableName];
-            const valueName = variableName + comparison;
-            const value = variableValues[variableName];
-            parameters[valueName] = value;
-            parameterString += comparison + ': $' + valueName + '\n';
-            parameterString += '                }\n            }\n';
-        }
-        parameterString += '        ]\n    }';
+    static generateFilter(filterJSON, variableValues) {
         return {
-            parameterString: parameterString,
-            parameters: parameters
-        };
+            // Add the parameter value and also take out all the quotation marks from the JSON
+            parameterString: "filter: " + JSON.stringify(filterJSON).replace(/['"]+/g, ''),
+            parameters: variableValues
+        }
     }
     static generateIDList(ids) {
         let idListString = "ids: [";
@@ -282,6 +309,7 @@ class GraphQL {
         }
     }
     // TODO This only supports input String! regular types. Reason to change?
+    // TODO Make this more resilient to an empty filter?
     static constructQuery(queryName, queryFunction, inputVariables, outputVariables, filter = null, ifBatch = false, ifQuery = false) {
         let query = '';
         var finalInputVariables;
@@ -374,7 +402,7 @@ class GraphQL {
                 }
                 // console.log("Returned!");
                 if (ifDebug) {
-                    console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                    alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 }
                 // console.log(JSON.stringify(queryCache));
                 if (putQuery) {
