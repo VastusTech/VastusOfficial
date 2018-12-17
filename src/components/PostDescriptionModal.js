@@ -10,6 +10,7 @@ import { fetchClient, forceFetchPost, fetchPost } from "../redux_helpers/actions
 import { forceFetchUserAttributes } from "../redux_helpers/actions/userActions";
 import PostFunctions from "../databaseFunctions/PostFunctions";
 // import CommentScreen from "../screens/CommentScreen";
+// import VideoUploadScreen from "../screens/VideoUploadScreen";
 
 // function convertTime(time) {
 //     if (parseInt(time, 10) > 12) {

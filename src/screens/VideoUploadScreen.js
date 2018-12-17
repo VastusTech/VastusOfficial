@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
-import CommentBox from "../components/CommentBox";
+import VideoUpload from '../components/VideoUpload';
 import Comments from '../components/Comments';
 import {Grid, Card, Dimmer, Loader, Icon, Message} from "semantic-ui-react";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 
-class CommentScreen extends Component {
+class VideoUploadScreen extends Component {
     state = {
         currentChannel: '',
         canCallHistory: true,
@@ -15,7 +15,7 @@ class CommentScreen extends Component {
 
     _isMounted = true;
 
-    channelName = "persisted:" + this.props.challengeChannel;
+    channelName = "persisted:" + this.props.challengeChannel + "_VideoFeed";
     //channelName = this.props.challengeChannel;
 
     constructor(props) {
@@ -46,7 +46,7 @@ class CommentScreen extends Component {
         channel.once('attached', () => {
             channel.history((err, page) => {
                 // create a new array with comments only in an reversed order (i.e old to new)
-                const commentArray = Array.from(page.items.reverse(), item => item.data);
+                const commentArray = Array.from(page.items, item => item.data);
 
                 //console.error(JSON.stringify(commentArray));
 
@@ -119,13 +119,13 @@ class CommentScreen extends Component {
                 <Card.Content>
                     {/*console.error("Comment screen render user: " + this.props.curUser)*/}
                     {this.loadHistory(this.state.isHistoryLoading)}
-                    <Comments comments={this.state.comments}/>
-                    <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
+                    <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                                  challengeChannel={this.channelName}/>
+                    <Comments comments={this.state.comments}/>
                 </Card.Content>
             </Card>
         );
     }
 }
 
-export default CommentScreen;
+export default VideoUploadScreen;

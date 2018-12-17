@@ -11,6 +11,7 @@ import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import EventFunctions from "../databaseFunctions/EventFunctions";
+import VideoUploadScreen from "../screens/VideoUploadScreen";
 
 type Props = {
     open: boolean,
@@ -264,7 +265,7 @@ class EventDescriptionModal extends Component<Props> {
                                     <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
                                 </Grid.Column>
                             </Grid>
-                            <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                            <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                         </div>
                     )
                 }
@@ -272,7 +273,7 @@ class EventDescriptionModal extends Component<Props> {
                     return(
                         <div>
                             <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
-                            <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                            <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                         </div>
                     );
                 }
@@ -281,7 +282,7 @@ class EventDescriptionModal extends Component<Props> {
                 return (
                     <div>
                         <Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>
-                        <CommentScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                        <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
                     </div>
                 )
             }
