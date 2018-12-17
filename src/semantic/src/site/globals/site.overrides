@@ -150,6 +150,10 @@ body {
   margin-right: 0 !important;
 }
 
+.u-margin-bottom--half {
+  margin-bottom: 4px !important;
+}
+
 .u-margin-bottom--1 {
   margin-bottom: 8px !important;
 }

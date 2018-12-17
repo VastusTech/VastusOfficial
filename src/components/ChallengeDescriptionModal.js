@@ -368,7 +368,9 @@ class ChallengeDescriptionModal extends Component<Props> {
                         <List relaxed>
                             <List.Item>
                                 <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
-                                    <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                                    <Modal.Content>
+                                        <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                                    </Modal.Content>
                                 </Modal>
                             </List.Item>
                             <List.Item>
