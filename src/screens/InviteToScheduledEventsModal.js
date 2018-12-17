@@ -7,6 +7,7 @@ import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import { inspect } from 'util';
 import Lambda from "../Lambda";
 import {fetchEvent} from "../redux_helpers/actions/cacheActions";
+import InviteFunctions from "../databaseFunctions/InviteFunctions";
 
 class InviteToScheduledEventsModalProp extends Component {
     state = {
@@ -48,7 +49,7 @@ class InviteToScheduledEventsModalProp extends Component {
     }
 
     handleInviteToEvent(eventID) {
-        Lambda.sendEventInvite(this.props.user.id, this.props.user.id, this.props.friendID, eventID,
+        InviteFunctions.createEventInvite(this.props.user.id, this.props.user.id, this.props.friendID, eventID,
             (data) => {
                 this.handleClose();
             }, (error) => {

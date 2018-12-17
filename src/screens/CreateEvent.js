@@ -6,6 +6,7 @@ import {setError} from "../redux_helpers/actions/infoActions";
 import VTLogo from "../img/vt_new.svg";
 import QL from "../GraphQL";
 import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -122,7 +123,8 @@ class CreateEventProp extends Component<Props> {
         // TODO Check to see if valid inputs!
         if (this.eventState.capacity && this.eventState.location && this.eventState.title && this.eventState.goal) {
             if (Number.isInteger(+this.eventState.capacity)) {
-                Lambda.createChallengeOptional(this.props.user.id, this.props.user.id, time, this.eventState.capacity,
+                // TODO Fix this........
+                ChallengeFunctions.createChallengeOptional(this.props.user.id, this.props.user.id, time, this.eventState.capacity,
                     this.eventState.location, this.eventState.title, this.eventState.goal, this.eventState.description,
                     "3", [], this.eventState.access, (data) => {
                         console.log("Successfully created a challenge!");

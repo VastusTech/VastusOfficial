@@ -44,19 +44,22 @@ class UserFunctions {
     static updateBio(fromID, userID, bio, successHandler, failureHandler) {
         this.updateSet(fromID, userID, "bio", bio, successHandler, failureHandler);
     }
+    static updateProfileImagePath(fromID, userID, profileImagePath, successHandler, failureHandler) {
+        this.updateSet(fromID, userID, "profileImagePath", profileImagePath, successHandler, failureHandler);
+    }
 
     // TODO THESE ARE THE LOW-LEVEL DATABASE ACTION FUNCTIONS
     // =============================================================================
     static updateAdd(fromID, userID, attributeName, attributeValue, successHandler, failureHandler) {
         Lambda.updateAddToAttribute(fromID, userID, getItemTypeFromID(userID), attributeName, attributeValue, successHandler, failureHandler);
     }
-    static updateRemove(fromID, itemType, userID, attributeName, attributeValue, successHandler, failureHandler) {
+    static updateRemove(fromID, userID, attributeName, attributeValue, successHandler, failureHandler) {
         Lambda.updateRemoveFromAttribute(fromID, userID, getItemTypeFromID(userID), attributeName, attributeValue, successHandler, failureHandler);
     }
-    static updateSet(fromID, itemType, userID, attributeName, attributeValue, successHandler, failureHandler) {
+    static updateSet(fromID, userID, attributeName, attributeValue, successHandler, failureHandler) {
         Lambda.updateSetAttribute(fromID, userID, getItemTypeFromID(userID), attributeName, attributeValue, successHandler, failureHandler);
     }
-    static delete(fromID, itemType, userID, successHandler, failureHandler) {
+    static delete(fromID, userID, successHandler, failureHandler) {
         Lambda.delete(fromID, userID, getItemTypeFromID(userID), successHandler, failureHandler);
     }
 }

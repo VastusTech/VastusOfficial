@@ -11,6 +11,9 @@ import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CommentScreen from "../screens/CommentScreen";
 import ChallengeMemberList from "../screens/ChallengeMemberList";
+import UserFunctions from "../databaseFunctions/UserFunctions";
+import InviteFunctions from "../databaseFunctions/InviteFunctions";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 type Props = {
     open: boolean,
@@ -121,7 +124,7 @@ class ChallengeDescriptionModal extends Component<Props> {
     handleDeleteChallengeButton() {
         //alert("Handling deleting the event");
         this.setState({isDeleteLoading: true, isLoading: true});
-        Lambda.deleteChallenge(this.props.user.id, this.getChallengeAttribute("id"), (data) => {
+        ChallengeFunctions.delete(this.props.user.id, this.getChallengeAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
             this.setState({isLoading: false, isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
@@ -135,7 +138,7 @@ class ChallengeDescriptionModal extends Component<Props> {
     handleLeaveChallengeButton() {
         //alert("Handling leaving the event");
         this.setState({isLeaveLoading: true, isLoading: true});
-        Lambda.removeClientFromChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"), (data) => {
+        UserFunctions.removeChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             //alert(JSON.stringify(data));
             this.setState({isLoading: false, isLeaveLoading: false, isJoined: false});
@@ -148,7 +151,7 @@ class ChallengeDescriptionModal extends Component<Props> {
     handleJoinChallengeButton() {
         //alert("Handling joining the event");
         this.setState({isJoinLoading: true, isLoading: true});
-        Lambda.clientJoinChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
+        UserFunctions.addChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
             () => {
                 this.forceUpdate();
                 //alert(JSON.stringify(data));
@@ -160,7 +163,7 @@ class ChallengeDescriptionModal extends Component<Props> {
 
     handleRequestChallengeButton() {
         this.setState({isRequestLoading: true, isLoading: true});
-        Lambda.createChallengeRequest(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
+        InviteFunctions.createChallengeRequest(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
             () => {
                 this.forceUpdate();
                 this.setState({isLoading: false, isRequestLoading: false, isRequesting: true});

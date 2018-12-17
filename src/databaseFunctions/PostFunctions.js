@@ -69,3 +69,5 @@ class PostFunctions {
         Lambda.delete(fromID, postID, "Post", successHandler, failureHandler);
     }
 }
+
+export default PostFunctions;
