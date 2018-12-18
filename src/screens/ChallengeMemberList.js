@@ -61,22 +61,6 @@ class ChallengeMemberList extends Component<Props> {
     // closeClientModal = () => {this.setState({clientModalOpen: false})};
 
     render() {
-        // function createCorrectButton(userID, winnerID, challengeID, isOwned) {
-        //     //alert("user: " + userID + " winner: " + winnerID + " challenge: " + challengeID + " Owned?: " + isOwned);
-        //     if(isOwned === true) {
-        //         return (
-        //             <Button basic color='purple' onClick={() => {Lambda.completeChallenge(userID, winnerID, challengeID,
-        //                 (data) => {
-        //                     alert(JSON.stringify(data));
-        //                 }, (error) => {
-        //                     alert(JSON.stringify(error));
-        //                 })}}>
-        //                 Declare Winner
-        //             </Button>
-        //         )
-        //     }
-        // }
-
         function rows(userID, members, handleClientPress)
         {
             //alert(members);
