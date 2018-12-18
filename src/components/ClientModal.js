@@ -188,14 +188,15 @@ class ClientModal extends Component<Props> {
 
     render() {
         function errorMessage(error) {
-            if (error) {
-                return (
-                    <Message color='red'>
-                        <h1>Error!</h1>
-                        <p>{error.errorMessage}</p>
-                    </Message>
-                );
-            }
+            return null;
+            // if (error) {
+            //     return (
+            //         <Message color='red'>
+            //             <h1>Error!</h1>
+            //             <p>{error.errorMessage}</p>
+            //         </Message>
+            //     );
+            // }
         }
         function loadingProp(isLoading) {
             if (isLoading) {
