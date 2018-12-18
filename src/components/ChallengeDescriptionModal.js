@@ -79,6 +79,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         this.isRequesting();
         this.isRestricted();
         //console.log("Mount Owned: " + this.state.isOwned);
+        this.componentWillReceiveProps(this.props);
     }
 
     componentWillReceiveProps(newProps) {
@@ -89,7 +90,9 @@ class ChallengeDescriptionModal extends Component<Props> {
         const members = this.getChallengeAttribute("members");
         if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
             for (let i = 0; i < members.length; i++) {
-                this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+                this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
+                    this.setState({});
+                });
             }
         }
     }
@@ -304,17 +307,13 @@ class ChallengeDescriptionModal extends Component<Props> {
         else if (this.state.isOwned) {
             // TODO This should also link the choose winner button
             return (
-                <div>
-                    <Grid columns={2}>
-                        <Grid.Column>
-                            <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
-                        </Grid.Column>
-                    </Grid>
-                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
-                </div>
+                <Fragment>
+                    <Button primary fluid className='u-margin-bottom--1' onClick={this.openSubmitModal}>Submit Your Entry</Button>
+                    <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
+                    <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
+                    <Divider className='u-margin-top--4' />
+                    <Tab menu={{ widths: 2, inverted: true }} panes={panes} className='u-challenge u-margin-top--2' />
+                </Fragment>
             )
         }
         else if (this.state.isJoined) {

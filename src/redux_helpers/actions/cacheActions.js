@@ -70,6 +70,9 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         if (!variablesList.includes("id")) {
             variablesList = [...variablesList, "id"];
         }
+        if (!variablesList.includes("item_type")) {
+            variablesList = [...variablesList, "item_type"];
+        }
         QL[QLFunctionName](id, variablesList, (data) => {
             // console.log("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {
@@ -486,6 +489,10 @@ export function getQueryCache(itemType, getStore) {
     return switchReturnItemType(itemType, cache.clientQueries, cache.trainerQueries, cache.gymQueries, cache.workoutQueries,
         cache.reviewQueries, cache.eventQueries, cache.challengeQueries, cache.inviteQueries, cache.postQueries,
         "Retrieve query cache not implemented");
+}
+export function getPutItemFunction(itemType) {
+    return switchReturnItemType(itemType, putClient, putTrainer, putGym, putWorkout, putReview, putEvent, putChallenge,
+        putPost, "Retrieve put item function item type not implemented");
 }
 export function getPutQueryFunction(itemType) {
     return switchReturnItemType(itemType, putClientQuery, putTrainerQuery, putGymQuery, putWorkoutQuery, putReviewQuery,

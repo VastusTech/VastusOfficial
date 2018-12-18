@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {fetchClient, fetchEvent, putClientQuery, putEventQuery, fetchChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {newSearch, loadMoreResults} from "../redux_helpers/actions/searchActions";
 import {switchReturnItemType} from "../logic/ItemType";
+import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 
 // setupAWS();
 
@@ -255,48 +256,73 @@ class SearchBarProp extends Component {
                 />
             );
         }
+        else if (type === "Challenge") {
+            return(
+                <ChallengeDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} challengeID={this.state.result.id}/>
+            )
+        }
         else {
             console.log("Wrong type inputted! Received " + type);
         }
     }
 
     getFormattedResults() {
-        const results = this.props.search.results;
         const formattedResults = [];
-        for (const i in results) {
-            if (results.hasOwnProperty(i)) {
-                const result = results[i];
-                if (result.hasOwnProperty("item_type") && result.item_type) {
-                    let formattedResult = switchReturnItemType(result.item_type,
-                        { // Client
-                            title: result.name,
-                            description: result.username,
-                            resultcontent: result
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        { // Event
-                            title: (result.title),
-                            description: result.goal,
-                            resultcontent: result
-                        },
-                        { // Challenge
-                            title: (result.title),
-                            description: result.description,
-                            resultcontent: result
-                        },
-                        null,
-                        null);
+        if (this.props.search.searchBarEnabled) {
+            const results = this.props.search.results;
+            const resultTitles = [];
+            for (const i in results) {
+                if (results.hasOwnProperty(i)) {
+                    const result = results[i];
+                    if (result.hasOwnProperty("item_type") && result.item_type) {
+                        let formattedResult = switchReturnItemType(result.item_type,
+                            { // Client
+                                title: result.name,
+                                description: result.username,
+                                resultcontent: result
+                            },
+                            null,
+                            null,
+                            null,
+                            null,
+                            { // Event
+                                title: (result.title),
+                                description: result.goal,
+                                resultcontent: result
+                            },
+                            { // Challenge
+                                title: (result.title),
+                                description: result.description,
+                                resultcontent: result
+                            },
+                            null,
+                            null);
 
-                    if (formattedResult) {
-                        // TODO Insertsort this? By what basis though?
-                        formattedResults.push(formattedResult);
+                        if (formattedResult) {
+                            // TODO Insertsort this? By what basis though?
+                            while (formattedResult.title && resultTitles.includes(formattedResult.title)) {
+                                const len = formattedResult.title.length;
+                                // console.log(JSON.stringify(resultTitles));
+                                // console.log(formattedResult.title + "~ -3: " + formattedResult.title[len - 3] + ", -1: " + formattedResult.title[len - 1]);
+                                if (formattedResult.title[len - 3] === "(" && formattedResult.title[len - 1] === ")") {
+                                    let num = parseInt(formattedResult.title[len - 2]);
+                                    num++;
+                                    formattedResult.title = formattedResult.title.substr(0, len - 3) + "(" + num + ")";
+                                    // formattedResult.title[len - 2] = num;
+                                }
+                                else {
+                                    formattedResult.title += " (2)";
+                                }
+                            }
+                            // console.log(formattedResult.title + " is not in " + JSON.stringify(resultTitles));
+                            formattedResults.push(formattedResult);
+                            resultTitles.push(formattedResult.title);
+                        }
                     }
                 }
             }
         }
+        // console.log(formattedResults.length);
         return formattedResults;
     }
 
@@ -320,6 +346,7 @@ class SearchBarProp extends Component {
                     onSearchChange={_.debounce(this.handleSearchChange, 1000, { leading: true })}
                     results={this.getFormattedResults()}
                     value={this.props.search.searchQuery}
+                    showNoResults={this.props.search.searchBarEnabled}
                 />
             </Fragment>
         )

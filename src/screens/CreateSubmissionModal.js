@@ -22,7 +22,10 @@ class CreateSubmissionModal extends Component {
         picturesLoading: false,
         videosLoading: false,
         pictures: [],
-        videos: []
+        videos: [],
+        tempPictureURLs: [],
+        tempVideoURLs: [],
+        notifySubmission: false
     };
 
     constructor(props) {
@@ -100,7 +103,7 @@ class CreateSubmissionModal extends Component {
                     }
                 });
             }
-            Storage.put(id + "/")
+            // Storage.put(id + "/")
         }, (error) => {
             console.error(error);
         });
@@ -110,7 +113,7 @@ class CreateSubmissionModal extends Component {
         const picturePaths = [];
         console.log("Pictures: " + this.state.pictures.length);
         for (let i = 0; i < this.state.pictures.length; i++) {
-            const path = "/pictures/" + i;
+            const path = "pictures/" + i;
             picturePaths.push(path);
             console.log("Added: " + path);
         }
@@ -124,7 +127,7 @@ class CreateSubmissionModal extends Component {
         const videoPaths = [];
         console.log("Videos: " + this.state.videos.length);
         for (let i = 0; i < this.state.videos.length; i++) {
-            const path = "/videos/" + i;
+            const path = "videos/" + i;
             videoPaths.push(path);
             console.log("Added: " + path);
         }
@@ -135,23 +138,48 @@ class CreateSubmissionModal extends Component {
     }
 
     setVideo(event) {
+        const index = this.state.videos.length;
         this.state.videos.push(event.target.files[0]);
+        const path = "/" + this.props.user.id + "/temp/videos/" + index;
+        Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
+        .then(() => {
+            Storage.get(path).then((url) => {
+                this.state.tempVideoURLs.push(url);
+                this.setState({});
+            }).catch((error) => {
+                console.error(error);
+            })
+        }).catch((error) => {
+                console.error(error);
+        });
         this.setState({});
     }
 
     handleSubmitButton() {
         this.setState({isSubmitLoading: true});
         this.createSubmission(() => {
-            this.setState({isSubmitLoading: false});
+            this.setState({isSubmitLoading: false, notifySubmission: true});
         });
     }
 
+    displaySubmission() {
+        if(this.state.notifySubmission) {
+            return (
+                <Message positive>
+                    <Message.Header>Success!</Message.Header>
+                    <p>
+                        You submitted a video to the challenge!
+                    </p>
+                </Message>
+            );
+        }
+    }
+
     displayCurrentVideo() {
-        if (this.state.videos && this.state.videos.length > 0) {
-            console.log(this.state.videos[[0]]);
+        if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
                 <Player>
-                    <source src={this.state.videos[0]} type="video/mp4"/>
+                    <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
                 </Player>
             );
         }
@@ -186,6 +214,7 @@ class CreateSubmissionModal extends Component {
                         </div>
                     </Fragment>
                 </Modal.Content>
+                <div>{this.displaySubmission()}</div>
                 <Button primary fluid loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} onClick={this.handleSubmitButton}>Submit</Button>
             </Modal>
         );
