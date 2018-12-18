@@ -23,6 +23,14 @@ Date.prototype.toIsoString = function() {
         ':' + pad(tzo % 60);
 };
 
+Date.daysBetween = function( date1, date2 ) {   //Get 1 day in milliseconds
+    let one_day=1000*60*60*24;    // Convert both dates to milliseconds
+    let date1_ms = date1.getTime();
+    let date2_ms = date2.getTime();    // Calculate the difference in milliseconds
+    let difference_ms = date2_ms - date1_ms;        // Convert back to days and return
+    return Math.round(difference_ms/one_day);
+};
+
 /*
 * Challenge Card
 *
@@ -83,14 +91,33 @@ class ChallengeCard extends Component {
         return String(date);
     }
 
-    getDaysLeft(curDate) {
+    convertMonth(month) {
+        let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+        for(let i=0; i<12; i++) {
+            //alert(month + "vs" + months[i]);
+            if(month === months[i]) {
+                return (i + 1);
+            }
+        }
+    }
+
+    getDaysLeft() {
+        let curDate = this.getTodayDateString();
         let endTime = this.getChallengeAttribute("endTime");
-        //alert(endTime + " vs " + curDate + "and substr " + curDate.substr(8, 2));
+        let curMonth = this.convertMonth(curDate.substr(4, 3));
+        let endMonth = endTime.substr(5, 2);
+        //alert(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
         if(endTime && curDate) {
-            endTime = endTime.substr(8, 2);
-            curDate = curDate.substr(8, 2);
-            //alert(endTime - curDate);
-            return (endTime - curDate);
+            endTime = parseInt(endTime.substr(8, 2), 10);
+            curDate = parseInt(curDate.substr(8, 2), 10);
+            //alert(endMonth - curMonth);
+            if((endMonth - curMonth) < 0) {
+                //alert((endTime + (30 * (endMonth - curMonth + 12))));
+                return ((endTime + (30 * (endMonth - curMonth + 12))) - curDate);
+            }
+            else {
+                return ((endTime + (30 * (endMonth - curMonth))) - curDate);
+            }
         }
     }
 
@@ -157,10 +184,10 @@ class ChallengeCard extends Component {
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
                 <Card.Content textAlign = 'center'>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
-                    <Card.Meta textAlign = 'center' >{this.getDaysLeft(this.getTodayDateString())} days left</Card.Meta>
+                    <Card.Meta textAlign = 'center' >{this.getDaysLeft()/*this.getDaysLeft(Date.daysBetween(this.getTodayDateString(), this.getChallengeAttribute("endTime")))*/} days left</Card.Meta>
                     {this.displayTagIcons(this.getChallengeAttribute("tags"))}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
-                    daysLeft={this.getDaysLeft(this.getTodayDateString())}/>
+                                               daysLeft={5}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta textAlign = 'center'>

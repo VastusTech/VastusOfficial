@@ -34,7 +34,7 @@ class CompleteChallengeModal extends Component {
 
     declareWinnerButtonHandler(id) {
         if (id && this.state.challengeID && this.props.user.id) {
-            alert(this.props.user.id + " " + this.state.challengeID + " " + id);
+            console.log(this.props.user.id + " " + this.state.challengeID + " " + id);
             ChallengeFunctions.updateWinner(this.props.user.id, this.state.challengeID, id,
                 (data) => {
                     // alert("Successfully set the event winner!");
