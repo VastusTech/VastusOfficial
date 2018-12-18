@@ -34,6 +34,19 @@ class ClientModal extends Component<Props> {
         requestSent: false
     };
 
+    resetState(clientID) {
+        this.setState({
+            error: null,
+            isLoading: true,
+            clientID,
+            sentRequest: false,
+            inviteModalOpen: false,
+            isRemoveFriendLoading: false,
+            isAddFriendLoading: false,
+            requestSent: false
+        });
+    }
+
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
     }
@@ -42,6 +55,7 @@ class ClientModal extends Component<Props> {
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
                 // alert("Setting new state to " + newProps.clientID);
+                this.resetState(newProps.clientID);
                 this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
