@@ -15,6 +15,8 @@ import ChallengeMemberList from "../screens/ChallengeMemberList";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import CreateSubmissionModal from "../screens/CreateSubmissionModal";
+import SubmissionsScreen from "../screens/SubmissionsScreen";
 
 type Props = {
     open: boolean,
@@ -42,6 +44,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         // members: {},
         clientModalOpen: false,
         completeModalOpen: false,
+        submitModalOpen: false,
         isLeaveLoading: false,
         isDeleteLoading: false,
         isJoinLoading: false,
@@ -65,6 +68,8 @@ class ChallengeDescriptionModal extends Component<Props> {
         this.openClientModal = this.openClientModal.bind(this);
         this.closeCompleteModal = this.closeCompleteModal.bind(this);
         this.openCompleteModal = this.openCompleteModal.bind(this);
+        this.openSubmitModal = this.openSubmitModal.bind(this);
+        this.closeSubmitModal = this.closeSubmitModal.bind(this);
     }
 
     componentDidMount() {
@@ -255,6 +260,9 @@ class ChallengeDescriptionModal extends Component<Props> {
     openCompleteModal() { this.setState({completeModalOpen: true}); }
     closeCompleteModal() { this.setState({completeModalOpen: false}); }
 
+    openSubmitModal() { this.setState({submitModalOpen: true}); }
+    closeSubmitModal() { this.setState({submitModalOpen: false}); }
+
     forceUpdate() {
         forceFetchChallenge(this.getChallengeAttribute("id"), ["owner",
             "time", "capacity", "title", "description", "difficulty", "memberIDs", "memberRequests", "access", "restriction", "prize"]);
@@ -276,7 +284,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         const panes = [
             { menuItem: 'Submissions', render: () => (
                 <Tab.Pane basic className='u-border--0 u-padding--0 u-margin-top--3'>
-                    <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    <SubmissionsScreen challengeID={this.state.challengeID}/>
                 </Tab.Pane>
             )},
             { menuItem: 'Challenge Chat', render: () => (
@@ -312,7 +320,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         else if (this.state.isJoined) {
             return (
                 <Fragment>
-                    <Button primary fluid className='u-margin-bottom--1'>Submit Your Entry</Button>
+                    <Button primary fluid className='u-margin-bottom--1' onClick={this.openSubmitModal}>Submit Your Entry</Button>
                     <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
                     <Divider className='u-margin-top--4' />
                     <Tab menu={{ widths: 2, inverted: true }} panes={panes} className='u-challenge u-margin-top--2' />
@@ -415,6 +423,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
+                        <CreateSubmissionModal open={this.state.submitModalOpen} onClose={this.closeSubmitModal} challengeID={this.getChallengeAttribute("id")}/>
                         <List relaxed>
                             {/*{this.createChallengeChatButton()}*/}
                             <List.Item>
