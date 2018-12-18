@@ -124,10 +124,10 @@ class VideoUpload extends Component<Props> {
             <form onSubmit={this.addComment} className='u-margin-top--2'>
                 <Input type='text' action fluid className="textarea" name="comment" placeholder="Write Message...">
                     <input />
-                    <Label as='label' for='proPicUpload' basic className='u-bg--input u-margin--0 u-border-x--0 u-border-y--1 u-border-color--border u-radius--0 u-flex u-flex-justify--center u-flex-align--center'>
-                        <Icon name='camera' className='u-margin--0' />
+                    <Button as='label' for='proPicUpload'  >
+                        <Icon name='camera' size = "Large"/>
                         <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden='true' onChange={this.setPicture}/>
-                    </Label>
+                    </Button>
                     <Button primary>Send</Button>
                 </Input> 
             </form>
