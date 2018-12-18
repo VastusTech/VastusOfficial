@@ -265,7 +265,7 @@ class EventDescriptionModal extends Component {
             }
             else {
                 //alert(isJoinLoading);
-                return({});
+                return null;
             }
         }
 

@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { fetchPost } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../logic/TimeHelper";
 import ItemType from "../logic/ItemType";
+import { Storage } from "aws-amplify";
 
 type Props = {
     postID: string
@@ -22,6 +23,7 @@ class PostCard extends Component {
         error: null,
         // isLoading: true,
         postID: null,
+        videoURL: null,
         // event: null,
         // members: {},
         // owner: null,
@@ -93,12 +95,21 @@ class PostCard extends Component {
         const pictures = this.getPostAttribute("picturePaths");
         const videos = this.getPostAttribute("videoPaths");
         if (videos && videos.length > 0) {
-            const video = videos[0];
-            return(
-                <Player>
-                    <source src={this.state.videoURL} type="video/mp4"/>
-                </Player>
-            );
+            if (!this.state.videoURL) {
+                const video = videos[0];
+                Storage.get(video).then((url) => {
+                    this.setState({videoURL: url});
+                }).catch((error) => {
+                    console.error(error);
+                });
+            }
+            else {
+                return (
+                    <Player inline={true}>
+                        <source src={this.state.videoURL} type="video/mp4"/>
+                    </Player>
+                );
+            }
         }
     }
 
@@ -174,12 +185,12 @@ class PostCard extends Component {
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <Card fluid raised onClick={this.openPostModal}>
+            <Card fluid raised>
                 <Card.Header textAlign = 'center'>{this.getPostAttribute("title")}</Card.Header>
                 <Card.Content>
                     {this.getDisplayMedia()}
                 </Card.Content>
-                <Card.Content extra>
+                <Card.Content extra onClick={this.openPostModal}>
                     <Card.Meta textAlign = 'center' >{convertFromISO(this.getPostAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>
                     <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>

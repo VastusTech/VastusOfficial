@@ -13,7 +13,7 @@ type Props = {
 
 class SubmissionsScreen extends Component {
     state = {
-        isLoading: true,
+        isLoading: false,
         challengeID: null,
         loadedPostIDs: [],
         sentRequest: false
@@ -32,38 +32,42 @@ class SubmissionsScreen extends Component {
     }
 
     componentDidMount() {
-        this.update(this.props);
+        // alert("cdm");
         if (this.state.challengeID !== this.props.challengeID) {
-            this.setState({challengeID: this.props.challengeID});
+            this.state.challengeID = this.props.challengeID;
+            // this.setState({challengeID: this.props.challengeID});
         }
+        this.update(this.props);
     }
 
     componentWillReceiveProps(newProps, nextContext) {
+        // alert("cwrp");
+        if (this.state.challengeID !== this.props.challengeID) {
+            this.state.challengeID = this.props.challengeID;
+            // this.setState({challengeID: this.props.challengeID});
+        }
         this.update(newProps);
     }
 
     update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
         if (this.getChallengeAttribute("id")) {
+            // alert("Updating!");
             const submissions = this.getChallengeAttribute("submissions");
-            if (this.state.isLoading && submissions && submissions.length) {
-                this.state.isLoading = false;
+            if (!this.state.sentRequest && submissions && submissions.length > 0) {
+                this.state.isLoading = true;
+                this.state.sentRequest = true;
                 for (let i = 0; i < submissions.length; i++) {
-                    alert("Fetching: " + submissions[i]);
-                    props.fetchPost(submissions[i], ["id", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                    // alert("Fetching: " + submissions[i]);
+                    props.fetchPost(submissions[i], ["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                         (post) => {
-                        alert("Returned a value! Post: " + JSON.stringify(post));
+                        // alert("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
                             this.state.loadedPostIDs.push(post.id);
+                            this.setState({isLoading: false});
                         }
                     })
                 }
-            }
-            else if (!this.state.sentRequest && !this.state.isLoading) {
-                this.state.sentRequest = true;
-                props.fetchChallenge(this.state.challengeID, ["submissions"], () => {
-                    this.setState({});
-                })
             }
         }
     }
