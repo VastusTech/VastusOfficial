@@ -13,6 +13,8 @@ import { connect } from "react-redux";
 import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
+import EventFunctions from "../databaseFunctions/EventFunctions";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 class NotificationCard extends Component {
     state = {
@@ -137,7 +139,7 @@ class NotificationCard extends Component {
         this.handleAcceptFriendRequest();
     }
 
-    handleAcceptEventRequestButton() {
+    handleAcceptEventInviteButton() {
         this.setState({isAcceptInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
@@ -188,7 +190,7 @@ class NotificationCard extends Component {
         this.handleDeclineFriendRequest();
     }
 
-    handleDeclineEventRequestButton() {
+    handleDeclineEventInviteButton() {
         this.setState({isDenyInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
@@ -209,6 +211,49 @@ class NotificationCard extends Component {
             console.log("user id or invite id not set");
             this.setState({isDenyInviteLoading: false});
         }
+    }
+
+    handleAcceptChallengeInvite() {
+        UserFunctions.addChallenge(this.state.user.id, this.state.user.id, this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineChallengeInvite() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleAcceptEventRequest() {
+        EventFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineEventRequest() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleAcceptChallengeRequest() {
+        ChallengeFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineChallengeRequest() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
     }
 
     getInviteAttribute(attribute) {
@@ -341,8 +386,8 @@ class NotificationCard extends Component {
                                         </Feed.Summary>
                                         <Divider/>
                                         <Feed.Extra>
-                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineEventRequestButton.bind(this)}>Deny</Button>
-                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptEventRequestButton.bind(this)}>Accept</Button>
+                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineEventInviteButton.bind(this)}>Deny</Button>
+                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptEventInviteButton.bind(this)}>Accept</Button>
                                         </Feed.Extra>
                                     </Feed.Content>
                                 </Feed.Event>
