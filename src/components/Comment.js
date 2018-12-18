@@ -36,7 +36,7 @@ class Comment extends Component<Props> {
                         return(
                             <div className='u-text-align--right'>
                                 <strong className='u-margin-bottom--half u-display--block'>{this.state.username}</strong>
-                                <Label fluid className='u-bg--primary u-color--white u-overflow-wrap--break u-max-width--full' pointing='right' size='large'>
+                                <Label fluid className='u-bg--primary u-color--white u-overflow-wrap--break u-max-width--full' pointing='right' size='large' color='purple'>
                                     {this.props.comment.comment}
                                 </Label>
                             </div>
