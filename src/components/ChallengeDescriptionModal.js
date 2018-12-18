@@ -284,7 +284,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                     <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
                 </Tab.Pane> 
             )},
-        ]
+        ];
 
         //alert("Owned: " + isOwned + " Joined: " + isJoined);
         // alert(ifCompleted);
@@ -397,7 +397,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
                         <List relaxed>
-                            {this.createChallengeChatButton()}
+                            {/*{this.createChallengeChatButton()}*/}
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
