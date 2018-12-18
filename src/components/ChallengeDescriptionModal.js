@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image, Tab } from 'semantic-ui-react';
+import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image, Tab, Dimmer, Label, Loader, Segment } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 // import Lambda from '../Lambda';
 // import EventMemberList from "../screens/EventMemberList";
@@ -340,16 +340,31 @@ class ChallengeDescriptionModal extends Component<Props> {
     }
 
     createChallengeChatButton() {
-        if (this.state.isOwned || this.state.isJoined) {
-            return(
-                <List.Item>
-                    <Modal closeIcon trigger={<Button primary>Challenge Chat</Button>}>
-                        <CommentScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
-                    </Modal>
-                </List.Item>
+        
+        return null;
+    }
+    
+   profilePicture() {
+        if (this.props.user.profilePicture) {
+            
+            return (
+                <div>
+                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                            <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                        </Label>
+                        <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                    </div>
+                </div>
             );
         }
-        return null;
+        else {
+            return(
+                <Dimmer inverted>
+                    <Loader />
+                </Dimmer>
+            );
+        }
     }
 
     render() {
@@ -378,20 +393,24 @@ class ChallengeDescriptionModal extends Component<Props> {
             this.setState({canCallChecks: false});
             //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
-
+	
+		 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
+        	
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
-                <div>{this.getChallengeAttribute("title")}</div>
-                    <List relaxed>
-                    <List.Item>
-                        <List.Icon name='bullseye' />
-                        <List.Content>
-                            {this.getChallengeAttribute("goal")}
-                        </List.Content>
-                    </List.Item>
-                    </List></Modal.Header>
+            
+                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))} 
+                {this.getChallengeAttribute("title")}</div>
+                		<Segment inverted color='black' textAlign = "center" >
+                           <Icon.Group size='large'>
+      <Icon name='bullseye' />
+    </Icon.Group> {this.getChallengeAttribute("goal")}
+                        </Segment>
+                    </Modal.Header>
+              
+                    
+                
                 <Modal.Content>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
@@ -401,7 +420,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='user' />
                                 <List.Content>
-                                    Created by <Button className="u-button--flat" onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                                    Created by {this.profilePicture()}<Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
                                 </List.Content>
                             </List.Item>
                             <List.Item>
@@ -419,11 +438,11 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <List.Item>
                                 <List.Icon name='users' />
                                 <List.Content>
-                                    <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
+                                 <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                         <Modal.Content>
                                             <ChallengeMemberList challengeID={this.state.challengeID} />
                                         </Modal.Content>
-                                    </Modal>
+                                 </Modal>
                                 </List.Content>
                             </List.Item>
                         </List>
