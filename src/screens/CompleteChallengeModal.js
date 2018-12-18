@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from "react";
 import { Modal, Message, Button, Card } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
-import Lambda from "../Lambda";
 import { connect } from "react-redux";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 /**
  * Takes in open, onClose, and challengeID
@@ -35,7 +35,7 @@ class CompleteChallengeModal extends Component {
     declareWinnerButtonHandler(id) {
         if (id && this.state.challengeID && this.props.user.id) {
             alert(this.props.user.id + " " + this.state.challengeID + " " + id);
-            Lambda.setEventWinner(this.props.user.id, this.state.challengeID, id,
+            ChallengeFunctions.updateWinner(this.props.user.id, this.state.challengeID, id,
                 (data) => {
                     // alert("Successfully set the event winner!");
                     this.props.onClose();

@@ -4,6 +4,9 @@ class PostFunctions {
     // TODO THESE ARE THE HIGH-LEVEL DATABASE ACTION FUNCTIONS
     // =============================================================================
     // Create Functions ============================================================
+    static createSubmission(fromID, by, challengeID, description, picturePaths, videoPaths, successHandler, failureHandler) {
+        this.create(fromID, by, description, "public", "submission", challengeID, picturePaths, videoPaths, successHandler, failureHandler);
+    }
     static createBarePost(fromID, by, description, access, successHandler, failureHandler) {
         this.createNormalPost(fromID, by, description, access, null, null, successHandler, failureHandler);
     }

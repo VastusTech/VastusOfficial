@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO, convertFromIntervalISO } from "../logic/TimeHelper";
 
-/*type Props = {
-    challengeID: string
-}*/
 
 Date.prototype.toIsoString = function() {
     var tzo = -this.getTimezoneOffset(),
@@ -158,7 +155,7 @@ class ChallengeCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openChallengeModal.bind(this)}>
-                <Card.Content>
+                <Card.Content textAlign = 'center'>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{this.getDaysLeft(this.getTodayDateString())} days left</Card.Meta>
                     {this.displayTagIcons(this.getChallengeAttribute("tags"))}

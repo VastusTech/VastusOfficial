@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 // import QL from '../GraphQL';
 import { fetchClient, forceFetchPost, fetchPost } from "../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
+import { convertFromISO } from "../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../redux_helpers/actions/userActions";
 import PostFunctions from "../databaseFunctions/PostFunctions";
 // import CommentScreen from "../screens/CommentScreen";
@@ -214,28 +215,28 @@ class EventDescriptionModal extends Component {
     }
 
     render() {
-        function convertFromISO(dateTime) {
-            let dateTimeString = String(dateTime);
-            let dateTimes = String(dateTimeString).split("_");
-            let fromDateString = dateTimes[0];
-            let toDateString = dateTimes[1];
-            let fromDate = new Date(fromDateString);
-            let toDate = new Date(toDateString);
-
-            // Display time logic came from stack over flow
-            // https://stackoverflow.com/a/18537115
-            const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
-            const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
-            const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
-                fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
-                fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
-                tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
-                tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
-                toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
-                months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
-        }
+        // function convertFromISO(dateTime) {
+        //     let dateTimeString = String(dateTime);
+        //     let dateTimes = String(dateTimeString).split("_");
+        //     let fromDateString = dateTimes[0];
+        //     let toDateString = dateTimes[1];
+        //     let fromDate = new Date(fromDateString);
+        //     let toDate = new Date(toDateString);
+        //
+        //     // Display time logic came from stack over flow
+        //     // https://stackoverflow.com/a/18537115
+        //     const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
+        //     const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
+        //     const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
+        //         fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
+        //         fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
+        //         tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
+        //         tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
+        //         toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
+        //         months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        //         days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        //     return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
+        // }
 
         if (!this.getPostAttribute("id")) {
             return(
@@ -274,7 +275,7 @@ class EventDescriptionModal extends Component {
                 <Modal.Header>{convertFromISO(this.getPostAttribute("time_created"))}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
-                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.getEventAttribute("by")}/>
+                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal.bind(this)} clientID={this.getPostAttribute("by")}/>
                         <List relaxed>
                             <List.Item>
                                 <List.Icon name='user' />
@@ -285,7 +286,7 @@ class EventDescriptionModal extends Component {
                             <List.Item>
                                 <List.Icon name='calendar' />
                                 <List.Content>
-                                    {this.convertFromISO(this.getPostAttribute("time_created"))}
+                                    {convertFromISO(this.getPostAttribute("time_created"))}
                                 </List.Content>
                             </List.Item>
                             <List.Item>

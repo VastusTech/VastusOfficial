@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import VideoUpload from '../components/VideoUpload';
 import Comments from '../components/Comments';
 import {Grid, Card, Dimmer, Loader, Icon, Message} from "semantic-ui-react";
@@ -70,6 +70,37 @@ class VideoUploadScreen extends Component {
         this._isMounted = false;
     }
 
+    update(props) {
+        // TODO Change this if we want to actually be able to do something while it's loading
+        const user = props.user;
+        //alert("Updating Scheduled Events");
+        if (!user.id) {
+            // console.error("Pretty bad error");
+            this.setState({isLoading: true});
+        }
+
+        if (this.state.isLoading && user.hasOwnProperty("scheduledEvents") && user.scheduledEvents && user.scheduledEvents.length) {
+            this.setState({isLoading: false});
+            for (let i = 0; i < user.scheduledEvents.length; i++) {
+                this.props.fetchEvent(user.scheduledEvents[i], ["id", "title", "goal", "time", "time_created", "owner", "ifChallenge", "members", "capacity", "difficulty"]);
+                //this.props.fetchEvent(user.scheduledEvent//s[i], ["time", "time_created", "title", "goal", "members"]);
+                // if (!(user.scheduledEvents[i] in this.state.events)) {
+                //     this.addEventFromGraphQL(user.scheduledEvents[i]);
+                // }
+            }
+        }
+        else if (!this.props.info.isLoading) {
+            if (!this.state.sentRequest && !this.props.info.error) {
+                this.props.fetchUserAttributes(["scheduledEvents"]);
+                this.setState({sentRequest: true});
+            }
+        }
+    }
+
+    getChallengeAttribute(attribute) {
+
+    }
+
     handleAddComment(comment) {
         //console.error("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
         //this.setState({comments: this.state.comments.concat(comment)});
@@ -115,15 +146,14 @@ class VideoUploadScreen extends Component {
     render() {
 
         return (
-            <Card fluid raised>
-                <Card.Content>
-                    {/*console.error("Comment screen render user: " + this.props.curUser)*/}
-                    {this.loadHistory(this.state.isHistoryLoading)}
-                    <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
-                                 challengeChannel={this.channelName}/>
-                    <Comments comments={this.state.comments}/>
-                </Card.Content>
-            </Card>
+            <Fragment>
+                {/*console.error("Comment screen render user: " + this.props.curUser)*/}
+                {this.loadHistory(this.state.isHistoryLoading)}
+                {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}
+                {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
+                                challengeChannel={this.channelName}/> */}
+                <Comments comments={this.state.comments}/>
+            </Fragment>
         );
     }
 }

@@ -150,6 +150,10 @@ body {
   margin-right: 0 !important;
 }
 
+.u-margin-bottom--half {
+  margin-bottom: 4px !important;
+}
+
 .u-margin-bottom--1 {
   margin-bottom: 8px !important;
 }
@@ -174,6 +178,10 @@ body {
 
 // Padding
 
+.u-padding--0 {
+  padding: 0 !important;
+}
+
 .ui.u-padding-left--1 {
   padding-left: 8px !important;
 }
@@ -192,6 +200,18 @@ body {
 
 .u-text-align--right {
   text-align: right !important;
+}
+
+// Overflow
+
+.u-overflow-wrap--break {
+  overflow-wrap: break-word !important;
+}
+
+// width
+
+.u-max-width--full {
+  max-width: 100% !important;
 }
 
 // Flex
@@ -219,4 +239,10 @@ body {
   box-shadow: none !important;
   border: none !important;
   background: none !important;
+}
+
+// Temp
+
+.u-challenge .ui.item.menu .item {
+  background-color: @darkBlack;
 }

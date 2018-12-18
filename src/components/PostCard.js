@@ -1,33 +1,15 @@
 import React, { Component } from 'react';
 import { Card } from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
+import {Player} from "video-react";
 import { connect } from 'react-redux';
 import { fetchPost } from "../redux_helpers/actions/cacheActions";
+import { convertFromISO } from "../logic/TimeHelper";
 import ItemType from "../logic/ItemType";
 
-// function convertTime(time) {
-//     if (parseInt(time, 10) > 12) {
-//         return "0" + (parseInt(time, 10) - 12) + time.substr(2, 3) + "pm";
-//     }
-//     else if (parseInt(time, 10) === 12) {
-//         return time + "pm";
-//     }
-//     else if (parseInt(time, 10) === 0) {
-//         return "0" + (parseInt(time, 10) + 12) + time.substr(2, 3) + "am"
-//     }
-//     else {
-//         return time + "am"
-//     }
-// }
-
-// function convertDate(date) {
-//     let dateString = String(date);
-//     let year = dateString.substr(0, 4);
-//     let month = dateString.substr(5, 2);
-//     let day = dateString.substr(8, 2);
-//
-//     return month + "/" + day + "/" + year;
-// }
+type Props = {
+    postID: string
+};
 
 /*
 * Post Card
@@ -53,6 +35,7 @@ class PostCard extends Component {
         super(props);
         this.openPostModal = this.openPostModal.bind(this);
         this.closePostModal = this.closePostModal.bind(this);
+        this.getDisplayMedia = this.getDisplayMedia.bind(this);
     }
 
     // componentDidMount() {
@@ -105,6 +88,20 @@ class PostCard extends Component {
     openPostModal = () => { this.setState({postModalOpen: true})};
     closePostModal = () => {this.setState({postModalOpen: false})};
 
+    getDisplayMedia() {
+        // TODO How to properly display videos and pictures?
+        const pictures = this.getPostAttribute("picturePaths");
+        const videos = this.getPostAttribute("videoPaths");
+        if (videos && videos.length > 0) {
+            const video = videos[0];
+            return(
+                <Player>
+                    <source src={this.state.videoURL} type="video/mp4"/>
+                </Player>
+            );
+        }
+    }
+
     getCorrectDetailCard() {
         const postType = this.getPostAttribute("postType");
         if (postType && postType.length) {
@@ -145,28 +142,28 @@ class PostCard extends Component {
     }
 
     render() {
-        function convertFromISO(dateTime) {
-            let dateTimeString = String(dateTime);
-            let dateTimes = String(dateTimeString).split("_");
-            let fromDateString = dateTimes[0];
-            let toDateString = dateTimes[1];
-            let fromDate = new Date(fromDateString);
-            let toDate = new Date(toDateString);
-
-            // Display time logic came from stack over flow
-            // https://stackoverflow.com/a/18537115
-            const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
-            const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
-            const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
-                fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
-                fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
-                tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
-                tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
-                toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
-                months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-                days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-            return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
-        }
+        // function convertFromISO(dateTime) {
+        //     let dateTimeString = String(dateTime);
+        //     let dateTimes = String(dateTimeString).split("_");
+        //     let fromDateString = dateTimes[0];
+        //     let toDateString = dateTimes[1];
+        //     let fromDate = new Date(fromDateString);
+        //     let toDate = new Date(toDateString);
+        //
+        //     // Display time logic came from stack over flow
+        //     // https://stackoverflow.com/a/18537115
+        //     const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
+        //     const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
+        //     const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
+        //         fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
+        //         fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
+        //         tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
+        //         tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
+        //         toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
+        //         months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
+        //         days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+        //     return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
+        // }
 
         if (!this.getPostAttribute("id")) {
             return(
@@ -178,11 +175,14 @@ class PostCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised onClick={this.openPostModal}>
+                <Card.Header textAlign = 'center'>{this.getPostAttribute("title")}</Card.Header>
                 <Card.Content>
-                    <Card.Header textAlign = 'center'>{this.getPostAttribute("by")}</Card.Header>
+                    {this.getDisplayMedia()}
+                </Card.Content>
+                <Card.Content extra>
                     <Card.Meta textAlign = 'center' >{convertFromISO(this.getPostAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>
-                    <PostDescriptionModal open={this.state.eventModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
+                    <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
                 </Card.Content>
                 <Card.Content extra>
                     {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
@@ -203,10 +203,10 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchEvent: (id, variablesList) => {
-            dispatch(fetchEvent(id, variablesList));
+        fetchPost: (id, variablesList, dataHandler) => {
+            dispatch(fetchPost(id, variablesList, dataHandler));
         }
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventCard);
+export default connect(mapStateToProps, mapDispatchToProps)(PostCard);
