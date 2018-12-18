@@ -33,7 +33,7 @@ class ChallengeMemberList extends Component<Props> {
             this.setState({challengeID: this.props.challengeID, isLoading: false});
         }
         //if (this.props.members) {
-        //alert("owned:" + this.props.ifOwned);
+        //console.log("owned:" + this.props.ifOwned);
         // this.setState({isLoading: false, members: this.props.members, ifOwned: this.props.ifOwned});
         //}
     }
@@ -63,7 +63,7 @@ class ChallengeMemberList extends Component<Props> {
     render() {
         function rows(userID, members, handleClientPress)
         {
-            //alert(members);
+            //console.log(members);
             return _.times(members.length, i => (
                 <Grid.Row key={i} className="ui one column stackable center aligned page grid">
                     <ClientCard rank={i} clientID={members[i]}/>

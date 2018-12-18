@@ -14,7 +14,7 @@ class ReviewFunctions {
     // =============================================================================
     static create() {
         // TODO Implement
-        alert("Not implemented...");
+        console.log("Not implemented...");
     }
     static updateAdd(fromID, reviewID, attributeName, attributeValue, successHandler, failureHandler) {
         Lambda.updateAddToAttribute(fromID, reviewID, itemType, attributeName, attributeValue, successHandler, failureHandler);

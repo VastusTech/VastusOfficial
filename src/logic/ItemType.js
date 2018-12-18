@@ -62,7 +62,7 @@ export function switchReturnItemType(itemType, clientValue, trainerValue, gymVal
         return returnValue;
     }
     else {
-        alert(errorMessage + " ~ itemType = " + itemType + " not recognized...");
+        console.log(errorMessage + " ~ itemType = " + itemType + " not recognized...");
         return null;
     }
 }
@@ -104,7 +104,7 @@ export function switchHandleItemType(itemType, clientHandler, trainerHandler, gy
         itemHandler();
     }
     else {
-        alert(errorMessage + " ~ itemType = " + itemType + " not recognized...");
+        console.log(errorMessage + " ~ itemType = " + itemType + " not recognized...");
     }
 }
 

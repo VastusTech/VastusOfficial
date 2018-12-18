@@ -15,7 +15,7 @@ class TrainerFunctions extends UserFunctions {
     // =============================================================================
     static create() {
         // TODO Implement
-        alert("Not implemented...");
+        console.log("Not implemented...");
     }
     static updateAdd(fromID, trainerID, attributeName, attributeValue, successHandler, failureHandler) {
         super.updateAdd(fromID, itemType, trainerID, attributeName, attributeValue, successHandler, failureHandler);

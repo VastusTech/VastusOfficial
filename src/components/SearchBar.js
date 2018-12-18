@@ -138,7 +138,7 @@ class SearchBarProp extends Component {
     //                 console.log("Received clients query: " + JSON.stringify(data));
     //                 if (data.items && data.items.length) {
     //                     // if (searchQuery === "Blake") {
-    //                     //     alert(JSON.stringify(data.items));
+    //                     //     console.log(JSON.stringify(data.items));
     //                     // }
     //                     this.addResults(data.items);
     //                 }
@@ -182,7 +182,7 @@ class SearchBarProp extends Component {
     //                     };
     //                 }
     //                 else {
-    //                     alert("item has item_type of " + item.item_type + " for some reason?");
+    //                     console.log("item has item_type of " + item.item_type + " for some reason?");
     //                     return;
     //                 }
     //                 results.push(result);
@@ -193,8 +193,8 @@ class SearchBarProp extends Component {
     // }
 
     handleResultSelect = (e, { result }) => {
-        // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        // alert("Popping up result = " + JSON.stringify(result.resultcontent));
+        // console.log("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        // console.log("Popping up result = " + JSON.stringify(result.resultcontent));
         // if (result.resultcontent.item_type === "Client") {
         //     this.props.fetchClient(result.resultcontent.id, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
         // }
@@ -237,11 +237,11 @@ class SearchBarProp extends Component {
     }
 
     retrieveMoreResults(searchQuery, results) {
-        // alert("Retrieving more results!");
+        // console.log("Retrieving more results!");
         this.props.loadMoreResults(searchQuery, (data) => {
             results.push(...data);
             if (results.length < this.state.minimumSearchResults && !this.props.search.ifFinished) {
-                // alert("Grabbing more results: numResults = " + results.length + ", ifFinished = " + this.props.search.ifFinished);
+                // console.log("Grabbing more results: numResults = " + results.length + ", ifFinished = " + this.props.search.ifFinished);
                 this.retrieveMoreResults(searchQuery, results);
             }
             else {
@@ -276,7 +276,7 @@ class SearchBarProp extends Component {
         )
         }
         else {
-            alert("Wrong type inputted! Received " + type);
+            console.log("Wrong type inputted! Received " + type);
         }
     }
 
@@ -347,7 +347,7 @@ class SearchBarProp extends Component {
         // TODO Check to see that this is valid to do?
         // console.log("Showing " + this.state.searchResults.length + " results");
         // const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
-        // alert(this.props.search.results.length);
+        // console.log(this.props.search.results.length);
         return (
             <Fragment>
                 {this.resultModal(this.state.result)}

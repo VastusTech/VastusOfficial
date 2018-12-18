@@ -96,7 +96,7 @@ class ClientModal extends Component<Props> {
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     this.setState({isAddFriendLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: "*" + error});
                 });
         }
@@ -115,11 +115,11 @@ class ClientModal extends Component<Props> {
             UserFunctions.removeFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isRemoveFriendLoading: false});
-                    alert("Successfully removed " + this.getClientAttribute("name") + " from friends list");
+                    console.log("Successfully removed " + this.getClientAttribute("name") + " from friends list");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     this.setState({isRemoveFriendLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: "*" + error});
                 });
         }

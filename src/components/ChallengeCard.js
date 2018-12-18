@@ -75,7 +75,7 @@ class ChallengeCard extends Component {
                     }
                 }
                 /*if(attribute === "tags") {
-                    alert(challenge[attribute]);
+                    console.log(challenge[attribute]);
                 }*/
                 return challenge[attribute];
             }
@@ -94,7 +94,7 @@ class ChallengeCard extends Component {
     convertMonth(month) {
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         for(let i=0; i<12; i++) {
-            //alert(month + "vs" + months[i]);
+            //console.log(month + "vs" + months[i]);
             if(month === months[i]) {
                 return (i + 1);
             }
@@ -106,13 +106,13 @@ class ChallengeCard extends Component {
         let endTime = this.getChallengeAttribute("endTime");
         let curMonth = this.convertMonth(curDate.substr(4, 3));
         let endMonth = endTime.substr(5, 2);
-        //alert(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
+        //console.log(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
         if(endTime && curDate) {
             endTime = parseInt(endTime.substr(8, 2), 10);
             curDate = parseInt(curDate.substr(8, 2), 10);
-            //alert(endMonth - curMonth);
+            //console.log(endMonth - curMonth);
             if((endMonth - curMonth) < 0) {
-                //alert((endTime + (30 * (endMonth - curMonth + 12))));
+                //console.log((endTime + (30 * (endMonth - curMonth + 12))));
                 return ((endTime + (30 * (endMonth - curMonth + 12))) - curDate);
             }
             else {
@@ -176,8 +176,8 @@ class ChallengeCard extends Component {
             );
         }
         // if(this.getChallengeAttribute("tags")) {
-        //     // alert("There be tags!");
-        //     // alert(this.getChallengeAttribute("tags"));
+        //     // console.log("There be tags!");
+        //     // console.log(this.getChallengeAttribute("tags"));
         // }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
@@ -187,7 +187,7 @@ class ChallengeCard extends Component {
                     <Card.Meta textAlign = 'center' >{this.getDaysLeft()/*this.getDaysLeft(Date.daysBetween(this.getTodayDateString(), this.getChallengeAttribute("endTime")))*/} days left</Card.Meta>
                     {this.displayTagIcons(this.getChallengeAttribute("tags"))}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
-                                               daysLeft={5}/>
+                                               daysLeft={this.getDaysLeft()}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta textAlign = 'center'>

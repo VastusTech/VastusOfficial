@@ -58,7 +58,7 @@ class EventDescriptionModal extends Component<Props> {
     componentDidMount() {
         this.isJoined();
         this.isOwned();
-        //alert("Mount Owned: " + this.state.isOwned);
+        //console.log("Mount Owned: " + this.state.isOwned);
     }
 
     componentWillReceiveProps(newProps) {
@@ -131,38 +131,38 @@ class EventDescriptionModal extends Component<Props> {
     }
 
     handleDeleteEventButton() {
-        //alert("Handling deleting the event");
+        //console.log("Handling deleting the event");
         this.setState({isLoading: true});
         EventFunctions.delete(this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
-            // alert(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
         }, (error) => {
-            // alert(JSON.stringify(error));
+            // console.log(JSON.stringify(error));
             this.setState({isDeleteLoading: false, error: error});
         })
     }
 
     handleLeaveEventButton() {
-        //alert("Handling leaving the event");
+        //console.log("Handling leaving the event");
         this.setState({isLoading: true});
         UserFunctions.removeEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"), (data) => {
             this.forceUpdate(data.id);
-            //alert(JSON.stringify(data));
+            //console.log(JSON.stringify(data));
             this.setState({isLeaveLoading: false, isJoined: false});
         }, (error) => {
-            //alert(JSON.stringify(error));
+            //console.log(JSON.stringify(error));
             this.setState({isLeaveLoading: false, error: error});
         })
     }
 
     handleJoinEventButton() {
-        //alert("Handling joining the event");
+        //console.log("Handling joining the event");
         this.setState({isLoading: true});
         UserFunctions.addEvent(this.props.user.id, this.props.user.id, this.getEventAttribute("id"),
             (data) => {
                 this.forceUpdate(data.id);
-                //alert(JSON.stringify(data));
+                //console.log(JSON.stringify(data));
                 this.setState({isJoinLoading: false, isJoined: true});
             }, (error) => {
                 this.setState({isJoinLoading: false, error: error});
@@ -173,9 +173,9 @@ class EventDescriptionModal extends Component<Props> {
         const members = this.getEventAttribute("members");
         if (members) {
             const isMembers = members.includes(this.props.user.id);
-            //alert("Is Members?: " + isMembers);
+            //console.log("Is Members?: " + isMembers);
             this.setState({isJoined: isMembers});
-            //alert("am I in members?: " + members.includes(this.props.user.id));
+            //console.log("am I in members?: " + members.includes(this.props.user.id));
         }
         else {
             this.setState({isJoined: false});
@@ -235,9 +235,9 @@ class EventDescriptionModal extends Component<Props> {
         if(this.state.canCallChecks) {
             this.isJoined();
             this.isOwned();
-            //alert("Render Owned: " + this.state.isOwned);
+            //console.log("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //console.log("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
@@ -245,8 +245,8 @@ class EventDescriptionModal extends Component<Props> {
         function createCorrectButton(isOwned, isJoined, ifCompleted, ifChallenge,
                                      joinHandler, leaveHandler, deleteHandler, completeHandler,
                                      isLeaveLoading, isJoinLoading, isDeleteLoading, username, channelName, curUserID) {
-            //alert("Owned: " + isOwned + " Joined: " + isJoined);
-            // alert(ifCompleted);
+            //console.log("Owned: " + isOwned + " Joined: " + isJoined);
+            // console.log(ifCompleted);
             if (ifCompleted === "true") {
                 return(
                     <Button disabled fluid inverted size="large">This Event is completed</Button>
@@ -287,13 +287,13 @@ class EventDescriptionModal extends Component<Props> {
                 )
             }
             else {
-                //alert(isJoinLoading);
+                //console.log(isJoinLoading);
                 return (<Button loading={isJoinLoading} fluid size="large" disabled={isJoinLoading}
                                 onClick={joinHandler}>Join</Button>)
             }
         }
 
-        //alert("Challenge Info: " + JSON.stringify(this.state.event));
+        //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{this.getEventAttribute("title")}</Modal.Header>
