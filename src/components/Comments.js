@@ -9,7 +9,7 @@ class Comments extends Component {
             <Fragment>
                     {
                         this.props.comments.map((comment, index) => {
-                            //alert(index + ":" + JSON.stringify(comment));
+                            //console.log(index + ":" + JSON.stringify(comment));
                             return <Comment key={index} comment={comment} />
                         })
                     }

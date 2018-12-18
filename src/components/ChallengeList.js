@@ -22,14 +22,14 @@ class ChallengeList extends Component<Props> {
 
     constructor(props) {
         super(props);
-        //alert("Got into Scheduled Events constructor");
+        //console.log("Got into Scheduled Events constructor");
         // this.state.username = this.props.username;
     }
 
     update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = props.user;
-        //alert("Updating Scheduled Events");
+        //console.log("Updating Scheduled Events");
         if (!user.id) {
             console.error("Pretty bad error");
             this.setState({isLoading: true});
@@ -91,7 +91,7 @@ class ChallengeList extends Component<Props> {
     }
 
     componentWillReceiveProps(newProps) {
-        //alert("Receevin props");
+        //console.log("Receevin props");
         // this.props = newProps;
         // if (newProps.user && this.props.user && newProps.user.id !== this.props.user.id) {
         //     this.setState(this.state);
@@ -100,13 +100,13 @@ class ChallengeList extends Component<Props> {
     }
 
     render() {
-        //alert("Redering");
+        //console.log("Redering");
         function rows(challenges) {
             const row = [];
             const rowProps = [];
             for (const key in challenges) {
                 if (challenges.hasOwnProperty(key)) {
-                    //alert(JSON.stringify(events[key]));
+                    //console.log(JSON.stringify(events[key]));
                     row.push(
                         challenges[key]
                     );
@@ -127,7 +127,7 @@ class ChallengeList extends Component<Props> {
             return rowProps;
         }
         if (this.props.isLoading) {
-            //alert("loading: " + JSON.stringify(this.state));
+            //console.log("loading: " + JSON.stringify(this.state));
             return(
                 <Message>Loading...</Message>
             )

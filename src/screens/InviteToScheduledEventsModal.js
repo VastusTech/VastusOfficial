@@ -26,7 +26,7 @@ class InviteToScheduledEventsModalProp extends Component {
     update() {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = this.props.user;
-        //alert("Updating Scheduled Events");
+        //console.log("Updating Scheduled Events");
         if (!user.id) {
             console.error("Pretty bad error");
             this.setState({isLoading: true});
@@ -53,7 +53,7 @@ class InviteToScheduledEventsModalProp extends Component {
             (data) => {
                 this.handleClose();
             }, (error) => {
-                alert(JSON.stringify(error));
+                console.log(JSON.stringify(error));
             });
     }
 
@@ -94,7 +94,7 @@ class InviteToScheduledEventsModalProp extends Component {
             return rowProps;
         }
         if (this.props.info.isLoading) {
-            //alert("loading: " + JSON.stringify(this.state));
+            //console.log("loading: " + JSON.stringify(this.state));
             return(
                 <Modal dimmer='blurring' open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Message>Loading...</Message>

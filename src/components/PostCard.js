@@ -44,10 +44,10 @@ class PostCard extends Component {
     // if (this.props.event) {
     //     let ifOwned = false;
     //     let ifJoined = false;
-    //     //alert("Membahs: " + this.props.event.members);
-    //     //alert(this.props.owner + "vs. " + this.props.event.owner);
+    //     //console.log("Membahs: " + this.props.event.members);
+    //     //console.log(this.props.owner + "vs. " + this.props.event.owner);
     //     if (this.props.user.id === this.props.event.owner) {
-    //         //alert("Same owner and cur user for: " + this.props.event.id);
+    //         //console.log("Same owner and cur user for: " + this.props.event.id);
     //         ifOwned = true;
     //     }
     //     if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {

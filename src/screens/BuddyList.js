@@ -38,9 +38,9 @@ class BuddyListProp extends Component {
     //     }
     //
     //     if (user.hasOwnProperty("friends")) {
-    //         //alert("Friends: " + user.friends);
+    //         //console.log("Friends: " + user.friends);
     //         if(user.friends != null) {
-    //             //alert("getting to friend loupe");
+    //             //console.log("getting to friend loupe");
     //             for (let i = 0; i < user.friends.length; i++) {
     //                 if (!(user.friends[i] in this.state.friends)) {
     //                     this.addFriendFromGraphQL(user.friends[i]);
@@ -48,7 +48,7 @@ class BuddyListProp extends Component {
     //             }
     //         }
     //         else {
-    //             alert("You got no friends you loser");
+    //             console.log("You got no friends you loser");
     //         }
     //     }
     //     else if (!this.props.info.isLoading) {
@@ -62,7 +62,7 @@ class BuddyListProp extends Component {
     update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = props.user;
-        //alert("Updating Scheduled Events");
+        //console.log("Updating Scheduled Events");
         if (!user.id) {
             console.error("Pretty bad error");
             this.setState({isLoading: true});
@@ -125,7 +125,7 @@ class BuddyListProp extends Component {
             const rowProps = [];
             for (const key in friends) {
                 if (friends.hasOwnProperty(key) === true) {
-                    //alert("Friend " + key + ": " + JSON.stringify(friends[key].id));
+                    //console.log("Friend " + key + ": " + JSON.stringify(friends[key].id));
                     const friendID = friends[key];
                     rowProps.push(
                         <List.Item>

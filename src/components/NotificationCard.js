@@ -49,17 +49,17 @@ class NotificationCard extends Component {
                     if (this.state.inviteID !== props.inviteID && !this.state.sentRequest && !this.props.info.isLoading) {
                         this.setState({inviteID: props.inviteID});
                         this.state.sentRequest = true;
-                        // alert("Fetching client = " + invite.from);
+                        // console.log("Fetching client = " + invite.from);
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                         if (invite.inviteType === "eventInvite") {
-                            // alert("Fetching event = " + invite.about);
+                            // console.log("Fetching event = " + invite.about);
                             props.fetchEvent(invite.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                         }
                     }
                 }
                 else {
-                    alert("Invite only partially gotten?");
-                    alert(JSON.stringify(invite));
+                    console.log("Invite only partially gotten?");
+                    console.log(JSON.stringify(invite));
                 }
             }
         }
@@ -84,7 +84,7 @@ class NotificationCard extends Component {
         //     });
         // }
         // else {
-        //     //alert("ERID: " + this.props.eventRequestID);
+        //     //console.log("ERID: " + this.props.eventRequestID);
         //     QL.getEvent(this.props.eventRequestID, ["id", "title", "goal", "time", "time_created", "owner", "members"], (data) => {
         //         if (data) {
         //             this.setState({isLoading: false, name: data.title, event: data});
@@ -111,23 +111,23 @@ class NotificationCard extends Component {
     handleAcceptFriendRequest() {
         const userID = this.props.user.id;
         const friendRequestID = this.state.inviteID;
-        // alert("Accepting friend request id = " + friendRequestID);
+        // console.log("Accepting friend request id = " + friendRequestID);
         if(userID && friendRequestID) {
             const friendID = this.getAboutAttribute("id");
-            // alert("User ID: " + userID + " Friend ID: " + friendID);
+            // console.log("User ID: " + userID + " Friend ID: " + friendID);
             UserFunctions.addFriend(userID, userID, friendID,
                 (data) => {
                     this.setState({isAcceptInviteLoading: false});
-                    // alert("Successfully added " + friendID + " as a friend!");
+                    // console.log("Successfully added " + friendID + " as a friend!");
                     this.props.feedUpdate();
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set yet");
+            console.log("user id or invite id not set yet");
             this.setState({isAcceptInviteLoading: false});
         }
     }
@@ -141,44 +141,44 @@ class NotificationCard extends Component {
         this.setState({isAcceptInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("Accepting event invite " + inviteID);
+        // console.log("Accepting event invite " + inviteID);
         if(userID && inviteID) {
             const eventID = this.getAboutAttribute("id");
-            // alert("User ID: " + userID + " event ID: " + eventID);
+            // console.log("User ID: " + userID + " event ID: " + eventID);
             UserFunctions.addEvent(userID, userID, eventID,
                 (data) => {
-                    // alert("Successfully added " + eventID + " to the schedule!");
+                    // console.log("Successfully added " + eventID + " to the schedule!");
                     this.props.feedUpdate();
                     this.setState({isAcceptInviteLoading: false});
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set yet");
+            console.log("user id or invite id not set yet");
         }
     }
 
     handleDeclineFriendRequest() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
+        // console.log("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
         if(userID && inviteID) {
             InviteFunctions.delete(userID, inviteID,
                 (data) => {
-                    // alert("Successfully declined " + inviteID + " friend request!");
+                    // console.log("Successfully declined " + inviteID + " friend request!");
                     this.props.feedUpdate();
                     this.setState({isDenyInviteLoading: false});
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isDenyInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set");
+            console.log("user id or invite id not set");
             this.setState({isDenyInviteLoading: false});
         }
     }
@@ -192,21 +192,21 @@ class NotificationCard extends Component {
         this.setState({isDenyInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
+        // console.log("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
         if(userID && inviteID) {
             InviteFunctions.delete(userID, inviteID,
                 (data) => {
                     this.setState({isDenyInviteLoading: false});
-                    // alert("Successfully declined " + inviteID + " event invite!");
+                    // console.log("Successfully declined " + inviteID + " event invite!");
                     this.props.feedUpdate();
                 }, (error) => {
                     this.setState({isDenyInviteLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                 });
         }
         else {
-            alert("user id or invite id not set");
+            console.log("user id or invite id not set");
             this.setState({isDenyInviteLoading: false});
         }
     }

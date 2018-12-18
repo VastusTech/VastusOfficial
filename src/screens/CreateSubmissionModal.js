@@ -55,7 +55,7 @@ class CreateSubmissionModal extends Component {
     createSubmission(finishHandler) {
         PostFunctions.createSubmission(this.props.user.id, this.props.user.id, this.state.challengeID, "Submission", this.getPicturePaths(), this.getVideoPaths(), (returnValue) => {
             this.setState({picturesLoading: (this.state.pictures.length > 0), videosLoading: (this.state.videos.length > 0)});
-            alert(JSON.stringify(returnValue));
+            console.log(JSON.stringify(returnValue));
             const id = returnValue.data;
             let numPicturesLoaded = 0;
             let picturesLength = this.state.pictures.length;
@@ -108,11 +108,11 @@ class CreateSubmissionModal extends Component {
 
     getPicturePaths() {
         const picturePaths = [];
-        alert("Pictures: " + this.state.pictures.length);
+        console.log("Pictures: " + this.state.pictures.length);
         for (let i = 0; i < this.state.pictures.length; i++) {
             const path = "/pictures/" + i;
             picturePaths.push(path);
-            alert("Added: " + path);
+            console.log("Added: " + path);
         }
         if (picturePaths.length > 0) {
             return picturePaths;
@@ -122,11 +122,11 @@ class CreateSubmissionModal extends Component {
 
     getVideoPaths() {
         const videoPaths = [];
-        alert("Videos: " + this.state.videos.length);
+        console.log("Videos: " + this.state.videos.length);
         for (let i = 0; i < this.state.videos.length; i++) {
             const path = "/videos/" + i;
             videoPaths.push(path);
-            alert("Added: " + path);
+            console.log("Added: " + path);
         }
         if (videoPaths.length > 0) {
             return videoPaths;
@@ -148,7 +148,7 @@ class CreateSubmissionModal extends Component {
 
     displayCurrentVideo() {
         if (this.state.videos && this.state.videos.length > 0) {
-            alert(this.state.videos[[0]]);
+            console.log(this.state.videos[[0]]);
             return(
                 <Player>
                     <source src={this.state.videos[0]} type="video/mp4"/>

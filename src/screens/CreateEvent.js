@@ -95,7 +95,7 @@ class CreateEventProp extends Component<Props> {
             this.eventState.access = 'public';
         }
         else {
-            alert("Event access should be public or private");
+            console.log("Event access should be public or private");
         }
     };
 
@@ -108,11 +108,11 @@ class CreateEventProp extends Component<Props> {
         const minute = parseInt(this.eventState.startTime.substr(3, 2));
         let startDate = new Date(year, month, day, hour, minute);
         let endDate = new Date(startDate.getTime() + (60000 * this.eventState.duration));
-        // alert(endDate.toDateString());
-        // alert(endDate.getMinutes());
+        // console.log(endDate.toDateString());
+        // console.log(endDate.getMinutes());
         // endDate.setMinutes(endDate.getMinutes() + this.eventState.duration);
-        // alert(endDate.getMinutes());
-        // alert(endDate.toDateString());
+        // console.log(endDate.getMinutes());
+        // console.log(endDate.toDateString());
 
         
 
@@ -137,7 +137,7 @@ class CreateEventProp extends Component<Props> {
                         //this.setState({showSuccessModal: true});
 
                     }, (error) => {
-                        //alert(JSON.stringify(error));
+                        //console.log(JSON.stringify(error));
                         this.setState({submitError: "*" + JSON.stringify(error)});
                         this.setState({isSubmitLoading: false});
                     });
@@ -153,7 +153,7 @@ class CreateEventProp extends Component<Props> {
 
     handleDurationChange = (e, data) => {
         this.eventState.duration = data.value;
-        //alert(this.eventState.duration);
+        //console.log(this.eventState.duration);
         // this.setState({
         //     duration: data.value,
         // }, () => {

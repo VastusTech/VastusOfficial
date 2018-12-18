@@ -44,8 +44,8 @@ class Profile extends React.PureComponent {
     toggle = () => this.setState({ checked: !this.state.checked });
 
     constructor(props) {
-        // alert("constructor");
-        // alert("constructor props: " + JSON.stringify(props));
+        // console.log("constructor");
+        // console.log("constructor props: " + JSON.stringify(props));
         super(props);
         // this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
@@ -75,13 +75,13 @@ class Profile extends React.PureComponent {
     }
 
     componentDidMount() {
-        // alert("componentDidMount");
+        // console.log("componentDidMount");
         this.update();
     }
 
     componentWillReceiveProps(newProps, nextContext) {
-        // alert("componentWillReceiveProps");
-        // alert("receive props: " + JSON.stringify(newProps));
+        // console.log("componentWillReceiveProps");
+        // console.log("receive props: " + JSON.stringify(newProps));
         if (newProps.user.profileImagePath) {
             this.setState({isLoading: true});
         }
@@ -93,9 +93,9 @@ class Profile extends React.PureComponent {
 
     update() {
         const user = this.props.user;
-        // alert("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
+        // console.log("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
         if (!user.id) {
-            // alert("ID is not set inside profile... This means a problem has occurred");
+            // console.log("ID is not set inside profile... This means a problem has occurred");
         }
 
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
@@ -108,29 +108,29 @@ class Profile extends React.PureComponent {
     }
 
     setPicture(event) {
-        //alert(JSON.stringify(this.props));
+        //console.log(JSON.stringify(this.props));
         if (this.props.user.id) {
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
-            //alert("Calling storage put");
-            //alert("File = " + JSON.stringify(event.target.files[0]));
+            //console.log("Calling storage put");
+            //console.log("File = " + JSON.stringify(event.target.files[0]));
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 // Now we update the database object to reflect this
-                //alert("resulttt:" + JSON.stringify(result));
-                //alert("Successfully put the image, now putting the data into the database!");
+                //console.log("resulttt:" + JSON.stringify(result));
+                //console.log("Successfully put the image, now putting the data into the database!");
                 ClientFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
                     (data) => {
-                        //alert("successfully editted client");
-                        //alert(JSON.stringify(data));
+                        //console.log("successfully editted client");
+                        //console.log(JSON.stringify(data));
                         this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
-                        alert("Failed edit client attribute");
-                        alert(JSON.stringify(error));
+                        console.log("Failed edit client attribute");
+                        console.log(JSON.stringify(error));
                     });
                 this.setState({isLoading: true});
             }).catch((error) => {
-                alert("failed storage put");
-                alert(error);
+                console.log("failed storage put");
+                console.log(error);
             });
         }
     }
@@ -173,7 +173,7 @@ class Profile extends React.PureComponent {
     }
 
     handleLogOut() {
-        // alert("logging out");
+        // console.log("logging out");
         this.props.logOut();
         // this.setState({isLoading: true});
         // Auth.signOut({global: true}).then((data) => {
@@ -199,7 +199,7 @@ class Profile extends React.PureComponent {
 
 
     render() {
-        //alert(JSON.stringify(this.state));
+        //console.log(JSON.stringify(this.state));
         /**
          * This creates an error message from the given error string
          * @param error A string containing the error message that was invoked

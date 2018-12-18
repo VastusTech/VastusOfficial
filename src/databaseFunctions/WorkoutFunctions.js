@@ -14,7 +14,7 @@ class WorkoutFunctions {
     // =============================================================================
     static create() {
         // TODO Implement
-        alert("Not implemented...");
+        console.log("Not implemented...");
     }
     static updateAdd(fromID, workoutID, attributeName, attributeValue, successHandler, failureHandler) {
         Lambda.updateAddToAttribute(fromID, workoutID, itemType, attributeName, attributeValue, successHandler, failureHandler);

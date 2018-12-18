@@ -41,7 +41,7 @@ function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, d
         if (currentObject) {
             const objectKeyList = Object.keys(currentObject);
             variablesList = variablesList.filter((v) => { return !objectKeyList.includes(v) });
-            // alert("Final filtered list is = " + JSON.stringify(variablesList));
+            // console.log("Final filtered list is = " + JSON.stringify(variablesList));
         }
         overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore);
     };
@@ -55,7 +55,7 @@ function forceFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchTy
 function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
     if (profilePictureIndex !== -1) {
-        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        // console.log("The variable list is requesting the profilePicture to be uploaded as well.");
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
@@ -71,11 +71,11 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             variablesList = [...variablesList, "id"];
         }
         QL[QLFunctionName](id, variablesList, (data) => {
-            // alert("Successfully retrieved the QL info");
+            // console.log("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {
-                // alert("Adding profile image to the data");
+                // console.log("Adding profile image to the data");
                 addProfilePictureToData(data, (updatedData) => {
-                    // alert("Dispatching the profile image + data");
+                    // console.log("Dispatching the profile image + data");
                     dispatch({
                         type: fetchDispatchType,
                         payload: {
@@ -88,7 +88,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                 });
             }
             else {
-                // alert("Just dispatching the normal data");
+                // console.log("Just dispatching the normal data");
                 dispatch({
                     type: fetchDispatchType,
                     payload: {
@@ -133,7 +133,7 @@ function batchForceFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDisp
 function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
     if (profilePictureIndex !== -1) {
-        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        // console.log("The variable list is requesting the profilePicture to be uploaded as well.");
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {

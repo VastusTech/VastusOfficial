@@ -32,7 +32,7 @@ class SignUpModal extends Component {
     }
 
     handleCreateButton() {
-        // alert("Setting state with isConfirming is true");
+        // console.log("Setting state with isConfirming is true");
         // TODO Do extra checking for the specifications of the account!
         if (this.fieldsAreFilledCorrectly()) {
             this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
@@ -41,7 +41,7 @@ class SignUpModal extends Component {
     }
 
     fieldsAreFilledCorrectly() {
-        // alert("Setting state with isConfirming is true");
+        // console.log("Setting state with isConfirming is true");
         // TODO Do extra checking for the specifications of the account!
         if (this.authState.username && this.authState.password && this.authState.confirmPassword && this.authState.name &&
             this.authState.birthday && this.authState.gender && this.authState.email) {
@@ -91,7 +91,7 @@ class SignUpModal extends Component {
     render() {
         function errorMessage(error) {
             if (error && error.message) {
-                // alert(JSON.stringify(error));
+                // console.log(JSON.stringify(error));
                 return (
                     <Modal.Description>
                         <Message color='red'>

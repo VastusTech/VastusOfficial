@@ -52,20 +52,20 @@ class ChallengeFeed extends Component {
         //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
         //         (data) => {
         //             // When it has finished
-        //             alert("Finished");
+        //             console.log("Finished");
         //             this.queryEvents();
         //         });
         // }
     }
 
     componentWillReceiveProps(newProps) {
-        // alert("Set state to userID = " + newProps.userID);
+        // console.log("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
-            // alert("fetchin user attributes");
+            // console.log("fetchin user attributes");
             this.props.fetchUserAttributes(["friends", "invitedChallenges"],
                 (data) => {
-                    // alert("finished");
+                    // console.log("finished");
                     this.queryChallenges()
                 });
         }
@@ -74,7 +74,7 @@ class ChallengeFeed extends Component {
     queryChallenges() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
-            // alert(JSON.stringify(this.props.cache.eventQueries));
+            // console.log(JSON.stringify(this.props.cache.eventQueries));
             const filter = QL.generateFilter({
                 and: [
                     {
@@ -96,11 +96,11 @@ class ChallengeFeed extends Component {
                     }
                     if (data.items) {
                         // TODO We can see private events
-                        // alert("got items");
+                        // console.log("got items");
                         const newlyQueriedChallenges = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const challenge = data.items[i];
-                            // alert(JSON.stringify(challenge));
+                            // console.log(JSON.stringify(challenge));
                             if (challenge.access === 'public') {
                                 newlyQueriedChallenges.push(challenge);
                             }
@@ -116,12 +116,12 @@ class ChallengeFeed extends Component {
                         }
                         this.setState({challenges: [...this.state.challenges, ...newlyQueriedChallenges]});
                         for (let i = 0; i < data.items.length; i++) {
-                            //alert(data.items[i].time_created);
-                            // alert("Putting in event: " + JSON.stringify(data.items[i]));
+                            //console.log(data.items[i].time_created);
+                            // console.log("Putting in event: " + JSON.stringify(data.items[i]));
                             // this.setState({events: [...this.state.events, data.items[i]]});
                             this.props.putChallenge(data.items[i]);
                         }
-                        // alert("events in the end: " + JSON.stringify(this.state.events));
+                        // console.log("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
                     }
                     else {
@@ -163,9 +163,9 @@ class ChallengeFeed extends Component {
          */
         function rows(challenges) {
             // if(challenges != null && challenges.length > 0)
-            //     alert(JSON.stringify(challenges[0].id));
-            // alert("EVENTS TO PRINT: ");
-            // alert(JSON.stringify(challenges));
+            //     console.log(JSON.stringify(challenges[0].id));
+            // console.log("EVENTS TO PRINT: ");
+            // console.log(JSON.stringify(challenges));
             return _.times(challenges.length, i => (
                 <Fragment key={i + 1}>
                     <ChallengeCard challengeID={challenges[i].id}/>

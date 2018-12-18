@@ -41,7 +41,7 @@ class ClientModal extends Component<Props> {
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
-                // alert("Setting new state to " + newProps.clientID);
+                // console.log("Setting new state to " + newProps.clientID);
                 this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
@@ -73,16 +73,16 @@ class ClientModal extends Component<Props> {
 
     handleAddFriendButton() {
         this.setState({isAddFriendLoading: true});
-        // alert("Adding this friend!");
+        // console.log("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             InviteFunctions.createFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isAddFriendLoading: false, requestSent: true});
-                    //alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
+                    //console.log("Successfully added " + this.getClientAttribute("name") + " as a friend!");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     this.setState({isAddFriendLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: "*" + error});
                 });
         }
@@ -95,17 +95,17 @@ class ClientModal extends Component<Props> {
     }*/
 
     handleRemoveFriendButton() {
-        // alert("Removing this friend!");
+        // console.log("Removing this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             this.setState({isRemoveFriendLoading: true});
             UserFunctions.removeFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isRemoveFriendLoading: false});
-                    alert("Successfully removed " + this.getClientAttribute("name") + " from friends list");
+                    console.log("Successfully removed " + this.getClientAttribute("name") + " from friends list");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     this.setState({isRemoveFriendLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: "*" + error});
                 });
         }
@@ -132,7 +132,7 @@ class ClientModal extends Component<Props> {
     }
 
     getCorrectFriendActionButton() {
-        // alert("getting correct friend action button for " + this.getClientAttribute("id"));
+        // console.log("getting correct friend action button for " + this.getClientAttribute("id"));
         if (this.getClientAttribute("id")) {
             if (this.props.user.friends && this.props.user.friends.length) {
                 if (this.props.user.friends.includes(this.getClientAttribute("id"))) {
@@ -203,7 +203,7 @@ class ClientModal extends Component<Props> {
         }
         function button_rows(events) {
             //if(events != null)
-            //alert(JSON.stringify(events[0]));
+            //console.log(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Fragment key={i}>
                     <Button primary>Invite to Challenge</Button>

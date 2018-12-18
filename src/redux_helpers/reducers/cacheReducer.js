@@ -282,7 +282,7 @@ export default (state = initialState, action) => {
 function addObjectToCache(state, cacheName, maxCacheSize, LRUHandlerName, object) {
     // TODO Check to see that this is all well-formed?
     if (!object.id) {
-        alert("Adding object to cache does not include the id!!!");
+        console.log("Adding object to cache does not include the id!!!");
     }
     if (!state[cacheName][object.id]) {
         state = {

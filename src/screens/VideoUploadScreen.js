@@ -73,7 +73,7 @@ class VideoUploadScreen extends Component {
     update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
         const user = props.user;
-        //alert("Updating Scheduled Events");
+        //console.log("Updating Scheduled Events");
         if (!user.id) {
             // console.error("Pretty bad error");
             this.setState({isLoading: true});
