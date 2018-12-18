@@ -423,7 +423,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                                     </Icon.Group> {this.getChallengeAttribute("goal")}
                             </Grid.Row>
                             <Grid.Row>
-                                <Icon name='user'/>{this.profilePicture()}<Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                                <Icon name='user'/><Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
                             </Grid.Row>
                         </Grid.Column>
                         <Grid.Column floated='right' width={6}>
