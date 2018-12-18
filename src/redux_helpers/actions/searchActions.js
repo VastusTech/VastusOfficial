@@ -1,6 +1,6 @@
 import { setError, setIsLoading } from "./infoActions";
 import QL from "../../GraphQL";
-import {getCache, getPutQueryFunction} from "./cacheActions";
+import {getCache, getPutItemFunction, getPutQueryFunction, getQueryCache} from "./cacheActions";
 
 const ENABLE_TYPE = 'ENABLE_TYPE';
 const DISABLE_TYPE = 'DISABLE_TYPE';
@@ -10,6 +10,8 @@ const SET_TYPE_NEXT_TOKEN = 'SET_TYPE_NEXT_TOKEN';
 const ADD_TYPE_RESULTS = 'ADD_TYPE_RESULTS';
 const RESET_TYPE_QUERY = 'RESET_TYPE_QUERY';
 const RESET_QUERY = 'RESET_QUERY';
+const ENABLE_SEARCH_BAR = 'ENABLE_SEARCH_BAR';
+const DISABLE_SEARCH_BAR = 'DISABLE_SEARCH_BAR';
 
 export function newSearch(queryString, dataHandler) {
     return (dispatch, getStore) => {
@@ -83,13 +85,19 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
         const nextToken = typeQuery.nextToken;
         const ifFirst = typeQuery.ifFirst;
         if (nextToken || ifFirst) {
+            const putItemFunction = getPutItemFunction(itemType);
             QL.getQueryFunction(itemType)(variableList, QL.generateFilter(filterJSON, filterParameters), limit, nextToken, (data) => {
                 dispatch(setTypeNextToken(itemType, nextToken));
                 successHandler(data);
+                if (data && data.items) {
+                    for (let i = 0; i < data.items.length; i++) {
+                        dispatch(putItemFunction(data.items[i]));
+                    }
+                }
             }, (error) => {
                 dispatch(setError(error));
                 failureHandler();
-            }, getCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
+            }, getQueryCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
         }
         else {
             successHandler({items: [], nextToken: null});
@@ -152,4 +160,14 @@ export function resetQuery() {
     return {
         type: RESET_QUERY
     };
+}
+export function enableSearchBar() {
+    return {
+        type: ENABLE_SEARCH_BAR
+    }
+}
+export function disableSearchBar() {
+    return {
+        type: DISABLE_SEARCH_BAR
+    }
 }

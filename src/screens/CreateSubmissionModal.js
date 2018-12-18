@@ -22,7 +22,9 @@ class CreateSubmissionModal extends Component {
         picturesLoading: false,
         videosLoading: false,
         pictures: [],
-        videos: []
+        videos: [],
+        tempPictureURLs: [],
+        tempVideoURLs: [],
     };
 
     constructor(props) {
@@ -135,7 +137,20 @@ class CreateSubmissionModal extends Component {
     }
 
     setVideo(event) {
+        const index = this.state.videos.length;
         this.state.videos.push(event.target.files[0]);
+        const path = "/" + this.props.user.id + "/temp/videos/" + index;
+        Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
+        .then(() => {
+            Storage.get(path).then((url) => {
+                this.state.tempVideoURLs.push(url);
+                this.setState({});
+            }).catch((error) => {
+                console.error(error);
+            })
+        }).catch((error) => {
+                console.error(error);
+        });
         this.setState({});
     }
 
@@ -147,11 +162,10 @@ class CreateSubmissionModal extends Component {
     }
 
     displayCurrentVideo() {
-        if (this.state.videos && this.state.videos.length > 0) {
-            alert(this.state.videos[[0]]);
+        if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
                 <Player>
-                    <source src={this.state.videos[0]} type="video/mp4"/>
+                    <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
                 </Player>
             );
         }

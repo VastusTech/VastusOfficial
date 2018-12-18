@@ -261,38 +261,40 @@ class SearchBarProp extends Component {
     }
 
     getFormattedResults() {
-        const results = this.props.search.results;
         const formattedResults = [];
-        for (const i in results) {
-            if (results.hasOwnProperty(i)) {
-                const result = results[i];
-                if (result.hasOwnProperty("item_type") && result.item_type) {
-                    let formattedResult = switchReturnItemType(result.item_type,
-                        { // Client
-                            title: result.name,
-                            description: result.username,
-                            resultcontent: result
-                        },
-                        null,
-                        null,
-                        null,
-                        null,
-                        { // Event
-                            title: (result.title),
-                            description: result.goal,
-                            resultcontent: result
-                        },
-                        { // Challenge
-                            title: (result.title),
-                            description: result.description,
-                            resultcontent: result
-                        },
-                        null,
-                        null);
+        if (this.props.search.searchBarEnabled) {
+            const results = this.props.search.results;
+            for (const i in results) {
+                if (results.hasOwnProperty(i)) {
+                    const result = results[i];
+                    if (result.hasOwnProperty("item_type") && result.item_type) {
+                        let formattedResult = switchReturnItemType(result.item_type,
+                            { // Client
+                                title: result.name,
+                                description: result.username,
+                                resultcontent: result
+                            },
+                            null,
+                            null,
+                            null,
+                            null,
+                            { // Event
+                                title: (result.title),
+                                description: result.goal,
+                                resultcontent: result
+                            },
+                            { // Challenge
+                                title: (result.title),
+                                description: result.description,
+                                resultcontent: result
+                            },
+                            null,
+                            null);
 
-                    if (formattedResult) {
-                        // TODO Insertsort this? By what basis though?
-                        formattedResults.push(formattedResult);
+                        if (formattedResult) {
+                            // TODO Insertsort this? By what basis though?
+                            formattedResults.push(formattedResult);
+                        }
                     }
                 }
             }
@@ -320,6 +322,7 @@ class SearchBarProp extends Component {
                     onSearchChange={_.debounce(this.handleSearchChange, 1000, { leading: true })}
                     results={this.getFormattedResults()}
                     value={this.props.search.searchQuery}
+                    showNoResults={this.props.search.searchBarEnabled}
                 />
             </Fragment>
         )
