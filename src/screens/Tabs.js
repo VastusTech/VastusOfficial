@@ -49,7 +49,7 @@ export default () => (
                     <LeaderBoard />
                 </Tab.Pane>
             },
-            {
+            /*{
                 menuItem: (
                     <Menu.Item key={3}>
                         <Icon name='search' size='large' />
@@ -57,7 +57,7 @@ export default () => (
                 render: () => <Tab.Pane basic attached={false}>
                     <SearchScreen />
                 </Tab.Pane>
-            },
+            },*/
             {
                 menuItem: (
                     <Menu.Item key={4}>

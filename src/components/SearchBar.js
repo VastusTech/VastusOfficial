@@ -30,8 +30,17 @@ class SearchBarProp extends Component {
         // eventsLimit: 100,
         // clientsLimit: 100,
         selectedResult: null,
+        result: null,
+        resultModal: null,
         resultModalOpen: false
     };
+
+    constructor(props) {
+        super(props);
+        this.handleResultSelect = this.handleResultSelect.bind(this);
+        this.openResultModal = this.openResultModal.bind(this);
+        this.closeResultModal = this.closeResultModal.bind(this);
+    }
 
     componentWillMount() {
         // this.resetComponent()
@@ -192,7 +201,9 @@ class SearchBarProp extends Component {
         // else if (result.resultcontent.item_type === "Event") {
         //     this.props.fetchEvent(result.resultcontent.id, ["time", "time_created", "title", "goal", "members"]);
         // }
-        this.setState({result: result.resultcontent, resultModalOpen: true});
+        // this.setState({resultModal: this.resultModal(result.resultcontent)});
+        this.setState({result: result.resultcontent});
+        this.setState({resultModalOpen: true});
     };
 
     handleSearchChange = (e, { value }) => {
@@ -239,27 +250,30 @@ class SearchBarProp extends Component {
         })
     }
 
-    resultModal() {
-        if (!this.state.result) {
+    resultModal(result) {
+        if (!result) {
             return null;
         }
-        const type = this.state.result.item_type;
+        const type = result.item_type;
+        // if (this.state.toOpenResultModal) {
+        //     this.setState({toOpenResultModal: false, resultModalOpen: true});
+        // }
         if (type === "Client") {
             return(
-                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} clientID={this.state.result.id}/>
+                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal} clientID={result.id}/>
             );
         }
         else if (type === "Event") {
             return(
-                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)}
-                                       eventID={this.state.result.id}
+                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal}
+                                       eventID={result.id}
                 />
             );
         }
         else if (type === "Challenge") {
             return(
-                <ChallengeDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} challengeID={this.state.result.id}/>
-            )
+                <ChallengeDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal} challengeID={result.id}/>
+        )
         }
         else {
             console.log("Wrong type inputted! Received " + type);
@@ -336,7 +350,7 @@ class SearchBarProp extends Component {
         // console.log(this.props.search.results.length);
         return (
             <Fragment>
-                {this.resultModal()}
+                {this.resultModal(this.state.result)}
                 <Search
                     fluid
                     size="large"

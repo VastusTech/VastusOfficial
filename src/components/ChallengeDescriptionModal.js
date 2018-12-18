@@ -53,6 +53,30 @@ class ChallengeDescriptionModal extends Component<Props> {
         canCallChecks: true,
     };
 
+    resetState(challengeID) {
+        this.setState({
+            isLoading: false,
+            isOwned: false,
+            isJoined: false,
+            isCompleted: false,
+            isRequesting: false,
+            isRestricted: false,
+            challengeID: challengeID,
+            // event: null,
+            // ownerName: null,
+            // members: {},
+            clientModalOpen: false,
+            completeModalOpen: false,
+            submitModalOpen: false,
+            isLeaveLoading: false,
+            isDeleteLoading: false,
+            isJoinLoading: false,
+            isRequestLoading: false,
+            joinRequestSent: false,
+            canCallChecks: true,
+        });
+    }
+
     constructor(props) {
         super(props);
         this.handleJoinChallengeButton = this.handleJoinChallengeButton.bind(this);
@@ -83,8 +107,9 @@ class ChallengeDescriptionModal extends Component<Props> {
     }
 
     componentWillReceiveProps(newProps) {
-        if (newProps.challengeID && !this.state.challengeID) {
-            this.state.challengeID = newProps.challengeID;
+        if (newProps.challengeID !== this.state.challengeID) {
+            // alert("resetting state to " + newProps.challengeID);
+            this.resetState(newProps.challengeID);
         }
 
         const members = this.getChallengeAttribute("members");
