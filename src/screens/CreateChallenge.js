@@ -198,6 +198,7 @@ class CreateChallengeProp extends Component {
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
+                        this.setState({showModal: false});
                         //this.setState({showSuccessModal: true});
 
                     }, (error) => {
@@ -246,14 +247,16 @@ class CreateChallengeProp extends Component {
     };
 
     createSuccessModal() {
-        return(
-            <Modal open={this.state.showSuccessModal}>
-                <Modal.Header align='center'>Successfully Created Event!</Modal.Header>
-                <Modal.Content>
-                    <Button fluid negative size="small" onClick={this.closeSuccessModal}>Ok</Button>
-                </Modal.Content>
-            </Modal>
-        );
+        if(this.state.showSuccessModal) {
+            return (
+                <Modal open={this.state.showSuccessModal}>
+                    <Modal.Header align='center'>Successfully Created Event!</Modal.Header>
+                    <Modal.Content>
+                        <Button fluid negative size="small" onClick={this.closeSuccessModal}>Ok</Button>
+                    </Modal.Content>
+                </Modal>
+            );
+        }
     }
 
     createSuccessLabel() {
@@ -261,7 +264,12 @@ class CreateChallengeProp extends Component {
             this.setState({showSuccessLabel: false});
         }
         else if(this.state.showSuccessLabel) {
-            return (<Label inverted primary fluid size="massive" color="green">Successfully Created Event!</Label>);
+            return (<Message positive>
+                <Message.Header>Success!</Message.Header>
+                <p>
+                    You just created a new Challenge!
+                </p>
+            </Message>);
         }
         else {
             return null;
@@ -284,6 +292,7 @@ class CreateChallengeProp extends Component {
     render() {
 
         return (
+            <div>
             <Modal closeIcon trigger={<Button primary fluid size="large"> <Icon name='plus' /> Post Challenge</Button>}>
                 <Modal.Header align='center'>Challenge Builder</Modal.Header>
                 <Modal.Content align='center'>
@@ -342,7 +351,7 @@ class CreateChallengeProp extends Component {
                                     <Form.Field width={12}>
                                         <Checkbox toggle onClick={this.handleRestrictionSwitch} onChange={this.toggleRest} checked={this.state.checkedRest} label={this.showRestriction()} />
                                     </Form.Field>
-                                    <div>{this.displayError()}</div>
+                                    <div>{this.displayError()}{this.createSuccessLabel()}</div>
                                 </Form>
                             </Grid.Column>
                         </Grid.Row>
@@ -352,6 +361,7 @@ class CreateChallengeProp extends Component {
                     <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
                 </Modal.Actions>
             </Modal>
+            {this.createSuccessLabel()}</div>
         );
     }
 }

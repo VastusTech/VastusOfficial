@@ -131,7 +131,7 @@ class ChallengeFeed extends Component {
                 }, (error) => {
                     console.log("Querying challenges failed!");
                     console.log(error);
-                    alert(error);
+                    console.error(error);
                     this.setState({isLoading: false, error: error});
                 }, this.props.cache.challengeQueries, this.props.putChallengeQuery);
         }
