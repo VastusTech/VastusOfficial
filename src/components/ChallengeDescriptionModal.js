@@ -314,6 +314,12 @@ class ChallengeDescriptionModal extends Component<Props> {
                         </Grid.Column>
                     </Grid>
                     <VideoUploadScreen curUser={this.props.user.username} curUserID={this.props.user.id} challengeChannel={this.state.challengeID}/>
+                    <Fragment>
+                        <Button primary fluid className='u-margin-bottom--1' onClick={this.openSubmitModal}>Submit Your Entry</Button>
+                        <Button loading={this.state.isLeaveLoading} fluid inverted size="large" disabled={this.state.isLeaveLoading} onClick={this.handleLeaveChallengeButton}>Leave</Button>
+                        <Divider className='u-margin-top--4' />
+                        <Tab menu={{ widths: 2, inverted: true }} panes={panes} className='u-challenge u-margin-top--2' />
+                    </Fragment>
                 </div>
             )
         }
