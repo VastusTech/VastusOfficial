@@ -102,7 +102,7 @@ class CreateSubmissionModal extends Component {
                     }
                 });
             }
-            Storage.put(id + "/")
+            // Storage.put(id + "/")
         }, (error) => {
             console.error(error);
         });
@@ -112,7 +112,7 @@ class CreateSubmissionModal extends Component {
         const picturePaths = [];
         alert("Pictures: " + this.state.pictures.length);
         for (let i = 0; i < this.state.pictures.length; i++) {
-            const path = "/pictures/" + i;
+            const path = "pictures/" + i;
             picturePaths.push(path);
             alert("Added: " + path);
         }
@@ -126,7 +126,7 @@ class CreateSubmissionModal extends Component {
         const videoPaths = [];
         alert("Videos: " + this.state.videos.length);
         for (let i = 0; i < this.state.videos.length; i++) {
-            const path = "/videos/" + i;
+            const path = "videos/" + i;
             videoPaths.push(path);
             alert("Added: " + path);
         }
