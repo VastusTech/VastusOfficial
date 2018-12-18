@@ -10,6 +10,8 @@ const SET_TYPE_NEXT_TOKEN = 'SET_TYPE_NEXT_TOKEN';
 const ADD_TYPE_RESULTS = 'ADD_TYPE_RESULTS';
 const RESET_TYPE_QUERY = 'RESET_TYPE_QUERY';
 const RESET_QUERY = 'RESET_QUERY';
+const ENABLE_SEARCH_BAR = 'ENABLE_SEARCH_BAR';
+const DISABLE_SEARCH_BAR = 'DISABLE_SEARCH_BAR';
 
 export function newSearch(queryString, dataHandler) {
     return (dispatch, getStore) => {
@@ -152,4 +154,14 @@ export function resetQuery() {
     return {
         type: RESET_QUERY
     };
+}
+export function enableSearchBar() {
+    return {
+        type: ENABLE_SEARCH_BAR
+    }
+}
+export function disableSearchBar() {
+    return {
+        type: DISABLE_SEARCH_BAR
+    }
 }

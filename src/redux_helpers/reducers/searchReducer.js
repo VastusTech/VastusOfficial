@@ -6,6 +6,8 @@ const SET_TYPE_NEXT_TOKEN = 'SET_TYPE_NEXT_TOKEN';
 const ADD_TYPE_RESULTS = 'ADD_TYPE_RESULTS';
 const RESET_TYPE_QUERY = 'RESET_TYPE_QUERY';
 const RESET_QUERY = 'RESET_QUERY';
+const ENABLE_SEARCH_BAR = 'ENABLE_SEARCH_BAR';
+const DISABLE_SEARCH_BAR = 'DISABLE_SEARCH_BAR';
 // const CLEAR_TYPE_RESULTS = 'CLEAR_TYPE_RESULTS';
 // const CLEAR_ALL_RESULTS = 'CLEAR_ALL_RESULTS';
 
@@ -200,6 +202,7 @@ const initialState = {
     limit: 100, // This should be computed dynamically, based on how many types we're querying to maintain a certain number
     numTypesEnabled: 2,
     ifFinished: false,
+    searchBarEnabled: true,
     typeQueries: {
         Client: initialClientState,
         Trainer: initialTrainerState,
@@ -319,6 +322,18 @@ export default (state = initialState, action) => {
                         ifFirst: true,
                     }
                 }
+            };
+            break;
+        case ENABLE_SEARCH_BAR:
+            state = {
+                ...state,
+                searchBarEnabled: true
+            };
+            break;
+        case DISABLE_SEARCH_BAR:
+            state = {
+                ...state,
+                searchBarEnabled: false
             };
             break;
         default:
