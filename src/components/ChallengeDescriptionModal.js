@@ -399,53 +399,45 @@ class ChallengeDescriptionModal extends Component<Props> {
         return(
         	
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-            
-                <Modal.Header><div>{this.displayTagIcons(this.getChallengeAttribute("tags"))} 
+                <Modal.Header align='center'><div>
                 {this.getChallengeAttribute("title")}</div>
-                		<Segment inverted color='black' textAlign = "center" >
-                           <Icon.Group size='large'>
-      <Icon name='bullseye' />
-    </Icon.Group> {this.getChallengeAttribute("goal")}
-                        </Segment>
+                    <div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
+                    <div>
+                        {this.props.daysLeft} days left
+                    </div>
                     </Modal.Header>
-              
-                    
-                
-                <Modal.Content>
+                <Modal.Content align='center'>
+                    <Grid>
+                        <Grid.Column floated='left' width={6}>
+                            <Grid.Row>
+                                    <Icon.Group size='large'>
+                                        <Icon name='bullseye' />
+                                    </Icon.Group> {this.getChallengeAttribute("goal")}
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Icon name='user'/>{this.profilePicture()}<Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                            </Grid.Row>
+                        </Grid.Column>
+                        <Grid.Column floated='right' width={6}>
+                            <Grid.Row>
+                                <div>
+                                    <Icon.Group size='large'>
+                                        <Icon name='trophy' />
+                                    </Icon.Group> {this.getChallengeAttribute("prize")}
+                                </div>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <Icon name='users' /><Modal trigger={<Button primary className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
+                                    <Modal.Content>
+                                        <ChallengeMemberList challengeID={this.state.challengeID} />
+                                    </Modal.Content>
+                                </Modal>
+                            </Grid.Row>
+                        </Grid.Column>
+                    </Grid>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
-                        <List relaxed>
-                            {/*{this.createChallengeChatButton()}*/}
-                            <List.Item>
-                                <List.Icon name='user' />
-                                <List.Content>
-                                    Created by {this.profilePicture()}<Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
-                                </List.Content>
-                            </List.Item>
-                            <List.Item>
-                                <List.Icon name='calendar' />
-                                <List.Content>
-                                    {this.props.daysLeft} days left
-                                </List.Content>
-                            </List.Item>
-                            <List.Item>
-                                <List.Icon name='trophy' />
-                                <List.Content>
-                                    {this.getChallengeAttribute("prize")}
-                                </List.Content>
-                            </List.Item>
-                            <List.Item>
-                                <List.Icon name='users' />
-                                <List.Content>
-                                 <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
-                                        <Modal.Content>
-                                            <ChallengeMemberList challengeID={this.state.challengeID} />
-                                        </Modal.Content>
-                                 </Modal>
-                                </List.Content>
-                            </List.Item>
-                        </List>
                         {this.createCorrectButton()}
                     </Modal.Description>
                     <div>{this.displayError()}</div>
