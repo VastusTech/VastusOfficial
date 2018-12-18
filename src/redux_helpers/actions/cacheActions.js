@@ -487,6 +487,10 @@ export function getQueryCache(itemType, getStore) {
         cache.reviewQueries, cache.eventQueries, cache.challengeQueries, cache.inviteQueries, cache.postQueries,
         "Retrieve query cache not implemented");
 }
+export function getPutItemFunction(itemType) {
+    return switchReturnItemType(itemType, putClient, putTrainer, putGym, putWorkout, putReview, putEvent, putChallenge,
+        putPost, "Retrieve put item function item type not implemented");
+}
 export function getPutQueryFunction(itemType) {
     return switchReturnItemType(itemType, putClientQuery, putTrainerQuery, putGymQuery, putWorkoutQuery, putReviewQuery,
         putEventQuery, putChallengeQuery, putInviteQuery, putPostQuery, "Retrieve Put Query Function not implemented");

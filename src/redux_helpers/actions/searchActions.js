@@ -1,6 +1,6 @@
 import { setError, setIsLoading } from "./infoActions";
 import QL from "../../GraphQL";
-import {getCache, getPutQueryFunction} from "./cacheActions";
+import {getCache, getPutItemFunction, getPutQueryFunction, getQueryCache} from "./cacheActions";
 
 const ENABLE_TYPE = 'ENABLE_TYPE';
 const DISABLE_TYPE = 'DISABLE_TYPE';
@@ -85,13 +85,19 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
         const nextToken = typeQuery.nextToken;
         const ifFirst = typeQuery.ifFirst;
         if (nextToken || ifFirst) {
+            const putItemFunction = getPutItemFunction(itemType);
             QL.getQueryFunction(itemType)(variableList, QL.generateFilter(filterJSON, filterParameters), limit, nextToken, (data) => {
                 dispatch(setTypeNextToken(itemType, nextToken));
                 successHandler(data);
+                if (data && data.items) {
+                    for (let i = 0; i < data.items.length; i++) {
+                        dispatch(putItemFunction(data.items[i]));
+                    }
+                }
             }, (error) => {
                 dispatch(setError(error));
                 failureHandler();
-            }, getCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
+            }, getQueryCache(itemType, getStore), getPutQueryFunction(itemType, getStore));
         }
         else {
             successHandler({items: [], nextToken: null});

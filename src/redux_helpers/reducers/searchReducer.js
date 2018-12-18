@@ -21,7 +21,7 @@ const typeRatios = {
 
 const initialClientState = {
     enabled: true,
-    variableList: ["id", "item_type", "username", "gender", "birthday", "name", "friends", "challengesWon", /*"scheduledEvents",*/ /*"profileImagePath", /*"profilePicture"*/ /*"friendRequests"*/],
+    variableList: ["id", "item_type", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", /*"profilePicture"*/ "friendRequests"],
     filterJSON: {
         or: [{
             username: {

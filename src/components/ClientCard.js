@@ -44,7 +44,6 @@ class ClientCard extends Component<Props> {
 
     componentWillReceiveProps(newProps, nextContext) {
         if (newProps.clientID && !this.state.clientID) {
-           
             this.setState({clientID: newProps.clientID});
         }
     }

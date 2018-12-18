@@ -1,6 +1,6 @@
-import React, { Component } from "react";
+import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
-import {List, Divider, Segment, Grid, Form, Button} from "semantic-ui-react";
+import {List, Header, Divider, Segment, Grid, Form, Button} from "semantic-ui-react";
 import {switchReturnItemType} from "../logic/ItemType";
 import ClientCard from "../components/ClientCard";
 import EventCard from "../components/EventCard";
@@ -42,43 +42,44 @@ class SearchScreen extends Component {
 
     getFormattedResults() {
         const results = [];
-        for (let i = 0; i < this.props.search.results; i++) {
+        for (let i = 0; i < this.props.search.results.length; i++) {
             const result = this.props.search.results[i];
             const item_type = result.item_type;
-            // results.push(
-            //     <List.Item>
-            //         {switchReturnItemType(item_type,
-            //         <ClientCard rank={} clientID={}/>,
-            //         null,
-            //         null,
-            //         null,
-            //         null,
-            //         <EventCard eventID={}/>,
-            //         <ChallengeCard/>,
-            //         null,
-            //         <PostCard/>, "Result type not implemented!")}
-            //     </List.Item>
-            // );
+            results.push(
+                <List.Item>
+                    {switchReturnItemType(item_type,
+                    <ClientCard rank={i} clientID={result.id}/>,
+                    null,
+                    null,
+                    null,
+                    null,
+                    <EventCard eventID={result.id}/>,
+                    <ChallengeCard challengeID={result.id}/>,
+                    null,
+                    <PostCard postID={result.id}/>,
+                        "Result type not implemented!")}
+                </List.Item>
+            );
         }
+        return results;
     }
 
     render() {
         return(
-            <Segment placeholder>
-                <Grid columns={2} relaxed='very' stackable>
-                    <Grid.Column>
+            <Fragment>
+                <Grid columns={2}>
+                    <Grid.Column className="ui one column stackable center aligned page grid">
                         <Form>
-                            <Form.Input icon='user' iconPosition='left' label='Username' placeholder='Username' />
-                            <Form.Input icon='lock' iconPosition='left' label='Password' type='password' />
-                            <Button content='Login' primary />
+                            <Header>Filter</Header>
                         </Form>
                     </Grid.Column>
                     <Grid.Column verticalAlign='middle' >
-                        <Button fluid content='Sign up' icon='signup' size='big' />
+                        <List>
+                            {this.getFormattedResults()}
+                        </List>
                     </Grid.Column>
                 </Grid>
-                {/*<Divider vertical>Or</Divider>*/}
-            </Segment>
+            </Fragment>
         );
     }
 }
@@ -87,6 +88,7 @@ const mapStateToProps = (state) => ({
     user: state.user,
     cache: state.cache,
     info: state.info,
+    search: state.search
 });
 
 const mapDispatchToProps = (dispatch) => {
