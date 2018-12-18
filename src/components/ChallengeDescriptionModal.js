@@ -102,7 +102,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         this.isCompleted();
         this.isRequesting();
         this.isRestricted();
-        //console.log("Mount Owned: " + this.state.isOwned);
+        //alert("Mount Owned: " + this.state.isOwned);
         this.componentWillReceiveProps(this.props);
     }
 
@@ -200,39 +200,39 @@ class ChallengeDescriptionModal extends Component<Props> {
     }
 
     handleDeleteChallengeButton() {
-        //console.log("Handling deleting the event");
+        //alert("Handling deleting the event");
         this.setState({isDeleteLoading: true, isLoading: true});
         ChallengeFunctions.delete(this.props.user.id, this.getChallengeAttribute("id"), (data) => {
             this.forceUpdate(data.id);
-            // console.log(JSON.stringify(data));
+            // alert(JSON.stringify(data));
             this.setState({isLoading: false, isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
             this.props.onClose();
         }, (error) => {
-            // console.log(JSON.stringify(error));
+            // alert(JSON.stringify(error));
             this.setState({isLoading: false, isDeleteLoading: false, error: error});
         })
     }
 
     handleLeaveChallengeButton() {
-        //console.log("Handling leaving the event");
+        //alert("Handling leaving the event");
         this.setState({isLeaveLoading: true, isLoading: true});
         UserFunctions.removeChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"), (data) => {
             this.forceUpdate(data.id);
-            //console.log(JSON.stringify(data));
+            //alert(JSON.stringify(data));
             this.setState({isLoading: false, isLeaveLoading: false, isJoined: false});
         }, (error) => {
-            //console.log(JSON.stringify(error));
+            //alert(JSON.stringify(error));
             this.setState({isLoading: false, isLeaveLoading: false, error: error});
         })
     }
 
     handleJoinChallengeButton() {
-        //console.log("Handling joining the event");
+        //alert("Handling joining the event");
         this.setState({isJoinLoading: true, isLoading: true});
         UserFunctions.addChallenge(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
             () => {
                 this.forceUpdate();
-                //console.log(JSON.stringify(data));
+                //alert(JSON.stringify(data));
                 this.setState({isLoading: false, isJoinLoading: false, isJoined: true});
             }, (error) => {
                 this.setState({isLoading: false, isJoinLoading: false, error: error});
@@ -254,9 +254,9 @@ class ChallengeDescriptionModal extends Component<Props> {
         const members = this.getChallengeAttribute("members");
         if (members) {
             const isMembers = members.includes(this.props.user.id);
-            //console.log("Is Members?: " + isMembers);
+            //alert("Is Members?: " + isMembers);
             this.setState({isJoined: isMembers});
-            //console.log("am I in members?: " + members.includes(this.props.user.id));
+            //alert("am I in members?: " + members.includes(this.props.user.id));
         }
         else {
             this.setState({isJoined: false});
@@ -322,8 +322,8 @@ class ChallengeDescriptionModal extends Component<Props> {
             )},
         ];
 
-        //console.log("Owned: " + isOwned + " Joined: " + isJoined);
-        // console.log(ifCompleted);
+        //alert("Owned: " + isOwned + " Joined: " + isJoined);
+        // alert(ifCompleted);
         if (this.state.isCompleted) {
             return(
                 <Button disabled fluid inverted size="large">This Event is completed</Button>
@@ -333,7 +333,6 @@ class ChallengeDescriptionModal extends Component<Props> {
             // TODO This should also link the choose winner button
             return (
                 <Fragment>
-                    <Button primary fluid className='u-margin-bottom--1' onClick={this.openSubmitModal}>Submit Your Entry</Button>
                     <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
                     <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
                     <Divider className='u-margin-top--4' />
@@ -365,7 +364,7 @@ class ChallengeDescriptionModal extends Component<Props> {
             }
         }
         else {
-            //console.log(isJoinLoading);
+            //alert(isJoinLoading);
             return (<Button loading={this.state.isJoinLoading} fluid size="large" disabled={this.state.isJoinLoading}
                             onClick={this.handleJoinChallengeButton}>Join</Button>)
         }
@@ -421,13 +420,13 @@ class ChallengeDescriptionModal extends Component<Props> {
             this.isRequesting();
             this.isCompleted();
             this.isRestricted();
-            //console.log("Render Owned: " + this.state.isOwned);
+            //alert("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //console.log("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 	
 		 
-        //console.log("Challenge Info: " + JSON.stringify(this.state.event));
+        //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
         	
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
