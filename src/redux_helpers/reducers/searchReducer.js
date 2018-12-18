@@ -147,7 +147,7 @@ const initialEventState = {
 
 const initialChallengeState = {
     enabled: true,
-    variableList: ["id", "item_type", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"],
+    variableList: ["id", "item_type", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "description", "restriction", "tags", "prize", "submissions"],
     filterJSON: {
         and: [{
             or: [{

@@ -70,6 +70,9 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         if (!variablesList.includes("id")) {
             variablesList = [...variablesList, "id"];
         }
+        if (!variablesList.includes("item_type")) {
+            variablesList = [...variablesList, "item_type"];
+        }
         QL[QLFunctionName](id, variablesList, (data) => {
             // alert("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {

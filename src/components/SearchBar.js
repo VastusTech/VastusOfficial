@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {fetchClient, fetchEvent, putClientQuery, putEventQuery, fetchChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {newSearch, loadMoreResults} from "../redux_helpers/actions/searchActions";
 import {switchReturnItemType} from "../logic/ItemType";
+import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 
 // setupAWS();
 
@@ -255,6 +256,11 @@ class SearchBarProp extends Component {
                 />
             );
         }
+        else if (type === "Challenge") {
+            return(
+                <ChallengeDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} challengeID={this.state.result.id}/>
+            )
+        }
         else {
             alert("Wrong type inputted! Received " + type);
         }
@@ -264,6 +270,7 @@ class SearchBarProp extends Component {
         const formattedResults = [];
         if (this.props.search.searchBarEnabled) {
             const results = this.props.search.results;
+            const resultTitles = [];
             for (const i in results) {
                 if (results.hasOwnProperty(i)) {
                     const result = results[i];
@@ -293,12 +300,29 @@ class SearchBarProp extends Component {
 
                         if (formattedResult) {
                             // TODO Insertsort this? By what basis though?
+                            while (formattedResult.title && resultTitles.includes(formattedResult.title)) {
+                                const len = formattedResult.title.length;
+                                // alert(JSON.stringify(resultTitles));
+                                // alert(formattedResult.title + "~ -3: " + formattedResult.title[len - 3] + ", -1: " + formattedResult.title[len - 1]);
+                                if (formattedResult.title[len - 3] === "(" && formattedResult.title[len - 1] === ")") {
+                                    let num = parseInt(formattedResult.title[len - 2]);
+                                    num++;
+                                    formattedResult.title = formattedResult.title.substr(0, len - 3) + "(" + num + ")";
+                                    // formattedResult.title[len - 2] = num;
+                                }
+                                else {
+                                    formattedResult.title += " (2)";
+                                }
+                            }
+                            // alert(formattedResult.title + " is not in " + JSON.stringify(resultTitles));
                             formattedResults.push(formattedResult);
+                            resultTitles.push(formattedResult.title);
                         }
                     }
                 }
             }
         }
+        // alert(formattedResults.length);
         return formattedResults;
     }
 
