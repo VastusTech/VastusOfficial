@@ -143,7 +143,7 @@ class Profile extends React.PureComponent {
     }
 
     setGalleryPicture(event) {
-        //console.log(JSON.stringify(this.props));
+        alert("This is calling set gallery picture");
         if (this.props.user.id) {
             alert(this.state.galleryNum);
             const path = "/ClientFiles/" + this.props.user.id + "/galleryImages" + this.state.galleryNum;
