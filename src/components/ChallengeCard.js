@@ -165,7 +165,10 @@ class ChallengeCard extends Component {
     }
 
     openChallengeModal = () => {this.setState({challengeModalOpen: true})};
-    closeChallengeModal = () => {this.setState({challengeModalOpen: false})};
+    closeChallengeModal = () => {
+        console.log("Closing challenge Modal");
+        this.setState({challengeModalOpen: false})
+    };
 
     render() {
         if (!this.getChallengeAttribute("id")) {

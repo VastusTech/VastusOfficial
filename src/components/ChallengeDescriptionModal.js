@@ -431,6 +431,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         return(
         	
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Icon className='close' onClick={() => this.props.onClose()}/>
                 <Modal.Header align='center'><div>
                 {this.getChallengeAttribute("title")}</div>
                     <div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
@@ -447,7 +448,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                                     </Icon.Group> {this.getChallengeAttribute("goal")}
                             </Grid.Row>
                             <Grid.Row>
-                                <Icon name='user'/><Button className="u-button--flat"  onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                                <Icon name='user'/><Button className="u-button--flat" onClick={this.openClientModal}>{this.getOwnerName()}</Button>
                             </Grid.Row>
                         </Grid.Column>
                         <Grid.Column floated='right' width={6}>

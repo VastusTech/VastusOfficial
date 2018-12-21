@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Modal, Button, List, Dimmer, Loader, Message, Grid, Image } from 'semantic-ui-react';
+import ReactSwipe from 'react-swipe';
+import { Modal, Button, List, Dimmer, Loader, Message, Icon, Image } from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "../screens/ScheduledEventList";
@@ -130,10 +131,29 @@ class ClientModal extends Component<Props> {
         this.handleRemoveFriend();
     }*/
 
+    imageGallery(length) {
+
+    }
+
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
+            let reactSwipeEl;
             return(
-                <div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
+                <Modal trigger={<div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>}>
+                    <div>
+                        <ReactSwipe
+                            className="carousel"
+                            swipeOptions={{ continuous: false }}
+                            ref={el => (reactSwipeEl = el)}
+                        >
+                            <Image size='small' src={require('../img/Strength_icon.png')}/>
+                            <Image size='small' src={require('../img/Performance_icon.png')}/>
+                            <Image size='small' src={require('../img/Endurance_icon.png')}/>
+                        </ReactSwipe>
+                        <Button primary onClick={() => reactSwipeEl.prev()}>Previous</Button>
+                        <Button primary onClick={() => reactSwipeEl.next()}>Next</Button>
+                    </div>
+                </Modal>
             );
         }
         else {
@@ -231,6 +251,7 @@ class ClientModal extends Component<Props> {
         //bottom there is an add buddy function, which sends out a buddy request (friend request).
         return(
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                <Icon className='close' onClick={() => this.props.onClose()}/>
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>

@@ -1,10 +1,11 @@
-import React, {  } from 'react'
+import React, {Fragment} from 'react'
 import { Player } from 'video-react';
-import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
+import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 // import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
+import _ from 'lodash'
 // import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
@@ -17,12 +18,15 @@ import { connect } from "react-redux";
 // import AWSSetup from "../AppConfig";
 import {logOut} from "../redux_helpers/actions/authActions";
 import ClientFunctions from "../databaseFunctions/ClientFunctions";
+import ReactSwipe from "react-swipe";
+import ChallengeCard from "../components/ChallengeCard";
 
 // AWSSetup();
 
 // Storage.configure({level: 'public'});
 
 window.LOG_LEVEL='DEBUG';
+
 
 /**
 * Profile
@@ -38,6 +42,7 @@ class Profile extends React.PureComponent {
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
+        galleryNum: null,
         error: null
     };
 
@@ -50,6 +55,7 @@ class Profile extends React.PureComponent {
         // this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
         this.setPicture = this.setPicture.bind(this);
+        this.setGalleryPicture = this.setGalleryPicture.bind(this);
         this.update = this.update.bind(this);
         this.profilePicture = this.profilePicture.bind(this);
         this.openBuddyModal = this.openBuddyModal.bind(this);
@@ -59,6 +65,7 @@ class Profile extends React.PureComponent {
         this.openOwnedModal = this.openOwnedModal.bind(this);
         this.closeOwnedModal = this.closeOwnedModal.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);
+        this.imageGallery = this.imageGallery.bind(this);
     }
 
     resetState() {
@@ -100,7 +107,7 @@ class Profile extends React.PureComponent {
 
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges"]);
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         }
         else {
             this.setState({isLoading: false});
@@ -135,31 +142,82 @@ class Profile extends React.PureComponent {
         }
     }
 
+    setGalleryPicture(event) {
+        //console.log(JSON.stringify(this.props));
+        if (this.props.user.id) {
+            alert(this.state.galleryNum);
+            const path = "/ClientFiles/" + this.props.user.id + "/galleryImages" + this.state.galleryNum;
+            //console.log("Calling storage put");
+            //console.log("File = " + JSON.stringify(event.target.files[0]));
+            Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
+                // Now we update the database object to reflect this
+                //console.log("resulttt:" + JSON.stringify(result));
+                //console.log("Successfully put the image, now putting the data into the database!");
+                ClientFunctions.addProfileImagePath(this.props.user.id, this.props.user.id, path,
+                    (data) => {
+                        //console.log("successfully editted client");
+                        //console.log(JSON.stringify(data));
+                        this.props.forceFetchUserAttributes(["profileImagePaths"]);
+                        this.setState({isLoading: true});
+                    }, (error) => {
+                        console.log("Failed edit client attribute");
+                        console.log(JSON.stringify(error));
+                    });
+                this.setState({isLoading: true});
+            }).catch((error) => {
+                console.log("failed storage put");
+                console.log(error);
+            });
+        }
+    }
+
+    imageGallery() {
+        //alert(JSON.stringify(this.props.user.profileImagePaths));
+        if(this.props.user.profileImagePaths) {
+            return _.times(this.props.user.profileImagePaths.length, i => (
+                <Image size='small' src={require(this.props.user.profileImagePaths[i])}>
+                    {this.setState({galleryNum: i})}
+                </Image>
+            ));
+        }
+        else {
+            return (
+                <div>
+            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
+                <Icon name="upload" className='u-margin-right--0' size="large" inverted/>
+            </Label>
+            <input type="file" accept="image/*" id="proPicUpload" hidden={true}
+            onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: 0})}/>
+                </div>
+        );
+        }
+    }
+
     profilePicture() {
         if (this.props.user.profilePicture) {
-            // if (this.state.ifS3) {
-            //     // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
-            //     return(
-            //         <Item.Image size='medium' src={this.state.profilePicture} circular/>
-            //     );
-            // }
-            /*return(
-                <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+            let reactSwipeEl;
+            return (
+                <div>
+                    <Modal trigger={
+                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                    </div>}>
+                        <div>
+                            <ReactSwipe
+                                className="carousel"
+                                swipeOptions={{ continuous: false }}
+                                ref={el => (reactSwipeEl = el)}
+                            >
+                                {this.imageGallery()}
+                            </ReactSwipe>
+                            <Button primary onClick={() => reactSwipeEl.prev()}>Previous</Button>
+                            <Button primary onClick={() => reactSwipeEl.next()}>Next</Button>
+                        </div>
+                    </Modal>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
-                    <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                </div>
-            );*/
-            //console.log("PROPICIMAGE!!!!: " + this.props.user.profilePicture);
-            return (
-                <div>
-                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
-                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                            <Icon name="upload" className='u-margin-right--0' size="large" inverted />
-                        </Label>
-                        <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                    </div>
+                    <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}
+                    onClick={this.setState()}/>
                 </div>
             );
         }
