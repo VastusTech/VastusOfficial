@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import { Player } from 'video-react';
-import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image} from 'semantic-ui-react'
+import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 // import TrophyCaseProp from "./TrophyCase";
@@ -42,7 +42,7 @@ class Profile extends React.PureComponent {
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
-        galleryNum: null,
+        galleryNum: 0,
         galleryURLS: [],
         error: null
     };
@@ -88,6 +88,9 @@ class Profile extends React.PureComponent {
     componentDidMount() {
         // console.log("componentDidMount");
         this.update();
+        this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+        //alert(JSON.stringify(this.props.user.profileImagePaths));
+        //alert(JSON.stringify(this.state.galleryURLS));
     }
 
     componentWillReceiveProps(newProps, nextContext) {
@@ -108,9 +111,9 @@ class Profile extends React.PureComponent {
         if (!user.id) {
             // console.log("ID is not set inside profile... This means a problem has occurred");
         }
-
-        if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
-            this.state.sentRequest = true;
+        //this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+        if (!this.state.sentRequest) {
+            this.setState({sentRequest: true});
             this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         }
         else {
@@ -165,6 +168,7 @@ class Profile extends React.PureComponent {
                         //console.log("successfully editted client");
                         //console.log(JSON.stringify(data));
                         this.props.forceFetchUserAttributes(["profileImagePaths"]);
+                        this.setURLS(this.props.user.profileImagePaths);
                         this.setState({isLoading: true});
                     }, (error) => {
                         console.log("Failed edit client attribute");
@@ -179,6 +183,7 @@ class Profile extends React.PureComponent {
     }
 
     setURLS(paths) {
+        //alert("Setting URLS");
         for(let i = 0; i < paths.length; i++) {
             if (this.state.galleryURLS) {
                 Storage.get(paths[i]).then((url) => {
@@ -194,16 +199,27 @@ class Profile extends React.PureComponent {
         }
     }
 
-    imageGallery() {
-        this.setURLS(this.props.user.profileImagePaths);
+    imageGallery = () => {
+        if(this.props.user.profileImagePaths) {
+            //alert(JSON.stringify(this.props.user.profileImagePaths));
+            this.update();
+        }
         //alert(JSON.stringify(this.state.galleryURLS));
         if(this.state.galleryURLS.length > 0) {
             //alert(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
-                <Image size='medium' src={this.state.galleryURLS[i]}>
+                <div>
+                <Image src={this.state.galleryURLS[i]} size='small'>
                     {/*this.state.galleryURLS[i] + " Num: " + i*/}
                     {this.setState({galleryNum: i})}
                 </Image>
+                    <Label size='small' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
+                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
+                    </Label>
+                    Change Picture
+                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: i})}/>
+                </div>
             ));
         }
     }
@@ -228,12 +244,19 @@ class Profile extends React.PureComponent {
                                     <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
                                         <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
                                     </Label>
+                                    Add new picture to gallery
                                     <input type="file" accept="image/*" id="galleryUpload" hidden={true}
                                            onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
                                 </div>
                             </ReactSwipe>
-                            <Button primary onClick={() => reactSwipeEl.prev()}>Previous</Button>
-                            <Button primary onClick={() => reactSwipeEl.next()}>Next</Button>
+                            <Grid>
+                            <Grid.Column floated='left' width={2}>
+                                <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
+                            </Grid.Column>
+                            <Grid.Column floated='right' width={2}>
+                                <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
+                            </Grid.Column>
+                        </Grid>
                         </div>
                     </Modal>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
@@ -383,15 +406,16 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (attributesList) => {
-            dispatch(fetchUserAttributes(attributesList));
+        fetchUserAttributes: (variablesList, dataHandler) => {
+            dispatch(fetchUserAttributes(variablesList, dataHandler));
         },
         forceFetchUserAttributes: (variablesList) => {
             dispatch(forceFetchUserAttributes(variablesList));
         },
         logOut: () => {
             dispatch(logOut());
-        }
+        },
+
         // fetchUser: (username) => {
         //     dispatch(fetchUser(username));
         // }
