@@ -47,7 +47,7 @@ class OpeningScreen extends Component {
     	 				Win Capital and Glory
     	 			</h3>
     	 		
-    	 		<Button content={visible ? 'Begin Your Journey' : 'Show'} onClick={this.toggleVisibility} color = 'purple' size = 'massive'/>
+    	 		<Button content={visible ? 'Begin Your Journey' : 'Begin Your Journey'} onClick={this.toggleVisibility} color = 'purple' size = 'massive'/>
     	 			
     	 		 </Segment>
  
