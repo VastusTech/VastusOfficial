@@ -43,6 +43,7 @@ class Profile extends React.PureComponent {
         scheduledModalOpen: false,
         ownedModalOpen: false,
         galleryNum: null,
+        galleryURLS: [],
         error: null
     };
 
@@ -66,6 +67,7 @@ class Profile extends React.PureComponent {
         this.closeOwnedModal = this.closeOwnedModal.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);
         this.imageGallery = this.imageGallery.bind(this);
+        this.setURLS = this.setURLS.bind(this);
     }
 
     resetState() {
@@ -77,6 +79,8 @@ class Profile extends React.PureComponent {
             scheduledModalOpen: false,
             completedModalOpen: false,
             ownedModalOpen: false,
+            galleryNum: 0,
+            galleryURLS: [],
             error: null,
         });
     }
@@ -112,10 +116,13 @@ class Profile extends React.PureComponent {
         else {
             this.setState({isLoading: false});
         }
+        if(this.props.user.profileImagePaths) {
+            this.setURLS(this.props.user.profileImagePaths);
+        }
     }
 
     setPicture(event) {
-        //console.log(JSON.stringify(this.props));
+        //alert("This is calling regular set picture");
         if (this.props.user.id) {
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
             //console.log("Calling storage put");
@@ -143,9 +150,9 @@ class Profile extends React.PureComponent {
     }
 
     setGalleryPicture(event) {
-        alert("This is calling set gallery picture");
+        //alert("This is calling set gallery picture");
         if (this.props.user.id) {
-            alert(this.state.galleryNum);
+            //alert(this.state.galleryNum);
             const path = "/ClientFiles/" + this.props.user.id + "/galleryImages" + this.state.galleryNum;
             //console.log("Calling storage put");
             //console.log("File = " + JSON.stringify(event.target.files[0]));
@@ -171,25 +178,33 @@ class Profile extends React.PureComponent {
         }
     }
 
+    setURLS(paths) {
+        for(let i = 0; i < paths.length; i++) {
+            if (this.state.galleryURLS) {
+                Storage.get(paths[i]).then((url) => {
+                    let tempGal = this.state.galleryURLS;
+                    tempGal[i] = url;
+                    this.setState({galleryURLS: tempGal});
+                    //alert(JSON.stringify(this.state.galleryURLS));
+                }).catch((error) => {
+                    console.error("ERROR IN GETTING VIDEO FOR COMMENT");
+                    console.error(error);
+                });
+            }
+        }
+    }
+
     imageGallery() {
-        //alert(JSON.stringify(this.props.user.profileImagePaths));
-        if(this.props.user.profileImagePaths) {
-            return _.times(this.props.user.profileImagePaths.length, i => (
-                <Image size='small' src={require(this.props.user.profileImagePaths[i])}>
+        this.setURLS(this.props.user.profileImagePaths);
+        //alert(JSON.stringify(this.state.galleryURLS));
+        if(this.state.galleryURLS.length > 0) {
+            //alert(JSON.stringify(this.state.galleryURLS));
+            return _.times(this.state.galleryURLS.length, i => (
+                <Image size='medium' src={this.state.galleryURLS[i]}>
+                    {/*this.state.galleryURLS[i] + " Num: " + i*/}
                     {this.setState({galleryNum: i})}
                 </Image>
             ));
-        }
-        else {
-            return (
-                <div>
-            <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                <Icon name="upload" className='u-margin-right--0' size="large" inverted/>
-            </Label>
-            <input type="file" accept="image/*" id="proPicUpload" hidden={true}
-            onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: 0})}/>
-                </div>
-        );
         }
     }
 
@@ -198,7 +213,7 @@ class Profile extends React.PureComponent {
             let reactSwipeEl;
             return (
                 <div>
-                    <Modal trigger={
+                    <Modal closeIcon trigger={
                     <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
                     </div>}>
                         <div>
@@ -207,7 +222,15 @@ class Profile extends React.PureComponent {
                                 swipeOptions={{ continuous: false }}
                                 ref={el => (reactSwipeEl = el)}
                             >
+                                {this.setURLS(this.props.user.profileImagePaths)}
                                 {this.imageGallery()}
+                                <div>
+                                    <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
+                                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
+                                    </Label>
+                                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
+                                </div>
                             </ReactSwipe>
                             <Button primary onClick={() => reactSwipeEl.prev()}>Previous</Button>
                             <Button primary onClick={() => reactSwipeEl.next()}>Next</Button>

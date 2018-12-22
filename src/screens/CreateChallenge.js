@@ -305,7 +305,7 @@ class CreateChallengeProp extends Component {
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
+                                <Button inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
                                 <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
                                     <div className="ui white header">Strength</div>
                                 </Button>
@@ -313,13 +313,13 @@ class CreateChallengeProp extends Component {
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
+                                <Button inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
                                 <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
                                     <div className="ui white header">Performance</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
+                                <Button inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
                                 <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
                                     <div className="ui white header">Endurance</div>
                                 </Button>
