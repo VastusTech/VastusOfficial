@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import ReactSwipe from 'react-swipe';
-import { Modal, Button, List, Dimmer, Loader, Message, Icon, Image } from 'semantic-ui-react';
+import {Modal, Button, List, Dimmer, Loader, Message, Icon, Image, Label, Grid} from 'semantic-ui-react';
 import Lambda from "../Lambda";
 import { connect } from "react-redux";
 import ScheduledEventsList from "../screens/ScheduledEventList";
@@ -11,6 +11,7 @@ import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import UserFunctions from "../databaseFunctions/UserFunctions";
+import { Storage } from 'aws-amplify';
 
 type Props = {
     open: boolean,
@@ -32,8 +33,20 @@ class ClientModal extends Component<Props> {
         inviteModalOpen: false,
         isRemoveFriendLoading: false,
         isAddFriendLoading: false,
-        requestSent: false
+        requestSent: false,
+        galleryURLS: [],
+        urlsSet: false
     };
+
+    constructor(props) {
+        super(props);
+        this.resetState = this.resetState.bind(this);
+        this.getClientAttribute = this.getClientAttribute.bind(this);
+        this.setURLS = this.setURLS.bind(this);
+        this.profilePicture = this.profilePicture.bind(this);
+        this.getCorrectFriendActionButton = this.getCorrectFriendActionButton.bind(this);
+
+    }
 
     resetState(clientID) {
         this.setState({
@@ -55,9 +68,9 @@ class ClientModal extends Component<Props> {
     componentWillReceiveProps(newProps) {
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
-                // alert("Setting new state to " + newProps.clientID);
+                // console.log("Setting new state to " + newProps.clientID);
                 this.resetState(newProps.clientID);
-                this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"]);
+                this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profileImagePaths", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
                 // this.state.sentRequest = true;
@@ -88,12 +101,12 @@ class ClientModal extends Component<Props> {
 
     handleAddFriendButton() {
         this.setState({isAddFriendLoading: true});
-        // alert("Adding this friend!");
+        // console.log("Adding this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             InviteFunctions.createFriendRequest(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
                 (data) => {
                     this.setState({isAddFriendLoading: false, requestSent: true});
-                    //alert("Successfully added " + this.getClientAttribute("name") + " as a friend!");
+                    //console.log("Successfully added " + this.getClientAttribute("name") + " as a friend!");
                     this.props.forceFetchUserAttributes(["friends"]);
                 }, (error) => {
                     this.setState({isAddFriendLoading: false});
@@ -110,7 +123,7 @@ class ClientModal extends Component<Props> {
     }*/
 
     handleRemoveFriendButton() {
-        // alert("Removing this friend!");
+        // console.log("Removing this friend!");
         if (this.props.user.id && this.getClientAttribute("id")) {
             this.setState({isRemoveFriendLoading: true});
             UserFunctions.removeFriend(this.props.user.id, this.props.user.id, this.getClientAttribute("id"),
@@ -131,12 +144,61 @@ class ClientModal extends Component<Props> {
         this.handleRemoveFriend();
     }*/
 
-    imageGallery(length) {
+    setURLS(paths) {
+        if(this.getClientAttribute("profileImagePaths")) {
+            //console.log("Gallery URLS: " + JSON.stringify(this.state.galleryURLS) + " and paths " + JSON.stringify(paths));
+        }
+        if(paths) {
+            for (let i = 0; i < paths.length; i++) {
+                if (this.state.galleryURLS) {
+                    //console.log("I get in here!");
+                    Storage.get(paths[i]).then((url) => {
+                        let tempGal = this.state.galleryURLS;
+                        tempGal[i] = url;
+                        this.setState({galleryURLS: tempGal});
+                        console.log(JSON.stringify("setURL view: " + this.state.galleryURLS));
+                    }).catch((error) => {
+                        console.error("ERROR IN GETTING VIDEO FOR COMMENT");
+                        console.error(error);
+                    });
+                }
+            }
+        }
+    }
 
+    imageGallery = () => {
+        if(this.getClientAttribute("profileImagePaths")) {
+            if(!this.state.urlsSet) {
+                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
+                this.setURLS(this.getClientAttribute("profileImagePaths"));
+                console.log("Setting URLS: " + this.state.galleryURLS);
+                this.setState({urlsSet: true});
+            }
+            //console.log(JSON.stringify(this.state.galleryURLS));
+            return _.times(this.state.galleryURLS.length, i => (
+                <div>
+                    <Image src={this.state.galleryURLS[i]} size='small'>
+                        {/*this.state.galleryURLS[i] + " Num: " + i*/}
+                        {/*this.setGalleryNum(i)*/}
+                    </Image>
+                </div>
+            ));
+        }
+        else {
+            return(<div align="center">
+                No Images in Gallery
+            </div>);
+        }
     }
 
     profilePicture() {
-        if (this.getClientAttribute("profilePicture")) {
+        if (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null) {
+            /*if(!this.state.urlsSet) {
+                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
+                this.setURLS(this.getClientAttribute("profileImagePaths"));
+                console.log("Setting URLS: " + this.state.galleryURLS);
+                this.setState({urlsSet: true});
+            }*/
             let reactSwipeEl;
             return(
                 <Modal trigger={<div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>}>
@@ -146,12 +208,16 @@ class ClientModal extends Component<Props> {
                             swipeOptions={{ continuous: false }}
                             ref={el => (reactSwipeEl = el)}
                         >
-                            <Image size='small' src={require('../img/Strength_icon.png')}/>
-                            <Image size='small' src={require('../img/Performance_icon.png')}/>
-                            <Image size='small' src={require('../img/Endurance_icon.png')}/>
+                            {this.imageGallery()}
                         </ReactSwipe>
-                        <Button primary onClick={() => reactSwipeEl.prev()}>Previous</Button>
-                        <Button primary onClick={() => reactSwipeEl.next()}>Next</Button>
+                        <Grid>
+                            <Grid.Column floated='left' width={2}>
+                                <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
+                            </Grid.Column>
+                            <Grid.Column floated='right' width={2}>
+                                <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
+                            </Grid.Column>
+                        </Grid>
                     </div>
                 </Modal>
             );
@@ -166,7 +232,7 @@ class ClientModal extends Component<Props> {
     }
 
     getCorrectFriendActionButton() {
-        // alert("getting correct friend action button for " + this.getClientAttribute("id"));
+        // console.log("getting correct friend action button for " + this.getClientAttribute("id"));
         if (this.getClientAttribute("id")) {
             if (this.props.user.friends && this.props.user.friends.length) {
                 if (this.props.user.friends.includes(this.getClientAttribute("id"))) {
@@ -238,7 +304,7 @@ class ClientModal extends Component<Props> {
         }
         function button_rows(events) {
             //if(events != null)
-            //alert(JSON.stringify(events[0]));
+            //console.log(JSON.stringify(events[0]));
             return _.times(events.length, i => (
                 <Fragment key={i}>
                     <Button primary>Invite to Challenge</Button>

@@ -35,7 +35,8 @@ class ClientCard extends Component<Props> {
         // ifOwned: false,
         // ifJoined: false,
         // capacity: null,
-        clientModalOpen: false
+        clientModalOpen: false,
+        galleryURLS: []
     };
 
     componentDidMount() {

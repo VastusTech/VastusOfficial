@@ -184,17 +184,19 @@ class Profile extends React.PureComponent {
 
     setURLS(paths) {
         //alert("Setting URLS");
-        for(let i = 0; i < paths.length; i++) {
-            if (this.state.galleryURLS) {
-                Storage.get(paths[i]).then((url) => {
-                    let tempGal = this.state.galleryURLS;
-                    tempGal[i] = url;
-                    this.setState({galleryURLS: tempGal});
-                    //alert(JSON.stringify(this.state.galleryURLS));
-                }).catch((error) => {
-                    console.error("ERROR IN GETTING VIDEO FOR COMMENT");
-                    console.error(error);
-                });
+        if(paths) {
+            for (let i = 0; i < paths.length; i++) {
+                if (this.state.galleryURLS) {
+                    Storage.get(paths[i]).then((url) => {
+                        let tempGal = this.state.galleryURLS;
+                        tempGal[i] = url;
+                        this.setState({galleryURLS: tempGal});
+                        //alert(JSON.stringify(this.state.galleryURLS));
+                    }).catch((error) => {
+                        console.error("ERROR IN GETTING VIDEO FOR COMMENT");
+                        console.error(error);
+                    });
+                }
             }
         }
     }
