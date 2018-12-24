@@ -60,7 +60,7 @@ class PostCard extends Component {
     // }
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        alert("Post Card Prop: " + this.props.postID);
+        console.log("Post Card Prop: " + this.props.postID);
     }
 
     componentWillReceiveProps(newProps) {
