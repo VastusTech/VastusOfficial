@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO, convertFromIntervalISO } from "../logic/TimeHelper";
 
-
 Date.prototype.toIsoString = function() {
     var tzo = -this.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
