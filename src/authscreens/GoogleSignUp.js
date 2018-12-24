@@ -6,17 +6,76 @@ import Semantic, { Button, List } from 'semantic-ui-react';
 
 
 class GoogleSignUp extends React.Component {
-   
-   
-   
+    constructor(props) {
+        super(props);
+        this.signIn = this.signIn.bind(this);
+    }
+
+    componentDidMount() {
+        const ga = window.gapi && window.gapi.auth2 ? 
+            window.gapi.auth2.getAuthInstance() : 
+            null;
+        if (!ga) this.createScript();
+    }
+
+    signIn() {
+        const ga = window.gapi.auth2.getAuthInstance();
+        ga.signIn().then(
+            googleUser => {
+                this.getAWSCredentials(googleUser);
+            },
+            error => {
+                console.log(error);
+            }
+        );
+    }
+    
+
+
+    async getAWSCredentials(googleUser) {
+        const { id_token, expires_at } = googleUser.getAuthResponse();
+        const profile = googleUser.getBasicProfile();
+        let user = {
+            email: profile.getEmail(),
+            name: profile.getName(),
+            //birthdate: profile.getBirthdays()
+        };
+        
+        const credentials = await Auth.federatedSignIn(
+            'google',
+            { token: id_token, expires_at },
+            user
+        );
+        console.log('credentials', credentials);
+    }
+
+    createScript() {
+        // load the Google SDK
+        const script = document.createElement('script');
+        script.src = 'https://apis.google.com/js/platform.js';
+        script.async = true;
+        script.onload = this.initGapi;
+        document.body.appendChild(script);
+    }
+
+    initGapi() {
+        // init the Google SDK client
+        const g = window.gapi;
+        g.load('auth2', function() {
+            g.auth2.init({
+                client_id: '308108761903-qfc4dsbnjicjs0dpqao5ofh2c5u2636k.apps.googleusercontent.com',
+                // authorized scopes
+                scope: 'profile email openid'
+            });
+        });
+    }
 
     render() {
         return (
-        <div>
-            <List.Item class="g-signin2" data-onsuccess="onSignIn"></List.Item>
-            <List.Item href="#" onclick="signOut();">Sign out</List.Item>
-        </div>
+            <div>
+                <Button onClick={this.signIn}>Sign in with Google</Button>
+            </div>
         );
     }
-}
+    };
 export default GoogleSignUp;
