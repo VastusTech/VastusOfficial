@@ -70,6 +70,7 @@ class PostCard extends Component {
 
     getPostAttribute(attribute) {
         if (this.state.postID) {
+            alert("Getting the posts attributes!");
             let post = this.props.cache.posts[this.state.postID];
             if (post) {
                 if (attribute.substr(attribute.length - 6) === "Length") {

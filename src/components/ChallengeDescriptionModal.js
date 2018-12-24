@@ -51,6 +51,7 @@ class ChallengeDescriptionModal extends Component<Props> {
         isRequestLoading: false,
         joinRequestSent: false,
         canCallChecks: true,
+        deleted: false
     };
 
     resetState(challengeID) {
@@ -205,11 +206,11 @@ class ChallengeDescriptionModal extends Component<Props> {
         ChallengeFunctions.delete(this.props.user.id, this.getChallengeAttribute("id"), (data) => {
             this.forceUpdate(data.id);
             // alert(JSON.stringify(data));
-            this.setState({isLoading: false, isDeleteLoading: false, event: null, isOwned: false, isJoined: false});
+            this.setState({isLoading: false, isDeleteLoading: false, event: null, isOwned: false, isJoined: false, deleted: true});
             this.props.onClose();
         }, (error) => {
             // alert(JSON.stringify(error));
-            this.setState({isLoading: false, isDeleteLoading: false, error: error});
+            this.setState({isLoading: false, isDeleteLoading: false, error: error, deleted: false});
         })
     }
 
@@ -399,6 +400,14 @@ class ChallengeDescriptionModal extends Component<Props> {
         }
     }
 
+    challengeDeleted() {
+        if(this.state.deleted) {
+            return (<Message negative>
+                <Message.Header>This Challenge is Deleted!</Message.Header>
+            </Message>);
+        }
+    }
+
     render() {
         if (!this.getChallengeAttribute("id")) {
             return(
@@ -429,7 +438,7 @@ class ChallengeDescriptionModal extends Component<Props> {
 		 
         //alert("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-        	
+        	<div>
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Icon className='close' onClick={() => this.props.onClose()}/>
                 <Modal.Header align='center'><div>
@@ -474,7 +483,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                         <CreateSubmissionModal open={this.state.submitModalOpen} onClose={this.closeSubmitModal} challengeID={this.getChallengeAttribute("id")}/>
                         {this.createCorrectButton()}
                     </Modal.Description>
-                    <div>{this.displayError()}</div>
+                    <div>{this.displayError()}{this.challengeDeleted()}</div>
                     {/*
                         <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
                             <Grid>
@@ -486,6 +495,8 @@ class ChallengeDescriptionModal extends Component<Props> {
                         */}
                 </Modal.Content>
             </Modal>
+        {this.challengeDeleted()}
+        </div>
         );
     }
 }

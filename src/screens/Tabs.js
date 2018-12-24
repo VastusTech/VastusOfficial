@@ -11,6 +11,7 @@ import LeaderBoard from "./Leaderboard";
 // import PaymentScreen from "./PaymentScreen";
 import NotificationBellProp from "../components/NotificationBell";
 import ChallengeFeed from "./ChallengeFeed";
+import PostFeedProp from "./PostFeed";
 import SearchScreen from "./SearchScreen";
 
 /**
@@ -28,7 +29,7 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <ChallengeFeed/>
+                        <PostFeedProp/>
                     </Tab.Pane>
             },
             {
