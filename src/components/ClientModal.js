@@ -177,7 +177,9 @@ class ClientModal extends Component<Props> {
             //console.log(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
                 <div>
-                    <Image src={this.state.galleryURLS[i]} size='small'>
+                    <Image src={this.state.galleryURLS[i]} align='center' style={{height: 500,
+                        width: 500, display: 'block',
+                        margin: 'auto'}}>
                         {/*this.state.galleryURLS[i] + " Num: " + i*/}
                         {/*this.setGalleryNum(i)*/}
                     </Image>
@@ -201,7 +203,7 @@ class ClientModal extends Component<Props> {
             }*/
             let reactSwipeEl;
             return(
-                <Modal trigger={<div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>}>
+                <Modal closeIcon trigger={<div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>}>
                     <div>
                         <ReactSwipe
                             className="carousel"

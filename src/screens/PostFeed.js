@@ -159,7 +159,7 @@ class PostFeedProp extends Component {
                         const newlyQueriedPosts = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const post = data.items[i];
-                            alert(JSON.stringify(data.items[i]));
+                            //alert(JSON.stringify(newlyQueriedPosts));
                             // console.log(JSON.stringify(Post));
                             /*
                             if (post.access === 'public') {
@@ -231,7 +231,8 @@ class PostFeedProp extends Component {
             // console.log(JSON.stringify(Posts));
             return _.times(Posts.length, i => (
                 <Fragment key={i + 1}>
-                    <PostCard PostID={Posts[i].id}/>
+                    {/*alert(JSON.stringify(Posts[i].id))*/}
+                    <PostCard postID={Posts[i].id}/>
                 </Fragment>
             ));
         }
@@ -241,7 +242,7 @@ class PostFeedProp extends Component {
         return (
             <Visibility onUpdate={this.handleUpdate}>
                 <CreateChallengeProp queryPosts={this.queryChallenges}/>
-                <Header sub>Your Next Post:</Header>
+                <Header sub>Your Next Challenge:</Header>
                 <NextChallengeProp/>
                 <Header sub>Upcoming Posts:</Header>
                 {rows(this.state.posts)}

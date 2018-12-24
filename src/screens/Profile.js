@@ -211,7 +211,9 @@ class Profile extends React.PureComponent {
             //alert(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
                 <div>
-                <Image src={this.state.galleryURLS[i]} size='small'>
+                <Image src={this.state.galleryURLS[i]} align='center' style={{height: 500,
+                    width: 500, display: 'block',
+                    margin: 'auto'}}>
                     {/*this.state.galleryURLS[i] + " Num: " + i*/}
                     {this.setState({galleryNum: i})}
                 </Image>
