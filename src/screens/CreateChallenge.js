@@ -301,27 +301,27 @@ class CreateChallengeProp extends Component {
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
                                     <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
-                                    HIIT
+                                    <div className="ui white header">HIIT</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
+                                <Button inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
                                 <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
-                                Strength
+                                    <div className="ui white header">Strength</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
+                                <Button inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
                                 <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
-                                Performance
+                                    <div className="ui white header">Performance</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
+                                <Button inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
                                 <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
-                                Endurance
+                                    <div className="ui white header">Endurance</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>

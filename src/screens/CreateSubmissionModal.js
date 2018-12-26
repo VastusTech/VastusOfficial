@@ -25,6 +25,7 @@ class CreateSubmissionModal extends Component {
         videos: [],
         tempPictureURLs: [],
         tempVideoURLs: [],
+        notifySubmission: false
     };
 
     constructor(props) {
@@ -157,8 +158,21 @@ class CreateSubmissionModal extends Component {
     handleSubmitButton() {
         this.setState({isSubmitLoading: true});
         this.createSubmission(() => {
-            this.setState({isSubmitLoading: false});
+            this.setState({isSubmitLoading: false, notifySubmission: true});
         });
+    }
+
+    displaySubmission() {
+        if(this.state.notifySubmission) {
+            return (
+                <Message positive>
+                    <Message.Header>Success!</Message.Header>
+                    <p>
+                        You submitted a video to the challenge!
+                    </p>
+                </Message>
+            );
+        }
     }
 
     displayCurrentVideo() {
@@ -200,6 +214,7 @@ class CreateSubmissionModal extends Component {
                         </div>
                     </Fragment>
                 </Modal.Content>
+                <div>{this.displaySubmission()}</div>
                 <Button primary fluid loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} onClick={this.handleSubmitButton}>Submit</Button>
             </Modal>
         );

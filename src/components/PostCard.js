@@ -38,6 +38,7 @@ class PostCard extends Component {
         this.openPostModal = this.openPostModal.bind(this);
         this.closePostModal = this.closePostModal.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
+        this.getPostAttribute = this.getPostAttribute.bind(this);
     }
 
     // componentDidMount() {
@@ -59,6 +60,7 @@ class PostCard extends Component {
     // }
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        console.log("Post Card Prop: " + this.props.postID);
     }
 
     componentWillReceiveProps(newProps) {
@@ -69,6 +71,7 @@ class PostCard extends Component {
     }
 
     getPostAttribute(attribute) {
+        //alert(this.props.postID);
         if (this.state.postID) {
             let post = this.props.cache.posts[this.state.postID];
             if (post) {
