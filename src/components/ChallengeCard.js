@@ -163,10 +163,15 @@ class ChallengeCard extends Component {
         }
     }
 
-    openChallengeModal = () => {this.setState({challengeModalOpen: true})};
+    openChallengeModal = () => {
+        if (!this.state.challengeModalOpen) {
+            console.log("Opening challenge modal");
+            this.setState({challengeModalOpen: true});
+        }
+    };
     closeChallengeModal = () => {
-        console.log("Closing challenge Modal");
-        this.setState({challengeModalOpen: false})
+        this.setState({challengeModalOpen: false});
+        console.log("Closing challenge Modal pt. 2: the reckoning");
     };
 
     render() {
