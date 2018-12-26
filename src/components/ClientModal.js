@@ -45,6 +45,8 @@ class ClientModal extends Component<Props> {
         this.setURLS = this.setURLS.bind(this);
         this.profilePicture = this.profilePicture.bind(this);
         this.getCorrectFriendActionButton = this.getCorrectFriendActionButton.bind(this);
+        this.imageGallery = this.imageGallery.bind(this);
+        this.swipeGallery = this.swipeGallery.bind(this);
 
     }
 
@@ -201,27 +203,8 @@ class ClientModal extends Component<Props> {
                 console.log("Setting URLS: " + this.state.galleryURLS);
                 this.setState({urlsSet: true});
             }*/
-            let reactSwipeEl;
             return(
-                <Modal closeIcon trigger={<div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>}>
-                    <div>
-                        <ReactSwipe
-                            className="carousel"
-                            swipeOptions={{ continuous: false }}
-                            ref={el => (reactSwipeEl = el)}
-                        >
-                            {this.imageGallery()}
-                        </ReactSwipe>
-                        <Grid>
-                            <Grid.Column floated='left' width={2}>
-                                <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
-                            </Grid.Column>
-                            <Grid.Column floated='right' width={2}>
-                                <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
-                            </Grid.Column>
-                        </Grid>
-                    </div>
-                </Modal>
+                <div className="u-avatar u-avatar--small u-margin-bottom--1" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
             );
         }
         else {
@@ -233,6 +216,28 @@ class ClientModal extends Component<Props> {
         }
     }
 
+    swipeGallery() {
+        let reactSwipeEl;
+        return (
+        <div>
+            <ReactSwipe
+                className="carousel"
+                swipeOptions={{ continuous: false }}
+                ref={el => (reactSwipeEl = el)}
+            >
+                {this.imageGallery()}
+            </ReactSwipe>
+            <Grid>
+                <Grid.Column floated='left' width={2}>
+                    <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
+                </Grid.Column>
+                <Grid.Column floated='right' width={2}>
+                    <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
+                </Grid.Column>
+            </Grid>
+        </div>
+        );
+    }
     getCorrectFriendActionButton() {
         // console.log("getting correct friend action button for " + this.getClientAttribute("id"));
         if (this.getClientAttribute("id")) {
@@ -352,6 +357,9 @@ class ClientModal extends Component<Props> {
                             </List.Item>
                         </List>
                     </Modal.Description>
+                </Modal.Content>
+                <Modal.Content>
+                    {this.swipeGallery()}
                 </Modal.Content>
                 <Modal.Actions>
                     <Button primary onClick={this.handleInviteModalOpen.bind(this)}>Invite to Challenge</Button>
