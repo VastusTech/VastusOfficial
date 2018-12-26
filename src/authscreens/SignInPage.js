@@ -8,6 +8,7 @@ import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../img/vt_new.svg';
 import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
 import {setError} from "../redux_helpers/actions/infoActions";
+import GoogleSignUp from "./GoogleSignUp";
 
 class SignInPage extends Component {
     // This is the function that is called when the sign up button is pressed
@@ -45,46 +46,6 @@ class SignInPage extends Component {
         console.log("New " + key + " is equal to " + value.target.value);
     }
 
-    // handleLogInButtonPress() {
-
-        // this.vastusSignIn((user) => {
-        //     this.setState({user: user});
-        //     // this.authenticate(user);
-        // }, (error) => {
-        //     this.setState({error: error})
-        // });
-    // }
-
-    // openSignUpModal() {
-    //     // this.setState({signUpModalOpen: true})
-    // }
-    // closeSignUpModal() {
-    //     this.setState({signUpModalOpen: false})
-    // }
-    // openForgotPasswordModal() {
-    //     this.setState({forgotPasswordModalOpen: true})
-    // }
-    // closeForgotPasswordModal() {
-    //     this.setState({forgotPasswordModalOpen: false})
-    // }
-
-    // async componentDidMount() {
-    //     // StatusBar.setHidden(true);
-    //     try {
-    //         const user = await Auth.currentAuthenticatedUser();
-    //         this.setState({ user, isLoading: false })
-    //     } catch (err) {
-    //         this.setState({ isLoading: false })
-    //     }
-    // }
-    // async componentWillReceiveProps(nextProps) {
-    //     try {
-    //         const user = await Auth.currentAuthenticatedUser();
-    //         this.setState({ user })
-    //     } catch (err) {
-    //         this.setState({ user: {} })
-    //     }
-    // }
 
     render() {
         function errorMessage(error) {
@@ -107,6 +68,10 @@ class SignInPage extends Component {
             }
             return null;
         }
+        
+        
+		
+		
 
         return (
             <Container className='login-form'>
@@ -143,6 +108,7 @@ class SignInPage extends Component {
                             <List.Item>
                                 <ForgotPasswordModal/>
                                 </List.Item>
+                                <GoogleSignUp/>
                             </List>
                         </Segment>
                     </Grid.Column>
@@ -151,10 +117,7 @@ class SignInPage extends Component {
         );
     }
 }
-// {/*<div>*/}
-//     {/*<button className="ui button" onClick = {this.vastusSignUp.bind(this)} > Sign Up </button>*/}
-//     {/*<button className="ui button" onClick = {this.vastusSignIn.bind(this)} > Sign In </button>*/}
-// {/*</div>*/}
+
 
 const mapStateToProps = state => ({
     auth: state.auth,
@@ -177,5 +140,6 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 };
+//
 
 export default connect(mapStateToProps, mapDispatchToProps)(SignInPage);

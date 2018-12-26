@@ -7,8 +7,6 @@ import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux
 import { connect } from "react-redux";
 import {clearError, setError} from "../redux_helpers/actions/infoActions";
 
-// appConfig();
-
 class SignUpModal extends Component {
     constructor(props) {
         super(props);
