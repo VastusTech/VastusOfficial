@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
 import QL from "../../GraphQL";
-import Lambda from "../../Lambda";
+// import Lambda from "../../Lambda";
 import ClientFunctions from "../../databaseFunctions/ClientFunctions";
 
 export function updateAuth() {
@@ -137,8 +137,8 @@ export function confirmForgotPassword(username, confirmationCode, newPassword) {
         dispatch(setIsLoading());
         Auth.forgotPasswordSubmit(username, confirmationCode, newPassword).then(() => {
             console.log("REDUX: Successfully submitted forgot password!");
-            dispatch(authConfirmSignUp());
-            dispatch(closeForgotPasswordModal());
+            dispatch(authConfirmForgotPassword());
+            // dispatch(closeForgotPasswordModal());
             dispatch(setIsNotLoading());
         }).catch((error) => {
             console.log("REDUX: Failed submitting forgot password...");

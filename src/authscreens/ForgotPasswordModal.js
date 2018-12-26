@@ -90,7 +90,7 @@ class ForgotPasswordModal extends Component {
             console.log("Passwords did not match");
             this.props.setError(new Error("Password and confirm password do not match!"));
         }
-        else if (this.authState.username && this.authState.confirmationCode && this.authState.newPassword) {
+        else if (!(this.authState.username && this.authState.confirmationCode && this.authState.newPassword && this.authState.confirmNewPassword)) {
             this.props.setError(new Error("All fields need to be filled in!"));
         }
         else {
@@ -107,11 +107,14 @@ class ForgotPasswordModal extends Component {
     render() {
         function errorMessage(error) {
             if (error) {
+                // if (error.errorMessage) {
+                //     error = error.errorMessage;
+                // }
                 return (
                     <Modal.Description>
                         <Message color='red'>
                             <h1>Error!</h1>
-                            <p>{error}</p>
+                            <p>{JSON.stringify(error)}</p>
                         </Message>
                     </Modal.Description>
                 );
