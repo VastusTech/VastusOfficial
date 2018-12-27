@@ -6,8 +6,9 @@ import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
 // import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
-import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery, clearPostQuery, fetchPost, putPost, putPostQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import PostFunctions from "../databaseFunctions/PostFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -163,6 +164,24 @@ class CreateChallengeProp extends Component {
         }
     }
 
+    getPicturePaths() {
+        return null;
+    }
+
+    getVideoPaths() {
+        return null;
+    }
+
+    createChallengePost(challengeID) {
+        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, challengeID, this.getPicturePaths, this.getVideoPaths, (returnValue) => {
+            alert("Successfully Created Challenge Post!");
+            alert(JSON.stringify(returnValue));
+            //const id = returnValue.data;
+            }, (error) => {
+            console.error(error);
+        });
+    }
+
     handleSubmit = () => {
         // TODO Make sure the dates are well formed?
         /*
@@ -192,9 +211,13 @@ class CreateChallengeProp extends Component {
                     this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
+                        alert(JSON.stringify(data.data));
+                        this.createChallengePost(data.data);
                         //This is the second call
                         this.props.clearChallengeQuery();
+                        this.props.clearPostQuery();
                         this.props.queryChallenges();
+                        this.props.queryPosts();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
@@ -380,15 +403,27 @@ const mapDispatchToProps = (dispatch) => {
         fetchChallenge: (id, variablesList) => {
             dispatch(fetchChallenge(id, variablesList));
         },
+        fetchPost: (id, variablesList) => {
+            dispatch(fetchPost(id, variablesList));
+        },
         putChallenge: (event) => {
             dispatch(putChallenge(event));
+        },
+        putPost: (event) => {
+            dispatch(putPost(event));
         },
         putChallengeQuery: (queryString, queryResult) => {
             dispatch(putChallengeQuery(queryString, queryResult));
         },
+        putPostQuery: (queryString, queryResult) => {
+            dispatch(putPostQuery(queryString, queryResult));
+        },
         clearChallengeQuery: () => {
             dispatch(clearChallengeQuery());
-        }
+        },
+        clearPostQuery: () => {
+            dispatch(clearPostQuery());
+        },
     }
 };
 

@@ -47,7 +47,6 @@ class ClientModal extends Component<Props> {
         this.getCorrectFriendActionButton = this.getCorrectFriendActionButton.bind(this);
         this.imageGallery = this.imageGallery.bind(this);
         this.swipeGallery = this.swipeGallery.bind(this);
-
     }
 
     resetState(clientID) {

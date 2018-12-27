@@ -283,13 +283,25 @@ class ChallengeDescriptionModal extends Component<Props> {
         this.setState({ifCompleted: this.getChallengeAttribute("ifCompleted") === "true"});
     }
 
-    openClientModal() { this.setState({clientModalOpen: true}); }
+    openClientModal() {
+        if (!this.state.clientModalOpen) {
+            this.setState({clientModalOpen: true});
+        }
+    }
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
-    openCompleteModal() { this.setState({completeModalOpen: true}); }
+    openCompleteModal() {
+        if(!this.state.completeModalOpen) {
+            this.setState({completeModalOpen: true});
+        }
+    }
     closeCompleteModal() { this.setState({completeModalOpen: false}); }
 
-    openSubmitModal() { this.setState({submitModalOpen: true}); }
+    openSubmitModal() {
+        if(!this.state.submitModalOpen) {
+            this.setState({submitModalOpen: true});
+        }
+    }
     closeSubmitModal() { this.setState({submitModalOpen: false}); }
 
     forceUpdate() {

@@ -163,7 +163,11 @@ class ChallengeCard extends Component {
         }
     }
 
-    openChallengeModal = () => {this.setState({challengeModalOpen: true})};
+    openChallengeModal = () => {
+        if(!this.state.challengeModalOpen) {
+            this.setState({challengeModalOpen: true});
+        }
+    };
     closeChallengeModal = () => {
         console.log("Closing challenge Modal");
         this.setState({challengeModalOpen: false})
@@ -187,7 +191,7 @@ class ChallengeCard extends Component {
                 <Card.Content textAlign = 'center'>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{this.getDaysLeft()/*this.getDaysLeft(Date.daysBetween(this.getTodayDateString(), this.getChallengeAttribute("endTime")))*/} days left</Card.Meta>
-                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}
+                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}{/*alert(this.getChallengeAttribute("tags"))*/}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
                                                daysLeft={this.getDaysLeft()}/>
                 </Card.Content>

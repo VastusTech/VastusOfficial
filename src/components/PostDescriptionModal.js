@@ -43,7 +43,7 @@ import PostFunctions from "../databaseFunctions/PostFunctions";
 * This is the event description which displays more in depth information about a challenge, and allows the user
 * to join the challenge.
  */
-class EventDescriptionModal extends Component {
+class PostDescriptionModal extends Component {
     state = {
         // isLoading: false,
         postID: null,
@@ -271,7 +271,7 @@ class EventDescriptionModal extends Component {
 
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal closeIcon open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{convertFromISO(this.getPostAttribute("time_created"))}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
@@ -352,4 +352,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventDescriptionModal);
+export default connect(mapStateToProps, mapDispatchToProps)(PostDescriptionModal);

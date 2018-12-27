@@ -5,7 +5,7 @@ import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 // import ScheduledEventsList from "./ScheduledEventList";
-import {fetchPost, putClientQuery, putPost, putPostQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import CreateEventProp from "./CreateEvent";
 import CreateChallengeProp from "./CreateChallenge"
@@ -241,7 +241,7 @@ class PostFeedProp extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                <CreateChallengeProp queryPosts={this.queryChallenges}/>
+                <CreateChallengeProp queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
                 <Header sub>Your Next Challenge:</Header>
                 <NextChallengeProp/>
                 <Header sub>Upcoming Posts:</Header>
@@ -272,13 +272,13 @@ const mapDispatchToProps = (dispatch) => {
             dispatch(putPostQuery(queryString, queryResult));
         },
         fetchChallenge: (id, variablesList) => {
-            dispatch(fetchPost(id, variablesList));
+            dispatch(fetchChallenge(id, variablesList));
         },
         putChallenge: (event) => {
-            dispatch(putPost(event));
+            dispatch(putChallenge(event));
         },
         putChallengeQuery: (queryString, queryResult) => {
-            dispatch(putPostQuery(queryString, queryResult));
+            dispatch(putChallengeQuery(queryString, queryResult));
         },
     }
 };

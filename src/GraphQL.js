@@ -293,6 +293,7 @@ class GraphQL {
         if (nextToken) {
             inputVariables.nextToken = nextToken;
         }
+        //alert(JSON.stringify(GraphQL.constructQuery("QueryPosts", "queryPosts", inputVariables, variableList, filter, false, true)));
         GraphQL.execute(GraphQL.constructQuery("QueryPosts", "queryPosts", inputVariables, variableList, filter, false, true),
             "queryPosts", successHandler, failureHandler, queryPostCache, putCacheQueryPost);
     }
@@ -470,7 +471,17 @@ class GraphQL {
             if (ifDebug) {
                 console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
-            API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
+
+            let opResult = null;
+
+            try {
+                opResult = graphqlOperation(query.query, query.variables);
+            }
+            catch(error) {
+                console.error(error);
+            }
+
+            API.graphql(opResult).then((data) => {
                 console.log("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {
                     console.log("Object returned nothing!!! Something wrong?");
@@ -494,7 +505,7 @@ class GraphQL {
                 if (error.message) {
                     error = error.message;
                 }
-                console.log(JSON.stringify(error));
+                console.error(JSON.stringify(error));
                 failureHandler(error);
             });
         }

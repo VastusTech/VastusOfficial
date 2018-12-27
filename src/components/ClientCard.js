@@ -68,7 +68,11 @@ class ClientCard extends Component<Props> {
         return null;
     }
 
-    openClientModal = () => {this.setState({clientModalOpen: true})};
+    openClientModal = () => {
+        if (!this.state.clientModalOpen) {
+            this.setState({clientModalOpen: true})
+        };
+    }
     closeClientModal = () => {
         console.log("Closing client modal");
         this.setState({clientModalOpen: false})

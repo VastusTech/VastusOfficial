@@ -7,6 +7,8 @@ import { fetchPost } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../logic/TimeHelper";
 import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
+import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
+import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
 
 type Props = {
     postID: string
@@ -90,7 +92,11 @@ class PostCard extends Component {
         return null;
     }
 
-    openPostModal = () => { this.setState({postModalOpen: true})};
+    openPostModal = () => {
+        if (!this.state.postModalOpen) {
+            this.setState({postModalOpen: true})
+        };
+    }
     closePostModal = () => {this.setState({postModalOpen: false})};
 
     getDisplayMedia() {
@@ -116,43 +122,65 @@ class PostCard extends Component {
         }
     }
 
+    getOwnerName() {
+        const owner = this.getPostAttribute("owner");
+        if (owner) {
+            if (this.props.cache.clients[owner]) {
+                return this.props.cache.clients[owner].name
+            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
+        }
+        return null;
+    }
+
     getCorrectDetailCard() {
         const postType = this.getPostAttribute("postType");
+        //alert("Post Type: " + postType);
         if (postType && postType.length) {
-            let itemType = ItemType[postType];
-            if (!itemType && postType.substr(0, 3) === "new") {
+            let itemType = postType;
+            //alert("Item Type: " + itemType);
+            if (postType.substr(0, 3) === "new") {
                 // TODO This indicates that this is for a newly created Item
                 itemType = ItemType[postType.substring(3, postType.length)];
             }
             if (itemType) {
                 // TODO Switch the post types
                 if (itemType === "Client") {
-
+                    //return (<ClientDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Trainer") {
-
+                    //return (<TrainerDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Gym") {
-
+                    //return (<GymDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Workout") {
-
+                    //return (<WorkoutDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Review") {
-
+                    //return (<ReviewDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Event") {
-
+                    //return (<EventDetailCard displayMedia = {this.getDisplayMedia}/>);
+                }
+                else if (itemType === "Challenge") {
+                    return (<ChallengeDetailCard postID={this.state.postID}/>);
                 }
                 else if (itemType === "Invite") {
-
+                    //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Post") {
-
+                    //return (<PostDetailCard displayMedia = {this.getDisplayMedia}/>);
+                }
+                else if (itemType === "submission") {
+                    //alert("This is a submission");
+                    return (<SubmissionDetailCard postID={this.state.postID}/>);
                 }
             }
         }
-        return {};
+        return (<div/>);
     }
 
     render() {
@@ -189,12 +217,16 @@ class PostCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised>
-                <Card.Header textAlign = 'center'>{this.getPostAttribute("title")}</Card.Header>
+                <Card.Header textAlign = 'center'>{this.getOwnerName()} Posted {this.getPostAttribute("title")}</Card.Header>
+                <Card.Header textAlign = 'center'>{convertFromISO(this.getPostAttribute("time_created"))}</Card.Header>
                 <Card.Content>
-                    {this.getDisplayMedia()}
+                    {/*TODO: When the detail cards are done, uncomment this and comment out getDisplayMedia*/}
+                    <div align='center'>
+                        {this.getCorrectDetailCard()}
+                    </div>
+                    {/*this.getDisplayMedia()*/}
                 </Card.Content>
                 <Card.Content extra onClick={this.openPostModal}>
-                    <Card.Meta textAlign = 'center' >{convertFromISO(this.getPostAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>
                     <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
                 </Card.Content>
