@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO, convertFromIntervalISO } from "../logic/TimeHelper";
 
-
 Date.prototype.toIsoString = function() {
     var tzo = -this.getTimezoneOffset(),
         dif = tzo >= 0 ? '+' : '-',
@@ -52,7 +51,7 @@ class ChallengeCard extends Component {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        fetchChallenge(this.state.challengeID, ["time_created"])
+        fetchChallenge(this.state.challengeID, ["time_created", "tags"])
     }
 
     componentWillReceiveProps(newProps) {
@@ -75,7 +74,7 @@ class ChallengeCard extends Component {
                     }
                 }
                 /*if(attribute === "tags") {
-                    alert(challenge[attribute]);
+                    console.log(challenge[attribute]);
                 }*/
                 return challenge[attribute];
             }
@@ -94,7 +93,7 @@ class ChallengeCard extends Component {
     convertMonth(month) {
         let months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
         for(let i=0; i<12; i++) {
-            //alert(month + "vs" + months[i]);
+            //console.log(month + "vs" + months[i]);
             if(month === months[i]) {
                 return (i + 1);
             }
@@ -106,13 +105,13 @@ class ChallengeCard extends Component {
         let endTime = this.getChallengeAttribute("endTime");
         let curMonth = this.convertMonth(curDate.substr(4, 3));
         let endMonth = endTime.substr(5, 2);
-        //alert(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
+        //console.log(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
         if(endTime && curDate) {
             endTime = parseInt(endTime.substr(8, 2), 10);
             curDate = parseInt(curDate.substr(8, 2), 10);
-            //alert(endMonth - curMonth);
+            //console.log(endMonth - curMonth);
             if((endMonth - curMonth) < 0) {
-                //alert((endTime + (30 * (endMonth - curMonth + 12))));
+                //console.log((endTime + (30 * (endMonth - curMonth + 12))));
                 return ((endTime + (30 * (endMonth - curMonth + 12))) - curDate);
             }
             else {
@@ -164,11 +163,20 @@ class ChallengeCard extends Component {
         }
     }
 
-    openChallengeModal = () => {this.setState({challengeModalOpen: true})};
-    closeChallengeModal = () => {this.setState({challengeModalOpen: false})};
+    openChallengeModal = () => {
+        if (!this.state.challengeModalOpen) {
+            console.log("Opening challenge modal");
+            this.setState({challengeModalOpen: true});
+        }
+    };
+    closeChallengeModal = () => {
+        this.setState({challengeModalOpen: false});
+        console.log("Closing challenge Modal pt. 2: the reckoning");
+    };
 
     render() {
         if (!this.getChallengeAttribute("id")) {
+            //alert("can't find challenge");
             return(
                 <Card fluid raised>
                     <h1>Loading...</h1>
@@ -176,8 +184,8 @@ class ChallengeCard extends Component {
             );
         }
         // if(this.getChallengeAttribute("tags")) {
-        //     // alert("There be tags!");
-        //     // alert(this.getChallengeAttribute("tags"));
+        //     // console.log("There be tags!");
+        //     // console.log(this.getChallengeAttribute("tags"));
         // }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
@@ -185,9 +193,9 @@ class ChallengeCard extends Component {
                 <Card.Content textAlign = 'center'>
                     <Card.Header textAlign = 'center'>{this.getChallengeAttribute("title")}</Card.Header>
                     <Card.Meta textAlign = 'center' >{this.getDaysLeft()/*this.getDaysLeft(Date.daysBetween(this.getTodayDateString(), this.getChallengeAttribute("endTime")))*/} days left</Card.Meta>
-                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}
+                    {this.displayTagIcons(this.getChallengeAttribute("tags"))}{/*alert(this.getChallengeAttribute("tags"))*/}
                     <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.closeChallengeModal.bind(this)} challengeID={this.getChallengeAttribute("id")}
-                                               daysLeft={5}/>
+                                               daysLeft={this.getDaysLeft()}/>
                 </Card.Content>
                 <Card.Content extra>
                     <Card.Meta textAlign = 'center'>

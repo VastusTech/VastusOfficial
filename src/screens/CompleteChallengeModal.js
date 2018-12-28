@@ -37,10 +37,10 @@ class CompleteChallengeModal extends Component {
             console.log(this.props.user.id + " " + this.state.challengeID + " " + id);
             ChallengeFunctions.updateWinner(this.props.user.id, this.state.challengeID, id,
                 (data) => {
-                    // alert("Successfully set the event winner!");
+                    // console.log("Successfully set the event winner!");
                     this.props.onClose();
                 }, (error) => {
-                    alert("Event winner setting failed");
+                    console.log("Event winner setting failed");
                 });
         }
     }

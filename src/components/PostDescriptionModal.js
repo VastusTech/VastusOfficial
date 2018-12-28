@@ -43,7 +43,7 @@ import PostFunctions from "../databaseFunctions/PostFunctions";
 * This is the event description which displays more in depth information about a challenge, and allows the user
 * to join the challenge.
  */
-class EventDescriptionModal extends Component {
+class PostDescriptionModal extends Component {
     state = {
         // isLoading: false,
         postID: null,
@@ -74,7 +74,7 @@ class EventDescriptionModal extends Component {
     componentDidMount() {
         // this.isJoined();
         this.isOwned();
-        //alert("Mount Owned: " + this.state.isOwned);
+        //console.log("Mount Owned: " + this.state.isOwned);
     }
 
     componentWillReceiveProps(newProps) {
@@ -122,38 +122,38 @@ class EventDescriptionModal extends Component {
     }
 
     handleDeletePostButton() {
-        //alert("Handling deleting the event");
+        //console.log("Handling deleting the event");
         this.setState({isLoading: true});
         PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), (data) => {
             this.forceUpdate(data.id);
-            // alert(JSON.stringify(data));
+            // console.log(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false});
         }, (error) => {
-            // alert(JSON.stringify(error));
+            // console.log(JSON.stringify(error));
             this.setState({isDeleteLoading: false, error: error});
         })
     }
 
     // handleLeaveChallengeButton() {
-    //     //alert("Handling leaving the event");
+    //     //console.log("Handling leaving the event");
     //     this.setState({isLoading: true});
     //     Lambda.removeClientFromEvent(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"), (data) => {
     //         this.forceUpdate(data.id);
-    //         //alert(JSON.stringify(data));
+    //         //console.log(JSON.stringify(data));
     //         this.setState({isLeaveLoading: false, isJoined: false});
     //     }, (error) => {
-    //         //alert(JSON.stringify(error));
+    //         //console.log(JSON.stringify(error));
     //         this.setState({isLeaveLoading: false, error: error});
     //     })
     // }
 
     // handleJoinChallengeButton() {
-    //     //alert("Handling joining the event");
+    //     //console.log("Handling joining the event");
     //     this.setState({isLoading: true});
     //     Lambda.clientJoinEvent(this.props.user.id, this.props.user.id, this.getChallengeAttribute("id"),
     //         (data) => {
     //             this.forceUpdate(data.id);
-    //             //alert(JSON.stringify(data));
+    //             //console.log(JSON.stringify(data));
     //             this.setState({isJoinLoading: false, isJoined: true});
     //         }, (error) => {
     //             this.setState({isJoinLoading: false, error: error});
@@ -164,9 +164,9 @@ class EventDescriptionModal extends Component {
     //     const members = this.getChallengeAttribute("members");
     //     if (members) {
     //         const isMembers = members.includes(this.props.user.id);
-    //         //alert("Is Members?: " + isMembers);
+    //         //console.log("Is Members?: " + isMembers);
     //         this.setState({isJoined: isMembers});
-    //         //alert("am I in members?: " + members.includes(this.props.user.id));
+    //         //console.log("am I in members?: " + members.includes(this.props.user.id));
     //     }
     //     else {
     //         this.setState({isJoined: false});
@@ -245,16 +245,16 @@ class EventDescriptionModal extends Component {
         }
         if(this.state.canCallChecks) {
             this.isOwned();
-            //alert("Render Owned: " + this.state.isOwned);
+            //console.log("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //alert("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //console.log("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
         function createCorrectButton(isOwned, deleteHandler, isDeleteLoading) {
-            //alert("Owned: " + isOwned + " Joined: " + isJoined);
-            // alert(ifCompleted);
+            //console.log("Owned: " + isOwned + " Joined: " + isJoined);
+            // console.log(ifCompleted);
             if(isOwned) {
                 // TODO This should also link the choose winner button
                 return(
@@ -264,14 +264,14 @@ class EventDescriptionModal extends Component {
                 );
             }
             else {
-                //alert(isJoinLoading);
+                //console.log(isJoinLoading);
                 return null;
             }
         }
 
-        //alert("Challenge Info: " + JSON.stringify(this.state.event));
+        //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+            <Modal closeIcon open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Modal.Header>{convertFromISO(this.getPostAttribute("time_created"))}</Modal.Header>
                 <Modal.Content>
                     <Modal.Description>
@@ -352,4 +352,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(EventDescriptionModal);
+export default connect(mapStateToProps, mapDispatchToProps)(PostDescriptionModal);

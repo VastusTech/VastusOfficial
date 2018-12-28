@@ -1,10 +1,11 @@
-import React, {  } from 'react'
+import React, {Fragment} from 'react'
 import { Player } from 'video-react';
-import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
+import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
 // import TrophyCaseProp from "./TrophyCase";
 import { S3Image } from 'aws-amplify-react';
+import _ from 'lodash'
 // import ChallengeManagerProp from "./ManageChallenges";
 // import QL from '../GraphQL';
 import Lambda from '../Lambda';
@@ -17,12 +18,15 @@ import { connect } from "react-redux";
 // import AWSSetup from "../AppConfig";
 import {logOut} from "../redux_helpers/actions/authActions";
 import ClientFunctions from "../databaseFunctions/ClientFunctions";
+import ReactSwipe from "react-swipe";
+import ChallengeCard from "../components/ChallengeCard";
 
 // AWSSetup();
 
 // Storage.configure({level: 'public'});
 
 window.LOG_LEVEL='DEBUG';
+
 
 /**
 * Profile
@@ -38,18 +42,21 @@ class Profile extends React.PureComponent {
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
+        galleryNum: 0,
+        galleryURLS: [],
         error: null
     };
 
     toggle = () => this.setState({ checked: !this.state.checked });
 
     constructor(props) {
-        // alert("constructor");
-        // alert("constructor props: " + JSON.stringify(props));
+        // console.log("constructor");
+        // console.log("constructor props: " + JSON.stringify(props));
         super(props);
         // this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
         this.setPicture = this.setPicture.bind(this);
+        this.setGalleryPicture = this.setGalleryPicture.bind(this);
         this.update = this.update.bind(this);
         this.profilePicture = this.profilePicture.bind(this);
         this.openBuddyModal = this.openBuddyModal.bind(this);
@@ -59,6 +66,8 @@ class Profile extends React.PureComponent {
         this.openOwnedModal = this.openOwnedModal.bind(this);
         this.closeOwnedModal = this.closeOwnedModal.bind(this);
         this.handleLogOut = this.handleLogOut.bind(this);
+        this.imageGallery = this.imageGallery.bind(this);
+        this.setURLS = this.setURLS.bind(this);
     }
 
     resetState() {
@@ -70,18 +79,23 @@ class Profile extends React.PureComponent {
             scheduledModalOpen: false,
             completedModalOpen: false,
             ownedModalOpen: false,
+            galleryNum: 0,
+            galleryURLS: [],
             error: null,
         });
     }
 
     componentDidMount() {
-        // alert("componentDidMount");
+        // console.log("componentDidMount");
         this.update();
+        this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+        //alert(JSON.stringify(this.props.user.profileImagePaths));
+        //alert(JSON.stringify(this.state.galleryURLS));
     }
 
     componentWillReceiveProps(newProps, nextContext) {
-        // alert("componentWillReceiveProps");
-        // alert("receive props: " + JSON.stringify(newProps));
+        // console.log("componentWillReceiveProps");
+        // console.log("receive props: " + JSON.stringify(newProps));
         if (newProps.user.profileImagePath) {
             this.setState({isLoading: true});
         }
@@ -93,73 +107,167 @@ class Profile extends React.PureComponent {
 
     update() {
         const user = this.props.user;
-        // alert("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
+        // console.log("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
         if (!user.id) {
-            // alert("ID is not set inside profile... This means a problem has occurred");
+            // console.log("ID is not set inside profile... This means a problem has occurred");
         }
-
-        if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
-            this.state.sentRequest = true;
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges"]);
+        //this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+        if (!this.state.sentRequest) {
+            this.setState({sentRequest: true});
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         }
         else {
             this.setState({isLoading: false});
         }
+        if(this.props.user.profileImagePaths) {
+            this.setURLS(this.props.user.profileImagePaths);
+        }
     }
 
     setPicture(event) {
-        //alert(JSON.stringify(this.props));
+        //alert("This is calling regular set picture");
         if (this.props.user.id) {
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
-            //alert("Calling storage put");
-            //alert("File = " + JSON.stringify(event.target.files[0]));
+            //console.log("Calling storage put");
+            //console.log("File = " + JSON.stringify(event.target.files[0]));
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 // Now we update the database object to reflect this
-                //alert("resulttt:" + JSON.stringify(result));
-                //alert("Successfully put the image, now putting the data into the database!");
+                //console.log("resulttt:" + JSON.stringify(result));
+                //console.log("Successfully put the image, now putting the data into the database!");
                 ClientFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
                     (data) => {
-                        //alert("successfully editted client");
-                        //alert(JSON.stringify(data));
+                        //console.log("successfully editted client");
+                        //console.log(JSON.stringify(data));
                         this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
-                        alert("Failed edit client attribute");
-                        alert(JSON.stringify(error));
+                        console.log("Failed edit client attribute");
+                        console.log(JSON.stringify(error));
                     });
                 this.setState({isLoading: true});
             }).catch((error) => {
-                alert("failed storage put");
-                alert(error);
+                console.log("failed storage put");
+                console.log(error);
             });
+        }
+    }
+
+    setGalleryPicture(event) {
+        //alert("This is calling set gallery picture");
+        if (this.props.user.id) {
+            //alert(this.state.galleryNum);
+            const path = "/ClientFiles/" + this.props.user.id + "/galleryImages" + this.state.galleryNum;
+            //console.log("Calling storage put");
+            //console.log("File = " + JSON.stringify(event.target.files[0]));
+            Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
+                // Now we update the database object to reflect this
+                //console.log("resulttt:" + JSON.stringify(result));
+                //console.log("Successfully put the image, now putting the data into the database!");
+                ClientFunctions.addProfileImagePath(this.props.user.id, this.props.user.id, path,
+                    (data) => {
+                        //console.log("successfully editted client");
+                        //console.log(JSON.stringify(data));
+                        this.props.forceFetchUserAttributes(["profileImagePaths"]);
+                        this.setURLS(this.props.user.profileImagePaths);
+                        this.setState({isLoading: true});
+                    }, (error) => {
+                        console.log("Failed edit client attribute");
+                        console.log(JSON.stringify(error));
+                    });
+                this.setState({isLoading: true});
+            }).catch((error) => {
+                console.log("failed storage put");
+                console.log(error);
+            });
+        }
+    }
+
+    setURLS(paths) {
+        //alert("Setting URLS");
+        if(paths) {
+            for (let i = 0; i < paths.length; i++) {
+                if (this.state.galleryURLS) {
+                    Storage.get(paths[i]).then((url) => {
+                        let tempGal = this.state.galleryURLS;
+                        tempGal[i] = url;
+                        this.setState({galleryURLS: tempGal});
+                        //alert(JSON.stringify(this.state.galleryURLS));
+                    }).catch((error) => {
+                        console.error("ERROR IN GETTING VIDEO FOR COMMENT");
+                        console.error(error);
+                    });
+                }
+            }
+        }
+    }
+
+    imageGallery = () => {
+        if(this.props.user.profileImagePaths) {
+            //alert(JSON.stringify(this.props.user.profileImagePaths));
+            this.update();
+        }
+        //alert(JSON.stringify(this.state.galleryURLS));
+        if(this.state.galleryURLS.length > 0) {
+            //alert(JSON.stringify(this.state.galleryURLS));
+            return _.times(this.state.galleryURLS.length, i => (
+                <div>
+                <Image src={this.state.galleryURLS[i]} align='center' style={{height: 500,
+                    width: 500, display: 'block',
+                    margin: 'auto'}}>
+                    {/*this.state.galleryURLS[i] + " Num: " + i*/}
+                    {this.setState({galleryNum: i})}
+                </Image>
+                    <Label size='small' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
+                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
+                    </Label>
+                    Change Picture
+                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: i})}/>
+                </div>
+            ));
         }
     }
 
     profilePicture() {
         if (this.props.user.profilePicture) {
-            // if (this.state.ifS3) {
-            //     // <S3Image size='medium' imgKey={this.state.profilePicture} circular/>
-            //     return(
-            //         <Item.Image size='medium' src={this.state.profilePicture} circular/>
-            //     );
-            // }
-            /*return(
-                <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+            let reactSwipeEl;
+            return (
+                <div>
+                    <Modal closeIcon trigger={
+                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                    </div>}>
+                        <div>
+                            <ReactSwipe
+                                className="carousel"
+                                swipeOptions={{ continuous: false }}
+                                ref={el => (reactSwipeEl = el)}
+                            >
+                                {this.setURLS(this.props.user.profileImagePaths)}
+                                {this.imageGallery()}
+                                <div>
+                                    <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
+                                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
+                                    </Label>
+                                    Add new picture to gallery
+                                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
+                                </div>
+                            </ReactSwipe>
+                            <Grid>
+                            <Grid.Column floated='left' width={2}>
+                                <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
+                            </Grid.Column>
+                            <Grid.Column floated='right' width={2}>
+                                <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
+                            </Grid.Column>
+                        </Grid>
+                        </div>
+                    </Modal>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
-                    <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                </div>
-            );*/
-            //console.log("PROPICIMAGE!!!!: " + this.props.user.profilePicture);
-            return (
-                <div>
-                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
-                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                            <Icon name="upload" className='u-margin-right--0' size="large" inverted />
-                        </Label>
-                        <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
-                    </div>
+                    <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}
+                    onClick={this.setState()}/>
                 </div>
             );
         }
@@ -173,7 +281,7 @@ class Profile extends React.PureComponent {
     }
 
     handleLogOut() {
-        // alert("logging out");
+        // console.log("logging out");
         this.props.logOut();
         // this.setState({isLoading: true});
         // Auth.signOut({global: true}).then((data) => {
@@ -199,7 +307,7 @@ class Profile extends React.PureComponent {
 
 
     render() {
-        //alert(JSON.stringify(this.state));
+        //console.log(JSON.stringify(this.state));
         /**
          * This creates an error message from the given error string
          * @param error A string containing the error message that was invoked
@@ -302,15 +410,16 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (attributesList) => {
-            dispatch(fetchUserAttributes(attributesList));
+        fetchUserAttributes: (variablesList, dataHandler) => {
+            dispatch(fetchUserAttributes(variablesList, dataHandler));
         },
         forceFetchUserAttributes: (variablesList) => {
             dispatch(forceFetchUserAttributes(variablesList));
         },
         logOut: () => {
             dispatch(logOut());
-        }
+        },
+
         // fetchUser: (username) => {
         //     dispatch(fetchUser(username));
         // }

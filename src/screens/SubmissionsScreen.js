@@ -32,7 +32,7 @@ class SubmissionsScreen extends Component {
     }
 
     componentDidMount() {
-        // alert("cdm");
+        // console.log("cdm");
         if (this.state.challengeID !== this.props.challengeID) {
             this.state.challengeID = this.props.challengeID;
             // this.setState({challengeID: this.props.challengeID});
@@ -41,7 +41,7 @@ class SubmissionsScreen extends Component {
     }
 
     componentWillReceiveProps(newProps, nextContext) {
-        // alert("cwrp");
+        // console.log("cwrp");
         if (this.state.challengeID !== this.props.challengeID) {
             this.state.challengeID = this.props.challengeID;
             // this.setState({challengeID: this.props.challengeID});
@@ -52,16 +52,16 @@ class SubmissionsScreen extends Component {
     update(props) {
         // TODO Change this if we want to actually be able to do something while it's loading
         if (this.getChallengeAttribute("id")) {
-            // alert("Updating!");
+            // console.log("Updating!");
             const submissions = this.getChallengeAttribute("submissions");
             if (!this.state.sentRequest && submissions && submissions.length > 0) {
                 this.state.isLoading = true;
                 this.state.sentRequest = true;
                 for (let i = 0; i < submissions.length; i++) {
-                    // alert("Fetching: " + submissions[i]);
-                    props.fetchPost(submissions[i], ["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                    // console.log("Fetching: " + submissions[i]);
+                    props.fetchPost(submissions[i], ["id", "time_created", "by", "owner", "item_type", "postType", "about", "description", "videoPaths", "picturePaths", "title"],
                         (post) => {
-                        // alert("Returned a value! Post: " + JSON.stringify(post));
+                        // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
                             this.state.loadedPostIDs.push(post.id);
                             this.setState({isLoading: false});
@@ -115,7 +115,7 @@ class SubmissionsScreen extends Component {
             const rowProps = [];
             for (const key in postIDs) {
                 if (postIDs.hasOwnProperty(key)) {
-                    //alert(JSON.stringify(events[key]));
+                    //console.log(JSON.stringify(events[key]));
                     row.push(
                         postIDs[key]
                     );

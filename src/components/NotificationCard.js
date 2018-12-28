@@ -9,10 +9,13 @@ import Lambda from "../Lambda";
 import ClientModal from "./ClientModal";
 // import EventCard from "./EventCard";
 import EventDescriptionModal from "./EventDescriptionModal";
+import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 import { connect } from "react-redux";
-import {fetchClient, fetchEvent} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, fetchEvent, fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
+import EventFunctions from "../databaseFunctions/EventFunctions";
+import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 
 class NotificationCard extends Component {
     state = {
@@ -22,6 +25,7 @@ class NotificationCard extends Component {
         sentRequest: false,
         clientModalOpen: false,
         eventModalOpen: false,
+        challengeModalOpen: false,
         isAcceptInviteLoading: false,
         isDenyInviteLoading: false,
     };
@@ -49,17 +53,20 @@ class NotificationCard extends Component {
                     if (this.state.inviteID !== props.inviteID && !this.state.sentRequest && !this.props.info.isLoading) {
                         this.setState({inviteID: props.inviteID});
                         this.state.sentRequest = true;
-                        // alert("Fetching client = " + invite.from);
+                        // console.log("Fetching client = " + invite.from);
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
                         if (invite.inviteType === "eventInvite") {
-                            // alert("Fetching event = " + invite.about);
+                            // console.log("Fetching event = " + invite.about);
                             props.fetchEvent(invite.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+                        }
+                        else if (invite.inviteType === "challengeInvite") {
+                            props.fetchChallenge(invite.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                         }
                     }
                 }
                 else {
-                    alert("Invite only partially gotten?");
-                    alert(JSON.stringify(invite));
+                    console.log("Invite only partially gotten?");
+                    console.log(JSON.stringify(invite));
                 }
             }
         }
@@ -84,7 +91,7 @@ class NotificationCard extends Component {
         //     });
         // }
         // else {
-        //     //alert("ERID: " + this.props.eventRequestID);
+        //     //console.log("ERID: " + this.props.eventRequestID);
         //     QL.getEvent(this.props.eventRequestID, ["id", "title", "goal", "time", "time_created", "owner", "members"], (data) => {
         //         if (data) {
         //             this.setState({isLoading: false, name: data.title, event: data});
@@ -107,27 +114,29 @@ class NotificationCard extends Component {
     handleClientModalClose() { this.setState({clientModalOpen: false})};
     handleEventModalOpen() { this.setState({eventModalOpen: true})};
     handleEventModalClose() { this.setState({eventModalOpen: false})};
+    handleChallengeModalOpen() { this.setState({challengeModalOpen: true})};
+    handleChallengeModalClose() { this.setState({challengeModalOpen: false})};
 
     handleAcceptFriendRequest() {
         const userID = this.props.user.id;
         const friendRequestID = this.state.inviteID;
-        // alert("Accepting friend request id = " + friendRequestID);
+        // console.log("Accepting friend request id = " + friendRequestID);
         if(userID && friendRequestID) {
             const friendID = this.getAboutAttribute("id");
-            // alert("User ID: " + userID + " Friend ID: " + friendID);
+            // console.log("User ID: " + userID + " Friend ID: " + friendID);
             UserFunctions.addFriend(userID, userID, friendID,
                 (data) => {
                     this.setState({isAcceptInviteLoading: false});
-                    // alert("Successfully added " + friendID + " as a friend!");
+                    // console.log("Successfully added " + friendID + " as a friend!");
                     this.props.feedUpdate();
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set yet");
+            console.log("user id or invite id not set yet");
             this.setState({isAcceptInviteLoading: false});
         }
     }
@@ -137,48 +146,71 @@ class NotificationCard extends Component {
         this.handleAcceptFriendRequest();
     }
 
-    handleAcceptEventRequestButton() {
+    handleAcceptEventInviteButton() {
         this.setState({isAcceptInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("Accepting event invite " + inviteID);
+        // console.log("Accepting event invite " + inviteID);
         if(userID && inviteID) {
             const eventID = this.getAboutAttribute("id");
-            // alert("User ID: " + userID + " event ID: " + eventID);
+            // console.log("User ID: " + userID + " event ID: " + eventID);
             UserFunctions.addEvent(userID, userID, eventID,
                 (data) => {
-                    // alert("Successfully added " + eventID + " to the schedule!");
+                    // console.log("Successfully added " + eventID + " to the schedule!");
                     this.props.feedUpdate();
                     this.setState({isAcceptInviteLoading: false});
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isAcceptInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set yet");
+            console.error("user id or invite id not set yet");
+        }
+    }
+    handleAcceptChallengeRequestButton() {
+        this.setState({isAcceptInviteLoading: true});
+        const userID = this.props.user.id;
+        const inviteID = this.state.inviteID;
+        // console.log("Accepting event invite " + inviteID);
+        if(userID && inviteID) {
+            const challengeID = this.getAboutAttribute("id");
+            // console.log("User ID: " + userID + " event ID: " + eventID);
+            UserFunctions.addChallenge(userID, userID, challengeID,
+                (data) => {
+                    // console.log("Successfully added " + challengeID + " to the schedule!");
+                    this.props.feedUpdate();
+                    this.setState({isAcceptInviteLoading: false});
+                }, (error) => {
+                    console.log(JSON.stringify(error));
+                    this.setState({error: error});
+                    this.setState({isAcceptInviteLoading: false});
+                });
+        }
+        else {
+            console.error("user id or invite id not set yet");
         }
     }
 
     handleDeclineFriendRequest() {
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
+        // console.log("DECLINING " + "User ID: " + userID + " Friend Request ID: " + inviteID);
         if(userID && inviteID) {
             InviteFunctions.delete(userID, inviteID,
                 (data) => {
-                    // alert("Successfully declined " + inviteID + " friend request!");
+                    // console.log("Successfully declined " + inviteID + " friend request!");
                     this.props.feedUpdate();
                     this.setState({isDenyInviteLoading: false});
                 }, (error) => {
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                     this.setState({isDenyInviteLoading: false});
                 });
         }
         else {
-            alert("user id or invite id not set");
+            console.log("user id or invite id not set");
             this.setState({isDenyInviteLoading: false});
         }
     }
@@ -188,27 +220,92 @@ class NotificationCard extends Component {
         this.handleDeclineFriendRequest();
     }
 
-    handleDeclineEventRequestButton() {
+    handleDeclineEventInviteButton() {
         this.setState({isDenyInviteLoading: true});
         const userID = this.props.user.id;
         const inviteID = this.state.inviteID;
-        // alert("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
+        // console.log("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
         if(userID && inviteID) {
             InviteFunctions.delete(userID, inviteID,
                 (data) => {
                     this.setState({isDenyInviteLoading: false});
-                    // alert("Successfully declined " + inviteID + " event invite!");
+                    // console.log("Successfully declined " + inviteID + " event invite!");
                     this.props.feedUpdate();
                 }, (error) => {
                     this.setState({isDenyInviteLoading: false});
-                    alert(JSON.stringify(error));
+                    console.log(JSON.stringify(error));
                     this.setState({error: error});
                 });
         }
         else {
-            alert("user id or invite id not set");
+            console.log("user id or invite id not set");
             this.setState({isDenyInviteLoading: false});
         }
+    }
+    handleDeclineChallengeRequestButton() {
+        this.setState({isDenyInviteLoading: true});
+        const userID = this.props.user.id;
+        const inviteID = this.state.inviteID;
+        // console.log("DECLINING " + "User ID: " + userID + " Invite ID: " + inviteID);
+        if(userID && inviteID) {
+            InviteFunctions.delete(userID, inviteID,
+                (data) => {
+                    this.setState({isDenyInviteLoading: false});
+                    // console.log("Successfully declined " + inviteID + " event invite!");
+                    this.props.feedUpdate();
+                }, (error) => {
+                    this.setState({isDenyInviteLoading: false});
+                    console.error(JSON.stringify(error));
+                    this.setState({error: error});
+                });
+        }
+        else {
+            console.error("user id or invite id not set");
+            this.setState({isDenyInviteLoading: false});
+        }
+    }
+
+    handleAcceptChallengeInvite() {
+        UserFunctions.addChallenge(this.state.user.id, this.state.user.id, this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineChallengeInvite() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleAcceptEventRequest() {
+        EventFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineEventRequest() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleAcceptChallengeRequest() {
+        ChallengeFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
+    }
+    handleDeclineChallengeRequest() {
+        InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
+            // TODO
+        }, (error) => {
+            // TODO
+        });
     }
 
     getInviteAttribute(attribute) {
@@ -247,6 +344,12 @@ class NotificationCard extends Component {
                     return about[attribute];
                 }
             }
+            else if (invite.inviteType === "challengeInvite") {
+                const about = this.props.cache.challenges[invite.about];
+                if (about) {
+                    return about[attribute];
+                }
+            }
         }
         return null;
     }
@@ -267,7 +370,7 @@ class NotificationCard extends Component {
     }
 
     render() {
-        if (!this.getInviteAttribute("id") || !this.getAboutAttribute("id")) {
+        /*if (!this.getInviteAttribute("id") || !this.getAboutAttribute("id")) {
             return(
                 <Grid.Row className="ui one column stackable center aligned page grid">
                     <Dimmer>
@@ -276,14 +379,15 @@ class NotificationCard extends Component {
                 </Grid.Row>
             );
         }
-        else {
+        else {*/
             if (this.getInviteAttribute("inviteType") === "friendRequest") {
+                //alert(this.getInviteAttribute("inviteType"));
                 return (
                     <Card fluid raised centered>
                         <div className="u-container">
                         <div className="u-avatar u-avatar--large u-margin-bottom--neg2 u-margin-x--auto" style={{backgroundImage: `url(${this.getFromAttribute("profilePicture")})`}}></div>
                         </div>
-                        
+
                         <Card.Content textAlign='center'>
                             <Card.Header onClick={this.handleClientModalOpen.bind(this)}>
                                 {this.getFromAttribute("name")}
@@ -295,7 +399,7 @@ class NotificationCard extends Component {
                         <Card.Content extra textAlign='center'>
                             <Button.Group fluid>
                                 <Button onClick={this.handleDeclineFriendRequestButton.bind(this)}>Deny</Button>
-                                <Button primary onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>     
+                                <Button primary onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>
                             </Button.Group>
                         </Card.Content>
                         <ClientModal
@@ -308,6 +412,7 @@ class NotificationCard extends Component {
                 );
             }
             else if (this.getInviteAttribute("inviteType") === "eventInvite") {
+                //alert(this.getInviteAttribute("inviteType"));
                 return (
                     <Card fluid raised>
                         <Card.Content>
@@ -341,8 +446,54 @@ class NotificationCard extends Component {
                                         </Feed.Summary>
                                         <Divider/>
                                         <Feed.Extra>
-                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineEventRequestButton.bind(this)}>Deny</Button>
-                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptEventRequestButton.bind(this)}>Accept</Button>
+                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineEventInviteButton.bind(this)}>Deny</Button>
+                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptEventInviteButton.bind(this)}>Accept</Button>
+                                        </Feed.Extra>
+                                    </Feed.Content>
+                                </Feed.Event>
+                            </Feed>
+                        </Card.Content>
+                    </Card>
+                );
+            }
+            else if (this.getInviteAttribute("inviteType") === "challengeInvite") {
+                //alert("hey yah");
+                //alert(this.getInviteAttribute("title"));
+                return (
+                    <Card fluid raised>
+                        <Card.Content>
+                            <Feed>
+                                <Feed.Event>
+                                    <Feed.Label>
+                                        <Image src={this.getFromAttribute("profilePicture")} circular size="large"/>
+                                    </Feed.Label>
+                                    <Feed.Content>
+                                        <Feed.Summary>
+                                            You were invited to{' '}
+                                            <Feed.User onClick={this.handleChallengeModalOpen.bind(this)}>
+                                                {this.getAboutAttribute("title")}
+                                            </Feed.User>
+                                            <ChallengeDescriptionModal
+                                                open={this.state.challengeModalOpen}
+                                                onClose={this.handleChallengeModalClose.bind(this)}
+                                                challengeID={this.getAboutAttribute("id")}
+                                            />
+                                            {' '}by{' '}
+                                            <Feed.User onClick={this.handleClientModalOpen.bind(this)}>
+                                                {this.getFromAttribute("name")}
+                                            </Feed.User>
+                                            <ClientModal
+                                                clientID={this.getFromAttribute("id")}
+                                                open={this.state.clientModalOpen}
+                                                onOpen={this.handleClientModalOpen.bind(this)}
+                                                onClose={this.handleClientModalClose.bind(this)}
+                                            />
+                                            <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
+                                        </Feed.Summary>
+                                        <Divider/>
+                                        <Feed.Extra>
+                                            <Button inverted loading={this.state.isDenyInviteLoading} disabled={this.state.isDenyInviteLoading} floated="right" size="small" onClick={this.handleDeclineChallengeRequestButton.bind(this)}>Deny</Button>
+                                            <Button primary loading={this.state.isAcceptInviteLoading} disabled={this.state.isAcceptInviteLoading} floated="right" size="small" onClick={this.handleAcceptChallengeRequestButton.bind(this)}>Accept</Button>
                                         </Feed.Extra>
                                     </Feed.Content>
                                 </Feed.Event>
@@ -352,7 +503,7 @@ class NotificationCard extends Component {
                 );
             }
         }
-    }
+    //}
 }
 
 const mapStateToProps = (state) => ({
@@ -368,7 +519,10 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchEvent: (id, variablesList) => {
             dispatch(fetchEvent(id, variablesList));
-        }
+        },
+        fetchChallenge: (id, variablesList) => {
+            dispatch(fetchChallenge(id, variablesList));
+        },
     };
 };
 

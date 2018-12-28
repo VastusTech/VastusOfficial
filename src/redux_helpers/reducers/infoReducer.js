@@ -56,7 +56,7 @@ export default (state = initialState, action) => {
             };
             break;
     }
-    // alert("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
+    // console.log("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
 }
 

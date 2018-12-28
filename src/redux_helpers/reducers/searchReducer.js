@@ -147,7 +147,7 @@ const initialEventState = {
 
 const initialChallengeState = {
     enabled: true,
-    variableList: ["id", "item_type", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"],
+    variableList: ["id", "item_type", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "description", "restriction", "tags", "prize", "submissions"],
     filterJSON: {
         and: [{
             or: [{
@@ -279,7 +279,7 @@ export default (state = initialState, action) => {
             break;
         case ADD_TYPE_RESULTS:
             const results = action.payload.results ? action.payload.results : [];
-            // alert(action.payload.type + "\n" + JSON.stringify(results) + "\n" + JSON.stringify(state.typeQueries[action.payload.type].results));
+            // console.log(action.payload.type + "\n" + JSON.stringify(results) + "\n" + JSON.stringify(state.typeQueries[action.payload.type].results));
             state = {
                 ...state,
                 results: [...state.results, ...results],
@@ -342,7 +342,7 @@ export default (state = initialState, action) => {
             };
             break;
     }
-    // alert("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
+    // console.log("INFO: Did " + action.type + " and now state is = " + JSON.stringify(state));
     return state;
 }
 

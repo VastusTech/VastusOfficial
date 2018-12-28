@@ -53,20 +53,20 @@ class EventFeed extends Component {
         //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
         //         (data) => {
         //             // When it has finished
-        //             alert("Finished");
+        //             console.log("Finished");
         //             this.queryEvents();
         //         });
         // }
     }
 
     componentWillReceiveProps(newProps) {
-        // alert("Set state to userID = " + newProps.userID);
+        // console.log("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
-            // alert("fetchin user attributes");
+            // console.log("fetchin user attributes");
             this.props.fetchUserAttributes(["friends", "invitedEvents"],
                 (data) => {
-                    // alert("finished");
+                    // console.log("finished");
                     this.queryEvents()
                 });
         }
@@ -75,7 +75,7 @@ class EventFeed extends Component {
     // queryEvents() {
     //     this.setState({isLoading: true});
     //     if (!this.state.ifFinished) {
-    //         // alert(JSON.stringify(this.props.cache.eventQueries));
+    //         // console.log(JSON.stringify(this.props.cache.eventQueries));
     //         QL.queryEvents(["id", "title", "time", "time_created", "address", "owner", "ifCompleted", "members", "capacity", "access"], QL.generateFilter("and",
     //             {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.eventFeedLength,
     //             this.state.nextToken, (data) => {
@@ -84,11 +84,11 @@ class EventFeed extends Component {
     //                 }
     //                 if (data.items) {
     //                     // TODO We can see private events
-    //                     // alert("got items");
+    //                     // console.log("got items");
     //                     const newlyQueriedEvents = [];
     //                     for (let i = 0; i < data.items.length; i++) {
     //                         const event = data.items[i];
-    //                         // alert(JSON.stringify(event));
+    //                         // console.log(JSON.stringify(event));
     //                         if (event.access === 'public') {
     //                             newlyQueriedEvents.push(event);
     //                         }
@@ -104,12 +104,12 @@ class EventFeed extends Component {
     //                     }
     //                     this.setState({events: [...this.state.events, ...newlyQueriedEvents]});
     //                     for (let i = 0; i < data.items.length; i++) {
-    //                         //alert(data.items[i].time_created);
-    //                         // alert("Putting in event: " + JSON.stringify(data.items[i]));
+    //                         //console.log(data.items[i].time_created);
+    //                         // console.log("Putting in event: " + JSON.stringify(data.items[i]));
     //                         // this.setState({events: [...this.state.events, data.items[i]]});
     //                         this.props.putEvent(data.items[i]);
     //                     }
-    //                     // alert("events in the end: " + JSON.stringify(this.state.events));
+    //                     // console.log("events in the end: " + JSON.stringify(this.state.events));
     //                     this.setState({nextToken: data.nextToken});
     //                 }
     //                 else {
@@ -119,7 +119,7 @@ class EventFeed extends Component {
     //             }, (error) => {
     //                 console.log("Querying events failed!");
     //                 console.log(error);
-    //                 alert(error);
+    //                 console.log(error);
     //                 this.setState({isLoading: false, error: error});
     //             }, this.props.cache.eventQueries, this.props.putEventQuery);
     //     }
@@ -142,11 +142,11 @@ class EventFeed extends Component {
                     }
                     if (data.items) {
                         // TODO We can see private events
-                        // alert("got items");
+                        // console.log("got items");
                         const newlyQueriedChallenges = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const challenge = data.items[i];
-                            // alert(JSON.stringify(event));
+                            // console.log(JSON.stringify(event));
                             if (challenge.access === 'public') {
                                 newlyQueriedChallenges.push(challenge);
                             }
@@ -162,12 +162,12 @@ class EventFeed extends Component {
                         }
                         this.setState({challenges: [...this.state.events, ...newlyQueriedChallenges]});
                         for (let i = 0; i < data.items.length; i++) {
-                            //alert(data.items[i].time_created);
-                            // alert("Putting in event: " + JSON.stringify(data.items[i]));
+                            //console.log(data.items[i].time_created);
+                            // console.log("Putting in event: " + JSON.stringify(data.items[i]));
                             // this.setState({events: [...this.state.events, data.items[i]]});
                             this.props.putEvent(data.items[i]);
                         }
-                        // alert("events in the end: " + JSON.stringify(this.state.events));
+                        // console.log("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
                     }
                     else {
@@ -177,7 +177,7 @@ class EventFeed extends Component {
                 }, (error) => {
                     console.log("Querying events failed!");
                     console.log(error);
-                    alert(error);
+                    console.log(error);
                     this.setState({isLoading: false, error: error});
                 }, this.props.cache.eventQueries, this.props.putEventQuery);
         }
@@ -209,9 +209,9 @@ class EventFeed extends Component {
          */
         function rows(events) {
             // if(events != null && events.length > 0)
-            //     alert(JSON.stringify(events[0].id));
-            // alert("EVENTS TO PRINT: ");
-            // alert(JSON.stringify(events));
+            //     console.log(JSON.stringify(events[0].id));
+            // console.log("EVENTS TO PRINT: ");
+            // console.log(JSON.stringify(events));
             return _.times(events.length, i => (
                 <Fragment key={i + 1}>
                     <EventCard eventID={events[i].id}/>

@@ -7,6 +7,9 @@ import { fetchPost } from "../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../logic/TimeHelper";
 import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
+import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
+import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
+import PostDetailCard from "./post_detail_cards/PostDetailCard";
 
 type Props = {
     postID: string
@@ -38,16 +41,17 @@ class PostCard extends Component {
         this.openPostModal = this.openPostModal.bind(this);
         this.closePostModal = this.closePostModal.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
+        this.getPostAttribute = this.getPostAttribute.bind(this);
     }
 
     // componentDidMount() {
     // if (this.props.event) {
     //     let ifOwned = false;
     //     let ifJoined = false;
-    //     //alert("Membahs: " + this.props.event.members);
-    //     //alert(this.props.owner + "vs. " + this.props.event.owner);
+    //     //console.log("Membahs: " + this.props.event.members);
+    //     //console.log(this.props.owner + "vs. " + this.props.event.owner);
     //     if (this.props.user.id === this.props.event.owner) {
-    //         //alert("Same owner and cur user for: " + this.props.event.id);
+    //         //console.log("Same owner and cur user for: " + this.props.event.id);
     //         ifOwned = true;
     //     }
     //     if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
@@ -59,6 +63,8 @@ class PostCard extends Component {
     // }
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        console.log("Post Card Prop: " + this.props.postID);
+        //this.props.fetchPost(this.props.postID, ["id", "postType", "Description"])
     }
 
     componentWillReceiveProps(newProps) {
@@ -69,6 +75,7 @@ class PostCard extends Component {
     }
 
     getPostAttribute(attribute) {
+        //alert(this.props.postID);
         if (this.state.postID) {
             let post = this.props.cache.posts[this.state.postID];
             if (post) {
@@ -87,7 +94,11 @@ class PostCard extends Component {
         return null;
     }
 
-    openPostModal = () => { this.setState({postModalOpen: true})};
+    openPostModal = () => {
+        if (!this.state.postModalOpen) {
+            this.setState({postModalOpen: true})
+        };
+    }
     closePostModal = () => {this.setState({postModalOpen: false})};
 
     getDisplayMedia() {
@@ -113,43 +124,67 @@ class PostCard extends Component {
         }
     }
 
+    getOwnerName() {
+        const owner = this.getPostAttribute("by");
+        //alert(owner);
+        if (owner) {
+            if (this.props.cache.clients[owner]) {
+                //alert(JSON.stringify(this.props.cache.clients[owner]));
+                return this.props.cache.clients[owner].name
+            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
+        }
+        return null;
+    }
+
     getCorrectDetailCard() {
         const postType = this.getPostAttribute("postType");
+        //alert("Post Type: " + postType);
         if (postType && postType.length) {
-            let itemType = ItemType[postType];
-            if (!itemType && postType.substr(0, 3) === "new") {
+            let itemType = postType;
+            //alert("Item Type: " + itemType);
+            if (postType.substr(0, 3) === "new") {
                 // TODO This indicates that this is for a newly created Item
                 itemType = ItemType[postType.substring(3, postType.length)];
             }
             if (itemType) {
                 // TODO Switch the post types
                 if (itemType === "Client") {
-
+                    //return (<ClientDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Trainer") {
-
+                    //return (<TrainerDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Gym") {
-
+                    //return (<GymDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Workout") {
-
+                    //return (<WorkoutDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Review") {
-
+                    //return (<ReviewDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Event") {
-
+                    //return (<EventDetailCard displayMedia = {this.getDisplayMedia}/>);
+                }
+                else if (itemType === "Challenge") {
+                    return (<ChallengeDetailCard postID={this.state.postID}/>);
                 }
                 else if (itemType === "Invite") {
-
+                    //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Post") {
-
+                    return (<PostDetailCard/>);
+                }
+                else if (itemType === "submission") {
+                    //alert("This is a submission");
+                    return (<SubmissionDetailCard postID={this.state.postID}/>);
                 }
             }
         }
-        return {};
+        return (<div/>);
     }
 
     render() {
@@ -186,12 +221,15 @@ class PostCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised>
-                <Card.Header textAlign = 'center'>{this.getPostAttribute("title")}</Card.Header>
+                <Card.Header textAlign = 'center'>{this.getOwnerName()} Posted a new {this.getPostAttribute("postType")}</Card.Header>
                 <Card.Content>
-                    {this.getDisplayMedia()}
+                    {/*TODO: When the detail cards are done, uncomment this and comment out getDisplayMedia*/}
+                    <div align='center'>
+                        {this.getCorrectDetailCard()}
+                    </div>
+                    {/*this.getDisplayMedia()*/}
                 </Card.Content>
                 <Card.Content extra onClick={this.openPostModal}>
-                    <Card.Meta textAlign = 'center' >{convertFromISO(this.getPostAttribute("time_created"))}</Card.Meta>
                     <Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>
                     <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
                 </Card.Content>

@@ -6,8 +6,9 @@ import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
 // import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
-import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery, clearPostQuery, fetchPost, putPost, putPostQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import PostFunctions from "../databaseFunctions/PostFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -163,6 +164,24 @@ class CreateChallengeProp extends Component {
         }
     }
 
+    getPicturePaths() {
+        return null;
+    }
+
+    getVideoPaths() {
+        return null;
+    }
+
+    createChallengePost(challengeID) {
+        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, challengeID, this.getPicturePaths, this.getVideoPaths, (returnValue) => {
+            alert("Successfully Created Challenge Post!");
+            alert(JSON.stringify(returnValue));
+            //const id = returnValue.data;
+            }, (error) => {
+            console.error(error);
+        });
+    }
+
     handleSubmit = () => {
         // TODO Make sure the dates are well formed?
         /*
@@ -173,11 +192,11 @@ class CreateChallengeProp extends Component {
         const minute = parseInt(this.eventState.startTime.substr(3, 2));
         let startDate = new Date(year, month, day, hour, minute);
         let endDate = new Date(startDate.getTime() + (60000 * this.eventState.duration));
-        // alert(endDate.toDateString());
-        // alert(endDate.getMinutes());
+        // console.log(endDate.toDateString());
+        // console.log(endDate.getMinutes());
         // endDate.setMinutes(endDate.getMinutes() + this.eventState.duration);
-        // alert(endDate.getMinutes());
-        // alert(endDate.toDateString());
+        // console.log(endDate.getMinutes());
+        // console.log(endDate.toDateString());
 
 
 
@@ -192,9 +211,13 @@ class CreateChallengeProp extends Component {
                     this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
+                        alert(JSON.stringify(data.data));
+                        this.createChallengePost(data.data);
                         //This is the second call
                         this.props.clearChallengeQuery();
+                        this.props.clearPostQuery();
                         this.props.queryChallenges();
+                        this.props.queryPosts();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
@@ -202,7 +225,7 @@ class CreateChallengeProp extends Component {
                         //this.setState({showSuccessModal: true});
 
                     }, (error) => {
-                        //alert(JSON.stringify(error));
+                        //console.log(JSON.stringify(error));
                         this.setState({submitError: "*" + JSON.stringify(error)});
                         this.setState({isSubmitLoading: false});
                     });
@@ -218,7 +241,7 @@ class CreateChallengeProp extends Component {
 
     handleDurationChange = (e, data) => {
         this.eventState.duration = data.value;
-        //alert(this.eventState.duration);
+        //console.log(this.eventState.duration);
         // this.setState({
         //     duration: data.value,
         // }, () => {
@@ -300,28 +323,28 @@ class CreateChallengeProp extends Component {
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
-                                    <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
-                                    HIIT
+                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
+                                    <div className="ui white header">HIIT</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
+                                <Button inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
                                 <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
-                                Strength
+                                    <div className="ui white header">Strength</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
+                                <Button inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
                                 <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
-                                Performance
+                                    <div className="ui white header">Performance</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
+                                <Button inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
                                 <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
-                                Endurance
+                                    <div className="ui white header">Endurance</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
@@ -380,15 +403,27 @@ const mapDispatchToProps = (dispatch) => {
         fetchChallenge: (id, variablesList) => {
             dispatch(fetchChallenge(id, variablesList));
         },
+        fetchPost: (id, variablesList) => {
+            dispatch(fetchPost(id, variablesList));
+        },
         putChallenge: (event) => {
             dispatch(putChallenge(event));
+        },
+        putPost: (event) => {
+            dispatch(putPost(event));
         },
         putChallengeQuery: (queryString, queryResult) => {
             dispatch(putChallengeQuery(queryString, queryResult));
         },
+        putPostQuery: (queryString, queryResult) => {
+            dispatch(putPostQuery(queryString, queryResult));
+        },
         clearChallengeQuery: () => {
             dispatch(clearChallengeQuery());
-        }
+        },
+        clearPostQuery: () => {
+            dispatch(clearPostQuery());
+        },
     }
 };
 

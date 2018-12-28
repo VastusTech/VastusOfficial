@@ -35,7 +35,8 @@ class ClientCard extends Component<Props> {
         // ifOwned: false,
         // ifJoined: false,
         // capacity: null,
-        clientModalOpen: false
+        clientModalOpen: false,
+        galleryURLS: []
     };
 
     componentDidMount() {
@@ -67,8 +68,15 @@ class ClientCard extends Component<Props> {
         return null;
     }
 
-    openClientModal = () => {this.setState({clientModalOpen: true})};
-    closeClientModal = () => {this.setState({clientModalOpen: false})};
+    openClientModal = () => {
+        if (!this.state.clientModalOpen) {
+            this.setState({clientModalOpen: true})
+        };
+    }
+    closeClientModal = () => {
+        console.log("Closing client modal");
+        this.setState({clientModalOpen: false})
+    };
 
     profilePicture() {
         if (this.getClientAttribute("profilePicture")) {
@@ -96,7 +104,7 @@ class ClientCard extends Component<Props> {
         }
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <Card fluid raised onClick={this.openClientModal}>
+            <Card fluid raised onClick={() => this.openClientModal()}>
                 <Card.Content>
                     {/* If no rank */}
                     {!rank && (

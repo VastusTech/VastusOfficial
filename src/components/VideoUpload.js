@@ -95,7 +95,7 @@ class VideoUpload extends Component<Props> {
         //console.error(JSON.stringify(this.props));
         //console.error(this.props.curUserID);
         if (this.props.curUserID) {
-            const path = "/ClientFiles/" + this.props.curUserID + "/" + Math.floor((Math.random() * 10000000000000) + 1);
+            const path = "/ClientFiles/" + this.props.curUserID + "/" + Math.floor((Math.random() * 1000000000000000) + 1);
 
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 this.setState({imagePath: path});
@@ -110,8 +110,6 @@ class VideoUpload extends Component<Props> {
             //console.error("File = " + JSON.stringify(event.target.files[0]));
         }
     }
-
-
 
     render() {
         // if(this.state.imageURL && this.state.canAddImage) {

@@ -11,6 +11,7 @@ import {connect} from "react-redux";
 import {fetchClient, fetchEvent, putClientQuery, putEventQuery, fetchChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {newSearch, loadMoreResults} from "../redux_helpers/actions/searchActions";
 import {switchReturnItemType} from "../logic/ItemType";
+import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 
 // setupAWS();
 
@@ -29,8 +30,17 @@ class SearchBarProp extends Component {
         // eventsLimit: 100,
         // clientsLimit: 100,
         selectedResult: null,
+        result: null,
+        resultModal: null,
         resultModalOpen: false
     };
+
+    constructor(props) {
+        super(props);
+        this.handleResultSelect = this.handleResultSelect.bind(this);
+        this.openResultModal = this.openResultModal.bind(this);
+        this.closeResultModal = this.closeResultModal.bind(this);
+    }
 
     componentWillMount() {
         // this.resetComponent()
@@ -128,7 +138,7 @@ class SearchBarProp extends Component {
     //                 console.log("Received clients query: " + JSON.stringify(data));
     //                 if (data.items && data.items.length) {
     //                     // if (searchQuery === "Blake") {
-    //                     //     alert(JSON.stringify(data.items));
+    //                     //     console.log(JSON.stringify(data.items));
     //                     // }
     //                     this.addResults(data.items);
     //                 }
@@ -172,7 +182,7 @@ class SearchBarProp extends Component {
     //                     };
     //                 }
     //                 else {
-    //                     alert("item has item_type of " + item.item_type + " for some reason?");
+    //                     console.log("item has item_type of " + item.item_type + " for some reason?");
     //                     return;
     //                 }
     //                 results.push(result);
@@ -183,15 +193,17 @@ class SearchBarProp extends Component {
     // }
 
     handleResultSelect = (e, { result }) => {
-        // alert("This will pop up a modal in the future for result: " + JSON.stringify(result));
-        // alert("Popping up result = " + JSON.stringify(result.resultcontent));
+        // console.log("This will pop up a modal in the future for result: " + JSON.stringify(result));
+        // console.log("Popping up result = " + JSON.stringify(result.resultcontent));
         // if (result.resultcontent.item_type === "Client") {
         //     this.props.fetchClient(result.resultcontent.id, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
         // }
         // else if (result.resultcontent.item_type === "Event") {
         //     this.props.fetchEvent(result.resultcontent.id, ["time", "time_created", "title", "goal", "members"]);
         // }
-        this.setState({result: result.resultcontent, resultModalOpen: true});
+        // this.setState({resultModal: this.resultModal(result.resultcontent)});
+        this.setState({result: result.resultcontent});
+        this.setState({resultModalOpen: true});
     };
 
     handleSearchChange = (e, { value }) => {
@@ -225,11 +237,11 @@ class SearchBarProp extends Component {
     }
 
     retrieveMoreResults(searchQuery, results) {
-        // alert("Retrieving more results!");
+        // console.log("Retrieving more results!");
         this.props.loadMoreResults(searchQuery, (data) => {
             results.push(...data);
             if (results.length < this.state.minimumSearchResults && !this.props.search.ifFinished) {
-                // alert("Grabbing more results: numResults = " + results.length + ", ifFinished = " + this.props.search.ifFinished);
+                // console.log("Grabbing more results: numResults = " + results.length + ", ifFinished = " + this.props.search.ifFinished);
                 this.retrieveMoreResults(searchQuery, results);
             }
             else {
@@ -238,25 +250,33 @@ class SearchBarProp extends Component {
         })
     }
 
-    resultModal() {
-        if (!this.state.result) {
+    resultModal(result) {
+        if (!result) {
             return null;
         }
-        const type = this.state.result.item_type;
+        const type = result.item_type;
+        // if (this.state.toOpenResultModal) {
+        //     this.setState({toOpenResultModal: false, resultModalOpen: true});
+        // }
         if (type === "Client") {
             return(
-                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)} clientID={this.state.result.id}/>
+                <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal} clientID={result.id}/>
             );
         }
         else if (type === "Event") {
             return(
-                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal.bind(this)}
-                                       eventID={this.state.result.id}
+                <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal}
+                                       eventID={result.id}
                 />
             );
         }
+        else if (type === "Challenge") {
+            return(
+                <ChallengeDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal} challengeID={result.id}/>
+        )
+        }
         else {
-            alert("Wrong type inputted! Received " + type);
+            console.log("Wrong type inputted! Received " + type);
         }
     }
 
@@ -264,6 +284,7 @@ class SearchBarProp extends Component {
         const formattedResults = [];
         if (this.props.search.searchBarEnabled) {
             const results = this.props.search.results;
+            const resultTitles = [];
             for (const i in results) {
                 if (results.hasOwnProperty(i)) {
                     const result = results[i];
@@ -293,12 +314,29 @@ class SearchBarProp extends Component {
 
                         if (formattedResult) {
                             // TODO Insertsort this? By what basis though?
+                            while (formattedResult.title && resultTitles.includes(formattedResult.title)) {
+                                const len = formattedResult.title.length;
+                                // console.log(JSON.stringify(resultTitles));
+                                // console.log(formattedResult.title + "~ -3: " + formattedResult.title[len - 3] + ", -1: " + formattedResult.title[len - 1]);
+                                if (formattedResult.title[len - 3] === "(" && formattedResult.title[len - 1] === ")") {
+                                    let num = parseInt(formattedResult.title[len - 2]);
+                                    num++;
+                                    formattedResult.title = formattedResult.title.substr(0, len - 3) + "(" + num + ")";
+                                    // formattedResult.title[len - 2] = num;
+                                }
+                                else {
+                                    formattedResult.title += " (2)";
+                                }
+                            }
+                            // console.log(formattedResult.title + " is not in " + JSON.stringify(resultTitles));
                             formattedResults.push(formattedResult);
+                            resultTitles.push(formattedResult.title);
                         }
                     }
                 }
             }
         }
+        // console.log(formattedResults.length);
         return formattedResults;
     }
 
@@ -309,10 +347,10 @@ class SearchBarProp extends Component {
         // TODO Check to see that this is valid to do?
         // console.log("Showing " + this.state.searchResults.length + " results");
         // const isLoading = (this.state.clientsLoading || this.state.eventsLoading);
-        // alert(this.props.search.results.length);
+        // console.log(this.props.search.results.length);
         return (
             <Fragment>
-                {this.resultModal()}
+                {this.resultModal(this.state.result)}
                 <Search
                     fluid
                     size="large"

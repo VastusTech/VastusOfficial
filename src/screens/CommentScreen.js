@@ -117,7 +117,7 @@ class CommentScreen extends Component {
 
         return (
             <div className='u-margin-top--4'>
-                {/*alert("Comment screen render user: " + this.props.curUser)*/}
+                {/*console.log("Comment screen render user: " + this.props.curUser)*/}
                 {this.loadHistory(this.state.isHistoryLoading)}
                 <Comments comments={this.state.comments}/>
                 <Divider className='u-margin-top--4' />

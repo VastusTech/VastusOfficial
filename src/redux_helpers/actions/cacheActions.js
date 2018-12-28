@@ -9,28 +9,73 @@ function addProfilePictureToData(data, callback) {
         const imageKey = data.profileImagePath;
         if (imageKey) {
             Storage.get(imageKey).then((url) => {
-                callback({
+                addProfilePicturesToData({
                     ...data,
                     profilePicture: url
-                });
+                }, callback);
             }).catch((error) => {
                 console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
                 console.log("ERROR IN GETTING PROFILE IMAGE FOR USER");
                 console.log(error);
-                callback(data);
+                addProfilePicturesToData(data, callback);
             });
+        }
+        else {
+            addProfilePicturesToData({
+                ...data,
+                profilePicture: defaultProfilePicture
+            }, callback);
+        }
+    }
+    else {
+        addProfilePicturesToData({
+            ...data,
+            profilePicture: defaultProfilePicture
+        }, callback);
+    }
+}
+function addProfilePicturesToData(data, callback) {
+    if (data && data.hasOwnProperty("profileImagePaths")) {
+        const imagesKey = data.profileImagePaths;
+        if (imagesKey) {
+            const profilePictures = [];
+            const len = imagesKey.length;
+            for (let i = 0; i < len; i++) {
+                const imageKey = imagesKey[i];
+                Storage.get(imageKey).then((url) => {
+                    // Successful
+                    profilePictures.push(url);
+                    if (profilePictures.length >= len) {
+                        callback({
+                            ...data,
+                            profilePictures
+                        });
+                    }
+                }).catch((error) => {
+                    // Not successful
+                    console.error("ERROR IN GETTING PROFILE IMAGE FOR USER");
+                    console.error(error);
+                    profilePictures.push(defaultProfilePicture);
+                    if (profilePictures.length >= len) {
+                        callback({
+                            ...data,
+                            profilePictures
+                        });
+                    }
+                });
+            }
         }
         else {
             callback({
                 ...data,
-                profilePicture: defaultProfilePicture
+                profilePictures: [defaultProfilePicture]
             });
         }
     }
     else {
         callback({
             ...data,
-            profilePicture: defaultProfilePicture
+            profilePictures: [defaultProfilePicture]
         });
     }
 }
@@ -41,7 +86,7 @@ function fetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, d
         if (currentObject) {
             const objectKeyList = Object.keys(currentObject);
             variablesList = variablesList.filter((v) => { return !objectKeyList.includes(v) });
-            // alert("Final filtered list is = " + JSON.stringify(variablesList));
+            // console.log("Final filtered list is = " + JSON.stringify(variablesList));
         }
         overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore);
     };
@@ -54,8 +99,9 @@ function forceFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchTy
 }
 function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dataHandler, dispatch, getStore) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
+    const profilePicturesIndex = variablesList.indexOf("profilePictures");
     if (profilePictureIndex !== -1) {
-        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        // console.log("The variable list is requesting the profilePicture to be uploaded as well.");
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
@@ -66,16 +112,31 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             ]
         }
     }
+    if (profilePicturesIndex !== -1) {
+        // console.log("The variable list is requesting the profilePicture to be uploaded as well.");
+        variablesList.splice(profilePicturesIndex, 1);
+        // Add
+        if (!variablesList.includes("profileImagePaths")) {
+            console.error("lmao you forgot to include the profile image path, I'll include it tho, no worries");
+            variablesList = [
+                ...variablesList,
+                "profileImagePaths"
+            ]
+        }
+    }
     if (variablesList.length > 0) {
         if (!variablesList.includes("id")) {
             variablesList = [...variablesList, "id"];
         }
+        if (!variablesList.includes("item_type")) {
+            variablesList = [...variablesList, "item_type"];
+        }
         QL[QLFunctionName](id, variablesList, (data) => {
-            // alert("Successfully retrieved the QL info");
+            // console.log("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {
-                // alert("Adding profile image to the data");
+                // console.log("Adding profile image to the data");
                 addProfilePictureToData(data, (updatedData) => {
-                    // alert("Dispatching the profile image + data");
+                    // console.log("Dispatching the profile image + data");
                     dispatch({
                         type: fetchDispatchType,
                         payload: {
@@ -88,7 +149,7 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
                 });
             }
             else {
-                // alert("Just dispatching the normal data");
+                // console.log("Just dispatching the normal data");
                 dispatch({
                     type: fetchDispatchType,
                     payload: {
@@ -133,7 +194,7 @@ function batchForceFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDisp
 function batchOverwriteFetch(ids, variablesList, cacheSet, QLFunctionName, fetchDispatchType, dispatch) {
     const profilePictureIndex = variablesList.indexOf("profilePicture");
     if (profilePictureIndex !== -1) {
-        // alert("The variable list is requesting the profilePicture to be uploaded as well.");
+        // console.log("The variable list is requesting the profilePicture to be uploaded as well.");
         variablesList.splice(profilePictureIndex, 1);
         // Add
         if (!variablesList.includes("profileImagePath")) {
@@ -204,6 +265,15 @@ export function fetchInvite(id, variablesList, dataHandler) {
 export function fetchPost(id, variablesList, dataHandler) {
     return fetch(id, variablesList, "posts", "getPost", "FETCH_POST", dataHandler);
 }
+export function fetchGroup(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "groups", "getGroup", "FETCH_GROUP", dataHandler);
+}
+export function fetchComment(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "comments", "getComment", "FETCH_COMMENT", dataHandler);
+}
+export function fetchSponsor(id, variablesList, dataHandler) {
+    return fetch(id, variablesList, "sponsors", "getSponsor", "FETCH_SPONSOR", dataHandler);
+}
 export function forceFetchClient(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler);
 }
@@ -230,6 +300,15 @@ export function forceFetchInvite(id, variablesList, dataHandler) {
 }
 export function forceFetchPost(id, variablesList, dataHandler) {
     return forceFetch(id, variablesList, "posts", "getPost", "FETCH_POST", dataHandler);
+}
+export function forceFetchGroup(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "groups", "getGroup", "FETCH_GROUP", dataHandler);
+}
+export function forceFetchComment(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "comments", "getComment", "FETCH_COMMENT", dataHandler);
+}
+export function forceFetchSponsor(id, variablesList, dataHandler) {
+    return forceFetch(id, variablesList, "sponsors", "getSponsor", "FETCH_SPONSOR", dataHandler);
 }
 export function fetchClients(ids, variablesList) {
 
@@ -314,6 +393,33 @@ export function putPostQuery(queryString, queryResult) {
         }
     };
 }
+export function putGroupQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_GROUP_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putCommentQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_COMMENT_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
+export function putSponsorQuery(queryString, queryResult) {
+    return {
+        type: "FETCH_SPONSOR_QUERY",
+        payload: {
+            queryString,
+            queryResult
+        }
+    };
+}
 export function clearClientQuery() {
     return {
         type: "CLEAR_CLIENT_QUERY",
@@ -357,6 +463,21 @@ export function clearInviteQuery() {
 export function clearPostQuery() {
     return {
         type: "CLEAR_POST_QUERY",
+    };
+}
+export function clearGroupQuery() {
+    return {
+        type: "CLEAR_GROUP_QUERY",
+    };
+}
+export function clearCommentQuery() {
+    return {
+        type: "CLEAR_COMMENT_QUERY",
+    };
+}
+export function clearSponsorQuery() {
+    return {
+        type: "CLEAR_SPONSOR_QUERY",
     };
 }
 function putQuery(queryString, queryResult, actionType) {
@@ -476,26 +597,62 @@ export function putPost(post) {
     }
     return null;
 }
+export function putGroup(group) {
+    if (group && group.id) {
+        return {
+            type: "FETCH_GROUP",
+            payload: {
+                id: group.id,
+                data: group
+            }
+        };
+    }
+    return null;
+}
+export function putComment(comment) {
+    if (comment && comment.id) {
+        return {
+            type: "FETCH_COMMENT",
+            payload: {
+                id: comment.id,
+                data: comment
+            }
+        };
+    }
+    return null;
+}
+export function putSponsor(sponsor) {
+    if (sponsor && sponsor.id) {
+        return {
+            type: "FETCH_SPONSOR",
+            payload: {
+                id: sponsor.id,
+                data: sponsor
+            }
+        };
+    }
+    return null;
+}
 export function getCache(itemType, getStore) {
     const cache = getStore().cache;
     return switchReturnItemType(itemType, cache.clients, cache.trainers, cache.gyms, cache.workouts, cache.reviews,
-        cache.events, cache.challenges, cache.invites, cache.posts, "Retrieve cache not implemented");
+        cache.events, cache.challenges, cache.invites, cache.posts, cache.groups, cache.comments, cache.sponsors, "Retrieve cache not implemented");
 }
 export function getQueryCache(itemType, getStore) {
     const cache = getStore().cache;
     return switchReturnItemType(itemType, cache.clientQueries, cache.trainerQueries, cache.gymQueries, cache.workoutQueries,
-        cache.reviewQueries, cache.eventQueries, cache.challengeQueries, cache.inviteQueries, cache.postQueries,
+        cache.reviewQueries, cache.eventQueries, cache.challengeQueries, cache.inviteQueries, cache.postQueries, cache.groupQueries, cache.commentQueries, cache.sponsorQueries,
         "Retrieve query cache not implemented");
 }
 export function getPutItemFunction(itemType) {
     return switchReturnItemType(itemType, putClient, putTrainer, putGym, putWorkout, putReview, putEvent, putChallenge,
-        putPost, "Retrieve put item function item type not implemented");
+        putPost, putGroup, putComment, putSponsor, "Retrieve put item function item type not implemented");
 }
 export function getPutQueryFunction(itemType) {
     return switchReturnItemType(itemType, putClientQuery, putTrainerQuery, putGymQuery, putWorkoutQuery, putReviewQuery,
-        putEventQuery, putChallengeQuery, putInviteQuery, putPostQuery, "Retrieve Put Query Function not implemented");
+        putEventQuery, putChallengeQuery, putInviteQuery, putPostQuery, putGroupQuery, putCommentQuery, putSponsorQuery, "Retrieve Put Query Function not implemented");
 }
 export function getClearQueryFunction(itemType) {
     return switchReturnItemType(itemType, clearClientQuery, clearTrainerQuery, clearGymQuery, clearWorkoutQuery, clearReviewQuery,
-        clearEventQuery, clearChallengeQuery, clearInviteQuery, clearPostQuery, "Retrieve Clear Query Function not implemented");
+        clearEventQuery, clearChallengeQuery, clearInviteQuery, clearPostQuery, clearGroupQuery, clearCommentQuery, clearSponsorQuery, "Retrieve Clear Query Function not implemented");
 }

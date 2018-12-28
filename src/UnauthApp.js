@@ -13,7 +13,7 @@ class UnauthApp extends Component {
         // this.authenticate = this.props.authenticate.bind(this);
     }
 
-    
+
     render() {
         // Maybe this would be to have a sort of advertisement for our website?
         return (

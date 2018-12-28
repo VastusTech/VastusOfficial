@@ -44,7 +44,7 @@ class App extends Component {
     //         Auth.currentCredentials();
     //         Auth.currentAuthenticatedUser().then((authenticatedUser) => {
     //             if (authenticatedUser && (user.username === authenticatedUser.username)) {
-    //                 // alert("Logging in the user");
+    //                 // console.log("Logging in the user");
     //                 this.setState({ifLoggedIn: true});
     //                 if (user.username !== this.props.user.username) {
     //                     this.props.clearUser();
@@ -52,20 +52,20 @@ class App extends Component {
     //                 this.props.fetchUser(user.username);
     //             }
     //             else {
-    //                 alert("Error with second check");
+    //                 console.log("Error with second check");
     //             }
     //         }).catch((error) => {
-    //             alert("Error");
+    //             console.log("Error");
     //             this.setState({ifLoggedIn: false, error: error});
     //         });
     //     }
     //     else {
-    //         alert("received null user");
+    //         console.log("received null user");
     //     }
     // }
 
     // signOut() {
-    //     // alert("logging out the user");
+    //     // console.log("logging out the user");
     //     this.setState({ifLoggedIn: false});
     //     // this.props.clearUser();
     // }
