@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
-import {Visibility, Header} from 'semantic-ui-react'
+import {Visibility, Header, Grid} from 'semantic-ui-react'
 import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import CreateEventProp from "./CreateEvent";
-import CreateChallengeProp from "./CreateChallenge"
+import CreateChallengeProp from "./CreateChallenge";
+import CreatePostProp from "./CreatePost";
 // import NextEventProp from "../components/NextEvent";
 import NextChallengeProp from "../components/NextChallenge";
 import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
@@ -149,12 +150,12 @@ class PostFeedProp extends Component {
             //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.PostFeedLength,
             //     this.state.nextToken, (data) => {
             const filter = QL.generateFilter({
-                and: [{
+                not: {
                     postType: {
                         eq: "$postType"
                     }
-                }]
-                }, {postType: "newChallenge"}
+                }}
+                ,{postType: "submission"}
             );
             QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                 filter, this.state.postFeedLength, this.state.nextToken, (data) => {
@@ -249,7 +250,14 @@ class PostFeedProp extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                <CreateChallengeProp queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
+                <Grid className='ui center aligned'>
+                    <Grid.Column floated='center' width={15}>
+                        <CreateChallengeProp queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
+                    </Grid.Column>
+                    <Grid.Column floated='center' width={15}>
+                        <CreatePostProp queryPosts={this.queryPosts}/>
+                    </Grid.Column>
+                </Grid>
                 <Header sub>Your Next Challenge:</Header>
                 <NextChallengeProp/>
                 <Header sub>Upcoming Posts:</Header>

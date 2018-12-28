@@ -346,7 +346,7 @@ class ChallengeDetailCard extends Component {
                     {convertFromISO(this.getPostAttribute("time_created"))}
                 </Card.Content>
                 <Card.Content>
-                    {alert(this.getPostAttribute("about"))}
+                    {/*alert(this.getPostAttribute("about"))*/}
                     <ChallengeCard challengeID={this.getPostAttribute("about")}/>
                 </Card.Content>
             </Card>

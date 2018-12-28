@@ -9,6 +9,7 @@ import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
 import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
 import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
+import PostDetailCard from "./post_detail_cards/PostDetailCard";
 
 type Props = {
     postID: string
@@ -63,6 +64,7 @@ class PostCard extends Component {
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
         console.log("Post Card Prop: " + this.props.postID);
+        //this.props.fetchPost(this.props.postID, ["id", "postType", "Description"])
     }
 
     componentWillReceiveProps(newProps) {
@@ -174,7 +176,7 @@ class PostCard extends Component {
                     //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Post") {
-                    //return (<PostDetailCard displayMedia = {this.getDisplayMedia}/>);
+                    return (<PostDetailCard/>);
                 }
                 else if (itemType === "submission") {
                     //alert("This is a submission");

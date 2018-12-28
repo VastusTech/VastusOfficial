@@ -12,6 +12,7 @@ import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import { Storage } from 'aws-amplify';
+import PostFunctions from "../databaseFunctions/PostFunctions";
 
 type Props = {
     open: boolean,
@@ -35,7 +36,10 @@ class ClientModal extends Component<Props> {
         isAddFriendLoading: false,
         requestSent: false,
         galleryURLS: [],
-        urlsSet: false
+        urlsSet: false,
+        shareLoading: false,
+        showSuccessLabel: false,
+        clientFetchedAgain: false
     };
 
     constructor(props) {
@@ -53,28 +57,37 @@ class ClientModal extends Component<Props> {
         this.setState({
             error: null,
             isLoading: true,
-            clientID,
+            clientID: "",
             sentRequest: false,
             inviteModalOpen: false,
             isRemoveFriendLoading: false,
             isAddFriendLoading: false,
-            requestSent: false
+            requestSent: false,
+            shareLoading: false,
+            showSuccessLabel: false,
+            clientFetchedAgain: false
         });
     }
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
+        this.props.fetchClient(this.props.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profileImagePaths", "profilePicture", "friendRequests"]);
     }
 
     componentWillReceiveProps(newProps) {
+        if(!this.state.clientFetchedAgain) {
+            //this.props.fetchClient(this.props.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profileImagePaths", "profilePicture", "friendRequests"]);
+            this.setState({clientFetchedAgain: true})
+        }
+
         if (newProps.clientID) {
             if (this.state.clientID !== newProps.clientID) {
                 // console.log("Setting new state to " + newProps.clientID);
+                //this.props.fetchClient(this.props.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profileImagePaths", "profilePicture", "friendRequests"]);
                 this.resetState(newProps.clientID);
-                this.props.fetchClient(newProps.clientID, ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profileImagePaths", "profilePicture", "friendRequests"]);
                 this.state.clientID = newProps.clientID;
                 //this.setState({clientID: newProps.clientID});
-                // this.state.sentRequest = true;
+                //this.state.sentRequest = true;
             }
         }
     }
@@ -237,6 +250,7 @@ class ClientModal extends Component<Props> {
         </div>
         );
     }
+
     getCorrectFriendActionButton() {
         // console.log("getting correct friend action button for " + this.getClientAttribute("id"));
         if (this.getClientAttribute("id")) {
@@ -275,21 +289,52 @@ class ClientModal extends Component<Props> {
         );
     }
 
+    createSuccessLabel() {
+        if(this.state.showSuccessLabel && this.state.showModal) {
+            this.setState({showSuccessLabel: false});
+        }
+        else if(this.state.showSuccessLabel) {
+            return (<Message positive>
+                <Message.Header>Success!</Message.Header>
+                <p>
+                    You just shared this User!
+                </p>
+            </Message>);
+        }
+        else {
+            return null;
+        }
+    }
+
+    errorMessage(error) {
+        if (error) {
+            return (
+                <Message color='red'>
+                    <h1>Error!</h1>
+                    <p>{error}</p>
+                </Message>
+            );
+        }
+    }
+
+    shareClient() {
+        this.setState({shareLoading: true});
+        PostFunctions.createShareItemPost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, "Client", this.getClientAttribute("id"), this.getClientAttribute("profileImagePaths"), null, (returnValue) => {
+            alert("Successfully Created Post!");
+            alert(JSON.stringify(returnValue));
+            this.setState({shareLoading: false});
+            this.setState({showSuccessLabel: true});
+        }, (error) => {
+            console.error(error);
+            this.setState({error: "Could not share page at this time"});
+            this.setState({shareLoading: false});
+        });
+    }
+
     handleInviteModalOpen = () => {this.setState({inviteModalOpen: true})};
     handleInviteModalClose = () => {this.setState({inviteModalOpen: false})};
 
     render() {
-        function errorMessage(error) {
-            return null;
-            // if (error) {
-            //     return (
-            //         <Message color='red'>
-            //             <h1>Error!</h1>
-            //             <p>{error.errorMessage}</p>
-            //         </Message>
-            //     );
-            // }
-        }
         function loadingProp(isLoading) {
             if (isLoading) {
                 return (
@@ -325,11 +370,12 @@ class ClientModal extends Component<Props> {
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Icon className='close' onClick={() => this.props.onClose()}/>
                 {loadingProp(this.props.info.isLoading)}
-                {errorMessage(this.props.info.error)}
+                {this.errorMessage(this.state.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
                 <Modal.Content image>
                     {this.profilePicture()}
                     <Modal.Description>
+                        <Button primary floated='right' loading={this.state.shareLoading} disabled={this.state.shareLoading} onClick={() => this.shareClient()}>Share Page</Button>
                         <List relaxed>
 
                             {/* Bio */}
@@ -371,7 +417,7 @@ class ClientModal extends Component<Props> {
                     {this.getCorrectFriendActionButton()}
                 </Modal.Actions>
                 <Modal.Content>
-                    <div>{this.state.error}</div>
+                    {this.createSuccessLabel()}
                 </Modal.Content>
             </Modal>
         );
