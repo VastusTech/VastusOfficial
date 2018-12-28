@@ -1,22 +1,9 @@
 import Amplify from "aws-amplify";
 
 function setupAWS() {
-//     var {graphql, buildSchema} = require('graphql');
-//
-//     let myAppConfig = {
-//         // ...
-//         'aws_appsync_graphqlEndpoint': "https://ferhxllitvaypgfmlu75ra22su.appsync-api.us-east-1.amazonaws.com/graphql",
-//         'aws_appsync_region': 'us-east-1',
-//         // If we comment out, this line, then the GraphQL request is actually sent
-// //     //'aws_appsync_apiKey': 'da2-2h7e6fjjkffypdg6peqjv7khxa'
-//     };
-//
-// //Amplify.configure(aws_exports)
     Amplify.configure({
         'aws_appsync_authenticationType': 'AMAZON_COGNITO_USER_POOLS',
     });
-
-// Storage.configure({ level: 'private' });
 
     Amplify.configure({
         API: {
@@ -26,7 +13,7 @@ function setupAWS() {
         Auth: {
 
             // REQUIRED only for Federated Authentication - Amazon Cognito Identity Pool ID
-            // identityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222',
+            identityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222',
 
             // REQUIRED - Amazon Cognito Region
             region: 'us-east-1',
@@ -37,6 +24,9 @@ function setupAWS() {
 
             // OPTIONAL - Amazon Cognito Web Client ID (26-char alphanumeric string)
             userPoolWebClientId: '124v8f255kaqivbm5bp71s6rej',
+            
+            //Google App Client ID for social sign-in
+            //'your_google_client_id': '308108761903-qfc4dsbnjicjs0dpqao5ofh2c5u2636k.apps.googleusercontent.com'
 
             // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
             // mandatorySignIn: false,

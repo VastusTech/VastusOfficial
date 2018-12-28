@@ -66,7 +66,7 @@ class PostFeedProp extends Component {
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
             // console.log("fetchin user attributes");
-            this.props.fetchUserAttributes(["friends", "invitedChallenges"],
+            this.props.fetchUserAttributes(["friends", "invitedChallenges", "name"],
                 (data) => {
                     // console.log("finished");
                     this.queryPosts()
@@ -148,8 +148,16 @@ class PostFeedProp extends Component {
             // QL.queryPosts(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
             //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.PostFeedLength,
             //     this.state.nextToken, (data) => {
+            const filter = QL.generateFilter({
+                and: [{
+                    postType: {
+                        eq: "$postType"
+                    }
+                }]
+                }, {postType: "newChallenge"}
+            );
             QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                null, this.state.postFeedLength, this.state.nextToken, (data) => {
+                filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
                     }

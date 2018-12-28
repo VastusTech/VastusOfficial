@@ -323,7 +323,7 @@ class CreateChallengeProp extends Component {
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
-                                    <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
+                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
                                     <div className="ui white header">HIIT</div>
                                 </Button>
                             </Grid.Column>

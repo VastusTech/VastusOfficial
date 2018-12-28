@@ -51,7 +51,7 @@ class ChallengeCard extends Component {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        fetchChallenge(this.state.challengeID, ["time_created"])
+        fetchChallenge(this.state.challengeID, ["time_created", "tags"])
     }
 
     componentWillReceiveProps(newProps) {
@@ -164,13 +164,14 @@ class ChallengeCard extends Component {
     }
 
     openChallengeModal = () => {
-        if(!this.state.challengeModalOpen) {
+        if (!this.state.challengeModalOpen) {
+            console.log("Opening challenge modal");
             this.setState({challengeModalOpen: true});
         }
     };
     closeChallengeModal = () => {
-        console.log("Closing challenge Modal");
-        this.setState({challengeModalOpen: false})
+        this.setState({challengeModalOpen: false});
+        console.log("Closing challenge Modal pt. 2: the reckoning");
     };
 
     render() {

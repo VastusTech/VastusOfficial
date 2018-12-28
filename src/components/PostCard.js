@@ -123,9 +123,11 @@ class PostCard extends Component {
     }
 
     getOwnerName() {
-        const owner = this.getPostAttribute("owner");
+        const owner = this.getPostAttribute("by");
+        //alert(owner);
         if (owner) {
             if (this.props.cache.clients[owner]) {
+                //alert(JSON.stringify(this.props.cache.clients[owner]));
                 return this.props.cache.clients[owner].name
             }
             // else if (!this.props.info.isLoading) {
@@ -217,8 +219,7 @@ class PostCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised>
-                <Card.Header textAlign = 'center'>{this.getOwnerName()} Posted {this.getPostAttribute("title")}</Card.Header>
-                <Card.Header textAlign = 'center'>{convertFromISO(this.getPostAttribute("time_created"))}</Card.Header>
+                <Card.Header textAlign = 'center'>{this.getOwnerName()} Posted a new {this.getPostAttribute("postType")}</Card.Header>
                 <Card.Content>
                     {/*TODO: When the detail cards are done, uncomment this and comment out getDisplayMedia*/}
                     <div align='center'>

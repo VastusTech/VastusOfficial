@@ -42,7 +42,7 @@ class NextEventProp extends Component {
                     //     this.addEventFromGraphQL(this.props.user.scheduledEvents[i]);
                     // }
                     // TODO Make the function outside of the loop
-                    props.fetchChallenge(props.user.challenges[i], ["id", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction"],
+                    props.fetchChallenge(props.user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction"],
                         () => {
                             // console.log(JSON.stringify(data));
                             // Rerender when you get a new scheduled event

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, List, Divider, Grid, Message} from 'semantic-ui-react';
+import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loader} from 'semantic-ui-react';
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
@@ -133,6 +133,50 @@ class ChallengeDetailCard extends Component {
             // console.log(JSON.stringify(error));
             this.setState({isDeleteLoading: false, error: error});
         })
+    }
+
+    getClientAttribute(attribute) {
+        if (this.getPostAttribute("by")) {
+            console.log(this.getPostAttribute("by"));
+            let client = this.props.cache.clients[this.getPostAttribute("by")];
+            if (client) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (client[attribute] && client[attribute].length) {
+                        return client[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return client[attribute];
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
+    profilePicture() {
+        if (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null) {
+            /*if(!this.state.urlsSet) {
+                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
+                this.setURLS(this.getClientAttribute("profileImagePaths"));
+                console.log("Setting URLS: " + this.state.galleryURLS);
+                this.setState({urlsSet: true});
+            }*/
+            //alert(this.getClientAttribute("profilePicture"));
+            return(
+                <div avatar align="center" className="ui u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
+            );
+        }
+        else {
+            return(
+                <Dimmer inverted>
+                    <Loader />
+                </Dimmer>
+            );
+        }
     }
 
     // handleLeaveChallengeButton() {
@@ -296,7 +340,7 @@ class ChallengeDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
-                <Card.Header><Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.getOwnerName()}</Button>
+                <Card.Header><Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.profilePicture()}{this.getOwnerName()}</Button>
                     {/*convertFromISO(this.getPostAttribute("time_created"))*/}</Card.Header>
                 <Card.Content>
                     {convertFromISO(this.getPostAttribute("time_created"))}

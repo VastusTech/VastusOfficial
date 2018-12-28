@@ -59,7 +59,7 @@ class SubmissionsScreen extends Component {
                 this.state.sentRequest = true;
                 for (let i = 0; i < submissions.length; i++) {
                     // console.log("Fetching: " + submissions[i]);
-                    props.fetchPost(submissions[i], ["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                    props.fetchPost(submissions[i], ["id", "time_created", "by", "owner", "item_type", "postType", "about", "description", "videoPaths", "picturePaths", "title"],
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
