@@ -469,7 +469,7 @@ class GraphQL {
         else {
             console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             if (ifDebug) {
-                console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+                alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
 
             let opResult = null;
@@ -492,7 +492,7 @@ class GraphQL {
                 // console.log("Returned!");
                 console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 if (ifDebug) {
-                    console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                    alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 }
                 // console.log(JSON.stringify(queryCache));
                 if (putQuery) {
@@ -506,6 +506,9 @@ class GraphQL {
                     error = error.message;
                 }
                 console.error(JSON.stringify(error));
+                if (ifDebug) {
+                    alert("ERROR FOR QUERY: " + queryString + "\n" + JSON.stringify(error));
+                }
                 failureHandler(error);
             });
         }
