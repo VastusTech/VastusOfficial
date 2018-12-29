@@ -5,7 +5,7 @@
 // TODO This will be for a post that is sharing an existing Post with your friends!
 
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, List, Divider, Grid, Message} from 'semantic-ui-react';
+import {Card, Modal, Button, Header, List, Divider, Image, Message} from 'semantic-ui-react';
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
@@ -59,12 +59,9 @@ class PostDetailCard extends Component {
         // members: {},
         clientModalOpen: false,
         videoURL: null,
-        // completeModalOpen: false,
-        // isLeaveLoading: false,
-        // isDeleteLoading: false,
-        // isJoinLoading: false,
-        // joinRequestSent: false,
-        // canCallChecks: true,
+        pictureURL: null,
+        isOwned: null,
+        isDeleteLoading: false,
     };
 
     constructor(props) {
@@ -171,10 +168,13 @@ class PostDetailCard extends Component {
 
     getDisplayMedia() {
         // TODO How to properly display videos and pictures?
+        //alert("Displaying Media");
         const pictures = this.getPostAttribute("picturePaths");
         const videos = this.getPostAttribute("videoPaths");
-        if (videos && videos.length > 0) {
-            if (!this.state.videoURL) {
+        //alert(pictures + " and " + videos);
+        if ((videos && videos.length > 0) || (pictures && pictures.length > 0)) {
+            if (!this.state.videoURL && videos) {
+                //alert("getting video URL");
                 const video = videos[0];
                 Storage.get(video).then((url) => {
                     this.setState({videoURL: url});
@@ -182,24 +182,46 @@ class PostDetailCard extends Component {
                     console.error(error);
                 });
             }
-            else {
-                //alert("Video URL:" + this.state.videoURL);
+            else if(!this.state.pictureURL && pictures) {
+                //alert("getting picture URL");
+                const picture = pictures[0];
+                Storage.get(picture).then((url) => {
+                    this.setState({pictureURL: url});
+                }).catch((error) => {
+                    console.error(error);
+                })
+            }
+            else if(this.state.videoURL && !this.state.pictureURL) {
+                //alert(this.state.videoURL);
                 return (
                     <Player inline={true}>
                         <source src={this.state.videoURL} type="video/mp4"/>
                     </Player>
                 );
             }
+            else if(!this.state.videoURL && this.state.pictureURL) {
+                //alert(this.state.pictureURL);
+                return (
+                    <Image src={this.state.pictureURL}/>
+                );
+            }
+            else if((this.state.videoURL && this.state.pictureURL)) {
+                //alert(this.state.pictureURL + "and" + this.state.videoURL);
+                return (
+                    <div>
+                        {this.state.videoURL}
+                        <Player inline={true}>
+                            <source src={this.state.videoURL} type="video/mp4"/>
+                        </Player>
+                        <Image src={this.state.pictureURL}/>
+                    </div>
+                );
+            }
+            else return null;
         }
     }
 
     render() {
-
-        if (!this.getPostAttribute("id")) {
-            return(
-                null
-            );
-        }
         if(this.state.canCallChecks) {
             this.isOwned();
             //console.log("Render Owned: " + this.state.isOwned);
@@ -229,9 +251,11 @@ class PostDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
-                <Card.Header>
-                    {this.getPostAttribute("description")}
-                </Card.Header>
+                {this.getPostAttribute("description")}
+                <div>
+                    {this.getDisplayMedia()}
+                </div>
+                {createCorrectButton(this.isOwned, this.handleDeletePostButton, this.state.isDeleteLoading)}
             </Card>
         );
     }

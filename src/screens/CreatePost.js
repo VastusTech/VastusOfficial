@@ -1,14 +1,12 @@
-import React, { Component } from 'react'
+import React, {Component, Fragment} from 'react'
 import _ from 'lodash';
-import {Grid, Button, Message, Image, Modal, Label, Icon, Form, Container, TextArea, Checkbox, Rating} from 'semantic-ui-react';
-import CreateEventProp from "./CreateEvent";
-import VTLogo from "../img/vt_new.svg"
+import {Grid, Button, Message, Image, Modal, Card, Icon, Form, Container, TextArea, Checkbox, Rating} from 'semantic-ui-react';
+import { Storage } from 'aws-amplify';
 import {connect} from "react-redux";
-// import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
 import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery, clearPostQuery, fetchPost, putPost, putPostQuery} from "../redux_helpers/actions/cacheActions";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 import PostFunctions from "../databaseFunctions/PostFunctions";
+import {Player} from "video-react";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -59,7 +57,13 @@ class CreatePostProp extends Component {
         showSuccessLabelTimer: 0,
         description: "",
         title: "",
-        access: "public"
+        access: "public",
+        picturesLoading: false,
+        videosLoading: false,
+        pictures: [],
+        videos: [],
+        tempPictureURLs: [],
+        tempVideoURLs: [],
 
     };
 
@@ -85,13 +89,114 @@ class CreatePostProp extends Component {
         }
     };
 
+    getPicturePaths = () => {
+        const picturePaths = [];
+        console.log("Pictures: " + this.state.pictures.length);
+        for (let i = 0; i < this.state.pictures.length; i++) {
+            const path = "postPicture/" + i;
+            picturePaths.push(path);
+            alert("Added: " + path);
+        }
+        if (picturePaths.length > 0) {
+            return picturePaths;
+        }
+        return null;
+    }
+
+    getVideoPaths = () => {
+        const videoPaths = [];
+        console.log("Videos: " + this.state.videos.length);
+        for (let i = 0; i < this.state.videos.length; i++) {
+            const path = "postVideo/" + i;
+            videoPaths.push(path);
+            alert("Added: " + path);
+        }
+        if (videoPaths.length > 0) {
+            return videoPaths;
+        }
+        return null;
+    }
+
+    setVideo = (event) => {
+        const index = this.state.videos.length;
+        this.state.videos.push(event.target.files[0]);
+        const path = "/" + this.props.user.id + "/temp/videos/" + index;
+        Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
+            .then(() => {
+                Storage.get(path).then((url) => {
+                    this.state.tempVideoURLs.push(url);
+                    this.setState({});
+                }).catch((error) => {
+                    console.error(error);
+                })
+            }).catch((error) => {
+            console.error(error);
+        });
+        this.setState({});
+    };
+
+    setPicture = (event) => {
+        const index = this.state.pictures.length;
+        this.state.pictures.push(event.target.files[0]);
+        const path = "/" + this.props.user.id + "/temp/pictures/" + index;
+        Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
+            .then(() => {
+                Storage.get(path).then((url) => {
+                    this.state.tempPictureURLs.push(url);
+                    this.setState({});
+                }).catch((error) => {
+                    console.error(error);
+                })
+            }).catch((error) => {
+            console.error(error);
+        });
+        this.setState({});
+    };
+
+    displaySubmission() {
+        if(this.state.notifySubmission) {
+            return (
+                <Message positive>
+                    <Message.Header>Success!</Message.Header>
+                    <p>
+                        You submitted a video to the challenge!
+                    </p>
+                </Message>
+            );
+        }
+    }
+
+    displayCurrentVideo() {
+        if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
+            //alert("Running cur video");
+            return(
+                <Player>
+                    <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
+                </Player>
+            );
+        }
+        return null;
+    }
+
+    displayCurrentImage() {
+        if (this.state.tempPictureURLs && this.state.tempPictureURLs.length > 0) {
+            //alert("Running cur image");
+            return(
+                <Image src={this.state.tempPictureURLs[0]} />
+            );
+        }
+        return null;
+    }
+
     handleSubmit = () => {
 
         this.setState({isSubmitLoading: true});
 
         // TODO Check to see if valid inputs!
+        this.getPicturePaths();
+        this.getVideoPaths();
         if (this.state.description) {
-                PostFunctions.createBarePost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, (returnValue) => {
+                PostFunctions.createNormalPost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, this.getPicturePaths(), this.getVideoPaths(), (returnValue) => {
                     alert("Successfully Created Post!");
                     alert(JSON.stringify(returnValue));
                     this.setState({isSubmitLoading: false});
@@ -168,6 +273,34 @@ class CreatePostProp extends Component {
                                 </Grid.Column>
                             </Grid.Row>
                         </Container>
+                        <Card>
+                            <Card.Header className="u-bg--bg">Add photo or video to post</Card.Header>
+                            <Modal.Content className="u-bg--bg">
+                                {this.displayCurrentVideo()}
+                                {this.displayCurrentImage()}
+                                <Fragment>
+                                    <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
+                                        <div>
+                                            <Button primary fluid as="label" htmlFor="vidUpload" className="u-bg--primaryGradient">
+                                                <Icon name="camera" className='u-margin-right--0' inverted />
+                                                Upload Video
+                                            </Button>
+                                            <input type="file" accept="video/*;capture=camcorder" id="vidUpload" hidden={true} onChange={this.setVideo}/>
+                                        </div>
+                                    </div>
+                                    <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
+                                        <div>
+                                            <Button primary fluid as="label" htmlFor="picUpload" className="u-bg--primaryGradient">
+                                                <Icon name="camera" className='u-margin-right--0' inverted />
+                                                Upload Photo
+                                            </Button>
+                                            <input type="file" accept="image/*;capture=camcorder" id="picUpload" hidden={true} onChange={this.setPicture}/>
+                                        </div>
+                                    </div>
+                                </Fragment>
+                            </Modal.Content>
+                            <div>{this.displaySubmission()}</div>
+                        </Card>
                     </Modal.Content>
                     <Modal.Actions>
                         <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>

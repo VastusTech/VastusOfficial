@@ -144,16 +144,17 @@ class PostCard extends Component {
     }
 
     getCorrectDetailCard() {
-        const postType = this.getPostAttribute("postType");
-        //alert("Post Type: " + postType);
+        let postType = this.getPostAttribute("postType");
+        let itemType = this.getPostAttribute("item_type");
         if (postType && postType.length) {
-            let itemType = postType;
             //alert("Item Type: " + itemType);
             if (postType.substr(0, 3) === "new") {
                 // TODO This indicates that this is for a newly created Item
-                itemType = ItemType[postType.substring(3, postType.length)];
+                postType = ItemType[postType.substring(3, postType.length)];
             }
-            if (itemType) {
+            //alert(itemType);
+            if (postType) {
+                //alert("Post Type: " + postType);
                 // TODO Switch the post types
                 if (itemType === "Client") {
                     if(!this.state.postMessageSet) {
@@ -161,37 +162,41 @@ class PostCard extends Component {
                     }
                     return (<ClientDetailCard postID={this.state.postID}/>);
                 }
-                else if (itemType === "Trainer") {
+                else if (postType === "Trainer") {
                     //return (<TrainerDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Gym") {
+                else if (postType === "Gym") {
                     //return (<GymDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Workout") {
+                else if (postType === "Workout") {
                     //return (<WorkoutDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Review") {
+                else if (postType === "Review") {
                     //return (<ReviewDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Event") {
+                else if (postType === "Event") {
                     //return (<EventDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Challenge") {
+                else if (postType === "Challenge") {
                     if(!this.state.postMessageSet) {
                         this.setState({postMessage: "shared a challenge", postMessageSet: true});
                     }
                     return (<ChallengeDetailCard postID={this.state.postID}/>);
                 }
-                else if (itemType === "Invite") {
+                else if (postType === "Invite") {
                     //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
-                else if (itemType === "Post") {
+                else if (postType === "Post") {
                     return (<PostDetailCard postID={this.state.postID}/>);
                 }
-                else if (itemType === "submission") {
+                else if (postType === "submission") {
                     return (<SubmissionDetailCard postID={this.state.postID}/>);
                 }
             }
+        }
+        else if(itemType) {
+            //alert("Item Type: " + itemType);
+            return (<PostDetailCard postID={this.state.postID}/>);
         }
         return (<div/>);
     }
@@ -239,7 +244,7 @@ class PostCard extends Component {
                     {/*this.getDisplayMedia()*/}
                 </Card.Content>
                 <Card.Content extra onClick={this.openPostModal}>
-                    <Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>
+                    {/*<Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>*/}
                     <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
                 </Card.Content>
                 <Card.Content extra>
