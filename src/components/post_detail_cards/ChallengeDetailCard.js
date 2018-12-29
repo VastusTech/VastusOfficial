@@ -3,7 +3,7 @@ import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loade
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
-import { fetchClient, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
+import { fetchClient, forceFetchPost, fetchPost, fetchChallenge } from "../../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
@@ -84,7 +84,7 @@ class ChallengeDetailCard extends Component {
         }
         const by = this.getPostAttribute("by");
         if (!this.props.open && newProps.open && newProps.postID && by) {
-            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
         }
     }
 
@@ -363,6 +363,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchClient: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));
+        },
+        fetchChallenge: (id, variablesList) => {
+            dispatch(fetchChallenge(id, variablesList));
         },
         forceFetchUserAttributes: (attributeList) => {
             dispatch(forceFetchUserAttributes(attributeList));

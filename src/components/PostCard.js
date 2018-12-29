@@ -3,7 +3,7 @@ import { Card } from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
-import { fetchPost } from "../redux_helpers/actions/cacheActions";
+import { fetchPost , fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../logic/TimeHelper";
 import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
@@ -254,7 +254,10 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchPost: (id, variablesList, dataHandler) => {
             dispatch(fetchPost(id, variablesList, dataHandler));
-        }
+        },
+        fetchChallenge: (id, variablesList, dataHandler) => {
+            dispatch(fetchChallenge(id, variablesList, dataHandler));
+        },
     };
 };
 
