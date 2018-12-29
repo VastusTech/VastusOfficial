@@ -167,7 +167,7 @@ class ChallengeDetailCard extends Component {
             }*/
             //alert(this.getClientAttribute("profilePicture"));
             return(
-                <div avatar align="center" className="ui u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
+                <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
             );
         }
         else {
