@@ -3,7 +3,7 @@ import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loade
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
-import { fetchClient, forceFetchPost, fetchPost, fetchChallenge } from "../../redux_helpers/actions/cacheActions";
+import { fetchClient, forceFetchPost, fetchPost, fetchChallenge, forceFetchChallenge } from "../../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
@@ -69,7 +69,6 @@ class ChallengeDetailCard extends Component {
         // this.handleJoin = this.handleJoin.bind(this);
         this.handleDelete = this.handleDelete.bind(this);
         this.isOwned = this.isOwned.bind(this);
-        this.getDisplayMedia = this.getDisplayMedia.bind(this);
     }
 
     componentDidMount() {
@@ -84,7 +83,8 @@ class ChallengeDetailCard extends Component {
         }
         const by = this.getPostAttribute("by");
         if (!this.props.open && newProps.open && newProps.postID && by) {
-            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
+            this.props.fetchChallenge(this.getPostAttribute("about"), ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
         }
     }
 
@@ -247,6 +247,7 @@ class ChallengeDetailCard extends Component {
 
     forceUpdate = (postID) => {
         this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
+        this.props.forceFetchChallenge(this.getPostAttribute("about"), ["tags", "time_created"])
     };
 
     displayError() {
@@ -366,6 +367,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchChallenge: (id, variablesList) => {
             dispatch(fetchChallenge(id, variablesList));
+        },
+        forceFetchChallenge: (id, variablesList) => {
+            dispatch(forceFetchChallenge(id, variablesList));
         },
         forceFetchUserAttributes: (attributeList) => {
             dispatch(forceFetchUserAttributes(attributeList));

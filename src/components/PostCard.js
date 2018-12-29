@@ -10,6 +10,7 @@ import { Storage } from "aws-amplify";
 import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
 import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
 import PostDetailCard from "./post_detail_cards/PostDetailCard";
+import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
 
 type Props = {
     postID: string
@@ -33,7 +34,9 @@ class PostCard extends Component {
         // ifOwned: false,
         // ifJoined: false,
         // capacity: null,
-        postModalOpen: false
+        postModalOpen: false,
+        postMessage: "",
+        postMessageSet: false
     };
 
     constructor(props) {
@@ -42,6 +45,7 @@ class PostCard extends Component {
         this.closePostModal = this.closePostModal.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
+        this.getCorrectDetailCard = this.getCorrectDetailCard.bind(this);
     }
 
     // componentDidMount() {
@@ -152,7 +156,10 @@ class PostCard extends Component {
             if (itemType) {
                 // TODO Switch the post types
                 if (itemType === "Client") {
-                    //return (<ClientDetailCard displayMedia = {this.getDisplayMedia}/>);
+                    if(!this.state.postMessageSet) {
+                        this.setState({postMessage: "shared a user profile", postMessageSet: true});
+                    }
+                    return (<ClientDetailCard postID={this.state.postID}/>);
                 }
                 else if (itemType === "Trainer") {
                     //return (<TrainerDetailCard displayMedia = {this.getDisplayMedia}/>);
@@ -170,16 +177,18 @@ class PostCard extends Component {
                     //return (<EventDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Challenge") {
+                    if(!this.state.postMessageSet) {
+                        this.setState({postMessage: "shared a challenge", postMessageSet: true});
+                    }
                     return (<ChallengeDetailCard postID={this.state.postID}/>);
                 }
                 else if (itemType === "Invite") {
                     //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (itemType === "Post") {
-                    return (<PostDetailCard/>);
+                    return (<PostDetailCard postID={this.state.postID}/>);
                 }
                 else if (itemType === "submission") {
-                    //alert("This is a submission");
                     return (<SubmissionDetailCard postID={this.state.postID}/>);
                 }
             }
@@ -221,7 +230,7 @@ class PostCard extends Component {
         return(
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card fluid raised>
-                <Card.Header textAlign = 'center'>{this.getOwnerName()} Posted a new {this.getPostAttribute("postType")}</Card.Header>
+                <Card.Header textAlign = 'center'>{this.getOwnerName()} {this.state.postMessage}</Card.Header>
                 <Card.Content>
                     {/*TODO: When the detail cards are done, uncomment this and comment out getDisplayMedia*/}
                     <div align='center'>

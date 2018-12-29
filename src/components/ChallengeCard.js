@@ -51,7 +51,7 @@ class ChallengeCard extends Component {
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        fetchChallenge(this.state.challengeID, ["time_created", "tags", "title"])
+        //this.props.fetchChallenge(this.state.challengeID, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
     }
 
     componentWillReceiveProps(newProps) {

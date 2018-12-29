@@ -750,7 +750,8 @@ class ClientModal extends Component<Props> {
 
     shareClient() {
         this.setState({shareLoading: true});
-        PostFunctions.createShareItemPost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, "Client", this.getClientAttribute("id"), this.getClientAttribute("profileImagePaths"), null, (returnValue) => {
+        //alert(this.props.user.id + " and " + this.getClientAttribute("description") + " and " + this.getClientAttribute("access"));
+        PostFunctions.createShareItemPost(this.props.user.id, this.props.user.id, "", "public", "Client", this.getClientAttribute("id"), this.getClientAttribute("profileImagePaths"), null, (returnValue) => {
             alert("Successfully Created Post!");
             alert(JSON.stringify(returnValue));
             this.setState({shareLoading: false});
@@ -801,7 +802,7 @@ class ClientModal extends Component<Props> {
             <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                 <Icon className='close' onClick={() => this.props.onClose()}/>
                 {loadingProp(this.props.info.isLoading)}
-                {this.errorMessage(this.props.info.error)}
+                {this.errorMessage(this.state.error)}
                 <Modal.Header>{this.getClientAttribute("name")}</Modal.Header>
                 <Modal.Content image>
                     {this.profilePicture()}
@@ -848,7 +849,7 @@ class ClientModal extends Component<Props> {
                     {this.getCorrectFriendActionButton()}
                 </Modal.Actions>
                 <Modal.Content>
-                    {this.createSuccessLabel(this.props.info.error)}
+                    {this.createSuccessLabel()}
                 </Modal.Content>
             </Modal>
         );

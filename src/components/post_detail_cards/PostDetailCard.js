@@ -229,14 +229,9 @@ class PostDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
-                <Card.Header><Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.getOwnerName()}</Button>
-                    {/*convertFromISO(this.getPostAttribute("time_created"))*/}</Card.Header>
-                <Card.Content>
-                    {convertFromISO(this.getPostAttribute("time_created"))}
-                </Card.Content>
-                <Card.Content>
+                <Card.Header>
                     {this.getPostAttribute("description")}
-                </Card.Content>
+                </Card.Header>
             </Card>
         );
     }

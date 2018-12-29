@@ -5,7 +5,7 @@ import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 // import ScheduledEventsList from "./ScheduledEventList";
-import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge} from "../redux_helpers/actions/cacheActions";
+import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import CreateEventProp from "./CreateEvent";
 import CreateChallengeProp from "./CreateChallenge";
@@ -168,22 +168,10 @@ class PostFeedProp extends Component {
                         const newlyQueriedPosts = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const post = data.items[i];
-                            //alert(JSON.stringify(newlyQueriedPosts));
-                            // console.log(JSON.stringify(Post));
-                            /*
-                            if (post.access === 'public') {
-                                newlyQueriedPosts.push(post);
-                            }
-                            else if (this.props.user.id && this.props.user.id === post.owner) {
-                                newlyQueriedPosts.push(post);
-                            }
-                            else if (this.props.user.friends && this.props.user.friends.includes(post.owner)) {
-                                newlyQueriedPosts.push(post);
-                            }
-                            else if (this.props.user.invitedPosts && this.props.user.invitedPosts.includes(post.id)) {
-                                newlyQueriedPosts.push(post);
-                            }
-                            */
+                            //alert(JSON.stringify("")
+                            this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members"]);
+                            this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
+                            this.props.fetchPost(data.items[i].about, ["about", "by"]);
                             newlyQueriedPosts.push(post);
                         }
                         this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
@@ -277,6 +265,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchUserAttributes: (variablesList, dataHandler) => {
             dispatch(fetchUserAttributes(variablesList, dataHandler));
+        },
+        fetchClient: (variablesList, dataHandler) => {
+            dispatch(fetchClient(variablesList, dataHandler));
         },
         fetchPost: (id, variablesList) => {
             dispatch(fetchPost(id, variablesList));
