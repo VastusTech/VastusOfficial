@@ -104,7 +104,7 @@ export function googleSignIn(googleUser) {
                     // This user has not yet signed up!
                     console.log("User hasn't signed up yet! Generating a new account!");
                     generateGoogleUsername(name, (username) => {
-                        ClientFunctions.createClient("admin", name, email, username, (data) => {
+                        ClientFunctions.createFederatedClient("admin", name, email, username, sub, (data) => {
                             // Then this user has already signed up
                             const id = data.id;
                             client = {
