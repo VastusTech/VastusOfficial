@@ -1,5 +1,6 @@
 import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
+import jwt_decode from "jwt-decode";
 import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
 import QL from "../../GraphQL";
 // import Lambda from "../../Lambda";
@@ -72,6 +73,106 @@ export function logOut() {
         });
     }
 }
+export function googleSignIn(googleUser) {
+    return (dispatch, getStore) => {
+        // Useful data for your client-side scripts:
+        const { id_token, expires_at } = googleUser.getAuthResponse();
+        const profile = googleUser.getBasicProfile();
+        const email = profile.getEmail(), name = profile.getName(), birthdate = "undefined", gender = "unspecified";
+        const user = { email, name, birthdate, gender };
+        Auth.federatedSignIn(
+            'google',
+            { token: id_token, expires_at },
+            user
+        ).then(() => {
+            // The ID token you need to pass to your backend and the expires_at token:
+            const sub = jwt_decode(id_token).sub;
+            QL.getClientByFederatedID(sub, ["id", "username", "federatedID"], (client) => {
+                if (client) {
+                    // Then this user has already signed up
+                    console.log("REDUX: Successfully logged in!");
+                    dispatch(federatedAuthLogIn());
+                    if (getStore().user.id !== client.id) {
+                        dispatch(forceSetUser(client));
+                    }
+                    else {
+                        dispatch(setUser(client));
+                    }
+                    dispatch(setIsNotLoading());
+                }
+                else {
+                    // This user has not yet signed up!
+                    console.log("User hasn't signed up yet! Generating a new account!");
+                    generateGoogleUsername(name, (username) => {
+                        ClientFunctions.createClient("admin", name, email, username, (data) => {
+                            // Then this user has already signed up
+                            const id = data.id;
+                            client = {
+                                id,
+                                username,
+                                name,
+                                email,
+                            };
+                            console.log("REDUX: Successfully signed up!");
+                            dispatch(federatedAuthLogIn());
+                            if (getStore().user.id !== client.id) {
+                                dispatch(forceSetUser(client));
+                            }
+                            else {
+                                dispatch(setUser(client));
+                            }
+                            dispatch(setIsNotLoading());
+                        }, (error) => {
+                            console.log("REDUX: Could not create the federated client!");
+                            console.error(error);
+                            dispatch(setError(error));
+                            dispatch(setIsNotLoading());
+                        });
+                    }, (error) => {
+                        console.log("REDUX: Could not generate the client username!");
+                        console.error(error);
+                        dispatch(setError(error));
+                        dispatch(setIsNotLoading());
+                    });
+                }
+            }, (error) => {
+                console.log("REDUX: Could not fetch the client by federated ID!");
+                console.error(error);
+                dispatch(setError(error));
+                dispatch(setIsNotLoading());
+            });
+        }).catch((error) => {
+            console.error("Error while federation sign in!");
+            console.log(error);
+            dispatch(setError(error));
+            dispatch(setIsNotLoading());
+        });
+    };
+}
+function generateGoogleUsername(name, usernameHandler, failureHandler, depth=0) {
+    const randomInt = Math.floor((Math.random() * 10000) + 1);
+    const randomGoogleUsername = name + randomInt;
+    QL.getClientByUsername(randomGoogleUsername, ["username"], (client) => {
+        if (client) {
+            // That means there's a conflict
+            console.log("Conflicting username = " + randomGoogleUsername);
+            if (depth > 20) {
+                failureHandler(new Error("Too many tried usernames... Try again!"));
+            }
+            else {
+                generateGoogleUsername(name, usernameHandler, failureHandler, depth + 1);
+            }
+        }
+        else {
+            // That means that there is no username
+            console.log("Username free! Username = " + randomGoogleUsername);
+            usernameHandler(randomGoogleUsername);
+        }
+    }, (error) => {
+        console.error("Error querying for username while getting Federated username! Error: " + JSON.stringify(error));
+        failureHandler(error);
+    });
+}
 export function signUp(username, password, name, gender, birthday, email) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
@@ -104,22 +205,6 @@ export function signUp(username, password, name, gender, birthday, email) {
         });
     }
 }
-
-export function onSignIn(googleUser) {
-        // Useful data for your client-side scripts:
-        var profile = googleUser.getBasicProfile();
-        console.log("ID: " + profile.getId()); // Don't send this directly to your server!
-        console.log('Full Name: ' + profile.getName());
-        console.log('Given Name: ' + profile.getGivenName());
-        console.log('Family Name: ' + profile.getFamilyName());
-        console.log("Image URL: " + profile.getImageUrl());
-        console.log("Email: " + profile.getEmail());
-
-        // The ID token you need to pass to your backend:
-        var id_token = googleUser.getAuthResponse().id_token;
-        console.log("ID Token: " + id_token);
-      }
-
 export function confirmSignUp(username, confirmationCode) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
@@ -189,6 +274,11 @@ function authLogIn() {
     return {
         type: 'LOG_IN'
     };
+}
+function federatedAuthLogIn() {
+    return {
+        type: 'FEDERATED_LOG_IN'
+    }
 }
 function authLogOut() {
     return {

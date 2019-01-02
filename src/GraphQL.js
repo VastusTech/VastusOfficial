@@ -60,70 +60,84 @@ class GraphQL {
         if (func) { return func(queryString, successHandler, failureHandler); }
     }
     static getClient(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetClient", "getClient", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetClient", "getClient", {id}, variableList),
             "getClient", successHandler, failureHandler);
     }
     static getClientByUsername(username, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetClientByUsername", "getClientByUsername", {username: username}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetClientByUsername", "getClientByUsername", {username}, variableList),
             "getClientByUsername", successHandler, failureHandler);
     }
+    static getClientByFederatedID(federatedID, variableList, successHandler, failureHandler) {
+        GraphQL.execute(GraphQL.constructQuery("GetClientByFederatedID", "getClientByFederatedID", {federatedID}, variableList),
+            "getClientByFederatedID", successHandler, failureHandler);
+    }
     static getTrainer(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetTrainer", "getTrainer", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetTrainer", "getTrainer", {id}, variableList),
             "getTrainer", successHandler, failureHandler);
     }
     static getTrainerByUsername(username, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetTrainerByUsername", "getTrainerByUsername", {username: username}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetTrainerByUsername", "getTrainerByUsername", {username}, variableList),
             "getTrainerByUsername", successHandler, failureHandler);
     }
+    static getTrainerByFederatedID(federatedID, variableList, successHandler, failureHandler) {
+        GraphQL.execute(GraphQL.constructQuery("GetTrainerByFederatedID", "getTrainerByFederatedID", {federatedID}, variableList),
+            "getTrainerByFederatedID", successHandler, failureHandler);
+    }
     static getGym(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetGym", "getGym", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetGym", "getGym", {id}, variableList),
             "getGym", successHandler, failureHandler);
     }
     static getGymByUsername(username, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetGymByUsername", "getGymByUsername", {username: username}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetGymByUsername", "getGymByUsername", {username}, variableList),
             "getGymByUsername", successHandler, failureHandler);
     }
+    static getGymByFederatedID(federatedID, variableList, successHandler, failureHandler) {
+        GraphQL.execute(GraphQL.constructQuery("GetGymByFederatedID", "getGymByFederatedID", {federatedID}, variableList),
+            "getGymByFederatedID", successHandler, failureHandler);
+    }
     static getWorkout(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetWorkout", "getWorkout", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetWorkout", "getWorkout", {id}, variableList),
             "getWorkout", successHandler, failureHandler);
     }
     static getReview(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetReview", "getReview", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetReview", "getReview", {id}, variableList),
             "getReview", successHandler, failureHandler);
     }
     static getEvent(id, variableList, successHandler, failureHandler) {
-        // console.log("ay lmao pt. 2");
-        GraphQL.execute(GraphQL.constructQuery("GetEvent", "getEvent", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetEvent", "getEvent", {id}, variableList),
             "getEvent", successHandler, failureHandler);
     }
     static getChallenge(id, variableList, successHandler, failureHandler) {
-        // console.log("ay lmao pt. 2");
-        GraphQL.execute(GraphQL.constructQuery("GetChallenge", "getChallenge", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetChallenge", "getChallenge", {id}, variableList),
             "getChallenge", successHandler, failureHandler);
     }
     static getInvite(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetInvite", "getInvite", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetInvite", "getInvite", {id}, variableList),
             "getInvite", successHandler, failureHandler);
     }
     static getPost(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetPost", "getPost", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetPost", "getPost", {id}, variableList),
             "getPost", successHandler, failureHandler);
     }
     static getGroup(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetGroup", "getGroup", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetGroup", "getGroup", {id}, variableList),
             "getGroup", successHandler, failureHandler);
     }
     static getComment(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetComment", "getComment", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetComment", "getComment", {id}, variableList),
             "getComment", successHandler, failureHandler);
     }
     static getSponsor(id, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetSponsor", "getSponsor", {id: id}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetSponsor", "getSponsor", {id}, variableList),
             "getSponsor", successHandler, failureHandler);
     }
     static getSponsorByUsername(username, variableList, successHandler, failureHandler) {
-        GraphQL.execute(GraphQL.constructQuery("GetSponsorByUsername", "getSponsorByUsername", {username: username}, variableList),
+        GraphQL.execute(GraphQL.constructQuery("GetSponsorByUsername", "getSponsorByUsername", {username}, variableList),
             "getSponsorByUsername", successHandler, failureHandler);
+    }
+    static getSponsorByFederatedID(federatedID, variableList, successHandler, failureHandler) {
+        GraphQL.execute(GraphQL.constructQuery("GetSponsorByFederatedID", "getSponsorByFederatedID", {federatedID}, variableList),
+            "getSponsorByFederatedID", successHandler, failureHandler);
     }
     static getClients(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {

@@ -1,10 +1,13 @@
 import { Auth } from 'aws-amplify';
 import React, { Component } from 'react';
 import Semantic, { Button, List } from 'semantic-ui-react';
+import { connect } from 'react-redux';
+import {googleSignIn} from "../redux_helpers/actions/authActions";
+
 // To federated sign in from Google
-
-
-
+/*
+So for Google, it will only be a Google Sign up! Then you should sign in with the normal password and stuff
+ */
 class GoogleSignUp extends React.Component {
     constructor(props) {
         super(props);
@@ -22,32 +25,32 @@ class GoogleSignUp extends React.Component {
         const ga = window.gapi.auth2.getAuthInstance();
         ga.signIn().then(
             googleUser => {
-                this.getAWSCredentials(googleUser);
+                this.props.googleSignIn(googleUser);
+                // this.getAWSCredentials(googleUser);
             },
             error => {
-                console.log(error);
+                console.error(error);
             }
         );
     }
     
 
 
-    async getAWSCredentials(googleUser) {
-        const { id_token, expires_at } = googleUser.getAuthResponse();
-        const profile = googleUser.getBasicProfile();
-        let user = {
-            email: profile.getEmail(),
-            name: profile.getName(),
-            //birthdate: profile.getBirthdays()
-        };
-        
-        const credentials = await Auth.federatedSignIn(
-            'google',
-            { token: id_token, expires_at },
-            user
-        );
-        console.log('credentials', credentials);
-    }
+    // async getAWSCredentials(googleUser) {
+        // const { id_token, expires_at } = googleUser.getAuthResponse();
+        // const profile = googleUser.getBasicProfile();
+        // let user = {
+        //     email: profile.getEmail(),
+        //     name: profile.getName(),
+        //     //birthdate: profile.getBirthdays()
+        // };
+        // const credentials = await Auth.federatedSignIn(
+        //     'google',
+        //     { token: id_token, expires_at },
+        //     user
+        // );
+        // console.log('credentials', credentials);
+    // }
 
     createScript() {
         // load the Google SDK
@@ -77,5 +80,18 @@ class GoogleSignUp extends React.Component {
             </div>
         );
     }
+}
+
+const mapStateToProps = (state) => ({
+    user: state.user
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        googleSignIn: (googleUser) => {
+            dispatch(googleSignIn(googleUser));
+        }
     };
-export default GoogleSignUp;
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(GoogleSignUp);
