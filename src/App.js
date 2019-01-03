@@ -2,16 +2,20 @@ import React, { Component } from 'react';
 import './App.css';
 import './video-react-copy.css';
 import { connect } from 'react-redux';
+import FirebaseTokenHandler from "./FirebaseTokenHandler";
 // import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
+import { setOnMessage } from "./redux_helpers/actions/firebaseActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
+import FirebaseConfig from "./FirebaseConfig";
 // import ItemType, { getItemTypeFromID } from "./ItemType";
 
 // const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");
 
 AWSConfig();
+FirebaseConfig();
 
 function requestNotificationPermission() {
     // Some browsers don't support Notification yet. I'm looking at you iOS Safari
@@ -72,6 +76,9 @@ class App extends Component {
 
     componentDidMount() {
         this.props.updateAuth();
+        this.props.setOnMessage((payload) => {
+            alert(JSON.stringify(payload));
+        });
     }
 
     componentWillReceiveProps(newProps, nextContext) {
@@ -106,7 +113,8 @@ class App extends Component {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    auth: state.auth
+    auth: state.auth,
+    firebase: state.firebase
     // cache: state.cache,
 });
 
@@ -115,6 +123,9 @@ const mapDispatchToProps = (dispatch) => {
         updateAuth: () => {
             dispatch(updateAuth());
         },
+        setOnMessage: (messageHandler) => {
+            dispatch(setOnMessage(messageHandler));
+        }
     }
 };
 

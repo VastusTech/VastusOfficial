@@ -2,6 +2,7 @@ import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import jwt_decode from "jwt-decode";
 import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
+import {firebaseSignIn, firebaseSignOut} from "./firebaseActions";
 import QL from "../../GraphQL";
 // import Lambda from "../../Lambda";
 import ClientFunctions from "../../databaseFunctions/ClientFunctions";
@@ -19,6 +20,7 @@ export function updateAuth() {
             QL.getClientByUsername(user.username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully updated the authentication credentials");
                 dispatch(setUser(user));
+                // dispatch(firebaseSignIn(user.id));
                 dispatch(authLogIn());
                 dispatch(setIsNotLoading());
             }, (error) => {
@@ -45,6 +47,7 @@ export function logIn(username, password) {
                 else {
                     dispatch(setUser(user));
                 }
+                dispatch(firebaseSignIn(user.id));
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");
@@ -62,9 +65,10 @@ export function logIn(username, password) {
 export function logOut() {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
+        const userID = getStore().user.id;
         Auth.signOut({global: true}).then((data) => {
             console.log("REDUX: Successfully logged out!");
-            // dispatch(clearUser());
+            if (userID) { dispatch(firebaseSignOut(userID)); }
             dispatch(authLogOut());
             dispatch(setIsNotLoading());
         }).catch((error) => {
@@ -100,6 +104,7 @@ export function googleSignIn(googleUser) {
                     else {
                         dispatch(setUser(client));
                     }
+                    dispatch(firebaseSignIn(user.id));
                     dispatch(setIsNotLoading());
                 }
                 else {
@@ -123,6 +128,7 @@ export function googleSignIn(googleUser) {
                             else {
                                 dispatch(setUser(client));
                             }
+                            dispatch(firebaseSignIn(user.id));
                             dispatch(setIsNotLoading());
                         }, (error) => {
                             console.log("REDUX: Could not create the federated client!");
