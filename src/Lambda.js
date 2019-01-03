@@ -82,6 +82,9 @@ class Lambda {
     static invokeFirebaseLambda(payload, successHandler, failureHandler) {
         this.invokeLambda("VastusFirebaseTokenFunction", payload, successHandler, failureHandler);
     }
+    static invokeMessageLambda(payload, successHandler, failureHandler) {
+        this.invokeLambda("VastusMessageFunction", payload, successHandler, failureHandler);
+    }
     static invokeLambda(functionName, payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {

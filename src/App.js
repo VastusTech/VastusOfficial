@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import './video-react-copy.css';
 import { connect } from 'react-redux';
-import FirebaseTokenHandler from "./FirebaseTokenHandler";
+// import FirebaseTokenHandler from "./FirebaseTokenHandler";
 // import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
 import { setOnMessage } from "./redux_helpers/actions/firebaseActions";

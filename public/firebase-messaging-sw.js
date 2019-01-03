@@ -1,5 +1,5 @@
-importScripts("https://www.gstatic.com/firebasejs/3.4.0/firebase-app.js");
-importScripts("https://www.gstatic.com/firebasejs/3.4.0/firebase-messaging.js");
+importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-app.js");
+importScripts("https://www.gstatic.com/firebasejs/4.8.1/firebase-messaging.js");
 
 // Initialize Firebase
 var config = {
@@ -10,4 +10,6 @@ var config = {
     storageBucket: "testfirebaseproject-3c457.appspot.com",
     messagingSenderId: "716504991782"
 };
+
 firebase.initializeApp(config);
+const messaging = firebase.messaging();
