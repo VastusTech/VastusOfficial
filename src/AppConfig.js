@@ -26,7 +26,7 @@ function setupAWS() {
             userPoolWebClientId: '124v8f255kaqivbm5bp71s6rej',
             
             //Google App Client ID for social sign-in
-            //'your_google_client_id': '308108761903-qfc4dsbnjicjs0dpqao5ofh2c5u2636k.apps.googleusercontent.com'
+            // your_google_client_id: '308108761903-qfc4dsbnjicjs0dpqao5ofh2c5u2636k.apps.googleusercontent.com'
 
             // OPTIONAL - Enforce user authentication prior to accessing AWS resources or not
             // mandatorySignIn: false,

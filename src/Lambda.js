@@ -91,7 +91,7 @@ class Lambda {
             if (error) {
                 console.error(error);
                 console.error("Lambda failure: " + JSON.stringify(error));
-                failureHandler(error);
+                if (failureHandler) { failureHandler(error); }
             } else if (data.Payload) {
                 //console.log(data.Payload);
                 const payload = JSON.parse(data.Payload);
@@ -105,12 +105,12 @@ class Lambda {
                     if (ifDebug) {
                         console.log("Successful Lambda, received " + JSON.stringify(payload));
                     }
-                    successHandler(payload);
+                    if (successHandler) { successHandler(payload); }
                 }
             }
             else {
                 console.error("Weird error: payload returned with nothing...");
-                failureHandler("Payload returned with null");
+                if (failureHandler) { failureHandler("Payload returned with null"); }
             }
         });
     }

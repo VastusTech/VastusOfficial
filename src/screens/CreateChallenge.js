@@ -173,7 +173,7 @@ class CreateChallengeProp extends Component {
     }
 
     createChallengePost(challengeID) {
-        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, challengeID, this.getPicturePaths, this.getVideoPaths, (returnValue) => {
+        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, challengeID, (returnValue) => {
             alert("Successfully Created Challenge Post!");
             alert(JSON.stringify(returnValue));
             //const id = returnValue.data;

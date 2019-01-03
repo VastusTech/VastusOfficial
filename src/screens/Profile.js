@@ -157,28 +157,38 @@ class Profile extends React.PureComponent {
         if (this.props.user.id) {
             //alert(this.state.galleryNum);
             const path = "/ClientFiles/" + this.props.user.id + "/galleryImages" + this.state.galleryNum;
+            const image = event.target.files[0];
+            this.setState({isLoading: true});
+            ClientFunctions.addProfileImage(this.props.user.id, this.props.user.id, image, path, (data) => {
+                this.props.forceFetchUserAttributes(["profileImagePaths"]);
+                this.setURLS(this.props.user.profileImagePaths);
+                this.setState({isLoading: false});
+            }, (error) => {
+                console.log("Failed edit client attribute");
+                console.log(JSON.stringify(error));
+            });
             //console.log("Calling storage put");
             //console.log("File = " + JSON.stringify(event.target.files[0]));
-            Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
+            // Storage.put(path, event.target.files[0], { contentType: "image/*" }).then((result) => {
                 // Now we update the database object to reflect this
                 //console.log("resulttt:" + JSON.stringify(result));
                 //console.log("Successfully put the image, now putting the data into the database!");
-                ClientFunctions.addProfileImagePath(this.props.user.id, this.props.user.id, path,
-                    (data) => {
-                        //console.log("successfully editted client");
-                        //console.log(JSON.stringify(data));
-                        this.props.forceFetchUserAttributes(["profileImagePaths"]);
-                        this.setURLS(this.props.user.profileImagePaths);
-                        this.setState({isLoading: true});
-                    }, (error) => {
-                        console.log("Failed edit client attribute");
-                        console.log(JSON.stringify(error));
-                    });
-                this.setState({isLoading: true});
-            }).catch((error) => {
-                console.log("failed storage put");
-                console.log(error);
-            });
+            //     ClientFunctions.addProfileImagePath(this.props.user.id, this.props.user.id, path,
+            //         (data) => {
+            //             //console.log("successfully editted client");
+            //             //console.log(JSON.stringify(data));
+            //             this.props.forceFetchUserAttributes(["profileImagePaths"]);
+            //             this.setURLS(this.props.user.profileImagePaths);
+            //             this.setState({isLoading: true});
+            //         }, (error) => {
+            //             console.log("Failed edit client attribute");
+            //             console.log(JSON.stringify(error));
+            //         });
+            //     this.setState({isLoading: true});
+            // }).catch((error) => {
+            //     console.log("failed storage put");
+            //     console.log(error);
+            // });
         }
     }
 

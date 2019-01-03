@@ -751,7 +751,7 @@ class ClientModal extends Component<Props> {
     shareClient() {
         this.setState({shareLoading: true});
         //alert(this.props.user.id + " and " + this.getClientAttribute("description") + " and " + this.getClientAttribute("access"));
-        PostFunctions.createShareItemPost(this.props.user.id, this.props.user.id, "", "public", "Client", this.getClientAttribute("id"), this.getClientAttribute("profileImagePaths"), null, (returnValue) => {
+        PostFunctions.createShareItemPost(this.props.user.id, this.props.user.id, "", "public", "Client", this.getClientAttribute("id"), null, null, (returnValue) => {
             alert("Successfully Created Post!");
             alert(JSON.stringify(returnValue));
             this.setState({shareLoading: false});

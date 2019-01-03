@@ -15,6 +15,11 @@ class GraphQL {
         return switchReturnItemType(itemType, GraphQL.getClientByUsername, GraphQL.getTrainerByUsername, GraphQL.getGymByUsername,
             null, null, null, null, null, null, null, null, GraphQL.getSponsorByUsername, "GraphQL get Fetch Username function function not implemented");
     }
+    // Gives back function with parameters (federatedID, variablesList, successHandler, failureHandler)
+    static getGetByFederatedIDFunction(itemType) {
+        return switchReturnItemType(itemType, GraphQL.getClientByFederatedID, GraphQL.getTrainerByFederatedID, GraphQL.getGymByFederatedID,
+            null, null, null, null, null, null, null, null, GraphQL.getSponsorByFederatedID, "GraphQL get Fetch FederatedID function function not implemented");
+    }
     // Gives back function with parameters (ids, variablesList, successHandler, failureHandler)
     static getBatchGetFunction(itemType) {
         return switchReturnItemType(itemType, GraphQL.getClients, GraphQL.getTrainers, GraphQL.getGyms, GraphQL.getWorkouts,
@@ -490,7 +495,7 @@ class GraphQL {
             // console.log("Received query from the cache");
             console.log("Received the query from the cache");
             // console.log(JSON.stringify(queryCache[queryString]));
-            successHandler(queryCache[queryString]);
+            if (successHandler) { successHandler(queryCache[queryString]); }
         }
         else {
             console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
@@ -502,7 +507,7 @@ class GraphQL {
                 if (!data.data || !data.data[queryFunctionName]) {
                     console.log("Object returned nothing!!! Something wrong?");
                     // failureHandler("Object had returned null");
-                    successHandler(null);
+                    if (successHandler) { successHandler(null); }
                     return;
                 }
                 // console.log("Returned!");
@@ -516,7 +521,7 @@ class GraphQL {
                     putQuery(queryString, data.data[queryFunctionName]);
                 }
                 console.log("Handling the successHandler...");
-                successHandler(data.data[queryFunctionName]);
+                if (successHandler) { successHandler(data.data[queryFunctionName]); }
             }).catch((error) => {
                 console.log("GraphQL operation failed...");
                 if (error.message) {
@@ -524,7 +529,7 @@ class GraphQL {
                 }
                 console.log(JSON.stringify(error));
                 console.log("Handling the failureHandler...");
-                failureHandler(error);
+                if (failureHandler) { failureHandler(error); }
             });
         }
     }

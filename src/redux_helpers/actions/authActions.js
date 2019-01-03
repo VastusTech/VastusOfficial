@@ -15,6 +15,7 @@ export function updateAuth() {
         // Auth.currentUserInfo();
         // Auth.currentUserPoolUser();
         Auth.currentAuthenticatedUser().then((user) => {
+            console.log(JSON.stringify(user));
             QL.getClientByUsername(user.username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully updated the authentication credentials");
                 dispatch(setUser(user));
@@ -77,16 +78,17 @@ export function googleSignIn(googleUser) {
     return (dispatch, getStore) => {
         // Useful data for your client-side scripts:
         const { id_token, expires_at } = googleUser.getAuthResponse();
+        const sub = jwt_decode(id_token).sub;
         const profile = googleUser.getBasicProfile();
         const email = profile.getEmail(), name = profile.getName(), birthdate = "undefined", gender = "unspecified";
-        const user = { email, name, birthdate, gender };
+        const user = { email, name, birthdate, gender, sub };
         Auth.federatedSignIn(
             'google',
             { token: id_token, expires_at },
             user
         ).then(() => {
             // The ID token you need to pass to your backend and the expires_at token:
-            const sub = jwt_decode(id_token).sub;
+            console.log("Successfully federated sign in!");
             QL.getClientByFederatedID(sub, ["id", "username", "federatedID"], (client) => {
                 if (client) {
                     // Then this user has already signed up

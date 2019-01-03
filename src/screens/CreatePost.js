@@ -89,33 +89,27 @@ class CreatePostProp extends Component {
         }
     };
 
-    getPicturePaths = () => {
-        const picturePaths = [];
-        console.log("Pictures: " + this.state.pictures.length);
+    getPictures = () => {
+        const pictures = {};
         for (let i = 0; i < this.state.pictures.length; i++) {
-            const path = "postPicture/" + i;
-            picturePaths.push(path);
-            alert("Added: " + path);
+            pictures["pictures/" + i] = this.state.pictures[i];
         }
-        if (picturePaths.length > 0) {
-            return picturePaths;
+        if (this.state.pictures.length > 0) {
+            return pictures;
         }
         return null;
-    }
+    };
 
-    getVideoPaths = () => {
-        const videoPaths = [];
-        console.log("Videos: " + this.state.videos.length);
+    getVideos = () => {
+        const videos = {};
         for (let i = 0; i < this.state.videos.length; i++) {
-            const path = "postVideo/" + i;
-            videoPaths.push(path);
-            alert("Added: " + path);
+            videos["videos/" + i] = this.state.videos[i];
         }
-        if (videoPaths.length > 0) {
-            return videoPaths;
+        if (this.state.videos.length > 0) {
+            return videos;
         }
         return null;
-    }
+    };
 
     setVideo = (event) => {
         const index = this.state.videos.length;
@@ -193,12 +187,12 @@ class CreatePostProp extends Component {
         this.setState({isSubmitLoading: true});
 
         // TODO Check to see if valid inputs!
-        this.getPicturePaths();
-        this.getVideoPaths();
+        // this.getPicturePaths();
+        // this.getVideoPaths();
         if (this.state.description) {
-                PostFunctions.createNormalPost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, this.getPicturePaths(), this.getVideoPaths(), (returnValue) => {
-                    alert("Successfully Created Post!");
-                    alert(JSON.stringify(returnValue));
+                PostFunctions.createNormalPost(this.props.user.id, this.props.user.id, this.state.description, this.state.access, this.getPictures(), this.getVideos(), (returnValue) => {
+                    // alert("Successfully Created Post!");
+                    // alert(JSON.stringify(returnValue));
                     this.setState({isSubmitLoading: false});
                     this.setState({showSuccessLabel: true});
                     this.setState({showModal: false});
