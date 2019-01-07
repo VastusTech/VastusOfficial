@@ -1,14 +1,13 @@
 import React, { Component } from 'react'
 import _ from 'lodash';
-import {Grid, Button, Message, Image, Modal, Label, Icon, Form, Container, TextArea, Checkbox, Rating} from 'semantic-ui-react';
+import {Grid, Button, Message, Image, Modal, Card, Icon, Form, Container, TextArea, Checkbox, Header} from 'semantic-ui-react';
 import CreateEventProp from "./CreateEvent";
 import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
 // import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
-import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery, clearPostQuery, fetchPost, putPost, putPostQuery} from "../redux_helpers/actions/cacheActions";
+import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
-import PostFunctions from "../databaseFunctions/PostFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -124,7 +123,7 @@ class CreateChallengeProp extends Component {
     handleTag(tag) {
         if(tag === "HIIT" && !this.state.hiitPressed) {
             this.setState({tags: this.state.tags.concat(tag)},
-            () => console.log(JSON.stringify(this.state.tags)));
+                () => console.log(JSON.stringify(this.state.tags)));
             this.setState({hiitPressed: true});
         }
         else if(tag === "Performance" && !this.state.performancePressed) {
@@ -164,24 +163,6 @@ class CreateChallengeProp extends Component {
         }
     }
 
-    getPicturePaths() {
-        return null;
-    }
-
-    getVideoPaths() {
-        return null;
-    }
-
-    createChallengePost(challengeID) {
-        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, challengeID, this.getPicturePaths, this.getVideoPaths, (returnValue) => {
-            alert("Successfully Created Challenge Post!");
-            alert(JSON.stringify(returnValue));
-            //const id = returnValue.data;
-            }, (error) => {
-            console.error(error);
-        });
-    }
-
     handleSubmit = () => {
         // TODO Make sure the dates are well formed?
         /*
@@ -211,13 +192,9 @@ class CreateChallengeProp extends Component {
                     this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
-                        alert(JSON.stringify(data.data));
-                        this.createChallengePost(data.data);
                         //This is the second call
                         this.props.clearChallengeQuery();
-                        this.props.clearPostQuery();
                         this.props.queryChallenges();
-                        this.props.queryPosts();
                         this.setState({isSubmitLoading: false});
                         this.closeModal();
                         this.setState({showSuccessLabel: true});
@@ -315,45 +292,45 @@ class CreateChallengeProp extends Component {
     render() {
 
         return (
-            <div>
-            <Modal closeIcon trigger={<Button primary fluid size="large"> <Icon name='plus' /> Post Challenge</Button>}>
-                <Modal.Header align='center'>Challenge Builder</Modal.Header>
-                <Modal.Content align='center'>
-                    <Grid>
+            <div align='center'>
+                <Header align='center'>Challenge Builder</Header>
+                <div align='center'>
+                    <Grid align='center'>
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
-                                    <Image size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
-                                    <div className="ui white header">HIIT</div>
+                                    <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
+                                    HIIT
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
-                                <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
-                                    <div className="ui white header">Strength</div>
+                                <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
+                                    <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
+                                    Strength
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Button inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
-                                <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
-                                    <div className="ui white header">Performance</div>
+                                <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
+                                    <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
+                                    Performance
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Button inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
-                                <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
-                                    <div className="ui white header">Endurance</div>
+                                <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
+                                    <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
+                                    Endurance
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
                     </Grid>
 
-                    <Container>
-                        <Grid.Row centered>
-                            <Grid.Column width={2} className="segment centered">
-                                <Form onSubmit={this.handleSubmit}>
+                    <Container align='center'>
+                        <Grid centered>
+                            <Grid.Row centered>
+                                <Grid.Column>
+                                    <Form onSubmit={this.handleSubmit}>
                                         <Form.Input width={5} label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
                                         <div className="field" width={5}>
                                             <label>End Date & Time</label>
@@ -361,7 +338,7 @@ class CreateChallengeProp extends Component {
                                         </div>
                                         <Form.Input width={5} label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
                                         <Form.Input width={5} label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                    <Form.Input width={5} label="Prize" type="text" name="prize" placeholder="Prize for winning the event..." onChange={value => this.changeStateText("prize", value)}/>
+                                        <Form.Input width={5} label="Prize" type="text" name="prize" placeholder="Prize for winning the event..." onChange={value => this.changeStateText("prize", value)}/>
                                         {/*<Form.Field>
                                             <div className="field" width={5}>
                                                 <label>Difficulty</label>
@@ -371,20 +348,20 @@ class CreateChallengeProp extends Component {
                                         <Form.Field width={12}>
                                             <Checkbox toggle onClick={this.handleAccessSwitch} onChange={this.toggle} checked={this.state.checked} label={this.eventState.access} />
                                         </Form.Field>
-                                    <Form.Field width={12}>
-                                        <Checkbox toggle onClick={this.handleRestrictionSwitch} onChange={this.toggleRest} checked={this.state.checkedRest} label={this.showRestriction()} />
-                                    </Form.Field>
-                                    <div>{this.displayError()}{this.createSuccessLabel()}</div>
-                                </Form>
-                            </Grid.Column>
-                        </Grid.Row>
+                                        <Form.Field width={12}>
+                                            <Checkbox toggle onClick={this.handleRestrictionSwitch} onChange={this.toggleRest} checked={this.state.checkedRest} label={this.showRestriction()} />
+                                        </Form.Field>
+                                        <div>{this.displayError()}{this.createSuccessLabel()}</div>
+                                    </Form>
+                                </Grid.Column>
+                            </Grid.Row>
+                        </Grid>
                     </Container>
-                </Modal.Content>
+                </div>
                 <Modal.Actions>
                     <Button loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} primary size="big" type='button' onClick={() => { this.handleSubmit()}}>Submit</Button>
                 </Modal.Actions>
-            </Modal>
-            {this.createSuccessLabel()}</div>
+                {this.createSuccessLabel()}</div>
         );
     }
 }
@@ -403,27 +380,15 @@ const mapDispatchToProps = (dispatch) => {
         fetchChallenge: (id, variablesList) => {
             dispatch(fetchChallenge(id, variablesList));
         },
-        fetchPost: (id, variablesList) => {
-            dispatch(fetchPost(id, variablesList));
-        },
         putChallenge: (event) => {
             dispatch(putChallenge(event));
-        },
-        putPost: (event) => {
-            dispatch(putPost(event));
         },
         putChallengeQuery: (queryString, queryResult) => {
             dispatch(putChallengeQuery(queryString, queryResult));
         },
-        putPostQuery: (queryString, queryResult) => {
-            dispatch(putPostQuery(queryString, queryResult));
-        },
         clearChallengeQuery: () => {
             dispatch(clearChallengeQuery());
-        },
-        clearPostQuery: () => {
-            dispatch(clearPostQuery());
-        },
+        }
     }
 };
 

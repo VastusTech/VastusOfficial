@@ -5,7 +5,7 @@
 // TODO This will be for a post that is sharing an existing Post with your friends!
 
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, List, Divider, Image, Message} from 'semantic-ui-react';
+import {Card, Modal, Button, Header, Icon, Divider, Image, Message} from 'semantic-ui-react';
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
@@ -209,7 +209,7 @@ class PostDetailCard extends Component {
                 //alert(this.state.pictureURL + "and" + this.state.videoURL);
                 return (
                     <div>
-                        {this.state.videoURL}
+                        {/*this.state.videoURL*/}
                         <Player inline={true}>
                             <source src={this.state.videoURL} type="video/mp4"/>
                         </Player>
@@ -238,7 +238,7 @@ class PostDetailCard extends Component {
                 // TODO This should also link the choose winner button
                 return(
                     <div>
-                        <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
+                        <Button loading={isDeleteLoading} primary fluid size="tiny" disabled={isDeleteLoading} onClick={deleteHandler}><Icon name='delete'/></Button>
                     </div>
                 );
             }

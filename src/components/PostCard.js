@@ -110,6 +110,7 @@ class PostCard extends Component {
         const pictures = this.getPostAttribute("picturePaths");
         const videos = this.getPostAttribute("videoPaths");
         if (videos && videos.length > 0) {
+            //alert(videos[0]);
             if (!this.state.videoURL) {
                 const video = videos[0];
                 Storage.get(video).then((url) => {
@@ -237,7 +238,6 @@ class PostCard extends Component {
             <Card fluid raised>
                 <Card.Header textAlign = 'center'>{this.getOwnerName()} {this.state.postMessage}</Card.Header>
                 <Card.Content>
-                    {/*TODO: When the detail cards are done, uncomment this and comment out getDisplayMedia*/}
                     <div align='center'>
                         {this.getCorrectDetailCard()}
                     </div>

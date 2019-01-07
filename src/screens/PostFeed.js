@@ -8,11 +8,11 @@ import { connect } from 'react-redux';
 import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import CreateEventProp from "./CreateEvent";
-import CreateChallengeProp from "./CreateChallenge";
-import CreatePostProp from "./CreatePost";
+//import CreateChallengeProp from "./CreateChallenge";
+//import CreatePostProp from "./CreatePost";
+import PostManager from "./PostManager";
 // import NextEventProp from "../components/NextEvent";
 import NextChallengeProp from "../components/NextChallenge";
-import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 // import * as AWS from "aws-sdk";
 
 // AWS.config.update({region: 'REGION'});
@@ -238,12 +238,17 @@ class PostFeedProp extends Component {
         //is hit by the user.
         return (
             <Visibility onUpdate={this.handleUpdate}>
-                <Grid className='ui center aligned'>
+                {/*<Grid className='ui center aligned'>
                     <Grid.Column floated='center' width={15}>
                         <CreateChallengeProp queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
                     </Grid.Column>
                     <Grid.Column floated='center' width={15}>
                         <CreatePostProp queryPosts={this.queryPosts}/>
+                    </Grid.Column>
+                </Grid>*/}
+                <Grid className='ui center aligned'>
+                    <Grid.Column floated='center' width={15}>
+                        <PostManager queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
                     </Grid.Column>
                 </Grid>
                 <Header sub>Your Next Challenge:</Header>
