@@ -663,20 +663,22 @@ class ClientModal extends Component<Props> {
     swipeGallery() {
         let reactSwipeEl;
         return (
-            <div>
-                <ReactSwipe
-                    className="carousel"
-                    swipeOptions={{ continuous: false }}
-                    ref={el => (reactSwipeEl = el)}
-                >
-                    {this.imageGallery()}
-                </ReactSwipe>
+            <div align='center'>
                 <Grid>
-                    <Grid.Column floated='left' width={2}>
-                        <Button align="left" icon="caret left" primary onClick={() => reactSwipeEl.prev()}/>
+                    <Grid.Column width={1} onClick={() => reactSwipeEl.prev()}>
+                        <Icon align="left" size='large' name="caret left"/>
                     </Grid.Column>
-                    <Grid.Column floated='right' width={2}>
-                        <Button align="right" icon="caret right" primary onClick={() => reactSwipeEl.next()}/>
+                    <Grid.Column width={10}>
+                        <ReactSwipe
+                            className="carousel"
+                            swipeOptions={{ continuous: false }}
+                            ref={el => (reactSwipeEl = el)}
+                        >
+                            {this.imageGallery()}
+                        </ReactSwipe>
+                    </Grid.Column>
+                    <Grid.Column width={1} onClick={() => reactSwipeEl.next()}>
+                        <Icon align="right" size='large' name="caret right" />
                     </Grid.Column>
                 </Grid>
             </div>
