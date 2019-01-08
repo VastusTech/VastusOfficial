@@ -1,7 +1,7 @@
 import firebase from "firebase";
 
 export default function configFirebase() {
-// Initialize Firebase
+    // Initialize Firebase
     const config = {
         apiKey: "AIzaSyBqng9IIgG21Od6-M7hQorsXvuXvsOQIIM",
         authDomain: "vastus-fit.firebaseapp.com",
@@ -11,4 +11,10 @@ export default function configFirebase() {
         messagingSenderId: "308108761903"
     };
     firebase.initializeApp(config);
+
+    navigator.serviceWorker
+        .register('/firebase-messaging-sw.js')
+        .then((registration) => {
+            firebase.messaging().useServiceWorker(registration);
+        });
 }

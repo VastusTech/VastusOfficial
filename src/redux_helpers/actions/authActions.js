@@ -16,18 +16,36 @@ export function updateAuth() {
         // Auth.currentUserInfo();
         // Auth.currentUserPoolUser();
         Auth.currentAuthenticatedUser().then((user) => {
+            console.log("UPDATING AUTH WITH USER:");
             console.log(JSON.stringify(user));
-            QL.getClientByUsername(user.username, ["id", "username"], (user) => {
-                console.log("REDUX: Successfully updated the authentication credentials");
-                dispatch(setUser(user));
-                // dispatch(firebaseSignIn(user.id));
-                dispatch(authLogIn());
-                dispatch(setIsNotLoading());
-            }, (error) => {
-                console.log("REDUX: Could not fetch the client");
-                dispatch(setError(error));
-                dispatch(setIsNotLoading());
-            });
+            if (user.username) {
+                // Regular sign in
+                QL.getClientByUsername(user.username, ["id", "username"], (user) => {
+                    console.log("REDUX: Successfully updated the authentication credentials");
+                    dispatch(setUser(user));
+                    // dispatch(firebaseSignIn(user.id));
+                    dispatch(authLogIn());
+                    dispatch(setIsNotLoading());
+                }, (error) => {
+                    console.log("REDUX: Could not fetch the client");
+                    dispatch(setError(error));
+                    dispatch(setIsNotLoading());
+                });
+            }
+            else if (user.sub) {
+                // Federated Identities sign in
+                QL.getClientByFederatedID(user.sub, ["id", "username", "federatedID"], (user) => {
+                    console.log("REDUX: Successfully updated the authentication credentials for federated identity");
+                    dispatch(setUser(user));
+                    // dispatch(firebaseSignIn(user.id));
+                    dispatch(authLogIn());
+                    dispatch(setIsNotLoading());
+                }, (error) => {
+                    console.log("REDUX: Could not fetch the federated identity client");
+                    dispatch(setError(error));
+                    dispatch(setIsNotLoading());
+                });
+            }
         }).catch(() => {
             console.log("REDUX: Not currently logged in. Not a problem, no worries.");
             dispatch(setIsNotLoading());
@@ -113,7 +131,7 @@ export function googleSignIn(googleUser) {
                     generateGoogleUsername(name, (username) => {
                         ClientFunctions.createFederatedClient("admin", name, email, username, sub, (data) => {
                             // Then this user has already signed up
-                            const id = data.id;
+                            const id = data.data;
                             client = {
                                 id,
                                 username,
