@@ -369,20 +369,25 @@ export function fetchQuery(itemType, variablesList, filter, limit, nextToken, da
         else {
             queryString = QL.getConstructQueryFunction(itemType)(variablesList, filter, limit, nextToken);
         }
-        const queryResult = getCache(itemType, getStore)[queryString];
-        // const queryResult = getStore().cache[cacheSet][queryString];
+        const normalizedQueryString = QL.getNormalizedQuery(queryString);
+        const nextTokenString = QL.getNextTokenString(nextToken);
+        let queryResult = getQueryCache(itemType, getStore)[normalizedQueryString];
+        if (queryResult) {
+            queryResult = queryResult[nextTokenString];
+        }
         if (queryResult) {
             dispatch({
                 type: getFetchQueryType(itemType),
                 payload: {
-                    queryString,
+                    normalizedQueryString,
+                    nextToken: nextTokenString,
                     queryResult
                 }
             });
-            dataHandler(queryResult);
+            dataHandler(QL.getQueryResultFromCompressed(queryResult, getCache(itemType, getStore)));
         }
         else {
-            overwriteFetchQuery(itemType, queryString, dataHandler, failureHandler, dispatch);
+            overwriteFetchQuery(itemType, queryString, nextToken, dataHandler, failureHandler, dispatch);
         }
     };
 }
@@ -407,10 +412,10 @@ export function forceFetchQuery(itemType, variablesList, filter, limit, nextToke
             queryString = QL.getConstructQueryFunction(itemType)(variablesList, filter, limit, nextToken);
         }
         // const queryString = QL[QLFunctionName](variablesList, filter, limit, nextToken);
-        overwriteFetchQuery(itemType, queryString, dataHandler, failureHandler, dispatch);
+        overwriteFetchQuery(itemType, queryString, nextToken, dataHandler, failureHandler, dispatch);
     };
 }
-export function overwriteFetchQuery(itemType, queryString, dataHandler, failureHandler, dispatch) {
+export function overwriteFetchQuery(itemType, queryString, nextToken, dataHandler, failureHandler, dispatch) {
     QL.queryItems(itemType, queryString, (data) => {
         if (data && data.items && data.items.length) {
             for (let i = 0; i < data.items.length; i++) {
@@ -431,8 +436,9 @@ export function overwriteFetchQuery(itemType, queryString, dataHandler, failureH
         dispatch({
             type: getFetchQueryType(itemType),
             payload: {
-                queryString,
-                queryResult: data
+                normalizedQueryString: QL.getNormalizedQuery(queryString),
+                nextToken: QL.getNextTokenString(nextToken),
+                queryResult: QL.getCompressedFromQueryResult(data)
             }
         });
         if (dataHandler) { dataHandler(data);}

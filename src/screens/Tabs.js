@@ -20,7 +20,7 @@ import SearchScreen from "./SearchScreen";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 5, size: "medium", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
         [
             {
                 menuItem:

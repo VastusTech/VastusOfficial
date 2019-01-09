@@ -74,82 +74,98 @@ class PostFeedProp extends Component {
     componentWillReceiveProps(newProps) {
         // console.log("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
-            this.setState({userID: newProps.userID});
+            this.state.userID = newProps.userID;
+            // this.setState({userID: newProps.userID});
             // console.log("fetchin user attributes");
             this.props.fetchUserAttributes(["friends", "invitedChallenges", "name"],
                 (data) => {
                     // console.log("finished");
-                    this.queryPosts()
+                    this.queryPosts();
                 });
         }
     }
 
-    queryChallenges() {
-        this.setState({isLoading: true});
-        if (!this.state.ifFinished) {
-            // console.log(JSON.stringify(this.props.cache.eventQueries));
-            const filter = QL.generateFilter({
-                and: [
-                    {
-                        ifCompleted: {
-                            eq: "$ifCompleted"
-                        }
-                    }
-                ]
-            }, {
-                ifCompleted: "false"
-            });
-            // QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
-            //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
-            //     this.state.nextToken, (data) => {
-            QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize", "submissions"],
-                filter, this.state.challengeFeedLength, this.state.nextToken, (data) => {
-                    if (!data.nextToken) {
-                        this.setState({ifFinished: true});
-                    }
-                    if (data.items) {
-                        // TODO We can see private events
-                        // console.log("got items");
-                        const newlyQueriedChallenges = [];
-                        for (let i = 0; i < data.items.length; i++) {
-                            const challenge = data.items[i];
-                            // console.log(JSON.stringify(challenge));
-                            if (challenge.access === 'public') {
-                                newlyQueriedChallenges.push(challenge);
-                            }
-                            else if (this.props.user.id && this.props.user.id === challenge.owner) {
-                                newlyQueriedChallenges.push(challenge);
-                            }
-                            else if (this.props.user.friends && this.props.user.friends.includes(challenge.owner)) {
-                                newlyQueriedChallenges.push(challenge);
-                            }
-                            else if (this.props.user.invitedChallenges && this.props.user.invitedChallenges.includes(challenge.id)) {
-                                newlyQueriedChallenges.push(challenge);
-                            }
-                        }
-                        this.setState({challenges: [...this.state.challenges, ...newlyQueriedChallenges]});
-                        for (let i = 0; i < data.items.length; i++) {
-                            //console.log(data.items[i].time_created);
-                            // console.log("Putting in event: " + JSON.stringify(data.items[i]));
-                            // this.setState({events: [...this.state.events, data.items[i]]});
-                            this.props.putChallenge(data.items[i]);
-                        }
-                        // console.log("events in the end: " + JSON.stringify(this.state.events));
-                        this.setState({nextToken: data.nextToken});
-                    }
-                    else {
-                        // TODO Came up with no events
-                    }
-                    this.setState({isLoading: false});
-                }, (error) => {
-                    console.log("Querying challenges failed!");
-                    console.log(error);
-                    console.error(error);
-                    this.setState({isLoading: false, error: error});
-                }, this.props.cache.challengeQueries, this.props.putChallengeQuery);
-        }
-    }
+    // queryChallenges() {
+    //     this.setState({isLoading: true});
+    //     if (!this.state.ifFinished) {
+    //         // console.log(JSON.stringify(this.props.cache.eventQueries));
+    //         const filter = QL.generateFilter({
+    //             and: [
+    //                 {
+    //                     ifCompleted: {
+    //                         eq: "$ifCompleted"
+    //                     }
+    //                 }
+    //             ]
+    //         }, {
+    //             ifCompleted: "false"
+    //         });
+    //         // QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
+    //         //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
+    //         //     this.state.nextToken, (data) => {
+    //         QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize", "submissions"],
+    //             filter, this.state.challengeFeedLength, this.state.nextToken, (data) => {
+    //                 if (!data.nextToken) {
+    //                     this.setState({ifFinished: true});
+    //                 }
+    //                 if (data.items) {
+    //                     // TODO We can see private events
+    //                     // console.log("got items");
+    //                     const newlyQueriedChallenges = [];
+    //                     for (let i = 0; i < data.items.length; i++) {
+    //                         const challenge = data.items[i];
+    //                         // console.log(JSON.stringify(challenge));
+    //                         if (challenge.access === 'public') {
+    //                             newlyQueriedChallenges.push(challenge);
+    //                         }
+    //                         else if (this.props.user.id && this.props.user.id === challenge.owner) {
+    //                             newlyQueriedChallenges.push(challenge);
+    //                         }
+    //                         else if (this.props.user.friends && this.props.user.friends.includes(challenge.owner)) {
+    //                             newlyQueriedChallenges.push(challenge);
+    //                         }
+    //                         else if (this.props.user.invitedChallenges && this.props.user.invitedChallenges.includes(challenge.id)) {
+    //                             newlyQueriedChallenges.push(challenge);
+    //                         }
+    //                     }
+    //                     this.setState({challenges: [...this.state.challenges, ...newlyQueriedChallenges]});
+    //                     for (let i = 0; i < data.items.length; i++) {
+    //                         //console.log(data.items[i].time_created);
+    //                         // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+    //                         // this.setState({events: [...this.state.events, data.items[i]]});
+    //                         this.props.putChallenge(data.items[i]);
+    //                     }
+    //                     // console.log("events in the end: " + JSON.stringify(this.state.events));
+    //                     this.setState({nextToken: data.nextToken});
+    //                 }
+    //                 else {
+    //                     // TODO Came up with no events
+    //                 }
+    //                 this.setState({isLoading: false});
+    //             }, (error) => {
+    //                 console.log("Querying challenges failed!");
+    //                 console.log(error);
+    //                 console.error(error);
+    //                 this.setState({isLoading: false, error: error});
+    //             }, this.props.cache.challengeQueries, this.props.putChallengeQuery);
+    //     }
+    // }
 
+    /*
+    Here we have a feed of posts that we are querying.
+
+    For one query, we only change the nextToken to get the next stuff
+
+    PostQuery nextToken = null (1)
+
+    PostQuery nextToken = 1 (2)
+
+    PostQuery nextToken = 2 (null)
+
+    Done...
+
+
+     */
     queryPosts() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
@@ -222,7 +238,8 @@ class PostFeedProp extends Component {
     };
 
     forceUpdate = () => {
-        this.props.forceFetchUserAttributes(["Posts"]);
+        // What is this even doing?
+        // this.props.forceFetchUserAttributes(["Posts"]);
     };
 
     render() {
@@ -257,7 +274,7 @@ class PostFeedProp extends Component {
                     </Grid.Column>
                 </Grid>*/}
                 <Grid className='ui center aligned'>
-                    <Grid.Column floated='center' width={15}>
+                    <Grid.Column /*floated*/ width={15}>
                         <PostManager queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>
                     </Grid.Column>
                 </Grid>

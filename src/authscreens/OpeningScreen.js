@@ -8,57 +8,37 @@ import SignInPage from './SignInPage';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from './the_logo.svg';
 
-const transition = 'browse' 
+const transition = 'browse';
 
 class OpeningScreen extends Component {
  
- 	state = { visible: true }
- 	toggleVisibility = () => this.setState({ visible: !this.state.visible })
+ 	state = { visible: true };
+ 	toggleVisibility = () => this.setState({ visible: !this.state.visible });
 
     render() {
-		    const { visible } = this.state
-
-
-	return(
-  	<Transition visible={visible} animation='scale' duration={500}>
-    	 
-    	 <Container className='login-form'>
-    	 
-    	 	<Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-            <Grid.Column style={{ maxWidth: 475 }}>
-    	 	
-    	 		<Segment raised padded inverted>
-    	 			<Image src={Logo} size = 'tiny' centered/>
-    	 		
-    	 			<h2 textAlign = 'center'>
-    	 				VASTUS 
-    	 			</h2>
-    	 			<h2>	
-    	 				The 21st Century Standard of Fitness
-    	 			</h2>
-    	 		<Divider/>
-    	 			<h3>
-    	 				Enhanced Motivation 
-    	 			</h3>
-    	 			<h3>
-    	 				Increased Goal Accountability 
-    	 			</h3>
-    	 			<h3>
-    	 				Win Capital and Glory
-    	 			</h3>
-    	 		
-    	 		<Button content={visible ? 'Begin Your Journey' : 'Begin Your Journey'} onClick={this.toggleVisibility} color = 'purple' size = 'massive'/>
-    	 			
-    	 		 </Segment>
- 
-            </Grid.Column>
-            </Grid>
- 
-    	 </Container>
-	</Transition>
-		)
+    	const { visible } = this.state;
+		return(
+  			<Transition visible={visible} animation='scale' duration={500}>
+				<Container className='login-form'>
+    	 			<Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+            			<Grid.Column style={{ maxWidth: 475 }}>
+							<Segment raised padded inverted>
+    	 						<Image src={Logo} size = 'tiny' centered/>
+    	 							<h2>VASTUS</h2>
+    	 							<h2>The 21st Century Standard of Fitness</h2>
+    	 							<Divider/>
+    	 							<h3>Enhanced Motivation</h3>
+    	 							<h3>Increased Goal Accountability</h3>
+    	 							<h3>Win Capital and Glory</h3>
+    	 							<Button content={visible ? 'Begin Your Journey' : 'Begin Your Journey'} onClick={this.toggleVisibility} color = 'purple' size = 'massive'/>
+							</Segment>
+						</Grid.Column>
+					</Grid>
+				</Container>
+			</Transition>
+		);
 	}
-};
+}
 
 const mapStateToProps = (state) => ({
     user: state.user
@@ -71,4 +51,5 @@ const mapDispatchToProps = (dispatch) => {
         }
     }
 };
+
 export default connect(mapStateToProps, mapDispatchToProps)(OpeningScreen);
