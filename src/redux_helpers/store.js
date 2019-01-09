@@ -8,12 +8,20 @@ import info from "./reducers/infoReducer";
 import search from "./reducers/searchReducer";
 import firebase from "./reducers/firebaseReducer";
 
-const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
-export default createStore(combineReducers({
-    user,
-    cache,
-    info,
-    auth,
-    search,
-    firebase,
-}), composeEnhancers(applyMiddleware(logger, thunk)));
+const middleware = applyMiddleware(logger, thunk);
+
+const composeEnhancers =
+    window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
+
+const store = createStore(combineReducers({
+        user,
+        cache,
+        info,
+        auth,
+        search,
+        firebase,
+    }),
+    composeEnhancers(middleware)
+);
+
+export default store;

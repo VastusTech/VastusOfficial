@@ -3,8 +3,7 @@ import { Card } from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
-import { fetchPost , fetchChallenge} from "../redux_helpers/actions/cacheActions";
-import { convertFromISO } from "../logic/TimeHelper";
+import { fetchPost, fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
 import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
@@ -12,6 +11,7 @@ import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
 import PostDetailCard from "./post_detail_cards/PostDetailCard";
 import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
 import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
+import {convertFromISO} from "../logic/TimeHelper";
 
 type Props = {
     postID: string
@@ -47,6 +47,7 @@ class PostCard extends Component {
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
         this.getCorrectDetailCard = this.getCorrectDetailCard.bind(this);
+        this.getOwnerName = this.getOwnerName.bind(this);
     }
 
     // componentDidMount() {
@@ -132,11 +133,20 @@ class PostCard extends Component {
 
     getOwnerName() {
         const owner = this.getPostAttribute("by");
-        //alert(owner);
-        if (owner) {
+        //alert(owner.substr(0, 2));
+        if (owner.substr(0, 2) === "CL") {
             if (this.props.cache.clients[owner]) {
                 //alert(JSON.stringify(this.props.cache.clients[owner]));
-                return this.props.cache.clients[owner].name
+                return this.props.cache.clients[owner].name;
+            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
+        }
+        else if (owner.substr(0, 2) === "TR") {
+            if (this.props.cache.trainers[owner]) {
+                //alert(JSON.stringify(this.props.cache.clients[owner]));
+                return this.props.cache.trainers[owner].name;
             }
             // else if (!this.props.info.isLoading) {
             //     this.props.fetchClient(owner, ["name"]);
@@ -193,6 +203,9 @@ class PostCard extends Component {
                     //return (<InviteDetailCard displayMedia = {this.getDisplayMedia}/>);
                 }
                 else if (postType === "Post") {
+                    if(!this.state.postMessageSet) {
+                        this.setState({postMessage: "posted", postMessageSet: true});
+                    }
                     return (<PostDetailCard postID={this.state.postID}/>);
                 }
                 else if (postType === "submission") {
@@ -208,39 +221,16 @@ class PostCard extends Component {
     }
 
     render() {
-        // function convertFromISO(dateTime) {
-        //     let dateTimeString = String(dateTime);
-        //     let dateTimes = String(dateTimeString).split("_");
-        //     let fromDateString = dateTimes[0];
-        //     let toDateString = dateTimes[1];
-        //     let fromDate = new Date(fromDateString);
-        //     let toDate = new Date(toDateString);
-        //
-        //     // Display time logic came from stack over flow
-        //     // https://stackoverflow.com/a/18537115
-        //     const fromHourInt = fromDate.getHours() > 12 ? fromDate.getHours() - 12 : fromDate.getHours();
-        //     const toHourInt = toDate.getHours() > 12 ? toDate.getHours() - 12 : toDate.getHours();
-        //     const fromminutes = fromDate.getMinutes().toString().length === 1 ? '0'+ fromDate.getMinutes() : fromDate.getMinutes(),
-        //         fromhours = fromHourInt.toString().length === 1 ? '0'+ fromHourInt : fromHourInt,
-        //         fromampm = fromDate.getHours() >= 12 ? 'PM' : 'AM',
-        //         tominutes = toDate.getMinutes().toString().length === 1 ? '0'+ toDate.getMinutes() : toDate.getMinutes(),
-        //         tohours = toHourInt.toString().length === 1 ? '0'+ toHourInt : toHourInt,
-        //         toampm = toDate.getHours() >= 12 ? 'PM' : 'AM',
-        //         months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'],
-        //         days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-        //     return days[fromDate.getDay()]+', '+months[fromDate.getMonth()]+' '+fromDate.getDate()+', '+fromDate.getFullYear()+' '+fromhours+':'+fromminutes+fromampm + ' - '+tohours+':'+tominutes+toampm;
-        // }
-
         if (!this.getPostAttribute("id")) {
-            return(
-                <Card fluid raised>
+            return (
+                <Card color='purple' fluid raised>
                     <h1>Loading...</h1>
                 </Card>
             );
         }
-        return(
+        return (
             // This is displays a few important pieces of information about the challenge for the feed view.
-            <Card fluid raised>
+            <Card color='purple' fluid raised>
                 <Card.Header textAlign = 'center'>{this.getOwnerName()} {this.state.postMessage}</Card.Header>
                 <Card.Content>
                     <div align='center'>
@@ -250,10 +240,12 @@ class PostCard extends Component {
                 </Card.Content>
                 <Card.Content extra onClick={this.openPostModal}>
                     {/*<Card.Meta textAlign = 'center'>{this.getPostAttribute("description")}</Card.Meta>*/}
+                    <div align="center">
+                        {convertFromISO(this.getPostAttribute("time_created")).substr(5, 12)}
+                    </div>
                     <PostDescriptionModal open={this.state.postModalOpen} onClose={this.closePostModal} postID={this.state.postID}/>
                 </Card.Content>
                 <Card.Content extra>
-                    {/* <Card.Meta>{this.state.event.time_created}</Card.Meta> */}
                     <Card.Meta textAlign = 'center'>
                         {this.getPostAttribute("access")}
                     </Card.Meta>

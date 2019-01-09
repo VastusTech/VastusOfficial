@@ -48,7 +48,9 @@ export function updateAuth() {
             }
         }).catch(() => {
             console.log("REDUX: Not currently logged in. Not a problem, no worries.");
-            dispatch(setIsNotLoading());
+            const noLoad = setIsNotLoading();
+            alert(noLoad);
+            dispatch(noLoad);
         });
     }
 }

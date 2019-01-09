@@ -12,9 +12,14 @@ export default function configFirebase() {
     };
     firebase.initializeApp(config);
 
-    navigator.serviceWorker
-        .register('/firebase-messaging-sw.js')
-        .then((registration) => {
-            firebase.messaging().useServiceWorker(registration);
-        });
+    if (firebase.messaging.isSupported()) {
+        navigator.serviceWorker
+            .register('/firebase-messaging-sw.js')
+            .then((registration) => {
+                firebase.messaging().useServiceWorker(registration);
+            });
+    }
+    else {
+        alert("FIREBASE IS NOT SUPPORTED");
+    }
 }
