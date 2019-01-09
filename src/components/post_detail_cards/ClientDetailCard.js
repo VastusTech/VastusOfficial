@@ -249,9 +249,9 @@ class ClientDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
-                <Card.Header>
+                <Card.Content>
                     <ClientCard clientID={this.getPostAttribute("about")}/>
-                </Card.Header>
+                </Card.Content>
             </Card>
         );
     }

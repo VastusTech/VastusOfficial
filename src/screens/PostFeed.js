@@ -5,7 +5,16 @@ import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
 // import ScheduledEventsList from "./ScheduledEventList";
-import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
+import {
+    fetchPost,
+    putChallengeQuery,
+    putPost,
+    putPostQuery,
+    fetchChallenge,
+    putChallenge,
+    fetchClient,
+    fetchPostQuery
+} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 // import CreateEventProp from "./CreateEvent";
 //import CreateChallengeProp from "./CreateChallenge";
@@ -157,7 +166,8 @@ class PostFeedProp extends Component {
                 }}
                 ,{postType: "submission"}
             );
-            QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+            // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+            this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                 filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
@@ -282,6 +292,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         putPostQuery: (queryString, queryResult) => {
             dispatch(putPostQuery(queryString, queryResult));
+        },
+        fetchPostQuery: (variablesList, filter, limit, nextToken, dataHandler, failureHandler) => {
+            dispatch(fetchPostQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler));
         },
         fetchChallenge: (id, variablesList) => {
             dispatch(fetchChallenge(id, variablesList));

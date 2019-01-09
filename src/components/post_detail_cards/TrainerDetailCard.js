@@ -19,7 +19,7 @@ import { fetchClient, forceFetchPost, fetchPost, fetchChallenge, forceFetchChall
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
 import PostFunctions from "../../databaseFunctions/PostFunctions.js";
-import ClientCard from "../ClientCard";
+import TrainerCard from "../TrainerCard";
 import {Player} from "video-react";
 import ChallengeCard from "../ChallengeCard";
 import { Storage } from "aws-amplify";
@@ -255,7 +255,7 @@ class TrainerDetailCard extends Component {
         return(
             <Card>
                 <Card.Header>
-                    <ClientCard clientID={this.getPostAttribute("about")}/>
+                    <TrainerCard trainerID={this.getPostAttribute("about")}/>
                 </Card.Header>
             </Card>
         );

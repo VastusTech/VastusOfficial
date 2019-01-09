@@ -11,6 +11,7 @@ import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
 import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
 import PostDetailCard from "./post_detail_cards/PostDetailCard";
 import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
+import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
 
 type Props = {
     postID: string
@@ -157,14 +158,18 @@ class PostCard extends Component {
             if (postType) {
                 //alert("Post Type: " + postType);
                 // TODO Switch the post types
-                if (itemType === "Client") {
+                if (postType === "Client") {
+                    //alert("Client Share Post Spotted!");
                     if(!this.state.postMessageSet) {
                         this.setState({postMessage: "shared a user profile", postMessageSet: true});
                     }
                     return (<ClientDetailCard postID={this.state.postID}/>);
                 }
                 else if (postType === "Trainer") {
-                    //return (<TrainerDetailCard displayMedia = {this.getDisplayMedia}/>);
+                    if(!this.state.postMessageSet) {
+                        this.setState({postMessage: "shared a trainer profile", postMessageSet: true});
+                    }
+                    return (<TrainerDetailCard postID={this.state.postID}/>);
                 }
                 else if (postType === "Gym") {
                     //return (<GymDetailCard displayMedia = {this.getDisplayMedia}/>);

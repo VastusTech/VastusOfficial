@@ -79,6 +79,9 @@ class Lambda {
     static invokePaymentLambda(payload, successHandler, failureHandler) {
         this.invokeLambda("VastusPaymentLambdaFunction", payload, successHandler, failureHandler);
     }
+    static invokeFirebaseLambda(payload, successHandler, failureHandler) {
+        this.invokeLambda("VastusFirebaseTokenFunction", payload, successHandler, failureHandler);
+    }
     static invokeLambda(functionName, payload, successHandler, failureHandler) {
         console.log("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
@@ -91,7 +94,7 @@ class Lambda {
             if (error) {
                 console.error(error);
                 console.error("Lambda failure: " + JSON.stringify(error));
-                failureHandler(error);
+                if (failureHandler) { failureHandler(error); }
             } else if (data.Payload) {
                 //console.log(data.Payload);
                 const payload = JSON.parse(data.Payload);
@@ -105,12 +108,12 @@ class Lambda {
                     if (ifDebug) {
                         console.log("Successful Lambda, received " + JSON.stringify(payload));
                     }
-                    successHandler(payload);
+                    if (successHandler) { successHandler(payload); }
                 }
             }
             else {
                 console.error("Weird error: payload returned with nothing...");
-                failureHandler("Payload returned with null");
+                if (failureHandler) { failureHandler("Payload returned with null"); }
             }
         });
     }

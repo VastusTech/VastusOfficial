@@ -10,6 +10,7 @@
 // export const CONFIRM_LOGIN_SUCCESS = 'CONFIRM_LOGIN_SUCCESS';
 // export const CONFIRM_LOGIN_FAILURE = 'CONFIRM_LOGIN_FAILURE';
 export const LOG_IN = 'LOG_IN';
+export const FEDERATED_LOG_IN = 'FEDERATED_LOG_IN';
 export const LOG_OUT = 'LOG_OUT';
 export const SIGN_UP = 'SIGN_UP';
 export const CONFIRM_SIGNUP = 'CONFIRM_SIGNUP';
@@ -20,25 +21,13 @@ export const CLOSE_SIGN_UP_MODAL = 'CLOSE_SIGN_UP_MODAL';
 export const OPEN_FORGOT_PASSWORD_MODAL = 'OPEN_FORGOT_PASSWORD_MODAL';
 export const CLOSE_FORGOT_PASSWORD_MODAL = 'CLOSE_FORGOT_PASSWORD_MODAL';
 
-export const authFunctions = {
-    LOG_IN,
-    LOG_OUT,
-    SIGN_UP,
-    CONFIRM_SIGNUP,
-    FORGOT_PASSWORD,
-    CONFIRM_FORGOT_PASSWORD,
-    OPEN_SIGN_UP_MODAL,
-    CLOSE_SIGN_UP_MODAL,
-    OPEN_FORGOT_PASSWORD_MODAL,
-    CLOSE_FORGOT_PASSWORD_MODAL
-};
-
 const initialState = {
     loggedIn: false,
     confirmingSignUp: false,
     confirmingForgotPassword: false,
     signUpModalOpen: false,
-    forgotPasswordModalOpen: false
+    forgotPasswordModalOpen: false,
+    ifFederatedSignIn: false
 };
 
 export default (state = initialState, action) => {
@@ -50,7 +39,19 @@ export default (state = initialState, action) => {
                 confirmingSignUp: false,
                 confirmingForgotPassword: false,
                 signUpModalOpen: false,
-                forgotPasswordModalOpen: false
+                forgotPasswordModalOpen: false,
+                ifFederatedSignIn: false,
+            };
+            break;
+        case FEDERATED_LOG_IN:
+            state = {
+                ...state,
+                loggedIn: true,
+                confirmingSignUp: false,
+                confirmingForgotPassword: false,
+                signUpModalOpen: false,
+                forgotPasswordModalOpen: false,
+                ifFederatedSignIn: true,
             };
             break;
         case LOG_OUT:
