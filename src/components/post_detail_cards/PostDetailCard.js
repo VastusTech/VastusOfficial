@@ -5,17 +5,18 @@
 // TODO This will be for a post that is sharing an existing Post with your friends!
 
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, Icon, Divider, Image, Message} from 'semantic-ui-react';
+import {Card, Modal, Button, Header, Icon, Divider, Image, Message, Dimmer, Loader} from 'semantic-ui-react';
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
-import { fetchClient, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
+import { fetchClient, fetchTrainer, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
 import PostFunctions from "../../databaseFunctions/PostFunctions";
 import {Player} from "video-react";
 import { Storage } from "aws-amplify";
+import {getItemTypeFromID} from "../../logic/ItemType";
 // import CommentScreen from "../screens/CommentScreen";
 // import VideoUploadScreen from "../screens/VideoUploadScreen";
 
@@ -75,6 +76,7 @@ class PostDetailCard extends Component {
         this.isOwned = this.isOwned.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
+        this.getClientAttribute = this.getClientAttribute.bind(this);
     }
 
     componentDidMount() {
@@ -85,11 +87,19 @@ class PostDetailCard extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.postID && !this.state.postID) {
-            this.state.postID = newProps.postID;
+            //this.state.postID = newProps.postID;
+            this.setState({postID: newProps.postID});
         }
         const by = this.getPostAttribute("by");
         if (!this.props.open && newProps.open && newProps.postID && by) {
-            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+            const itemType = getItemTypeFromID(by);
+            //alert(itemType);
+            if(itemType === "Trainer") {
+                this.props.fetchTrainer(by, ["id", "name", "profileImagePath", "profilePicture"]);
+            }
+            if(itemType === "Client") {
+                this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
+            }
         }
     }
 
@@ -114,17 +124,83 @@ class PostDetailCard extends Component {
         }
     }
 
+    getClientAttribute(attribute) {
+        if (this.getPostAttribute("by")) {
+            //alert(this.getPostAttribute("by"));
+            let client = this.props.cache.clients[this.getPostAttribute("by")];
+            let trainer = this.props.cache.trainers[this.getPostAttribute("by")];
+            //alert(JSON.stringify(this.props.cache.trainers));
+            if (client) {
+                //alert("Found the Client!");
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (client[attribute] && client[attribute].length) {
+                        return client[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return client[attribute];
+            }
+            else if(trainer) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (trainer[attribute] && trainer[attribute].length) {
+                        return trainer[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return client[attribute];
+            }
+        }
+        else {
+            return null;
+        }
+    }
+
     getOwnerName() {
         const owner = this.getPostAttribute("by");
         if (owner) {
-            if (this.props.cache.clients[owner]) {
-                return this.props.cache.clients[owner].name
+            if (this.props.cache.clients[owner] || this.props.cache.trainers[owner]) {
+                const itemType = getItemTypeFromID(owner);
+                //alert(itemType);
+                if(itemType === "Trainer") {
+                    return this.props.cache.trainers[owner].name
+                }
+                if(itemType === "Client") {
+                    return this.props.cache.clients[owner].name
+                }
             }
             // else if (!this.props.info.isLoading) {
             //     this.props.fetchClient(owner, ["name"]);
             // }
         }
         return null;
+    }
+
+    profilePicture() {
+        if (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null) {
+            /*if(!this.state.urlsSet) {
+                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
+                this.setURLS(this.getClientAttribute("profileImagePaths"));
+                console.log("Setting URLS: " + this.state.galleryURLS);
+                this.setState({urlsSet: true});
+            }*/
+            //alert(this.getClientAttribute("profilePicture"));
+            return(
+                <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
+            );
+        }
+        else {
+            return(
+                <Dimmer inverted>
+                    <Loader />
+                </Dimmer>
+            );
+        }
     }
 
     handleDeletePostButton() {
@@ -251,6 +327,9 @@ class PostDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
+                <Card.Header>
+                    <Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.profilePicture()}{this.getOwnerName()}</Button>
+                </Card.Header>
                 <Card.Content>
                     <Card.Description>
                         {this.getPostAttribute("description")}
@@ -274,6 +353,9 @@ const mapDispatchToProps = (dispatch) => {
     return {
         fetchClient: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));
+        },
+        fetchTrainer: (id, variablesList) => {
+            dispatch(fetchTrainer(id, variablesList));
         },
         forceFetchUserAttributes: (attributeList) => {
             dispatch(forceFetchUserAttributes(attributeList));

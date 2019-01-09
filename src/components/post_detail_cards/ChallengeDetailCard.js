@@ -51,7 +51,7 @@ class ChallengeDetailCard extends Component {
         // event: null,
         // ownerName: null,
         // members: {},
-        clientModalOpen: false,
+        clientModalOpen: false
         // completeModalOpen: false,
         // isLeaveLoading: false,
         // isDeleteLoading: false,
@@ -140,6 +140,7 @@ class ChallengeDetailCard extends Component {
             console.log(this.getPostAttribute("by"));
             let client = this.props.cache.clients[this.getPostAttribute("by")];
             if (client) {
+                //alert("Found Client in Challenge");
                 if (attribute.substr(attribute.length - 6) === "Length") {
                     attribute = attribute.substr(0, attribute.length - 6);
                     if (client[attribute] && client[attribute].length) {
@@ -343,9 +344,6 @@ class ChallengeDetailCard extends Component {
             <Card>
                 <Card.Header><Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.profilePicture()}{this.getOwnerName()}</Button>
                     {/*convertFromISO(this.getPostAttribute("time_created"))*/}</Card.Header>
-                <Card.Content>
-                    {convertFromISO(this.getPostAttribute("time_created"))}
-                </Card.Content>
                 <Card.Content>
                     {/*alert(this.getPostAttribute("about"))*/}
                     <ChallengeCard challengeID={this.getPostAttribute("about")}/>
