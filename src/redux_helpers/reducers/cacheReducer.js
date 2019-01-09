@@ -15,6 +15,20 @@ const FETCH_COMMENT = 'FETCH_COMMENT';
 const FETCH_SPONSOR = 'FETCH_SPONSOR';
 const FETCH_MESSAGE = 'FETCH_MESSAGE';
 
+const REMOVE_CLIENT =    'REMOVE_CLIENT';
+const REMOVE_TRAINER =   'REMOVE_TRAINER';
+const REMOVE_GYM =       'REMOVE_GYM';
+const REMOVE_WORKOUT =   'REMOVE_WORKOUT';
+const REMOVE_REVIEW =    'REMOVE_REVIEW';
+const REMOVE_EVENT =     'REMOVE_EVENT';
+const REMOVE_CHALLENGE = 'REMOVE_CHALLENGE';
+const REMOVE_INVITE =    'REMOVE_INVITE';
+const REMOVE_POST =      'REMOVE_POST';
+const REMOVE_GROUP =     'REMOVE_GROUP';
+const REMOVE_COMMENT =   'REMOVE_COMMENT';
+const REMOVE_SPONSOR =   'REMOVE_SPONSOR';
+const REMOVE_MESSAGE =   'REMOVE_MESSAGE';
+
 const FETCH_CLIENT_QUERY = 'FETCH_CLIENT_QUERY';
 const FETCH_TRAINER_QUERY = 'FETCH_TRAINER_QUERY';
 const FETCH_GYM_QUERY = 'FETCH_GYM_QUERY';
@@ -194,6 +208,45 @@ export default (state = initialState, action) => {
             break;
         case FETCH_MESSAGE:
             state = addObjectToCache(state, "messages", messageCacheSize, "messageLRUHandler", action.payload);
+            break;
+        case REMOVE_CLIENT:
+            state = removeItem(state, "clients", action.payload);
+            break;
+        case REMOVE_TRAINER:
+            state = removeItem(state, "trainers", action.payload);
+            break;
+        case REMOVE_GYM:
+            state = removeItem(state, "gyms", action.payload);
+            break;
+        case REMOVE_WORKOUT:
+            state = removeItem(state, "workouts", action.payload);
+            break;
+        case REMOVE_REVIEW:
+            state = removeItem(state, "reviews", action.payload);
+            break;
+        case REMOVE_EVENT:
+            state = removeItem(state, "events", action.payload);
+            break;
+        case REMOVE_CHALLENGE:
+            state = removeItem(state, "challenges", action.payload);
+            break;
+        case REMOVE_INVITE:
+            state = removeItem(state, "invites", action.payload);
+            break;
+        case REMOVE_POST:
+            state = removeItem(state, "posts", action.payload);
+            break;
+        case REMOVE_GROUP:
+            state = removeItem(state, "groups", action.payload);
+            break;
+        case REMOVE_COMMENT:
+            state = removeItem(state, "comments", action.payload);
+            break;
+        case REMOVE_SPONSOR:
+            state = removeItem(state, "sponsors", action.payload);
+            break;
+        case REMOVE_MESSAGE:
+            state = removeItem(state, "messages", action.payload);
             break;
             // Connected these to LRU Handlers... important especially as we scale
         case FETCH_CLIENT_QUERY:
@@ -397,6 +450,15 @@ function addObjectToCache(state, cacheName, maxCacheSize, LRUHandlerName, object
         };
         return state;
     }
+}
+function removeItem(state, cacheName, id) {
+    return {
+        ...state,
+        [cacheName]: {
+            ...state[cacheName],
+            [id]: null
+        }
+    };
 }
 function clearCache(state, cacheName) {
     return {

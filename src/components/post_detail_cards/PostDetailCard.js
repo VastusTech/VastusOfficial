@@ -9,7 +9,7 @@ import {Card, Modal, Button, Header, Icon, Divider, Image, Message} from 'semant
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
-import { fetchClient, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
+import {fetchClient, forceFetchPost, fetchPost, removeItem} from "../../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
@@ -130,8 +130,8 @@ class PostDetailCard extends Component {
     handleDeletePostButton() {
         //console.log("Handling deleting the event");
         this.setState({isLoading: true});
-        PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), (data) => {
-            this.forceUpdate(data.id);
+        PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), () => {
+            this.forceUpdate(this.getPostAttribute("id"));
             // console.log(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false});
         }, (error) => {
@@ -153,7 +153,9 @@ class PostDetailCard extends Component {
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     forceUpdate = (postID) => {
-        this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
+        alert("FORCE UPDATE = " + postID);
+        this.props.removeItem("Post", postID);
+        // this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
     };
 
     displayError() {
@@ -280,6 +282,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchPost: (id, variablesList) => {
             dispatch(fetchPost(id, variablesList));
+        },
+        removeItem: (itemType, id) => {
+            dispatch(removeItem(itemType, id));
         },
         forceFetchPost: (id, variablesList) => {
             dispatch(forceFetchPost(id, variablesList));
