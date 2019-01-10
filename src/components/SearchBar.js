@@ -220,7 +220,7 @@ class SearchBarProp extends Component {
     };
 
     retrieveSearchResults(searchQuery) {
-        alert("STARTING SEARCH");
+        // alert("STARTING SEARCH");
         this.setState({isLoading: true});
         this.props.newSearch(searchQuery, (data) => {
             if (data && data.length) {
