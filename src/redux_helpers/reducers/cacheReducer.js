@@ -87,19 +87,19 @@ const sponsorCacheSize = 100;
 const messageCacheSize = 10000;
 
 // TODO The query cache sizes might be important if the user is searching for a lot
-const clientQueryCacheSize = 0;
-const trainerQueryCacheSize = 0;
-const gymQueryCacheSize = 0;
-const workoutQueryCacheSize = 0;
-const reviewQueryCacheSize = 0;
+const clientQueryCacheSize = 5;
+const trainerQueryCacheSize = 5;
+const gymQueryCacheSize = 5;
+const workoutQueryCacheSize = 5;
+const reviewQueryCacheSize = 5;
 const eventQueryCacheSize = 10;
-const challengeQueryCacheSize = 0;
-const inviteQueryCacheSize = 0;
+const challengeQueryCacheSize = 5;
+const inviteQueryCacheSize = 5;
 const postQueryCacheSize = 5;
-const groupQueryCacheSize = 0;
-const commentQueryCacheSize = 0;
-const sponsorQueryCacheSize = 0;
-const messageQueryCacheSize = 0;
+const groupQueryCacheSize = 5;
+const commentQueryCacheSize = 5;
+const sponsorQueryCacheSize = 5;
+const messageQueryCacheSize = 5;
 
 const initialState = {
     // ID --> DatabaseObject
@@ -391,7 +391,7 @@ function addQueryToCache(state, cacheName, maxCacheSize, LRUHandlerName, normali
         if (LRUHandler.length >= maxCacheSize) {
             // Then we have to pop something out
             const entry = LRUHandler.pop();
-            delete cache[entry.normalizedQueryString][entry.nextToken];
+            delete state[cacheName][entry.normalizedQueryString][entry.nextToken];
         }
         return state;
     }

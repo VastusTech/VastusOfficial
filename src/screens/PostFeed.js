@@ -176,12 +176,17 @@ class PostFeedProp extends Component {
             //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.PostFeedLength,
             //     this.state.nextToken, (data) => {
             const filter = QL.generateFilter({
-                not: {
+                or: [{
                     postType: {
-                        eq: "$postType"
+                        eq: "$postType1"
                     }
-                }}
-                ,{postType: "submission"}
+                },{
+                    postType: {
+                        eq: "$postType2"
+                    }
+                }]}
+                ,{postType1: "Challenge",
+                postType2: "newChallenge"}
             );
             // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
             this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
