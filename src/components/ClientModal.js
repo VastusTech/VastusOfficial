@@ -623,8 +623,8 @@ class ClientModal extends Component<Props> {
             //console.log(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
                 <div>
-                    <Image src={this.state.galleryURLS[i]} align='center' style={{height: 500,
-                        width: 500, display: 'block',
+                    <Image src={this.state.galleryURLS[i]} align='center' style={{height: '300px',
+                        width: '300px', display: 'block',
                         margin: 'auto'}}>
                         {/*this.state.galleryURLS[i] + " Num: " + i*/}
                         {/*this.setGalleryNum(i)*/}
@@ -663,12 +663,12 @@ class ClientModal extends Component<Props> {
     swipeGallery() {
         let reactSwipeEl;
         return (
-            <div align='center'>
-                <Grid>
-                    <Grid.Column width={1} onClick={() => reactSwipeEl.prev()}>
-                        <Icon align="left" size='large' name="caret left"/>
+            <div>
+                <Grid centered>
+                    <Grid.Column width={1} style={{marginRight: "10px"}} onClick={() => reactSwipeEl.prev()}>
+                        <Icon size='large' name="caret left" style={{marginTop: "150px"}}/>
                     </Grid.Column>
-                    <Grid.Column width={10}>
+                    <Grid.Column width={12}>
                         <ReactSwipe
                             className="carousel"
                             swipeOptions={{ continuous: false }}
@@ -677,8 +677,8 @@ class ClientModal extends Component<Props> {
                             {this.imageGallery()}
                         </ReactSwipe>
                     </Grid.Column>
-                    <Grid.Column width={1} onClick={() => reactSwipeEl.next()}>
-                        <Icon align="right" size='large' name="caret right" />
+                    <Grid.Column width={1} style={{marginRight: "10px", marginLeft: "-10px"}} onClick={() => reactSwipeEl.next()}>
+                        <Icon size='large' name="caret right" style={{marginTop: "150px"}}/>
                     </Grid.Column>
                 </Grid>
             </div>
@@ -809,7 +809,7 @@ class ClientModal extends Component<Props> {
                 <Modal.Content image>
                     {this.profilePicture()}
                     <Modal.Description>
-                        <Button primary floated='right' loading={this.state.shareLoading} disabled={this.state.shareLoading} onClick={() => this.shareClient()}>Share Page</Button>
+                        {/*<Button primary floated='right' loading={this.state.shareLoading} disabled={this.state.shareLoading} onClick={() => this.shareClient()}>Share Page</Button>*/}
                         <List relaxed>
 
                             {/* Bio */}
@@ -837,7 +837,7 @@ class ClientModal extends Component<Props> {
                         </List>
                     </Modal.Description>
                 </Modal.Content>
-                <Modal.Content>
+                <Modal.Content fluid>
                     {this.swipeGallery()}
                 </Modal.Content>
                 <Modal.Actions>

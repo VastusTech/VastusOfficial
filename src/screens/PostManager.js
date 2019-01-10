@@ -137,7 +137,7 @@ class PostManager extends Component {
                                         <CreateChallengeProp queryChallenges={this.props.queryChallenges} queryPosts={this.props.queryPosts}/>
                                     </Tab.Pane>
                             },
-                            {
+                            /*{
                                 menuItem: (
                                     <Menu.Item key={1}>
                                         Make Post
@@ -145,7 +145,7 @@ class PostManager extends Component {
                                 render: () => <Tab.Pane basic attached={false}>
                                     <CreatePostProp queryPosts={this.props.queryPosts}/>
                                 </Tab.Pane>
-                            },
+                            },*/
                         ]
                     }/>
                 </Modal.Content>

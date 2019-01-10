@@ -15,7 +15,7 @@ import FirebaseConfig from "./FirebaseConfig";
 // const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");
 
 AWSConfig();
-FirebaseConfig();
+//FirebaseConfig();
 
 function requestNotificationPermission() {
     // Some browsers don't support Notification yet. I'm looking at you iOS Safari
@@ -37,7 +37,7 @@ class App extends Component {
 
     constructor(props) {
         super(props);
-        requestNotificationPermission();
+        //requestNotificationPermission();
         // myServiceWorker.
     }
 
@@ -76,9 +76,9 @@ class App extends Component {
 
     componentDidMount() {
         this.props.updateAuth();
-        this.props.setOnMessage((payload) => {
+        /*this.props.setOnMessage((payload) => {
             alert(JSON.stringify(payload));
-        });
+        });*/
     }
 
     componentWillReceiveProps(newProps, nextContext) {
@@ -114,7 +114,7 @@ class App extends Component {
 const mapStateToProps = (state) => ({
     user: state.user,
     auth: state.auth,
-    firebase: state.firebase
+    //firebase: state.firebase
     // cache: state.cache,
 });
 
@@ -123,9 +123,10 @@ const mapDispatchToProps = (dispatch) => {
         updateAuth: () => {
             dispatch(updateAuth());
         },
-        setOnMessage: (messageHandler) => {
+        /*setOnMessage: (messageHandler) => {
             dispatch(setOnMessage(messageHandler));
         }
+        */
     }
 };
 

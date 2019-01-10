@@ -220,20 +220,19 @@ class Profile extends React.PureComponent {
         if(this.state.galleryURLS.length > 0) {
             //alert(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
-                <div>
-                <Image src={this.state.galleryURLS[i]} align='center' style={{height: 500,
-                    width: 500, display: 'block',
-                    margin: 'auto'}}>
-                    {/*this.state.galleryURLS[i] + " Num: " + i*/}
-                    {this.setState({galleryNum: i})}
-                </Image>
-                    <Label size='small' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
-                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
-                    </Label>
-                    Change Picture
-                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
-                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: i})}/>
-                </div>
+                <Grid centered>
+                    <Image src={this.state.galleryURLS[i]} centered style={{height: '500px',
+                        width: '500px', display: 'block',
+                        margin: 'auto'}}>
+                        {/*this.state.galleryURLS[i] + " Num: " + i*/}
+                        {this.setState({galleryNum: i})}
+                    </Image>
+                        <Button primary as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient" style={{marginLeft: "200px"}}>
+                            Change Picture
+                        </Button>
+                        <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                               onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: i})}/>
+                </Grid>
             ));
         }
     }
@@ -337,11 +336,11 @@ class Profile extends React.PureComponent {
                     <Card.Meta>Event Wins: {numChallengesWon(this.props.user.challengesWon)}</Card.Meta>
                     <List id = "profile buttons">
                         <List.Item>
-                            <Modal closeIcon trigger={<Button primary fluid size="large"><Icon name="picture" /> Photo Gallery</Button>}>
+                            <Modal closeIcon trigger={<Button primary fluid size="large"><Icon name="picture" /> Photo Gallery</Button>} >
                                 <div>
-                                    <Grid>
-                                        <Grid.Column floated='left' width={2}>
-                                            <Button align="left" icon="caret left" primary fluid onClick={() => reactSwipeEl.prev()}/>
+                                    <Grid centered>
+                                        <Grid.Column width={1} style={{marginRight: "10px"}} onClick={() => reactSwipeEl.prev()}>
+                                            <Icon size='large' name="caret left" style={{marginTop: "150px"}}/>
                                         </Grid.Column>
                                         <Grid.Column width={10}>
                                             <ReactSwipe
@@ -351,18 +350,20 @@ class Profile extends React.PureComponent {
                                             >
                                                 {this.setURLS(this.props.user.profileImagePaths)}
                                                 {this.imageGallery()}
-                                                <div>
-                                                    <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
-                                                        <Icon name="plus" className='u-margin-right--0' size="large" inverted/>
-                                                    </Label>
-                                                    Add new picture to gallery
-                                                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
-                                                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
-                                                </div>
+                                                <Grid centered style={{marginTop: "100px", marginBottom: "100px", marginLeft: "-1" +
+                                                        "px"}}>
+                                                    <Grid.Row width={12} height={20}>
+                                                        <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                                                               onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
+                                                        <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
+                                                            <Icon name="plus" size="large" inverted/>Add new picture
+                                                        </Label>
+                                                    </Grid.Row>
+                                                </Grid>
                                             </ReactSwipe>
                                         </Grid.Column>
-                                        <Grid.Column floated='right' width={2}>
-                                            <Button align="right" icon="caret right" primary fluid onClick={() => reactSwipeEl.next()}/>
+                                        <Grid.Column width={1} style={{marginRight: "10px", marginLeft: "-10px"}} onClick={() => reactSwipeEl.next()}>
+                                            <Icon size='large' name="caret right" style={{marginTop: "150px"}}/>
                                         </Grid.Column>
                                     </Grid>
                                 </div>
