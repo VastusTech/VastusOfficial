@@ -11,6 +11,7 @@ import PostFunctions from "../../databaseFunctions/PostFunctions.js";
 import {Player} from "video-react";
 import ChallengeCard from "../ChallengeCard";
 import { Storage } from "aws-amplify";
+import ClientModal from "../ClientModal";
 // import CommentScreen from "../screens/CommentScreen";
 // import VideoUploadScreen from "../screens/VideoUploadScreen";
 
@@ -168,7 +169,7 @@ class ChallengeDetailCard extends Component {
             }*/
             //alert(this.getClientAttribute("profilePicture"));
             return(
-                <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
+                <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`, width: '50px', height: '50px'}}></div>
             );
         }
         else {
@@ -240,8 +241,15 @@ class ChallengeDetailCard extends Component {
     //     return this.getChallengeAttribute("ifCompleted");
     // }
 
-    openClientModal() { this.setState({clientModalOpen: true}); }
-    closeClientModal() { this.setState({clientModalOpen: false}); }
+    openClientModal = () => {
+        if (!this.state.clientModalOpen) {
+            this.setState({clientModalOpen: true})
+        };
+    }
+    closeClientModal = () => {
+        console.log("Closing client modal");
+        this.setState({clientModalOpen: false})
+    };
 
     // openCompleteModal() { this.setState({completeModalOpen: true}); }
     // closeCompleteModal() { this.setState({completeModalOpen: false}); }
@@ -282,6 +290,15 @@ class ChallengeDetailCard extends Component {
                 );
             }
         }
+    }
+
+    clientOrTrainerModal() {
+        return (<ClientModal
+            clientID={this.getPostAttribute("by")}
+            open={this.state.clientModalOpen}
+            onOpen={this.openClientModal.bind(this)}
+            onClose={this.closeClientModal.bind(this)}
+        />);
     }
 
     render() {
@@ -342,8 +359,20 @@ class ChallengeDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
-                <Card.Header><Button className="u-button--flat" onClick={this.openClientModal.bind(this)}>{this.profilePicture()}{this.getOwnerName()}</Button>
-                    {/*convertFromISO(this.getPostAttribute("time_created"))*/}</Card.Header>
+                <Card.Header>
+                    <Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
+                        <Grid style={{marginLeft: '10px', marginTop: '10px'}}>
+                            <Grid.Column width={6}>
+                                {this.profilePicture()}
+                            </Grid.Column>
+                            <Grid.Column width={5} floated='center' style={{marginTop: '15px'}}>
+                                {this.getOwnerName()}
+                            </Grid.Column>
+                        </Grid>
+                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getPostAttribute("by")}/>
+                    </Button>
+                </Card.Header>
+                {/*alert(this.getPostAttribute("by"))*/}
                 <Card.Content>
                     {/*alert(this.getPostAttribute("about"))*/}
                     <ChallengeCard challengeID={this.getPostAttribute("about")}/>
