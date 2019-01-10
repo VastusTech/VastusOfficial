@@ -130,7 +130,8 @@ export function googleSignIn(googleUser) {
                 else {
                     // This user has not yet signed up!
                     console.log("User hasn't signed up yet! Generating a new account!");
-                    generateGoogleUsername(name, (username) => {
+                    // Generate a google username using their name without any spaces
+                    generateGoogleUsername(name.replace(/\s+/g, ''), (username) => {
                         ClientFunctions.createFederatedClient("admin", name, email, username, sub, (data) => {
                             // Then this user has already signed up
                             const id = data.data;
@@ -178,7 +179,7 @@ export function googleSignIn(googleUser) {
     };
 }
 function generateGoogleUsername(name, usernameHandler, failureHandler, depth=0) {
-    const randomInt = Math.floor((Math.random() * 10000) + 1);
+    const randomInt = Math.floor((Math.random() * 10000000) + 1);
     const randomGoogleUsername = name + randomInt;
     QL.getClientByUsername(randomGoogleUsername, ["username"], (client) => {
         if (client) {
