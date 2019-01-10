@@ -76,7 +76,6 @@ class PostDetailCard extends Component {
         this.isOwned = this.isOwned.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
-        this.getClientAttribute = this.getClientAttribute.bind(this);
     }
 
     componentDidMount() {
@@ -87,19 +86,11 @@ class PostDetailCard extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.postID && !this.state.postID) {
-            //this.state.postID = newProps.postID;
-            this.setState({postID: newProps.postID});
+            this.state.postID = newProps.postID;
         }
         const by = this.getPostAttribute("by");
         if (!this.props.open && newProps.open && newProps.postID && by) {
-            const itemType = getItemTypeFromID(by);
-            //alert(itemType);
-            if(itemType === "Trainer") {
-                this.props.fetchTrainer(by, ["id", "name", "profileImagePath", "profilePicture"]);
-            }
-            if(itemType === "Client") {
-                this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
-            }
+            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
         }
     }
 
