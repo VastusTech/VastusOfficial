@@ -20,7 +20,7 @@ import SearchScreen from "./SearchScreen";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 4, size: "large", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -53,15 +53,6 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <Icon name='search' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                    <SearchScreen />
-                </Tab.Pane>
-            },
-            {
-                menuItem: (
-                    <Menu.Item key={4}>
                         <NotificationBellProp/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
