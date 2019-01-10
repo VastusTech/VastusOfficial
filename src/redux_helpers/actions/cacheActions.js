@@ -617,7 +617,7 @@ export function forceFetchSponsors(ids, variablesList, dataHandler, unretrievedD
     return batchForceFetch(ids, variablesList, "sponsors", "getSponsors", "FETCH_SPONSOR", dataHandler, unretrievedDataHandler, failureHandler);
 }
 export function fetchClientQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
-    alert("fetching clients");
+    // alert("fetching clients");
     return fetchQuery("Client", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchTrainerQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
@@ -636,10 +636,10 @@ export function fetchEventQuery(variablesList, filter, limit, nextToken, dataHan
     return fetchQuery("Event", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchChallengeQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
-    alert("fetching challenges with variablesList = \n" + JSON.stringify(variablesList));
-    alert("with filter = \n" + JSON.stringify(filter));
-    alert("with limit = \n" + JSON.stringify(limit));
-    alert("with nextToken = \n" + JSON.stringify(nextToken));
+    // alert("fetching challenges with variablesList = \n" + JSON.stringify(variablesList));
+    // alert("with filter = \n" + JSON.stringify(filter));
+    // alert("with limit = \n" + JSON.stringify(limit));
+    // alert("with nextToken = \n" + JSON.stringify(nextToken));
     return fetchQuery("Challenge", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchPostQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {

@@ -88,11 +88,11 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
         if (nextToken || ifFirst) {
             const putItemFunction = getPutItemFunction(itemType);
             const fetchQueryFunction = getFetchQueryFunction(itemType);
-            alert(JSON.stringify(getFetchQueryFunction));
-            if (!fetchQueryFunction) { alert("problem"); }
-            else { alert(JSON.stringify(fetchQueryFunction)); }
+            // alert(JSON.stringify(getFetchQueryFunction));
+            // if (!fetchQueryFunction) { alert("problem"); }
+            // else { alert(JSON.stringify(fetchQueryFunction)); }
             fetchQueryFunction(variableList, QL.generateFilter(filterJSON, filterParameters), limit, nextToken, (data) => {
-                alert("Ay lmao it came back");
+                // alert("Ay lmao it came back");
                 if (data) {
                     dispatch(setTypeNextToken(itemType, data.nextToken));
                     successHandler(data);
