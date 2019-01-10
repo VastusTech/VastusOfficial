@@ -9,7 +9,7 @@ import {Card, Modal, Button, Header, Icon, Divider, Image, Message, Dimmer, Load
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
-import { fetchClient, fetchTrainer, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
+import {fetchClient, fetchTrainer, forceFetchPost, fetchPost, removeItem} from "../../redux_helpers/actions/cacheActions";
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
@@ -76,7 +76,6 @@ class PostDetailCard extends Component {
         this.isOwned = this.isOwned.bind(this);
         this.getDisplayMedia = this.getDisplayMedia.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
-        this.getClientAttribute = this.getClientAttribute.bind(this);
     }
 
     componentDidMount() {
@@ -87,19 +86,11 @@ class PostDetailCard extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.postID && !this.state.postID) {
-            //this.state.postID = newProps.postID;
-            this.setState({postID: newProps.postID});
+            this.state.postID = newProps.postID;
         }
         const by = this.getPostAttribute("by");
         if (!this.props.open && newProps.open && newProps.postID && by) {
-            const itemType = getItemTypeFromID(by);
-            //alert(itemType);
-            if(itemType === "Trainer") {
-                this.props.fetchTrainer(by, ["id", "name", "profileImagePath", "profilePicture"]);
-            }
-            if(itemType === "Client") {
-                this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
-            }
+            this.props.fetchClient(by, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"]);
         }
     }
 
@@ -206,8 +197,8 @@ class PostDetailCard extends Component {
     handleDeletePostButton() {
         //console.log("Handling deleting the event");
         this.setState({isLoading: true});
-        PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), (data) => {
-            this.forceUpdate(data.id);
+        PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), () => {
+            this.forceUpdate(this.getPostAttribute("id"));
             // console.log(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false});
         }, (error) => {
@@ -229,7 +220,9 @@ class PostDetailCard extends Component {
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     forceUpdate = (postID) => {
-        this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
+        alert("FORCE UPDATE = " + postID);
+        this.props.removeItem("Post", postID);
+        // this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
     };
 
     displayError() {
@@ -362,6 +355,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchPost: (id, variablesList) => {
             dispatch(fetchPost(id, variablesList));
+        },
+        removeItem: (itemType, id) => {
+            dispatch(removeItem(itemType, id));
         },
         forceFetchPost: (id, variablesList) => {
             dispatch(forceFetchPost(id, variablesList));

@@ -510,6 +510,52 @@ class GraphQL {
             variables: finalInputVariables
         };
     }
+    static getNextTokenString(nextToken) { return nextToken ? nextToken : "null"; }
+    static getNormalizedQuery(query) {
+        return {
+            ...query,
+            variables: {
+                ...query.variables,
+                nextToken: "not_defined"
+            }
+        };
+    }
+    static getQueryFromNormalizedQuery(normalizedQuery, nextToken) {
+        return {
+            ...normalizedQuery,
+            variables: {
+                ...normalizedQuery.variables,
+                nextToken
+            }
+        };
+    }
+    static getCompressedFromQueryResult(queryResult) {
+        const items = queryResult.items;
+        const ids = [];
+        if (items) {
+            for (let i = 0; i < items.length; i++) {
+                ids.push(items[i].id);
+            }
+        }
+        return {
+            ids,
+            nextToken: queryResult.nextToken
+        };
+    }
+    static getQueryResultFromCompressed(compressedResult, itemTypeCache) {
+        const ids = compressedResult.ids;
+        const items = [];
+        for (let i = 0; i < ids.length; i++) {
+            const item = itemTypeCache[ids[i]];
+            if (item) {
+                items.push(item);
+            }
+        }
+        return {
+            items,
+            nextToken: compressedResult.nextToken
+        };
+    }
     static execute(query, queryFunctionName, successHandler, failureHandler, queryCache, putQuery) {
         const queryString = JSON.stringify(query.query) + JSON.stringify(query.variables);
         // console.log(queryString);
