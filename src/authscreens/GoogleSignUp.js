@@ -1,6 +1,6 @@
 import { Auth } from 'aws-amplify';
 import React, { Component } from 'react';
-import Semantic, { Button, List } from 'semantic-ui-react';
+import Semantic, { Button, List, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {googleSignIn} from "../redux_helpers/actions/authActions";
 
@@ -76,7 +76,7 @@ class GoogleSignUp extends React.Component {
     render() {
         return (
             <div>
-                <Button onClick={this.signIn}>Sign in with Google</Button>
+                <Button color="green" onClick={this.signIn}> <Icon name="google icon"></Icon>Google Sign In</Button>
             </div>
         );
     }
