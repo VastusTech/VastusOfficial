@@ -465,7 +465,8 @@ export function overwriteFetchQuery(itemType, queryString, nextToken, dataHandle
         });
         if (dataHandler) { dataHandler(data);}
     }, (error) => {
-        console.error("Error in QUERY retrieval. ItemType = " + itemType + ", query string = " + queryString);
+        console.error("Error in QUERY retrieval. ItemType = " + itemType + ", query string = " + JSON.stringify(queryString));
+        console.error(JSON.stringify(error));
         dispatch(setError(error));
         dispatch(setIsNotLoading());
         if (failureHandler) { failureHandler(error);}
@@ -616,6 +617,7 @@ export function forceFetchSponsors(ids, variablesList, dataHandler, unretrievedD
     return batchForceFetch(ids, variablesList, "sponsors", "getSponsors", "FETCH_SPONSOR", dataHandler, unretrievedDataHandler, failureHandler);
 }
 export function fetchClientQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
+    alert("fetching clients");
     return fetchQuery("Client", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchTrainerQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
@@ -634,6 +636,10 @@ export function fetchEventQuery(variablesList, filter, limit, nextToken, dataHan
     return fetchQuery("Event", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchChallengeQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
+    alert("fetching challenges with variablesList = \n" + JSON.stringify(variablesList));
+    alert("with filter = \n" + JSON.stringify(filter));
+    alert("with limit = \n" + JSON.stringify(limit));
+    alert("with nextToken = \n" + JSON.stringify(nextToken));
     return fetchQuery("Challenge", variablesList, filter, limit, nextToken, dataHandler, failureHandler);
 }
 export function fetchPostQuery(variablesList, filter, limit, nextToken, dataHandler, failureHandler) {
@@ -1078,7 +1084,6 @@ export function getFetchQueryFunction(itemType) {
     return switchReturnItemType(itemType, fetchClientQuery, fetchTrainerQuery, fetchGymQuery, fetchWorkoutQuery,
         fetchReviewQuery, fetchEventQuery, fetchChallengeQuery, fetchInviteQuery, fetchPostQuery, fetchGroupQuery,
         fetchCommentQuery, fetchSponsorQuery, fetchMessageQuery, "Retrieve fetch query function item type not implemented");
-
 }
 export function getPutQueryFunction(itemType) {
     return switchReturnItemType(itemType, putClientQuery, putTrainerQuery, putGymQuery, putWorkoutQuery, putReviewQuery,
