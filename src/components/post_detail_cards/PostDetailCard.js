@@ -220,7 +220,7 @@ class PostDetailCard extends Component {
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     forceUpdate = (postID) => {
-        alert("FORCE UPDATE = " + postID);
+        // alert("FORCE UPDATE = " + postID);
         this.props.removeItem("Post", postID);
         // this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
     };
