@@ -56,6 +56,7 @@ class PostFeedProp extends Component {
         super(props);
         this.forceUpdate = this.forceUpdate.bind(this);
         this.queryPosts = this.queryPosts.bind(this);
+        this.queryChallenges = this.queryChallenges.bind(this);
     }
 
     componentDidMount() {

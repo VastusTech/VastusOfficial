@@ -215,6 +215,9 @@ class PostCard extends Component {
         }
         else if(itemType) {
             //alert("Item Type: " + itemType);
+            if(!this.state.postMessageSet) {
+                this.setState({postMessage: "posted", postMessageSet: true});
+            }
             return (<PostDetailCard postID={this.state.postID}/>);
         }
         return (<div/>);

@@ -8,6 +8,7 @@ import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
 import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import PostFunctions from "../databaseFunctions/PostFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -192,6 +193,14 @@ class CreateChallengeProp extends Component {
                     this.eventState.title, this.eventState.goal, "n/a",
                     "3", [], this.state.tags, this.eventState.access, this.state.restriction, this.eventState.prize, (data) => {
                         console.log("Successfully created a challenge!");
+                        alert(data.data);
+                        PostFunctions.createNewChallengePost(this.props.user.id, this.props.user.id, this.eventState.description, this.eventState.access, data.data, (data) => {
+                            console.log("Successfully created automatic challenge Post");
+                            }, (error) => {
+                            //console.log(JSON.stringify(error));
+                            this.setState({submitError: "*" + JSON.stringify(error)});
+                            this.setState({isSubmitLoading: false});
+                        });
                         //This is the second call
                         this.props.clearChallengeQuery();
                         this.props.queryChallenges();
