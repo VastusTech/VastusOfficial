@@ -360,8 +360,8 @@ class ChallengeDetailCard extends Component {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card fluid>
-                <Card.Header>
-                    {/*<Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
+                {/*<Card.Header>
+                    <Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
                         <Grid style={{marginLeft: '10px', marginTop: '10px'}}>
                             <Grid.Column width={6}>
                                 {this.profilePicture()}
@@ -371,8 +371,8 @@ class ChallengeDetailCard extends Component {
                             </Grid.Column>
                         </Grid>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getPostAttribute("by")}/>
-                    </Button>*/}
-                </Card.Header>
+                    </Button>
+                </Card.Header>*/}
                 {/*alert(this.getPostAttribute("by"))*/}
                 <ChallengeCard challengeID={this.getPostAttribute("about")}/>
             </Card>
