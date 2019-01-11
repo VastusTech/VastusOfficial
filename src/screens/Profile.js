@@ -220,19 +220,21 @@ class Profile extends React.PureComponent {
         if(this.state.galleryURLS.length > 0) {
             //alert(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
-                <Grid centered>
-                    <Image src={this.state.galleryURLS[i]} centered style={{height: '300px',
-                        width: '300px', display: 'block',
-                        margin: 'auto'}}>
-                        {/*this.state.galleryURLS[i] + " Num: " + i*/}
-                        {this.setState({galleryNum: i})}
+                <div>
+                    <Image src={this.state.galleryURLS[i]} style={{height: '300px',
+                            width: '300px',
+                            margin: 'auto', marginTop: "10px"}}>
+                            {/*this.state.galleryURLS[i] + " Num: " + i*/}
+                            {this.setState({galleryNum: i})}
                     </Image>
-                        <Button primary as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient" style={{marginLeft: "200px"}}>
+                    <Grid centered>
+                        <Button primary as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient" style={{marginTop: "20px", marginBottom: "20px"}}>
                             Change Picture
                         </Button>
                         <input type="file" accept="image/*" id="galleryUpload" hidden={true}
                                onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: i})}/>
-                </Grid>
+                    </Grid>
+                </div>
             ));
         }
     }
@@ -350,16 +352,13 @@ class Profile extends React.PureComponent {
                                             >
                                                 {this.setURLS(this.props.user.profileImagePaths)}
                                                 {this.imageGallery()}
-                                                <Grid centered style={{marginTop: "100px", marginBottom: "100px", marginLeft: "-1" +
-                                                        "px"}}>
-                                                    <Grid.Row width={12} height={20}>
-                                                        <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
-                                                            <input type="file" accept="image/*" id="galleryUpload" hidden={true}
-                                                                   onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
-                                                            <Icon name="plus" size="large" inverted/>
-                                                        </Label>
-                                                    </Grid.Row>
-                                                </Grid>
+                                                <div style={{width: "50px"}} align="center">
+                                                    <Button primary as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient" style={{marginTop: "140px", marginBottom: "140px"}}>
+                                                        <Icon name='plus'/> Add New Picture
+                                                    </Button>
+                                                    <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                                                           onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
+                                                </div>
                                             </ReactSwipe>
                                         </Grid.Column>
                                         <Grid.Column width={1} style={{marginRight: "10px", marginLeft: "-10px"}} onClick={() => reactSwipeEl.next()}>

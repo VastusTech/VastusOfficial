@@ -309,13 +309,13 @@ class CreateChallengeProp extends Component {
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
                                     <Image dark size='medium' src={require('../img/HIIT_icon.png')} onClick={() => {this.handleTag("HIIT")}}/>
-                                    HIIT
+                                    <div style={{color: 'white'}}>HIIT</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
                                     <Image size='medium' src={require('../img/Strength_icon.png')} onClick={() => {this.handleTag("Strength")}}/>
-                                    Strength
+                                    <div style={{color: 'white'}}>Strength</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
@@ -323,13 +323,13 @@ class CreateChallengeProp extends Component {
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
                                     <Image size='medium' src={require('../img/Performance_icon.png')} onClick={() => {this.handleTag("Performance")}}/>
-                                    Performance
+                                    <div style={{color: 'white'}}>Performance</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
                                     <Image size='medium' src={require('../img/Endurance_icon.png')} onClick={() => {this.handleTag("Endurance")}}/>
-                                    Endurance
+                                    <div style={{color: 'white'}}>Endurance</div>
                                 </Button>
                             </Grid.Column>
                         </Grid.Row>
@@ -340,14 +340,14 @@ class CreateChallengeProp extends Component {
                             <Grid.Row centered>
                                 <Grid.Column>
                                     <Form onSubmit={this.handleSubmit}>
-                                        <Form.Input width={5} label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
-                                        <div className="field" width={5}>
+                                        <Form.Input fluid label="Title" type="text" name="title" placeholder="Title" onChange={value => this.changeStateText("title", value)}/>
+                                        <div className="field" fluid>
                                             <label>End Date & Time</label>
-                                            <input width={5} type="datetime-local" name="challengeDate" onChange={value => this.changeStateText("eventDate", value)}/>
+                                            <input fluid type="datetime-local" name="challengeDate" onChange={value => this.changeStateText("eventDate", value)}/>
                                         </div>
-                                        <Form.Input width={5} label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
-                                        <Form.Input width={5} label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
-                                        <Form.Input width={5} label="Prize" type="text" name="prize" placeholder="Prize for winning the event..." onChange={value => this.changeStateText("prize", value)}/>
+                                        <Form.Input fluid label="Capacity" type="text" name="capacity" placeholder="Number of allowed attendees... " onChange={value => this.changeStateText("capacity", value)}/>
+                                        <Form.Input fluid label="Goal" type="text" name="goal" placeholder="Criteria the victor is decided on..." onChange={value => this.changeStateText("goal", value)}/>
+                                        <Form.Input fluid label="Prize" type="text" name="prize" placeholder="Prize for winning the event..." onChange={value => this.changeStateText("prize", value)}/>
                                         {/*<Form.Field>
                                             <div className="field" width={5}>
                                                 <label>Difficulty</label>
