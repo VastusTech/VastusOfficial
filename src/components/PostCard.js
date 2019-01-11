@@ -3,7 +3,7 @@ import {Button, Card, Dimmer, Grid, Loader} from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
-import { fetchPost, fetchChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
+import { fetchPost, fetchChallenge, fetchClient, fetchTrainer} from "../redux_helpers/actions/cacheActions";
 import ItemType from "../logic/ItemType";
 import { Storage } from "aws-amplify";
 import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
@@ -13,6 +13,7 @@ import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
 import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
 import {convertFromISO} from "../logic/TimeHelper";
 import ClientModal from "./ClientModal";
+import TrainerModal from "./TrainerModal";
 
 type Props = {
     postID: string
@@ -40,6 +41,7 @@ class PostCard extends Component {
         postMessage: "",
         postMessageSet: false,
         clientModalOpen: false,
+        trainerModalOpen: false,
     };
 
     constructor(props) {
@@ -77,6 +79,7 @@ class PostCard extends Component {
 
     componentWillReceiveProps(newProps) {
         if (newProps.postID && !this.state.postID) {
+            //this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
             // this.props.fetchEvent(newProps.eventID, ["id", "title", "goal", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
             this.setState({postID: newProps.postID});
         }
@@ -100,6 +103,28 @@ class PostCard extends Component {
             }
         }
         return null;
+    }
+
+    getTrainerAttribute(attribute) {
+        if (this.getPostAttribute("by")) {
+            console.log(this.getPostAttribute("by"));
+            let trainer = this.props.cache.trainers[this.getPostAttribute("by")];
+            if (trainer) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (trainer[attribute] && trainer[attribute].length) {
+                        return trainer[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return trainer[attribute];
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     getChallengeAttribute(attribute) {
@@ -148,6 +173,7 @@ class PostCard extends Component {
         //alert(owner.substr(0, 2));
         if (owner.substr(0, 2) === "CL") {
             if (this.props.cache.clients[owner]) {
+                //alert(JSON.stringify(this.props.cache.trainers));
                 //alert(JSON.stringify(this.props.cache.clients[owner]));
                 return this.props.cache.clients[owner].name;
             }
@@ -157,7 +183,7 @@ class PostCard extends Component {
         }
         else if (owner.substr(0, 2) === "TR") {
             if (this.props.cache.trainers[owner]) {
-                //alert(JSON.stringify(this.props.cache.clients[owner]));
+                //alert(JSON.stringify(this.props.cache.trainers));
                 return this.props.cache.trainers[owner].name;
             }
             // else if (!this.props.info.isLoading) {
@@ -281,14 +307,35 @@ class PostCard extends Component {
     }
 
     openClientModal = () => {
-        if (!this.state.clientModalOpen) {
-            this.setState({clientModalOpen: true})
-            this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
-        };
+        if (this.getPostAttribute("by").substr(0, 2) === "CL") {
+            if (!this.state.clientModalOpen) {
+                this.setState({clientModalOpen: true});
+                this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
+            }
+        ;
+        }
+        else if (this.getPostAttribute("by").substr(0, 2) === "TR") {
+            //alert("opening trainer modal");
+            if (!this.state.trainerModalOpen) {
+                this.setState({trainerModalOpen: true});
+                this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+            }
+        }
     }
     closeClientModal = () => {
         console.log("Closing client modal");
         this.setState({clientModalOpen: false})
+    };
+
+    openTrainerModal = () => {
+        if (!this.state.trainerModalOpen) {
+            this.setState({trainerModalOpen: true});
+            this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
+        };
+    }
+    closeTrainerModal = () => {
+        console.log("Closing trainer modal");
+        this.setState({trainerModalOpen: false})
     };
 
 
@@ -318,6 +365,7 @@ class PostCard extends Component {
                             </Grid.Column>
                         </Grid>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getPostAttribute("by")}/>
+                        <TrainerModal open={this.state.trainerModalOpen} onClose={this.closeTrainerModal} trainerID={this.getPostAttribute("by")}/>
                     </Button>
                 </Grid>
                 <Card.Content>
@@ -359,6 +407,9 @@ const mapDispatchToProps = (dispatch) => {
         },
         fetchClient: (id, variablesList, dataHandler) => {
             dispatch(fetchClient(id, variablesList, dataHandler));
+        },
+        fetchTrainer: (id, variablesList, dataHandler) => {
+            dispatch(fetchTrainer(id, variablesList, dataHandler));
         },
     };
 };

@@ -39,7 +39,7 @@ type Props = {
  *
  * This is the profile page which displays information about the current user.
  */
-class TrainerPortalModal extends React.PureComponent<Props> {
+class TrainerModal extends React.PureComponent<Props> {
     state = {
         trainerID: null,
         isLoading: true,
@@ -118,8 +118,9 @@ class TrainerPortalModal extends React.PureComponent<Props> {
     }
 
     getTrainerAttribute(attribute) {
-        if (this.props.user && this.props.user.id) {
-            let trainer = this.props.user;
+        if (this.props.trainerID) {
+            console.log(this.props.trainerID);
+            let trainer = this.props.cache.trainers[this.props.trainerID];
             if (trainer) {
                 if (attribute.substr(attribute.length - 6) === "Length") {
                     attribute = attribute.substr(0, attribute.length - 6);
@@ -133,7 +134,9 @@ class TrainerPortalModal extends React.PureComponent<Props> {
                 return trainer[attribute];
             }
         }
-        return null;
+        else {
+            return null;
+        }
     }
 
     setPicture(event) {
@@ -184,10 +187,6 @@ class TrainerPortalModal extends React.PureComponent<Props> {
             return (
                 <div>
                     <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.getTrainerAttribute("profilePicture")})`}}>
-                        <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                            <Icon name="upload" className='u-margin-right--0' size="large" inverted />
-                        </Label>
-                        <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                     </div>
                 </div>
             );
@@ -277,7 +276,7 @@ class TrainerPortalModal extends React.PureComponent<Props> {
                 <Card color='purple' fluid raised className="u-margin-top--2">
                     <Card.Content textAlign="center">
                         {this.profilePicture()}
-                        <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
+                        <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.getTrainerAttribute("name")}</Card.Header>
                         <Card.Meta>Age: {calculateAge(this.getTrainerAttribute("birthday"))}</Card.Meta>
                         <Card.Meta>Event Wins: {this.getTrainerAttribute("challengesWonLength")}</Card.Meta>
                         <List id = "profile buttons">
@@ -298,7 +297,7 @@ class TrainerPortalModal extends React.PureComponent<Props> {
                                 </Modal>
                             </List.Item>
                         </List>
-                        <TrainerPostFeed trainerID={this.props.user.id}/>
+                        <TrainerPostFeed trainerID={this.getTrainerAttribute("id")}/>
                     </Card.Content>
                 </Card>
             </Modal>
@@ -308,7 +307,8 @@ class TrainerPortalModal extends React.PureComponent<Props> {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    info: state.info
+    info: state.info,
+    cache: state.cache,
 });
 
 const mapDispatchToProps = (dispatch) => {
@@ -322,4 +322,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TrainerPortalModal);
+export default connect(mapStateToProps, mapDispatchToProps)(TrainerModal);
