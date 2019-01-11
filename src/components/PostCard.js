@@ -42,6 +42,7 @@ class PostCard extends Component {
         postMessageSet: false,
         clientModalOpen: false,
         trainerModalOpen: false,
+        trainerModalOpened: false
     };
 
     constructor(props) {
@@ -75,6 +76,7 @@ class PostCard extends Component {
         this.componentWillReceiveProps(this.props);
         console.log("Post Card Prop: " + this.props.postID);
         //this.props.fetchPost(this.props.postID, ["id", "postType", "Description"])
+        //this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
     }
 
     componentWillReceiveProps(newProps) {
@@ -194,16 +196,15 @@ class PostCard extends Component {
     }
 
     profilePicture() {
-        if (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null) {
-            /*if(!this.state.urlsSet) {
-                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
-                this.setURLS(this.getClientAttribute("profileImagePaths"));
-                console.log("Setting URLS: " + this.state.galleryURLS);
-                this.setState({urlsSet: true});
-            }*/
-            //alert(this.getClientAttribute("profilePicture"));
+        const owner = this.getPostAttribute("by");
+        if (owner.substr(0, 2) === "CL" && (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null)) {
             return(
                 <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`, width: '50px', height: '50px'}}></div>
+            );
+        }
+        if (owner.substr(0, 2) === "TR" && (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null)) {
+            return(
+                <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getTrainerAttribute("profilePicture")})`, width: '50px', height: '50px'}}></div>
             );
         }
         else {
@@ -327,16 +328,17 @@ class PostCard extends Component {
         this.setState({clientModalOpen: false})
     };
 
-    openTrainerModal = () => {
-        if (!this.state.trainerModalOpen) {
-            this.setState({trainerModalOpen: true});
-            this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
-        };
-    }
     closeTrainerModal = () => {
         console.log("Closing trainer modal");
         this.setState({trainerModalOpen: false})
     };
+
+    openOnce = () => {
+        if(!this.state.trainerModalOpened) {
+            this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+            this.setState({trainerModalOpened: true});
+        }
+    }
 
 
     render() {
@@ -350,6 +352,7 @@ class PostCard extends Component {
         if (!this.getChallengeAttribute("id")) {
             return null;
         }
+        //alert(JSON.stringify(this.props.cache.clients));
         return (
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card color='purple' fluid raised>
@@ -368,6 +371,7 @@ class PostCard extends Component {
                         <TrainerModal open={this.state.trainerModalOpen} onClose={this.closeTrainerModal} trainerID={this.getPostAttribute("by")}/>
                     </Button>
                 </Grid>
+                {this.openOnce()}
                 <Card.Content>
                     <div align='center'>
                         {this.getCorrectDetailCard()}
