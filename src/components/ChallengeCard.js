@@ -177,11 +177,7 @@ class ChallengeCard extends Component {
     render() {
         if (!this.getChallengeAttribute("id")) {
             //alert("can't find challenge");
-            return(
-                <Card fluid raised>
-                    <h1>Loading...</h1>
-                </Card>
-            );
+            return null;
         }
         // if(this.getChallengeAttribute("tags")) {
         //     // console.log("There be tags!");

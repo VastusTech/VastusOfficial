@@ -138,7 +138,7 @@ class ChallengeDetailCard extends Component {
 
     getClientAttribute(attribute) {
         if (this.getPostAttribute("by")) {
-            console.log(this.getPostAttribute("by"));
+            //console.log(this.getPostAttribute("by"));
             let client = this.props.cache.clients[this.getPostAttribute("by")];
             if (client) {
                 //alert("Found Client in Challenge");
@@ -244,6 +244,7 @@ class ChallengeDetailCard extends Component {
     openClientModal = () => {
         if (!this.state.clientModalOpen) {
             this.setState({clientModalOpen: true})
+            this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
         };
     }
     closeClientModal = () => {
@@ -358,7 +359,7 @@ class ChallengeDetailCard extends Component {
 
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
-            <Card>
+            <Card fluid>
                 <Card.Header>
                     <Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
                         <Grid style={{marginLeft: '10px', marginTop: '10px'}}>
@@ -373,10 +374,7 @@ class ChallengeDetailCard extends Component {
                     </Button>
                 </Card.Header>
                 {/*alert(this.getPostAttribute("by"))*/}
-                <Card.Content>
-                    {/*alert(this.getPostAttribute("about"))*/}
-                    <ChallengeCard challengeID={this.getPostAttribute("about")}/>
-                </Card.Content>
+                <ChallengeCard challengeID={this.getPostAttribute("about")}/>
             </Card>
         );
     }

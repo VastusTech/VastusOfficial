@@ -221,8 +221,8 @@ class Profile extends React.PureComponent {
             //alert(JSON.stringify(this.state.galleryURLS));
             return _.times(this.state.galleryURLS.length, i => (
                 <Grid centered>
-                    <Image src={this.state.galleryURLS[i]} centered style={{height: '500px',
-                        width: '500px', display: 'block',
+                    <Image src={this.state.galleryURLS[i]} centered style={{height: '300px',
+                        width: '300px', display: 'block',
                         margin: 'auto'}}>
                         {/*this.state.galleryURLS[i] + " Num: " + i*/}
                         {this.setState({galleryNum: i})}
@@ -353,10 +353,10 @@ class Profile extends React.PureComponent {
                                                 <Grid centered style={{marginTop: "100px", marginBottom: "100px", marginLeft: "-1" +
                                                         "px"}}>
                                                     <Grid.Row width={12} height={20}>
-                                                        <input type="file" accept="image/*" id="galleryUpload" hidden={true}
-                                                               onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
                                                         <Label size='massive' as="label" htmlFor="galleryUpload" circular className="u-bg--primaryGradient">
-                                                            <Icon name="plus" size="large" inverted/>Add new picture
+                                                            <input type="file" accept="image/*" id="galleryUpload" hidden={true}
+                                                                   onChange={this.setGalleryPicture} onClick={this.setState({galleryNum: this.state.galleryURLS.length})}/>
+                                                            <Icon name="plus" size="large" inverted/>
                                                         </Label>
                                                     </Grid.Row>
                                                 </Grid>

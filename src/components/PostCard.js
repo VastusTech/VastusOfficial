@@ -100,6 +100,16 @@ class PostCard extends Component {
         return null;
     }
 
+    getChallengeAttribute(attribute) {
+        if (this.getPostAttribute("about")) {
+            const challenge = this.props.cache.challenges[this.getPostAttribute("about")];
+            if (challenge) {
+                return challenge[attribute];
+            }
+        }
+        return null;
+    }
+
     openPostModal = () => {
         if (!this.state.postModalOpen) {
             this.setState({postModalOpen: true})
@@ -231,9 +241,13 @@ class PostCard extends Component {
                 </Card>
             );
         }
+        if (!this.getChallengeAttribute("id")) {
+            return null;
+        }
         return (
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card color='purple' fluid raised>
+                {/*this.getPostAttribute("about")*/}
                 <Card.Header textAlign = 'center'>{this.getOwnerName()} {this.state.postMessage}</Card.Header>
                 <Card.Content>
                     <div align='center'>
