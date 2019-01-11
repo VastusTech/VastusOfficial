@@ -7,6 +7,7 @@ import auth from "./reducers/authReducer";
 import info from "./reducers/infoReducer";
 import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
+import message from "./reducers/messageReducer";
 
 const middleware = applyMiddleware(logger, thunk);
 
@@ -20,6 +21,7 @@ const store = createStore(combineReducers({
         auth,
         search,
         ably,
+        message,
     }),
     composeEnhancers(middleware)
 );

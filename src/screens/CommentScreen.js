@@ -3,19 +3,30 @@ import CommentBox from "../components/CommentBox";
 import Comments from '../components/Comments';
 import { Icon, Message, Divider } from "semantic-ui-react";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchClient, fetchTrainer, fetchMessageQuery, getFetchItemFunction} from "../redux_helpers/actions/cacheActions";
 import connect from "react-redux/es/connect/connect";
+import QL from "../GraphQL";
+import { getItemTypeFromID } from "../logic/ItemType";
 
-class CommentScreen extends Component {
+type Props = {
+    board: string,
+};
+
+class CommentScreen extends Component<Props> {
     state = {
+        board: null,
         currentChannel: '',
         canCallHistory: true,
         comments: [],
-        isHistoryLoading: true
+        isLoading: true,
+        messagesToFetch: 10,
+        messageNextToken: null,
+        ifFirst: true
     };
 
     _isMounted = true;
 
-    channelName = "persisted:" + this.props.challengeChannel;
+    // channelName = "persisted:" + this.props.challengeChannel;
     //channelName = this.props.challengeChannel;
 
     constructor(props) {
@@ -24,78 +35,80 @@ class CommentScreen extends Component {
     }
 
     componentDidMount() {
-        /*global Ably*/
 
-        this._isMounted = true;
-
-        //console.error(this.props.challengeChannel);
-
-        const channel = Ably.channels.get(this.channelName);
-
-        let self = this;
-
-        channel.subscribe(function(msg) {
-            if(self._isMounted) {
-                //console.error(JSON.stringify(msg.data));
-                self.setState({comments: self.state.comments.concat(msg.data)});
-            }
-            self.getHistory();
-        });
-
-        channel.attach();
-        channel.once('attached', () => {
-            channel.history((err, page) => {
-                // create a new array with comments only in an reversed order (i.e old to new)
-                const commentArray = Array.from(page.items.reverse(), item => item.data);
-
-                //console.error(JSON.stringify(commentArray));
-
-                this.setState({comments: commentArray});
-            });
-        });
-        //console.error("Comment screen user: " + this.props.curUser);
     }
 
 
     componentDidUpdate() {
-        //Don't call the history multiple times or else Ably will restrict us lol
-        if(this.state.canCallHistory) {
-            //console.error("Getting the history");
-            this.getHistory();
-           //console.error("I should only be called once");
-        }
+
     }
 
     componentWillUnmount() {
         this._isMounted = false;
     }
 
+    componentWillReceiveProps(newProps, nextContext) {
+        if (this.state.board !== newProps.board) {
+            this.state.board = newProps.board;
+            // Set up the board
+        }
+    }
+
     handleAddComment(comment) {
-        //console.error("concatted: " + JSON.stringify(this.state.comments.concat(comment)));
-        //this.setState({comments: this.state.comments.concat(comment)});
-        //console.error("after: " + JSON.stringify(this.state.comments));
-        //this.getHistory();
+
     }
 
     getHistory() {
-        //console.error(this.channelName);
-        this.setState({canCallHistory: true});
 
-        const channel = Ably.channels.get(this.channelName);
+    }
 
-        this.setState({canCallHistory: false});
+    queryMessages() {
+        if (this.state.ifFirst || this.state.messageNextToken) {
+            const filter = QL.generateFilter();
+            this.props.fetchMessageQuery(this.state.board, ["board", "id", "from", "message", "type"], filter, this.state.messagesToFetch, this.state.messageNextToken, (data) => {
+                this.setState({messageNextToken: data.nextToken, ifFirst: false});
+                if (data.items) {
+                    //
+                    for (let i = 0; i < data.items.length; i++) {
+                        // Fetch the users
+                        const message = data.items[i];
+                        const fromItemType = getItemTypeFromID(message.from);
+                        if (fromItemType === "Client") {
+                            this
+                        }
+                        else if (fromItemType === "Trainer") {
 
-        channel.history((err, page) => {
-            // create a new array with comments only in an reversed order (i.e old to new)
-            console.log("Received history!");
-            const commentArray = Array.from(page.items.reverse(), item => item.data);
+                        }
+                    }
+                    this.setState([...this.state.comments, data.items]);
+                    this.setState({isLoading: false});
+                }
+                else {
+                    // TODO What to do if you get no results? Anything
+                }
+                    // TODO We can see private events
+                    // console.log("got items");
+                    const newlyQueriedPosts = [];
+                    for (let i = 0; i < data.items.length; i++) {
+                        const post = data.items[i];
+                        //alert(JSON.stringify("")
+                        this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members"]);
+                        this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
+                        this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
+                        newlyQueriedPosts.push(post);
+                    }
+                    this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
+                    for (let i = 0; i < data.items.length; i++) {
+                        //console.log(data.items[i].time_created);
+                        // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+                        // this.setState({events: [...this.state.events, data.items[i]]});
+                        this.props.putPost(data.items[i]);
+                    }
+                this.setState({isLoading: false});
+            }, (error) => {
 
-            //console.error(JSON.stringify(commentArray));
-
-            if(this._isMounted) {
-                this.setState({comments: commentArray, isHistoryLoading: false});
-            }
-        });
+            });
+        }
     }
 
     loadHistory(historyLoading) {
@@ -118,7 +131,7 @@ class CommentScreen extends Component {
         return (
             <div className='u-margin-top--4'>
                 {/*console.log("Comment screen render user: " + this.props.curUser)*/}
-                {this.loadHistory(this.state.isHistoryLoading)}
+                {this.loadHistory(this.state.isLoading)}
                 <Comments comments={this.state.comments}/>
                 <Divider className='u-margin-top--4' />
                 <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
@@ -128,4 +141,20 @@ class CommentScreen extends Component {
     }
 }
 
-export default CommentScreen;
+const mapStateToProps = (state) => ({
+    user: state.user,
+    cache: state.cache
+});
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchMessageQuery: (board, variablesList, filter, limit, nextToken, dataHandler, failureHandler) => {
+            dispatch(fetchMessageQuery(board, variablesList, filter, limit, nextToken, dataHandler, failureHandler));
+        },
+        getFetchItemFunction: (itemType) => {
+            dispatch(getFetchItemFunction(itemType));
+        }
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CommentScreen);
