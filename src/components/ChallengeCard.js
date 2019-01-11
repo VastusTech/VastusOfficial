@@ -179,6 +179,9 @@ class ChallengeCard extends Component {
             //alert("can't find challenge");
             return null;
         }
+        if  (this.getDaysLeft() <= 0) {
+            return null;
+        }
         // if(this.getChallengeAttribute("tags")) {
         //     // console.log("There be tags!");
         //     // console.log(this.getChallengeAttribute("tags"));
