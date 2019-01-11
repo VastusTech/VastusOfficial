@@ -6,7 +6,7 @@ import cache from "./reducers/cacheReducer";
 import auth from "./reducers/authReducer";
 import info from "./reducers/infoReducer";
 import search from "./reducers/searchReducer";
-import firebase from "./reducers/firebaseReducer";
+import ably from "./reducers/ablyReducer";
 
 const middleware = applyMiddleware(logger, thunk);
 
@@ -19,7 +19,7 @@ const store = createStore(combineReducers({
         info,
         auth,
         search,
-        firebase,
+        ably,
     }),
     composeEnhancers(middleware)
 );

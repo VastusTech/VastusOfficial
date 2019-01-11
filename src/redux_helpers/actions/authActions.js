@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import jwt_decode from "jwt-decode";
 import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
-import {firebaseSignIn, firebaseSignOut} from "./firebaseActions";
+import {addHandlerToNotifications, removeAllHandlers} from "./ablyActions";
 import QL from "../../GraphQL";
 // import Lambda from "../../Lambda";
 import ClientFunctions from "../../databaseFunctions/ClientFunctions";
@@ -23,7 +23,9 @@ export function updateAuth() {
                 QL.getClientByUsername(user.username, ["id", "username"], (user) => {
                     console.log("REDUX: Successfully updated the authentication credentials");
                     dispatch(setUser(user));
-                    // dispatch(firebaseSignIn(user.id));
+                    dispatch(addHandlerToNotifications((message) => {
+                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
                 }, (error) => {
@@ -37,7 +39,9 @@ export function updateAuth() {
                 QL.getClientByFederatedID(user.sub, ["id", "username", "federatedID"], (user) => {
                     console.log("REDUX: Successfully updated the authentication credentials for federated identity");
                     dispatch(setUser(user));
-                    // dispatch(firebaseSignIn(user.id));
+                    dispatch(addHandlerToNotifications((message) => {
+                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
                 }, (error) => {
@@ -67,7 +71,9 @@ export function logIn(username, password) {
                 else {
                     dispatch(setUser(user));
                 }
-                dispatch(firebaseSignIn(user.id));
+                dispatch(addHandlerToNotifications((message) => {
+                    alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                }));
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");
@@ -88,8 +94,8 @@ export function logOut() {
         const userID = getStore().user.id;
         Auth.signOut({global: true}).then((data) => {
             console.log("REDUX: Successfully logged out!");
-            if (userID) { dispatch(firebaseSignOut(userID)); }
             dispatch(authLogOut());
+            dispatch(removeAllHandlers());
             dispatch(setIsNotLoading());
         }).catch((error) => {
             console.log("REDUX: Failed log out...");
@@ -124,7 +130,9 @@ export function googleSignIn(googleUser) {
                     else {
                         dispatch(setUser(client));
                     }
-                    dispatch(firebaseSignIn(user.id));
+                    dispatch(addHandlerToNotifications((message) => {
+                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    }));
                     dispatch(setIsNotLoading());
                 }
                 else {
@@ -149,7 +157,9 @@ export function googleSignIn(googleUser) {
                             else {
                                 dispatch(setUser(client));
                             }
-                            dispatch(firebaseSignIn(user.id));
+                            dispatch(addHandlerToNotifications((message) => {
+                                alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                            }));
                             dispatch(setIsNotLoading());
                         }, (error) => {
                             console.log("REDUX: Could not create the federated client!");

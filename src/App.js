@@ -19,14 +19,14 @@ AWSConfig();
 
 function requestNotificationPermission() {
     // Some browsers don't support Notification yet. I'm looking at you iOS Safari
-    if ("Notification" in window) {
-        if (
-            Notification.permission !== "denied" &&
-            Notification.permission !== "granted"
-        ) {
-            Notification.requestPermission();
-        }
-    }
+    // if ("Notification" in window) {
+    //     if (
+    //         Notification.permission !== "denied" &&
+    //         Notification.permission !== "granted"
+    //     ) {
+    //         Notification.requestPermission();
+    //     }
+    // }
 }
 
 class App extends Component {
