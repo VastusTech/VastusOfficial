@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Label, Grid, Icon } from 'semantic-ui-react'
+import { Label, Grid, Icon, Container } from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 import {Player} from "video-react";
@@ -26,26 +26,30 @@ class Comment extends Component<Props> {
             if (type === "picture") {
                 if (ifSelf) {
                     // Self picture
-                    return(
+                    return (
                         <Label className='ui right fluid' pointing='right' color='purple'>
-                            <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${message})`}}>
+                            <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4"
+                                 style={{backgroundImage: `url(${message})`}}>
                                 <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                                    <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                                    <Icon name="upload" className='u-margin-right--0' size="large" inverted/>
                                 </Label>
-                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true}
+                                       onChange={this.setPicture}/>
                             </div>
                         </Label>
                     );
                 }
                 else {
                     // Other picture
-                    return(
+                    return (
                         <Label className='ui left fluid' pointing='left'>
-                            <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${message})`}}>
+                            <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4"
+                                 style={{backgroundImage: `url(${message})`}}>
                                 <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
-                                    <Icon name="upload" className='u-margin-right--0' size="large" inverted />
+                                    <Icon name="upload" className='u-margin-right--0' size="large" inverted/>
                                 </Label>
-                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
+                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true}
+                                       onChange={this.setPicture}/>
                             </div>
                         </Label>
                     );
@@ -54,7 +58,7 @@ class Comment extends Component<Props> {
             else if (type === "video") {
                 if (ifSelf) {
                     // Self video
-                    return(
+                    return (
                         <Label className='ui right fluid' pointing='right' color='purple'>
                             <Player>
                                 <source src={message} type="video/mp4"/>
@@ -67,7 +71,7 @@ class Comment extends Component<Props> {
                     return (
                         <Label className='ui left fluid' pointing='left'>
                             <Player>
-                                <source src={message} type="video/mp4" />
+                                <source src={message} type="video/mp4"/>
                             </Player>
                         </Label>
                     );
@@ -81,8 +85,8 @@ class Comment extends Component<Props> {
             // Normal message
             if (ifSelf) {
                 // Self text
-                return(
-                    <Grid.Column floated='right' width={5}>
+                return (
+                    <Grid.Column floated='right' width={10}>
                         <div>
                             <Label pointing='right' size='large' color='purple'>
                                 {message}
@@ -94,8 +98,8 @@ class Comment extends Component<Props> {
             }
             else {
                 // Other text
-                return(
-                    <Grid.Column floated='left' width={5}>
+                return (
+                    <Grid.Column floated='left' width={10}>
                         <div>
                             <strong>{name}</strong>
                             <Label pointing='left' size='large'>
