@@ -4,6 +4,8 @@ import Comments from '../components/Comments';
 import { Icon, Message, Divider } from "semantic-ui-react";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {fetchClient, fetchTrainer, fetchMessageQuery, getFetchItemFunction} from "../redux_helpers/actions/cacheActions";
+import {queryNextMessagesFromBoard, clearBoard, addMessageToBoard} from "../redux_helpers/actions/messageActions";
+import {addHandlerToBoard} from "../redux_helpers/actions/ablyActions";
 import connect from "react-redux/es/connect/connect";
 import QL from "../GraphQL";
 import { getItemTypeFromID } from "../logic/ItemType";
@@ -15,113 +17,87 @@ type Props = {
 class CommentScreen extends Component<Props> {
     state = {
         board: null,
-        currentChannel: '',
-        canCallHistory: true,
-        comments: [],
+        messages: [],
         isLoading: true,
-        messagesToFetch: 10,
-        messageNextToken: null,
-        ifFirst: true
+        fetchLimit: 10,
+        canFetch: true,
     };
-
-    _isMounted = true;
-
-    // channelName = "persisted:" + this.props.challengeChannel;
-    //channelName = this.props.challengeChannel;
 
     constructor(props) {
         super(props);
-        this.handleAddComment = this.handleAddComment.bind(this);
+        // this.handleAddComment = this.handleAddComment.bind(this);
+        this.queryMessages = this.queryMessages.bind(this);
     }
 
     componentDidMount() {
-
-    }
-
-
-    componentDidUpdate() {
-
+        this.componentWillReceiveProps(this.props);
     }
 
     componentWillUnmount() {
-        this._isMounted = false;
+        // TODO Unsubscribe to the Ably messages
+        // TODO Also potentially clear the board?
     }
 
     componentWillReceiveProps(newProps, nextContext) {
         if (this.state.board !== newProps.board) {
             this.state.board = newProps.board;
+            this.props.addHandlerToBoard(newProps.board, (message) => {
+                // If you get a message, then that means that it is definitely a Message?
+                // alert("What to do with this?\n\n" + JSON.stringify(message));
+
+                this.props.addMessageToBoard(newProps.board, message.data);
+            });
             // Set up the board
+            this.queryMessages();
         }
-    }
-
-    handleAddComment(comment) {
-
-    }
-
-    getHistory() {
-
     }
 
     queryMessages() {
-        if (this.state.ifFirst || this.state.messageNextToken) {
-            const filter = QL.generateFilter();
-            this.props.fetchMessageQuery(this.state.board, ["board", "id", "from", "message", "type"], filter, this.state.messagesToFetch, this.state.messageNextToken, (data) => {
-                this.setState({messageNextToken: data.nextToken, ifFirst: false});
-                if (data.items) {
-                    //
-                    for (let i = 0; i < data.items.length; i++) {
-                        // Fetch the users
-                        const message = data.items[i];
+        // alert("Can we query?");
+        if (this.state.canFetch) {
+            // alert("QUerying next messages from the board!");
+            this.props.queryNextMessagesFromBoard(this.state.board, this.state.fetchLimit, (items) => {
+                if (items) {
+                    // this.setState({messages: [...this.state.messages, ...items]});
+                    for (let i = 0; i < items.length; i++) {
+                        // Fetch everything we need to!
+                        const message = items[i];
                         const fromItemType = getItemTypeFromID(message.from);
                         if (fromItemType === "Client") {
-                            this
+                            this.props.fetchClient(message.from, ["name"])
                         }
                         else if (fromItemType === "Trainer") {
-
+                            this.props.fetchTrainer(message.from, ["name"]);
                         }
                     }
-                    this.setState([...this.state.comments, data.items]);
-                    this.setState({isLoading: false});
                 }
                 else {
-                    // TODO What to do if you get no results? Anything
+                    // That means we're done getting messages
+                    this.setState({canFetch: false});
                 }
-                    // TODO We can see private events
-                    // console.log("got items");
-                    const newlyQueriedPosts = [];
-                    for (let i = 0; i < data.items.length; i++) {
-                        const post = data.items[i];
-                        //alert(JSON.stringify("")
-                        this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members"]);
-                        this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
-                        this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
-                        newlyQueriedPosts.push(post);
-                    }
-                    this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
-                    for (let i = 0; i < data.items.length; i++) {
-                        //console.log(data.items[i].time_created);
-                        // console.log("Putting in event: " + JSON.stringify(data.items[i]));
-                        // this.setState({events: [...this.state.events, data.items[i]]});
-                        this.props.putPost(data.items[i]);
-                    }
                 this.setState({isLoading: false});
-            }, (error) => {
-
             });
         }
+    }
+
+    getBoardMessages() {
+        if (this.state.board && this.props.message.boards[this.state.board]) {
+            return this.props.message.boards[this.state.board];
+        }
+        return [];
     }
 
     loadHistory(historyLoading) {
         if (historyLoading) {
             return (
-                    <Message icon>
-                        <Icon name='spinner' size="small" loading />
-                        <Message.Content>
-                            <Message.Header>
-                                Loading...
-                            </Message.Header>
-                        </Message.Content>
-                    </Message>
+                <Message icon>
+                    <Icon name='spinner' size="small" loading />
+                    <Message.Content>
+                        <Message.Header>
+                            Loading...
+                        </Message.Header>
+                    </Message.Content>
+                </Message>
             )
         }
     }
@@ -132,10 +108,9 @@ class CommentScreen extends Component<Props> {
             <div className='u-margin-top--4'>
                 {/*console.log("Comment screen render user: " + this.props.curUser)*/}
                 {this.loadHistory(this.state.isLoading)}
-                <Comments comments={this.state.comments}/>
+                <Comments board={this.state.board} comments={this.getBoardMessages()}/>
                 <Divider className='u-margin-top--4' />
-                <CommentBox handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
-                    challengeChannel={this.channelName}/>
+                <CommentBox board={this.state.board}/>
             </div>
         );
     }
@@ -143,16 +118,29 @@ class CommentScreen extends Component<Props> {
 
 const mapStateToProps = (state) => ({
     user: state.user,
-    cache: state.cache
+    cache: state.cache,
+    message: state.message
 });
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchMessageQuery: (board, variablesList, filter, limit, nextToken, dataHandler, failureHandler) => {
-            dispatch(fetchMessageQuery(board, variablesList, filter, limit, nextToken, dataHandler, failureHandler));
+        fetchClient: (id, variablesList, dataHandler) => {
+            dispatch(fetchClient(id, variablesList, dataHandler));
         },
-        getFetchItemFunction: (itemType) => {
-            dispatch(getFetchItemFunction(itemType));
+        fetchTrainer: (id, variablesList, dataHandler) => {
+            dispatch(fetchTrainer(id, variablesList, dataHandler));
+        },
+        addMessageToBoard: (board, message) => {
+            dispatch(addMessageToBoard(board, message));
+        },
+        queryNextMessagesFromBoard: (board, limit, dataHandler, failureHandler) => {
+            dispatch(queryNextMessagesFromBoard(board, limit, dataHandler, failureHandler));
+        },
+        clearBoard: (board) => {
+            dispatch(clearBoard(board));
+        },
+        addHandlerToBoard: (board, handler) => {
+            dispatch(addHandlerToBoard(board, handler));
         }
     };
 };
