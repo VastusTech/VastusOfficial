@@ -46,7 +46,7 @@ const initialClientState = {
 
 const initialTrainerState = {
     enabled: true,
-    variableList: ["id", "name", "username", "item_type", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths", "subscribers", "friendlinessRating", "" +
+    variableList: ["id", "name", "username", "item_type", "gender", "birthday", "profileImagePath", /*"profilePicture", */"profileImagePaths", "subscribers", "friendlinessRating", "" +
     "effectivenessRating", "posts"],
     filterJSON: {
         or: [{
@@ -281,6 +281,7 @@ export default (state = initialState, action) => {
         case ADD_TYPE_RESULTS:
             const results = action.payload.results ? action.payload.results : [];
             // console.log(action.payload.type + "\n" + JSON.stringify(results) + "\n" + JSON.stringify(state.typeQueries[action.payload.type].results));
+            // TODO InSERT SORT THESE INTO THE RESULTS?
             state = {
                 ...state,
                 results: [...state.results, ...results],

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Label, Icon } from 'semantic-ui-react'
+import { Label, Grid } from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 // import {Player} from "video-react";
@@ -34,22 +34,26 @@ class Comment extends Component<Props> {
                     // Regular message
                     if (ifSelf) {
                         return(
-                            <div className='u-text-align--right'>
-                                <strong className='u-margin-bottom--half u-display--block'>{name}</strong>
-                                <Label fluid className='u-bg--primary u-color--white u-overflow-wrap--break u-max-width--full' pointing='right' size='large' color='purple'>
-                                    {message}
-                                </Label>
-                            </div>
+                            <Grid.Column floated='right' width={5}>
+                                <div>
+                                    <Label pointing='right' size='large' color='purple'>
+                                        {message}
+                                    </Label>
+                                    <strong>{name}</strong>
+                                </div>
+                            </Grid.Column>
                         );
                     }
                     else {
                         return(
-                            <div className='u-text-align--left'>
-                                <strong className='u-margin-bottom--half u-display--block'>{name}</strong>
-                                <Label pointing='left' size='large' className='u-overflow-wrap--break u-max-width--full'>
-                                    {message}
-                                </Label>
-                            </div>
+                            <Grid.Column floated='left' width={5}>
+                                <div>
+                                    <strong>{name}</strong>
+                                    <Label pointing='left' size='large'>
+                                        {message}
+                                    </Label>
+                                </div>
+                            </Grid.Column>
                         );
                     }
                 }
@@ -139,9 +143,9 @@ class Comment extends Component<Props> {
 
     render() {
         return (
-            <div className='u-margin-bottom--2'>
+            <Grid class="ui computer vertically reversed equal width grid">
                 {this.createCorrectMessage()}
-            </div>
+            </Grid>
 
         );
     }

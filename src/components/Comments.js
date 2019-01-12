@@ -9,7 +9,7 @@ type Props = {
 class Comments extends Component<Props> {
     render() {
         return (
-            <Fragment>
+            <Fragment fluid>
                 {
                     this.props.comments.map((comment, index) => {
                         return <Comment key={index} comment={comment} />

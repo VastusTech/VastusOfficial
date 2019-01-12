@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import ReactSwipe from 'react-swipe';
 import {Modal, Button, List, Dimmer, Loader, Message, Icon, Image, Label, Grid} from 'semantic-ui-react';
-import Lambda from "../Lambda";
 import { connect } from "react-redux";
-import ScheduledEventsList from "../screens/ScheduledEventList";
-// import InviteToScheduledEventsModalProp from "../screens/InviteToScheduledEventsModal";
 import InviteToChallengeModalProp from "../screens/InviteToChallengeModal";
 import _ from "lodash";
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
