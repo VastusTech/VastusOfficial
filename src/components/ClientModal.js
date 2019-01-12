@@ -340,13 +340,13 @@ class ClientModal extends Component<Props> {
             return null;
         }
 
-        if (this.props.info.isLoading) {
+        /*if (this.props.info.isLoading) {
             return(
                 <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
                     <Modal.Header>Loading...</Modal.Header>
                 </Modal>
             );
-        }
+        }*/
         function button_rows(events) {
             //if(events != null)
             //console.log(JSON.stringify(events[0]));

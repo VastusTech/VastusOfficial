@@ -7,6 +7,7 @@ import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
 // import ChallengeDescrip
 import ClientModal from "./ClientModal";
+import TrainerModal from "./TrainerModal";
 import {connect} from "react-redux";
 import {fetchClient, fetchEvent, putClientQuery, putEventQuery, fetchChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {newSearch, loadMoreResults} from "../redux_helpers/actions/searchActions";
@@ -264,6 +265,11 @@ class SearchBarProp extends Component {
                 <ClientModal open={this.state.resultModalOpen} onClose={this.closeResultModal} clientID={result.id}/>
             );
         }
+        else if (type === "Trainer") {
+            return (
+                <TrainerModal open={this.state.resultModalOpen} onClose={this.closeResultModal} trainerID={result.id}/>
+            );
+        }
         else if (type === "Event") {
             return(
                 <EventDescriptionModal open={this.state.resultModalOpen} onClose={this.closeResultModal}
@@ -296,7 +302,11 @@ class SearchBarProp extends Component {
                                 description: result.username,
                                 resultcontent: result
                             },
-                            null,
+                            { // Trainer
+                                title: result.name,
+                                description: result.username,
+                                resultcontent: result
+                            },
                             null,
                             null,
                             null,
