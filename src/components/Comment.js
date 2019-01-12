@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Label, Grid } from 'semantic-ui-react'
+import { Label, Grid, Icon } from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import connect from "react-redux/es/connect/connect";
 import {Player} from "video-react";
