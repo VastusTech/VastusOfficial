@@ -5,7 +5,6 @@ import {Search } from 'semantic-ui-react'
 // import setupAWS from "../AppConfig";
 import QL from '../GraphQL';
 import EventDescriptionModal from "./EventDescriptionModal";
-// import ChallengeDescrip
 import ClientModal from "./ClientModal";
 import TrainerModal from "./TrainerModal";
 import {connect} from "react-redux";
@@ -295,6 +294,7 @@ class SearchBarProp extends Component {
             for (const i in results) {
                 if (results.hasOwnProperty(i)) {
                     const result = results[i];
+                    alert(JSON.stringify(result));
                     if (result.hasOwnProperty("item_type") && result.item_type) {
                         let formattedResult = switchReturnItemType(result.item_type,
                             { // Client
