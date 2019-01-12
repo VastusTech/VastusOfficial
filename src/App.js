@@ -5,11 +5,9 @@ import { connect } from 'react-redux';
 // import FirebaseTokenHandler from "./FirebaseTokenHandler";
 // import { ServiceWorker } from 'aws-amplify';
 import { updateAuth } from "./redux_helpers/actions/authActions";
-import { setOnMessage } from "./redux_helpers/actions/firebaseActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 import AWSConfig from './AppConfig';
-import FirebaseConfig from "./FirebaseConfig";
 // import ItemType, { getItemTypeFromID } from "./ItemType";
 
 // const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");
@@ -19,14 +17,14 @@ AWSConfig();
 
 function requestNotificationPermission() {
     // Some browsers don't support Notification yet. I'm looking at you iOS Safari
-    if ("Notification" in window) {
-        if (
-            Notification.permission !== "denied" &&
-            Notification.permission !== "granted"
-        ) {
-            Notification.requestPermission();
-        }
-    }
+    // if ("Notification" in window) {
+    //     if (
+    //         Notification.permission !== "denied" &&
+    //         Notification.permission !== "granted"
+    //     ) {
+    //         Notification.requestPermission();
+    //     }
+    // }
 }
 
 class App extends Component {
