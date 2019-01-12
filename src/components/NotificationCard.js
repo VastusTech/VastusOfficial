@@ -502,6 +502,9 @@ class NotificationCard extends Component {
                     </Card>
                 );
             }
+            else {
+                    return null;
+            }
         }
     //}
 }
