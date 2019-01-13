@@ -50,11 +50,9 @@ export function updateAuth() {
                     dispatch(setIsNotLoading());
                 });
             }
-        }).catch(() => {
+        }).catch((error) => {
             console.log("REDUX: Not currently logged in. Not a problem, no worries.");
-            const noLoad = setIsNotLoading();
-            alert(noLoad);
-            dispatch(noLoad);
+            dispatch(setIsNotLoading());
         });
     }
 }
@@ -81,10 +79,27 @@ export function logIn(username, password) {
                 dispatch(setIsNotLoading());
             });
         }).catch((error) => {
-            console.log("REDUX: Failed log in...");
-            console.log(error);
-            dispatch(setError(error));
-            dispatch(setIsNotLoading());
+            // alert(JSON.stringify(error));
+            // alert(error.code);
+            if (error.code === "UserNotConfirmedException") {
+                // This means that the user has not been confirmed yet!
+                dispatch(authSignUp());
+                dispatch(openSignUpModal());
+                dispatch(setIsNotLoading());
+            // }
+            // else if (error.code === 'PasswordResetRequiredException'){
+            //     // Reset Password Required
+            // } else if (error.code === 'NotAuthorizedException'){
+            //     // Not Authorized (Incorrect Password)
+            // } else if (error.code === 'ResourceNotFoundException'){
+                // User Not found
+            } else {
+                // Unknown
+                console.log("REDUX: Failed log in...");
+                console.log(error);
+                dispatch(setError(error));
+                dispatch(setIsNotLoading());
+            }
         });
     };
 }
@@ -225,7 +240,7 @@ export function signUp(username, password, name, gender, birthday, email) {
                 email: email
             }
         };
-        ClientFunctions.createClient("admin", name, gender, birthday, email, username, (clientID) => {
+        ClientFunctions.createClient("admin", name, email, username, (clientID) => {
             Auth.signUp(params).then((data) => {
                 console.log("REDUX: Successfully signed up!");
                 dispatch(authSignUp());

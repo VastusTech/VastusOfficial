@@ -8,13 +8,13 @@ class ClientFunctions extends UserFunctions {
     // =============================================================================
     // Create Functions ============================================================
     static createClient(fromID, name, email, username, successHandler, failureHandler) {
-        this.create(fromID, name, null, null, email, username, null, successHandler, failureHandler);
+        this.create(fromID, name, null, null, email, username, null, null, null, successHandler, failureHandler);
     }
     static createClientOptional(fromID, name, gender, birthday, email, username, bio, successHandler, failureHandler) {
-        this.create(fromID, name, gender, birthday, email, username, bio, successHandler, failureHandler);
+        this.create(fromID, name, gender, birthday, email, username, bio, null, null, successHandler, failureHandler);
     }
-    static createFederatedClient(fromID, name, email, username, federatedID, successHandler, failureHander) {
-        this.create(fromID, name, null, null, email, username, null, federatedID, null, successHandler, failureHander);
+    static createFederatedClient(fromID, name, email, username, federatedID, successHandler, failureHandler) {
+        this.create(fromID, name, null, null, email, username, null, federatedID, null, successHandler, failureHandler);
     }
     static createFederatedClientOptional(fromID, name, gender, birthday, email, username, federatedID, bio, successHandler, failureHander) {
         this.create(fromID, name, gender, birthday, email, username, null, federatedID, bio, successHandler, failureHander);
