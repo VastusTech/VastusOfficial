@@ -130,7 +130,7 @@ class BuddyListProp extends Component {
                     rowProps.push(
                         <List.Item>
                             <List.Content>
-                                <ClientCard rank={key} clientID={friendID} feedUpdate={forceUpdate}/>
+                                <ClientCard rank={key + 1} clientID={friendID} feedUpdate={forceUpdate}/>
                             </List.Content>
                         </List.Item>
                     );

@@ -9,12 +9,14 @@ type Props = {
 class Comments extends Component<Props> {
     render() {
         return (
-            <Fragment style={{overflow: 'auto', maxHeight: '50px'}}>
+            <Fragment>
+                <div style={{overflow: 'auto', maxHeight: '200px', display: 'flex', flexDirection: 'column-reverse'}}>
                 {
                     this.props.comments.slice(0).reverse().map((comment, index) => {
                         return <Comment key={index} comment={comment} />
                     })
                 }
+                </div>
             </Fragment>
         );
     }
