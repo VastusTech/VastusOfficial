@@ -135,6 +135,16 @@ class InviteToChallengeModalProp extends Component {
         }
     }
 
+    errorHandler() {
+        if(this.state.error) {
+            return (
+                <Message color='red'>
+                    <h1>Error!</h1>
+                    <p>{this.state.error.substr(102, 50)}</p>
+                </Message>);
+        }
+    }
+
     rows(userID, friendID, challenges, challengeInviteHandler, isInviteLoading, daysLeft) {
         const rowProps = [];
         for (let i = 0; i < challenges.length; i++) {
@@ -174,7 +184,7 @@ class InviteToChallengeModalProp extends Component {
                         {this.rows(this.props.user.id, this.props.friendID, this.state.loadedChallengeIDs, this.sendInvite.bind(this),
                             this.state.isInviteLoading, this.getDaysLeft)}
                     </Modal.Content>
-                    {this.state.error}
+                    {this.errorHandler()}
                 </Modal>
             );
         }
