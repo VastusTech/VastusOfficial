@@ -76,7 +76,7 @@ class GoogleSignUp extends React.Component {
     render() {
         return (
             <div>
-                <Button color="green" onClick={this.signIn}> <Icon name="google icon"></Icon>Google Sign In</Button>
+                <Button fluid color="green" onClick={this.signIn}> <Icon name="google"> </Icon>Google Sign In</Button>
             </div>
         );
     }
