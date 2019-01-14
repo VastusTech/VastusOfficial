@@ -7,6 +7,7 @@ type Props = {
 };
 
 class Comments extends Component<Props> {
+
     render() {
         return (
             <div>
