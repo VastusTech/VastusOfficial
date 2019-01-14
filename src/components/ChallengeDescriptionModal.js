@@ -18,6 +18,7 @@ import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 import CreateSubmissionModal from "../screens/CreateSubmissionModal";
 import SubmissionsScreen from "../screens/SubmissionsScreen";
+import {getItemTypeFromID} from "../logic/ItemType";
 
 type Props = {
     open: boolean,
@@ -207,8 +208,16 @@ class ChallengeDescriptionModal extends Component<Props> {
     getOwnerName() {
         const owner = this.getChallengeAttribute("owner");
         if (owner) {
-            if (this.props.cache.clients[owner]) {
-                return this.props.cache.clients[owner].name
+            const ownerType = getItemTypeFromID(owner);
+            if (ownerType === "Client") {
+                if (this.props.cache.clients[owner]) {
+                    return this.props.cache.clients[owner].name
+                }
+            }
+            else if (ownerType === "Trainer") {
+                if (this.props.cache.trainers[owner]) {
+                    return this.props.cache.trainers[owner].name
+                }
             }
             // else if (!this.props.info.isLoading) {
             //     this.props.fetchClient(owner, ["name"]);
