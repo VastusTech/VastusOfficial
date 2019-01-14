@@ -1,13 +1,7 @@
 import React, {Component} from 'react'
-// import _ from 'lodash'
-import {Image, Modal, Grid, Button, Dimmer, Loader, Card, Feed, Icon, Divider} from 'semantic-ui-react'
-// import { API, Auth, graphqlOperation } from "aws-amplify";
-// import setupAWS from '../AppConfig';
-// import proPic from "../img/BlakeProfilePic.jpg";
-// import QL from "../GraphQL";
-import Lambda from "../Lambda";
+import {Image, Button, Card, Feed, Divider} from 'semantic-ui-react'
 import ClientModal from "./ClientModal";
-// import EventCard from "./EventCard";
+import TrainerModal from "./TrainerModal";
 import EventDescriptionModal from "./EventDescriptionModal";
 import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 import { connect } from "react-redux";
@@ -25,6 +19,7 @@ class NotificationCard extends Component {
         sentRequest: false,
         clientModalOpen: false,
         eventModalOpen: false,
+        trainerModalOpen: false,
         challengeModalOpen: false,
         isAcceptInviteLoading: false,
         isDenyInviteLoading: false,
@@ -110,8 +105,16 @@ class NotificationCard extends Component {
         // }
     // };
 
-    handleClientModalOpen() { this.setState({clientModalOpen: true})};
+    handleClientModalOpen() {
+        if(this.getAboutAttribute("id").substr(0, 2) === "CL") {
+            this.setState({clientModalOpen: true});
+        }
+        else if(this.getAboutAttribute("id").substr(0, 2) === "TR") {
+            this.setState({trainerModalOpen: true});
+        }
+    };
     handleClientModalClose() { this.setState({clientModalOpen: false})};
+    handleTrainerModalClose() { this.setState({trainerModalOpen: false})};
     handleEventModalOpen() { this.setState({eventModalOpen: true})};
     handleEventModalClose() { this.setState({eventModalOpen: false})};
     handleChallengeModalOpen() { this.setState({challengeModalOpen: true})};
@@ -169,6 +172,7 @@ class NotificationCard extends Component {
             console.error("user id or invite id not set yet");
         }
     }
+
     handleAcceptChallengeRequestButton() {
         this.setState({isAcceptInviteLoading: true});
         const userID = this.props.user.id;
@@ -242,6 +246,7 @@ class NotificationCard extends Component {
             this.setState({isDenyInviteLoading: false});
         }
     }
+
     handleDeclineChallengeRequestButton() {
         this.setState({isDenyInviteLoading: true});
         const userID = this.props.user.id;
@@ -272,6 +277,7 @@ class NotificationCard extends Component {
             // TODO
         });
     }
+
     handleDeclineChallengeInvite() {
         InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
             // TODO
@@ -279,6 +285,7 @@ class NotificationCard extends Component {
             // TODO
         });
     }
+
     handleAcceptEventRequest() {
         EventFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
             // TODO
@@ -286,6 +293,7 @@ class NotificationCard extends Component {
             // TODO
         });
     }
+
     handleDeclineEventRequest() {
         InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
             // TODO
@@ -293,6 +301,7 @@ class NotificationCard extends Component {
             // TODO
         });
     }
+
     handleAcceptChallengeRequest() {
         ChallengeFunctions.addMember(this.state.user.id, this.getInviteAttribute("to"), this.getInviteAttribute("about"), () => {
             // TODO
@@ -300,6 +309,7 @@ class NotificationCard extends Component {
             // TODO
         });
     }
+
     handleDeclineChallengeRequest() {
         InviteFunctions.delete(this.state.user.id, this.state.inviteID, () => {
             // TODO
@@ -408,6 +418,12 @@ class NotificationCard extends Component {
                             onOpen={this.handleClientModalOpen.bind(this)}
                             onClose={this.handleClientModalClose.bind(this)}
                         />
+                        <TrainerModal
+                            clientID={this.getAboutAttribute("id")}
+                            open={this.state.clientModalOpen}
+                            onOpen={this.handleClientModalOpen.bind(this)}
+                            onClose={this.handleClientModalClose.bind(this)}
+                        />
                     </Card>
                 );
             }
@@ -441,6 +457,12 @@ class NotificationCard extends Component {
                                                 open={this.state.clientModalOpen}
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleClientModalClose.bind(this)}
+                                            />
+                                            <TrainerModal
+                                                clientID={this.getAboutAttribute("id")}
+                                                open={this.state.clientModalOpen}
+                                                onOpen={this.handleClientModalOpen.bind(this)}
+                                                onClose={this.handleTrainerModalClose.bind(this)}
                                             />
                                             <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                         </Feed.Summary>
@@ -488,6 +510,12 @@ class NotificationCard extends Component {
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleClientModalClose.bind(this)}
                                             />
+                                            <TrainerModal
+                                                clientID={this.getAboutAttribute("id")}
+                                                open={this.state.clientModalOpen}
+                                                onOpen={this.handleClientModalOpen.bind(this)}
+                                                onClose={this.handleTrainerModalClose.bind(this)}
+                                            />
                                             <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                         </Feed.Summary>
                                         <Divider/>
@@ -503,7 +531,7 @@ class NotificationCard extends Component {
                 );
             }
             else {
-                    return null;
+                return null;
             }
         }
     //}
