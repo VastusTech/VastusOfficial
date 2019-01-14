@@ -85,7 +85,6 @@ function getMessageHandler(channelName, getStore) {
         console.log("RECEIVED ABLY MESSAGE = " + JSON.stringify(message));
         const handlers = getStore().ably.notificationHandlers[channelName];
         if (handlers && handlers.length > 0) {
-            alert("Handling " + handlers.length + " different handlers...");
             for (let i = 0; i < handlers.length; i++) {
                 handlers[i](message);
             }
