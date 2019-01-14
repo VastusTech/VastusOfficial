@@ -50,6 +50,7 @@ class NotificationCard extends Component {
                         this.state.sentRequest = true;
                         // console.log("Fetching client = " + invite.from);
                         props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                        this.props.fetchTrainer(invite.from, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
                         if (invite.inviteType === "eventInvite") {
                             // console.log("Fetching event = " + invite.about);
                             props.fetchEvent(invite.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
@@ -106,11 +107,13 @@ class NotificationCard extends Component {
     // };
 
     handleClientModalOpen() {
-        if(this.getAboutAttribute("id").substr(0, 2) === "CL") {
-            this.setState({clientModalOpen: true});
-        }
-        else if(this.getAboutAttribute("id").substr(0, 2) === "TR") {
-            this.setState({trainerModalOpen: true});
+        if(this.getAboutAttribute("id")) {
+            if (this.getAboutAttribute("id").substr(0, 2) === "CL") {
+                this.setState({clientModalOpen: true});
+            }
+            else if (this.getAboutAttribute("id").substr(0, 2) === "TR") {
+                this.setState({trainerModalOpen: true});
+            }
         }
     };
     handleClientModalClose() { this.setState({clientModalOpen: false})};
@@ -419,7 +422,7 @@ class NotificationCard extends Component {
                             onClose={this.handleClientModalClose.bind(this)}
                         />
                         <TrainerModal
-                            clientID={this.getAboutAttribute("id")}
+                            trainertID={this.getAboutAttribute("id")}
                             open={this.state.clientModalOpen}
                             onOpen={this.handleClientModalOpen.bind(this)}
                             onClose={this.handleClientModalClose.bind(this)}
@@ -459,7 +462,7 @@ class NotificationCard extends Component {
                                                 onClose={this.handleClientModalClose.bind(this)}
                                             />
                                             <TrainerModal
-                                                clientID={this.getAboutAttribute("id")}
+                                                trainerID={this.getAboutAttribute("id")}
                                                 open={this.state.clientModalOpen}
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleTrainerModalClose.bind(this)}
@@ -511,7 +514,7 @@ class NotificationCard extends Component {
                                                 onClose={this.handleClientModalClose.bind(this)}
                                             />
                                             <TrainerModal
-                                                clientID={this.getAboutAttribute("id")}
+                                                trainerID={this.getAboutAttribute("id")}
                                                 open={this.state.clientModalOpen}
                                                 onOpen={this.handleClientModalOpen.bind(this)}
                                                 onClose={this.handleTrainerModalClose.bind(this)}
