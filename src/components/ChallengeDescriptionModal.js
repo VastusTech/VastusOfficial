@@ -357,8 +357,8 @@ class ChallengeDescriptionModal extends Component<Props> {
             return (
                 <Fragment>
                     <Button primary fluid className='u-margin-bottom--1' onClick={this.openSubmitModal}>Submit Your Entry</Button>
-                    <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
                     <Button primary fluid size="large" onClick={this.openCompleteModal}>Select Winner</Button>
+                    <Button loading={this.state.isDeleteLoading} fluid negative size="large" disabled={this.state.isDeleteLoading} onClick={this.handleDeleteChallengeButton}>Delete</Button>
                     <Divider className='u-margin-top--4' />
                     <Tab menu={{ widths: 2, inverted: true }} panes={panes} className='u-challenge u-margin-top--2' />
                 </Fragment>
