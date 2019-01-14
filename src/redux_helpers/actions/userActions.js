@@ -47,7 +47,7 @@ export function fetchUserAttributes(variablesList, dataHandler) {
             fetchClient(userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
-                if (dataHandler) { dataHandler(getStore().user);}
+                if (dataHandler) { dataHandler(getStore().user); }
             })(dispatch, getStore);
             // console.log("Filtering out results for fetch!");
             // const userKeyList = Object.keys(user);

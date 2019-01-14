@@ -5,7 +5,7 @@ import {Dimmer, Loader, Grid, Message} from 'semantic-ui-react'
 import NotificationCard from "../components/NotificationCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
-import {fetchInvite} from "../redux_helpers/actions/cacheActions";
+import {fetchInvite, fetchEvent, fetchChallenge, fetchGroup} from "../redux_helpers/actions/cacheActions";
 
 /*
 * NotificationCard Feed
@@ -43,7 +43,9 @@ class NotificationFeed extends Component {
         }
 
         const fetchAndAddInvite = (inviteID) => {
+            alert("Got here");
             props.fetchInvite(inviteID, ["time_created", "from", "inviteType", "about", "description"], (data) => {
+                alert("FEtched invite = " + JSON.stringify(data));
                 this.state.notifications.push(data.id);
                 this.setState({isLoading: false});
             });
@@ -68,7 +70,7 @@ class NotificationFeed extends Component {
             props.fetchUserAttributes(["receivedInvites", "ownedEvents", "ownedChallenges", "ownedGroups"], (data) => {
                 if (data) {
                     if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
-                        for (let i = 0; i < data.receivedInvites; i++) {
+                        for (let i = 0; i < data.receivedInvites.length; i++) {
                             fetchAndAddInvite(data.receivedInvites[i]);
                         }
                     }
@@ -139,14 +141,23 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchUserAttributes: (attributesList) => {
-            dispatch(fetchUserAttributes(attributesList));
+        fetchUserAttributes: (attributesList, dataHandler) => {
+            dispatch(fetchUserAttributes(attributesList, dataHandler));
         },
         forceFetchUserAttributes: (attributeList) => {
             dispatch(forceFetchUserAttributes(attributeList));
         },
-        fetchInvite: (id, variablesList) => {
-            dispatch(fetchInvite(id, variablesList));
+        fetchInvite: (id, variablesList, dataHandler) => {
+            dispatch(fetchInvite(id, variablesList, dataHandler));
+        },
+        fetchEvent: (id, variablesList, dataHandler) => {
+            dispatch(fetchEvent(id, variablesList, dataHandler));
+        },
+        fetchChallenge: (id, variablesList, dataHandler) => {
+            dispatch(fetchChallenge(id, variablesList, dataHandler));
+        },
+        fetchGroup: (id, variablesList, dataHandler) => {
+            dispatch(fetchGroup(id, variablesList, dataHandler));
         }
     }
 };
