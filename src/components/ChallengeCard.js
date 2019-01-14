@@ -104,7 +104,10 @@ class ChallengeCard extends Component {
         let curDate = this.getTodayDateString();
         let endTime = this.getChallengeAttribute("endTime");
         let curMonth = this.convertMonth(curDate.substr(4, 3));
-        let endMonth = endTime.substr(5, 2);
+        let endMonth = "";
+        if(endTime) {
+            endMonth = endTime.substr(5, 2);
+        }
         //console.log(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
         if(endTime && curDate) {
             endTime = parseInt(endTime.substr(8, 2), 10);
