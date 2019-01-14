@@ -6,7 +6,7 @@ import ClientModal from "./ClientModal";
 import { connect } from 'react-redux';
 // import QL from '../GraphQL';
 import { convertFromISO } from "../logic/TimeHelper";
-import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchTrainer, fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import VideoUploadScreen from "../screens/VideoUploadScreen";
@@ -51,7 +51,8 @@ class ChallengeDescriptionModal extends Component<Props> {
         isRequestLoading: false,
         joinRequestSent: false,
         canCallChecks: true,
-        deleted: false
+        deleted: false,
+        fetchedTrainer: false
     };
 
     resetState(challengeID) {
@@ -114,11 +115,20 @@ class ChallengeDescriptionModal extends Component<Props> {
         }
 
         const members = this.getChallengeAttribute("members");
+        const owner = this.getChallengeAttribute("owner");
         if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
             for (let i = 0; i < members.length; i++) {
                 this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
                     this.setState({});
                 });
+                if(owner) {
+                    if (owner.substr(0, 2) === "TR") {
+                        if(!this.state.fetchedTrainer) {
+                            this.props.fetchTrainer(owner, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+                            this.setState({fetchedTrainer: true});
+                        }
+                    }
+                }
             }
         }
     }
