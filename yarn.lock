@@ -7033,6 +7033,11 @@ react-error-overlay@^5.1.0:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/react-error-overlay/-/react-error-overlay-5.1.0.tgz#c516995a5652e7bfbed8b497910d5280df74a7e8"
 
+react-inverted-scrollview@^1.0.7:
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/react-inverted-scrollview/-/react-inverted-scrollview-1.0.7.tgz#25ab5384af7ac6446ebcfc155537cca3c7e1b37b"
+  integrity sha512-hbXWww8OGJHJpzPWXWZGxXhWLSd4CXnm/u70RaNcXOT+QF6stROVWFHKM9Rbt1SAuamb4dAXrfzT9gKKPBd9NA==
+
 react-is@^16.3.2, react-is@^16.6.0:
   version "16.6.3"
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.6.3.tgz#d2d7462fcfcbe6ec0da56ad69047e47e56e7eac0"
