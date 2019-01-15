@@ -1,3 +1,4 @@
+
 .App {
   align-content: center;
 }
@@ -5,14 +6,14 @@
 .App-logo {
   animation: App-logo-spin infinite 20s linear;
   height: 80px;
-  color: gray;
+  color: #7c7e80;
 }
 
 .App-header {
-  background-color: #222;
+  background-color: #007926;
   height: 150px;
   padding: 20px;
-  color: white;
+  color: #555558;
 }
 
 .App-title {
@@ -24,36 +25,36 @@
 }
 
 .ui.inverted.segment{
-    color: rebeccapurple;
+  color: #59ab1a;
 }
 
 .m1{
-    color: red;
+  color: #7f7e80;
 }
 
 body {
-    align-content: center;
-    color: #6600cc;
-}
-#root{
-  background-color: #f2e6ff;
-  font-family: Papyrus, fantasy;
-  font-weight: 7000;
-  --link-color: #28004d;
-  --button-background-color: #a3a3c2;
+  align-content: center;
+  color: #8b6a8c;
 }
 
+.chat {
+  color: black
+}
+
+/*Section Behind menu and search bar*/
+
 .Section__sectionHeader___2fwDQ{
-  color: #6600cc;
+  color: #73006e;
   font-size: 20px;
 }
 .Form__formSection___2Xr76{
-  background-color: #cc99ff;
+  background-color: #893c00;
 }
 .Input__inputLabel___2YLi4{
-  color: #f3e6ff;
+  color: #b3b400;
 
 }
+
 @keyframes App-logo-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }

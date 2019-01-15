@@ -88,7 +88,7 @@ You can find the most recent version of this guide [here](https://github.com/fac
   - [Building for Relative Paths](#building-for-relative-paths)
   - [Customizing Environment Variables for Arbitrary Build Environments](#customizing-environment-variables-for-arbitrary-build-environments)
   - [Azure](#azure)
-  - [Firebase](#firebase)
+  - [FirebaseHandler](#firebase)
   - [GitHub Pages](#github-pages)
   - [Heroku](#heroku)
   - [Netlify](#netlify)
@@ -2160,24 +2160,24 @@ See [this](https://medium.com/@to_pe/deploying-create-react-app-on-microsoft-azu
 
 See [this](https://medium.com/@strid/host-create-react-app-on-azure-986bc40d5bf2#.pycfnafbg) blog post or [this](https://github.com/ulrikaugustsson/azure-appservice-static) repo for a way to use automatic deployment to Azure App Service.
 
-### [Firebase](https://firebase.google.com/)
+### [FirebaseHandler](https://firebase.google.com/)
 
-Install the Firebase CLI if you haven’t already by running `npm install -g firebase-tools`. Sign up for a [Firebase account](https://console.firebase.google.com/) and create a new project. Run `firebase login` and login with your previous created Firebase account.
+Install the FirebaseHandler CLI if you haven’t already by running `npm install -g firebase-tools`. Sign up for a [FirebaseHandler account](https://console.firebase.google.com/) and create a new project. Run `firebase login` and login with your previous created FirebaseHandler account.
 
-Then run the `firebase init` command from your project’s root. You need to choose the **Hosting: Configure and deploy Firebase Hosting sites** and choose the Firebase project you created in the previous step. You will need to agree with `database.rules.json` being created, choose `build` as the public directory, and also agree to **Configure as a single-page app** by replying with `y`.
+Then run the `firebase init` command from your project’s root. You need to choose the **Hosting: Configure and deploy FirebaseHandler Hosting sites** and choose the FirebaseHandler project you created in the previous step. You will need to agree with `database.rules.json` being created, choose `build` as the public directory, and also agree to **Configure as a single-page app** by replying with `y`.
 
 ```sh
     === Project Setup
 
-    First, let's associate this project directory with a Firebase project.
+    First, let's associate this project directory with a FirebaseHandler project.
     You can create multiple project aliases by running firebase use --add,
     but for now we'll just set up a default project.
 
-    ? What Firebase project do you want to associate as default? Example app (example-app-fd690)
+    ? What FirebaseHandler project do you want to associate as default? Example app (example-app-fd690)
 
     === Database Setup
 
-    Firebase Realtime Database Rules allow you to define how your data should be
+    FirebaseHandler Realtime Database Rules allow you to define how your data should be
     structured and when your data can be read from and written to.
 
     ? What file should be used for Database Rules? database.rules.json
@@ -2198,7 +2198,7 @@ Then run the `firebase init` command from your project’s root. You need to cho
     i  Writing configuration info to firebase.json...
     i  Writing project information to .firebaserc...
 
-    ✔  Firebase initialization complete!
+    ✔  FirebaseHandler initialization complete!
 ```
 
 IMPORTANT: you need to set proper HTTP caching headers for `service-worker.js` file in `firebase.json` file or you will not be able to see changes after first deployment ([issue #2440](https://github.com/facebook/create-react-app/issues/2440)). It should be added inside `"hosting"` key like next:
@@ -2231,7 +2231,7 @@ Now, after you create a production build with `npm run build`, you can deploy it
     Hosting URL: https://example-app-fd690.firebaseapp.com
 ```
 
-For more information see [Add Firebase to your JavaScript Project](https://firebase.google.com/docs/web/setup).
+For more information see [Add FirebaseHandler to your JavaScript Project](https://firebase.google.com/docs/web/setup).
 
 ### [GitHub Pages](https://pages.github.com/)
 
