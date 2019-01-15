@@ -25,7 +25,7 @@ import ChallengeCard from "../components/ChallengeCard";
 
 // Storage.configure({level: 'public'});
 
-window.LOG_LEVEL='DEBUG';
+// window.LOG_LEVEL='DEBUG';
 
 
 /**

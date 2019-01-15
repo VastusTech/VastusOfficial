@@ -26,7 +26,7 @@ import EventList from "./EventList";
 
 // Storage.configure({level: 'public'});
 
-window.LOG_LEVEL='DEBUG';
+// window.LOG_LEVEL='DEBUG';
 
 type Props = {
     trainerID: string,

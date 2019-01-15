@@ -16,7 +16,8 @@ import UserFunctions from "../databaseFunctions/UserFunctions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import EventFunctions from "../databaseFunctions/EventFunctions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
-import {getItemTypeFromID} from "../logic/ItemType";
+import {getItemTypeFromID, switchReturnItemType} from "../logic/ItemType";
+
 type Props = {
     inviteID: string
 };
@@ -41,60 +42,16 @@ class NotificationCard extends Component<Props> {
         // this.update = this.update.bind(this);
         // this.update();
     }
+
     componentDidMount() {
         // this.update(this.props);
     }
+
     componentWillReceiveProps(newProps, nextContext) {
         // this.update(newProps);
         this.setState({inviteID: newProps.inviteID});
     }
-    // update(props) {
-    //     if (props.inviteID) {
-    //         alert(this.state.sentRequest);
-    //         if (!this.state.sentRequest) {
-    //             this.state.sentRequest = true;
-    //             alert("setting to true");
-    //             this.props.fetchInvite(props.inviteID, ["time_created", "from", "inviteType", "about", "description"], (data) => {
-    //                 if (data && data.from && data.inviteType && data.about) {
-    //                     // Fetch from user information
-    //                     const fromItemType = getItemTypeFromID(data.from);
-    //                     if (fromItemType === "Client") {
-    //                         props.fetchClient(data.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
-    //                     } else if (fromItemType === "Trainer") {
-    //                         props.fetchTrainer(data.from, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
-    //                     } else if (fromItemType === "Gym") {
-    //                         // TODO FETCH THIS?
-    //                         alert("not implemented!");
-    //                     } else {
-    //                         console.error("ITEM TYPE NOT RECOGNIZED FOR INVITE?");
-    //                     }
-    //                     // Fetch about item information
-    //                     const aboutItemType = getItemTypeFromID(data.about);
-    //                     if (aboutItemType === "Client") {
-    //                         props.fetchClient(data.about, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
-    //                     } else if (aboutItemType === "Trainer") {
-    //                         props.fetchTrainer(data.about, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
-    //                     } else if (aboutItemType === "Gym") {
-    //                         // TODO FETCH THIS?
-    //                         alert("not implemented!");
-    //                     } else if (aboutItemType === "Event") {
-    //                         props.fetchEvent(data.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
-    //                     } else if (aboutItemType === "Challenge") {
-    //                         props.fetchChallenge(data.about, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
-    //                     } else if (aboutItemType === "Group") {
-    //                         // TODO FETCH THIS?
-    //                         alert("not implemented!");
-    //                     } else {
-    //                         console.error("ITEM TYPE NOT RECOGNIZED FOR INVITE?");
-    //                     }
-    //                 }
-    //                 else {
-    //                     // TODO FIll in the invite with bum info?
-    //                 }
-    //             });
-    //         }
-    //     }
-    // }
+
     handleClientOrTrainerModalOpen() {
         if(this.getAboutAttribute("id")) {
             if (this.getAboutAttribute("id").substr(0, 2) === "CL") {
@@ -445,6 +402,29 @@ class NotificationCard extends Component<Props> {
             return inviteTime;
         }
     }
+    getProperModal(id) {
+        if (id) {
+            const itemType = getItemTypeFromID(id);
+            switchReturnItemType(itemType,
+                <ClientModal open={this.state.clientModalOpen} onClose={this.handleClientModalClose} clientID={id}/>,
+                <TrainerModal trainerID={id} open={this.state.trainerModalOpen}
+                              onClose={this.handleTrainerModalClose}/>,
+                null,
+                null,
+                null,
+                <EventDescriptionModal open={this.state.eventModalOpen} onClose={this.handleEventModalClose}
+                                       eventID={id}/>,
+                <ChallengeDescriptionModal open={this.state.challengeModalOpen} onClose={this.handleChallengeModalClose}
+                                           challengeID={id}/>,
+                null,
+                null,
+                null, // TODO Implement this in the future!
+                null,
+                null,
+                null,
+                "Get proper modal not implemented for this type!");
+        }
+    }
     render() {
         /*if (!this.getInviteAttribute("id") || !this.getAboutAttribute("id")) {
             return(
@@ -477,18 +457,7 @@ class NotificationCard extends Component<Props> {
                             <Button primary onClick={this.handleAcceptFriendRequestButton.bind(this)}>Accept</Button>
                         </Button.Group>
                     </Card.Content>
-                    <ClientModal
-                        clientID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
-                    <TrainerModal
-                        trainerID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
+                    {this.getProperModal(this.getAboutAttribute("id"))}
                 </Card>
             );
         }
@@ -517,18 +486,7 @@ class NotificationCard extends Component<Props> {
                                         <Feed.User onClick={this.handleClientOrTrainerModalOpen.bind(this)}>
                                             {this.getFromAttribute("name")}
                                         </Feed.User>
-                                        <ClientModal
-                                            clientID={this.getFromAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleClientModalClose.bind(this)}
-                                        />
-                                        <TrainerModal
-                                            trainerID={this.getAboutAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleTrainerModalClose.bind(this)}
-                                        />
+                                        {this.getProperModal(this.getFromAttribute("id"))}
                                         <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                     </Feed.Summary>
                                     <Divider/>
@@ -574,18 +532,7 @@ class NotificationCard extends Component<Props> {
                             <Button primary onClick={this.handleAcceptChallengeRequestButton.bind(this)}>Accept</Button>
                         </Button.Group>
                     </Card.Content>
-                    <ClientModal
-                        clientID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
-                    <TrainerModal
-                        trainerID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
+                    {this.getProperModal(this.getFromAttribute("id"))}
                 </Card>
             );
         }
@@ -620,18 +567,7 @@ class NotificationCard extends Component<Props> {
                             <Button primary onClick={this.handleAcceptChallengeRequest.bind(this)}>Accept</Button>
                         </Button.Group>
                     </Card.Content>
-                    <ClientModal
-                        clientID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
-                    <TrainerModal
-                        trainerID={this.getAboutAttribute("id")}
-                        open={this.state.clientModalOpen}
-                        onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                        onClose={this.handleClientModalClose.bind(this)}
-                    />
+                    {this.getProperModal(this.getAboutAttribute("id"))}
                 </Card>
             );
         }
@@ -658,20 +594,9 @@ class NotificationCard extends Component<Props> {
                                         <ChallengeDescriptionModal
                                             open={this.state.challengeModalOpen}
                                             onClose={this.handleChallengeModalClose.bind(this)}
-                                            challengeID={this.getAboutAttribute("id")}
+                                            challengeID={this.getToAttribute("id")}
                                         />
-                                        <ClientModal
-                                            clientID={this.getFromAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleClientModalClose.bind(this)}
-                                        />
-                                        <TrainerModal
-                                            trainerID={this.getAboutAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleTrainerModalClose.bind(this)}
-                                        />
+                                        {this.getProperModal(this.getAboutAttribute("id"))}
                                         <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                     </Feed.Summary>
                                     <Divider/>
@@ -711,18 +636,7 @@ class NotificationCard extends Component<Props> {
                                             onClose={this.handleChallengeModalClose.bind(this)}
                                             challengeID={this.getAboutAttribute("id")}
                                         />
-                                        <ClientModal
-                                            clientID={this.getFromAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleClientModalClose.bind(this)}
-                                        />
-                                        <TrainerModal
-                                            trainerID={this.getAboutAttribute("id")}
-                                            open={this.state.clientModalOpen}
-                                            onOpen={this.handleClientOrTrainerModalOpen.bind(this)}
-                                            onClose={this.handleTrainerModalClose.bind(this)}
-                                        />
+                                        {this.getProperModal(this.getAboutAttribute("id"))}
                                         <Feed.Date>{/*Insert Invite Sent Time Here*/}</Feed.Date>
                                     </Feed.Summary>
                                     <Divider/>
@@ -750,21 +664,21 @@ const mapStateToProps = (state) => ({
 });
 const mapDispatchToProps = (dispatch) => {
     return {
-        fetchClient: (id, variablesList, dataHandler) => {
-            dispatch(fetchClient(id, variablesList, dataHandler));
-        },
-        fetchTrainer: (id, variablesList, dataHandler) => {
-            dispatch(fetchTrainer(id, variablesList, dataHandler))
-        },
-        fetchEvent: (id, variablesList, dataHandler) => {
-            dispatch(fetchEvent(id, variablesList, dataHandler));
-        },
-        fetchChallenge: (id, variablesList, dataHandler) => {
-            dispatch(fetchChallenge(id, variablesList, dataHandler));
-        },
-        fetchInvite: (id, variablesList, dataHandler) => {
-            dispatch(fetchInvite(id, variablesList, dataHandler));
-        }
+        // fetchClient: (id, variablesList, dataHandler) => {
+        //     dispatch(fetchClient(id, variablesList, dataHandler));
+        // },
+        // fetchTrainer: (id, variablesList, dataHandler) => {
+        //     dispatch(fetchTrainer(id, variablesList, dataHandler))
+        // },
+        // fetchEvent: (id, variablesList, dataHandler) => {
+        //     dispatch(fetchEvent(id, variablesList, dataHandler));
+        // },
+        // fetchChallenge: (id, variablesList, dataHandler) => {
+        //     dispatch(fetchChallenge(id, variablesList, dataHandler));
+        // },
+        // fetchInvite: (id, variablesList, dataHandler) => {
+        //     dispatch(fetchInvite(id, variablesList, dataHandler));
+        // }
     };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationCard);

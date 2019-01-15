@@ -590,6 +590,7 @@ class GraphQL {
                     putQuery(queryString, data.data[queryFunctionName]);
                 }
                 console.log("Handling the successHandler...");
+                console.log("QL S H = " + successHandler.toString());
                 if (successHandler) { successHandler(data.data[queryFunctionName]); }
             }).catch((error) => {
                 console.log("GraphQL operation failed...");
@@ -598,6 +599,7 @@ class GraphQL {
                 }
                 console.log(JSON.stringify(error));
                 console.log("Handling the failureHandler...");
+                console.log("QL F H = " + failureHandler.toString());
                 if (failureHandler) { failureHandler(error); }
             });
         }

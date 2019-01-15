@@ -184,6 +184,10 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         if (!variablesList.includes("item_type")) {
             variablesList = [...variablesList, "item_type"];
         }
+        if (dataHandler) { console.log("S H = " + dataHandler.toString()); }
+        else { console.log("No data handler...");}
+        if (failureHandler) { console.log("F H = " + failureHandler.toString()); }
+        else { console.log("No failure handler...");}
         QL[QLFunctionName](id, variablesList, (data) => {
             // console.log("Successfully retrieved the QL info");
             if (profilePictureIndex !== -1) {
@@ -218,7 +222,10 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             console.error(error);
             dispatch(setError(error));
             dispatch(setIsNotLoading());
-            if (failureHandler) { failureHandler(error); }
+            if (failureHandler) {
+                console.log("F H " + failureHandler.toString());
+                failureHandler(error);
+            }
         });
     }
     else {
