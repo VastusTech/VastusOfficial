@@ -7,7 +7,7 @@ import { inspect } from 'util';
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import {daysLeft, parseISOString} from "../logic/TimeHelper";
 
-class NextEventProp extends Component {
+class NextChallengeProp extends Component {
     state = {
         isLoading: true,
         isFetching: false,
@@ -118,4 +118,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NextEventProp);
+export default connect(mapStateToProps, mapDispatchToProps)(NextChallengeProp);
