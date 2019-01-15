@@ -164,8 +164,8 @@ class Profile extends React.PureComponent {
                 this.setURLS(this.props.user.profileImagePaths);
                 this.setState({isLoading: false});
             }, (error) => {
-                console.log("Failed edit client attribute");
-                console.log(JSON.stringify(error));
+                //console.log("Failed edit client attribute");
+                //console.log(JSON.stringify(error));
             });
             //console.log("Calling storage put");
             //console.log("File = " + JSON.stringify(event.target.files[0]));

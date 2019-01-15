@@ -109,7 +109,7 @@ class PostCard extends Component {
 
     getTrainerAttribute(attribute) {
         if (this.getPostAttribute("by")) {
-            console.log(this.getPostAttribute("by"));
+            //console.log(this.getPostAttribute("by"));
             let trainer = this.props.cache.trainers[this.getPostAttribute("by")];
             if (trainer) {
                 if (attribute.substr(attribute.length - 6) === "Length") {

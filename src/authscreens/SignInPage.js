@@ -43,7 +43,7 @@ class SignInPage extends Component {
     changeStateText(key, value) {
         // inspect(value);
         this.authState[key] = value.target.value;
-        console.log("New " + key + " is equal to " + value.target.value);
+        //console.log("New " + key + " is equal to " + value.target.value);
     }
 
 

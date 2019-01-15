@@ -119,7 +119,7 @@ class TrainerModal extends React.PureComponent<Props> {
 
     getTrainerAttribute(attribute) {
         if (this.props.trainerID) {
-            console.log(this.props.trainerID);
+            //console.log(this.props.trainerID);
             let trainer = this.props.cache.trainers[this.props.trainerID];
             if (trainer) {
                 if (attribute.substr(attribute.length - 6) === "Length") {

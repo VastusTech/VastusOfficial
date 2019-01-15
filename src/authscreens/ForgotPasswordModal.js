@@ -72,7 +72,7 @@ class ForgotPasswordModal extends Component {
         // TODO Check to see if this will, in fact, work.!
         // inspect(value);
         this.authState[key] = value.target.value;
-        console.log("New " + key + " is equal to " + value.target.value);
+        //console.log("New " + key + " is equal to " + value.target.value);
     }
 
     handleSubmitButton() {
