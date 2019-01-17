@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Modal, Message, Button, Card, Icon } from "semantic-ui-react";
+import { Modal, Message, Button, Grid, Icon } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import { Storage } from 'aws-amplify';
 import { Player } from "video-react";
@@ -32,7 +32,8 @@ class CreateSubmissionModal extends Component {
         super(props);
         this.handleSubmitButton = this.handleSubmitButton.bind(this);
         this.setVideo = this.setVideo.bind(this);
-        this.displayCurrentVideo = this.displayCurrentVideo.bind(this);
+        this.displayBeforeVideo = this.displayBeforeVideo.bind(this);
+        this.displayAfterVideo = this.displayAfterVideo.bind(this);
     }
 
     componentDidMount() {
@@ -186,12 +187,29 @@ class CreateSubmissionModal extends Component {
         }
     }
 
-    displayCurrentVideo() {
+    displayBeforeVideo() {
         if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
-                <Player>
-                    <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
-                </Player>
+                <div>
+                    Before:
+                    <Player>
+                        <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
+                    </Player>
+                </div>
+            );
+        }
+        return null;
+    }
+
+    displayAfterVideo() {
+        if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 1) {
+            return(
+                <div>
+                    After:
+                    <Player>
+                        <source src={this.state.tempVideoURLs[1]} type="video/mp4"/>
+                    </Player>
+                </div>
             );
         }
         return null;
@@ -212,18 +230,28 @@ class CreateSubmissionModal extends Component {
             <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 <Modal.Header className="u-bg--bg">Create A Submission</Modal.Header>
                 <Modal.Content className="u-bg--bg">
-                    {this.displayCurrentVideo()}
-                    <Fragment>
+                    {this.displayBeforeVideo()}
+                    {this.displayAfterVideo()}
+                    <Grid centered>
                         <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
                             <div>
                                 <Button primary fluid as="label" htmlFor="proPicUpload" className="u-bg--primaryGradient">
                                     <Icon name="camera" className='u-margin-right--0' inverted />
-                                    Upload Video
+                                    Upload Before Video
                                 </Button>
                                 <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setVideo}/>
                             </div>
                         </div>
-                    </Fragment>
+                        <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
+                            <div>
+                                <Button primary fluid as="label" htmlFor="proPicUpload" className="u-bg--primaryGradient">
+                                    <Icon name="camera" className='u-margin-right--0' inverted />
+                                    Upload After Video
+                                </Button>
+                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setVideo}/>
+                            </div>
+                        </div>
+                    </Grid>
                 </Modal.Content>
                 <div>{this.displaySubmission()}</div>
                 <Button primary fluid loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} onClick={this.handleSubmitButton}>Submit</Button>
