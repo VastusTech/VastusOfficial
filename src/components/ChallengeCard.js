@@ -36,6 +36,13 @@ Date.daysBetween = function( date1, date2 ) {   //Get 1 day in milliseconds
 * It is used as a modal trigger in the feed.
  */
 class ChallengeCard extends Component {
+    static pictures = {
+        Performance: require('../img/Performance_icon.png'),
+        Strength: require('../img/Strength_icon.png'),
+        Endurance: require('../img/Endurance_icon.png'),
+        HIIT: require('../img/HIIT_icon.png')
+    };
+
     state = {
         error: null,
         challengeID: null,
@@ -126,33 +133,33 @@ class ChallengeCard extends Component {
         if(tags) {
             if (tags.length === 1) {
                 return (
-                    <Image size='small' src={require('../img/' + tags[0] + '_icon.png')}/>
+                    <Image size='small' src={ChallengeCard.pictures[tags[0]]}/>
                 );
             }
             else if (tags.length === 2) {
                 return (
                     <div>
-                        <Image size='tiny' src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image size='tiny' src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image size='tiny' src={ChallengeCard.pictures[tags[0]]}/>
+                        <Image size='tiny' src={ChallengeCard.pictures[tags[1]]}/>
                     </div>
                 );
             }
             else if (tags.length === 3) {
                 return(
                     <div>
-                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[0]]}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[1]]}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[2]]}/>
                     </div>
                     );
             }
             else if (tags.length === 4) {
                 return(
                     <div>
-                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[3] + '_icon.png')}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[0]]}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[1]]}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[2]]}/>
+                        <Image avatar src={ChallengeCard.pictures[tags[3]]}/>
                     </div>
                 );
             }
