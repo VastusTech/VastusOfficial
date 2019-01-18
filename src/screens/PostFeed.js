@@ -211,7 +211,7 @@ class PostFeedProp extends Component {
                             } else if (aboutItemType === "Event") {
 
                             } else if (aboutItemType === "Challenge") {
-                                this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction"]);
+                                this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
                             } else if (aboutItemType === "Post") {
                                 this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
                             }

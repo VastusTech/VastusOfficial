@@ -92,7 +92,7 @@ class PostFunctions {
             picturePaths,
             videoPaths,
         }, (data) => {
-            const id = data.id;
+            const id = data.data;
             const numVideosAndPictures = numPictures + numVideos;
             let numFinished = 0;
             function finish() {

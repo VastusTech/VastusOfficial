@@ -17,8 +17,8 @@ class SubmissionsScreen extends Component {
         challengeID: null,
         loadedPostIDs: [],
         sentRequest: false,
-        challengeMembers: ['all'],
-        memberSelected: null
+        challengeMembers: [],
+        memberSelected: 'all'
     };
 
     // _isMounted = true;
@@ -63,11 +63,12 @@ class SubmissionsScreen extends Component {
                 this.state.sentRequest = true;
                 for (let i = 0; i < submissions.length; i++) {
                     // console.log("Fetching: " + submissions[i]);
-                    props.fetchPost(submissions[i], ["id", "time_created", "by", "owner", "item_type", "postType", "about", "description", "videoPaths", "picturePaths", "title"],
+                    props.fetchPost(submissions[i], ["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
+                        alert("Got a post! ID = " + post.id);
                         if (post && post.id) {
-                            this.setState({challengeMembers: curChalMems.push(post.by)});
+                            this.setState({challengeMembers: [...curChalMems, post.by]});
                             alert(JSON.stringify(this.state.challengeMembers));
                             this.state.loadedPostIDs.push(post.id);
                             this.setState({isLoading: false});
@@ -141,10 +142,9 @@ class SubmissionsScreen extends Component {
     };
 
     render() {
-        function rows(postIDs) {
+        function rows(postIDs, memberSelected) {
             const row = [];
             const rowProps = [];
-            let t = this;
             for (const key in postIDs) {
                 if (postIDs.hasOwnProperty(key)) {
                     //console.log(JSON.stringify(events[key]));
@@ -154,9 +154,10 @@ class SubmissionsScreen extends Component {
                 }
             }
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
-            alert(JSON.stringify(postIDs));
+            alert("ROW " + JSON.stringify(row));
+            alert("MEM SEL " + memberSelected);
             for (const key in row) {
-                if(t.state.memberSelected === 'all' || t.state.memberSelected === row[key]) {
+                if (memberSelected === 'all' || memberSelected === row[key]) {
                     if (row.hasOwnProperty(key) === true) {
                         rowProps.push(
                             <List.Item key={key}>
@@ -178,7 +179,7 @@ class SubmissionsScreen extends Component {
                 {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                                 challengeChannel={this.channelName}/> */}
                 {/*<Comments comments={this.state.comments}/>*/}
-                {rows(this.state.loadedPostIDs)}
+                {rows(this.state.loadedPostIDs, this.state.memberSelected)}
             </Fragment>
         );
     }

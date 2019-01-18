@@ -51,7 +51,7 @@ class NextChallengeProp extends Component {
             this.props.fetchUserAttributes(["challenges"], (user) => {
                 if (user.challenges) {
                     for (let i = 0; i < user.challenges.length; i++) {
-                        this.props.fetchChallenge(user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction"], (challenge) => {
+                        this.props.fetchChallenge(user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction", "submissions"], (challenge) => {
                             if (challenge && challenge.endTime) {
                                 const challengeDaysLeft = daysLeft(parseISOString(challenge.endTime));
                                 if (challengeDaysLeft >= 0) {
