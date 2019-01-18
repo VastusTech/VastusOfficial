@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 // import VideoUpload from '../components/VideoUpload';
 // import Comments from '../components/Comments';
-import {Grid, Card, Dimmer, Loader, List, Icon, Message} from "semantic-ui-react";
+import {Grid, Card, Dimmer, Loader, List, Icon, Message, Dropdown} from "semantic-ui-react";
 // import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import PostCard from "../components/PostCard";
 import connect from "react-redux/es/connect/connect";
@@ -16,7 +16,9 @@ class SubmissionsScreen extends Component {
         isLoading: false,
         challengeID: null,
         loadedPostIDs: [],
-        sentRequest: false
+        sentRequest: false,
+        challengeMembers: ['all'],
+        memberSelected: null
     };
 
     // _isMounted = true;
@@ -29,6 +31,7 @@ class SubmissionsScreen extends Component {
         this.update = this.update.bind(this);
         this.getChallengeAttribute = this.getChallengeAttribute.bind(this);
         this.getLoading = this.getLoading.bind(this);
+        this.getName = this.getName.bind(this);
     }
 
     componentDidMount() {
@@ -50,6 +53,7 @@ class SubmissionsScreen extends Component {
     }
 
     update(props) {
+        let curChalMems = this.state.challengeMembers;
         // TODO Change this if we want to actually be able to do something while it's loading
         if (this.getChallengeAttribute("id")) {
             // console.log("Updating!");
@@ -63,6 +67,8 @@ class SubmissionsScreen extends Component {
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
+                            this.setState({challengeMembers: curChalMems.push(post.by)});
+                            alert(JSON.stringify(this.state.challengeMembers));
                             this.state.loadedPostIDs.push(post.id);
                             this.setState({isLoading: false});
                         }
@@ -70,6 +76,21 @@ class SubmissionsScreen extends Component {
                 }
             }
         }
+    }
+
+    getName(id) {
+        if (id) {
+            if (this.props.cache.clients[id]) {
+                return this.props.cache.clients[id].name
+            }
+            else if (this.props.cache.trainers[id]) {
+                return this.props.cache.trainers[id].name
+            }
+            // else if (!this.props.info.isLoading) {
+            //     this.props.fetchClient(owner, ["name"]);
+            // }
+        }
+        return null;
     }
 
     getChallengeAttribute(attribute) {
@@ -109,10 +130,21 @@ class SubmissionsScreen extends Component {
         return null;
     }
 
+    handleFilterChange = (e, data) => {
+        this.setState({memberSelected: data.value});
+        //console.log(this.eventState.duration);
+        // this.setState({
+        //     duration: data.value,
+        // }, () => {
+        //     console.log('value',this.state.duration);
+        // });
+    };
+
     render() {
         function rows(postIDs) {
             const row = [];
             const rowProps = [];
+            let t = this;
             for (const key in postIDs) {
                 if (postIDs.hasOwnProperty(key)) {
                     //console.log(JSON.stringify(events[key]));
@@ -122,14 +154,16 @@ class SubmissionsScreen extends Component {
                 }
             }
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
-
+            alert(JSON.stringify(postIDs));
             for (const key in row) {
-                if (row.hasOwnProperty(key) === true) {
-                    rowProps.push(
-                        <List.Item key={key}>
-                            <PostCard postID={row[key]}/>
-                        </List.Item>
-                    );
+                if(t.state.memberSelected === 'all' || t.state.memberSelected === row[key]) {
+                    if (row.hasOwnProperty(key) === true) {
+                        rowProps.push(
+                            <List.Item key={key}>
+                                <PostCard postID={row[key]}/>
+                            </List.Item>
+                        );
+                    }
                 }
             }
 
@@ -137,6 +171,7 @@ class SubmissionsScreen extends Component {
         }
         return (
             <Fragment>
+                <Dropdown fluid selection inverted options={this.state.challengeMembers} onChange={this.handleFilterChange}/>
                 {/*console.error("Comment screen render user: " + this.props.curUser)*/}
                 {this.getLoading()}
                 {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}

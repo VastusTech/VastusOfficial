@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from "react";
-import { Modal, Message, Button, Card, Icon } from "semantic-ui-react";
+import { Modal, Message, Button, Grid, Icon } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import { Storage } from 'aws-amplify';
 import { Player } from "video-react";
@@ -32,7 +32,7 @@ class CreateSubmissionModal extends Component {
         super(props);
         this.handleSubmitButton = this.handleSubmitButton.bind(this);
         this.setVideo = this.setVideo.bind(this);
-        this.displayCurrentVideo = this.displayCurrentVideo.bind(this);
+        this.displayVideo = this.displayVideo.bind(this);
     }
 
     componentDidMount() {
@@ -186,12 +186,15 @@ class CreateSubmissionModal extends Component {
         }
     }
 
-    displayCurrentVideo() {
+    displayVideo() {
         if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
-                <Player>
-                    <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
-                </Player>
+                <div>
+                    Before:
+                    <Player>
+                        <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
+                    </Player>
+                </div>
             );
         }
         return null;
@@ -212,8 +215,8 @@ class CreateSubmissionModal extends Component {
             <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 <Modal.Header className="u-bg--bg">Create A Submission</Modal.Header>
                 <Modal.Content className="u-bg--bg">
-                    {this.displayCurrentVideo()}
-                    <Fragment>
+                    {this.displayVideo()}
+                    <Grid centered>
                         <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
                             <div>
                                 <Button primary fluid as="label" htmlFor="proPicUpload" className="u-bg--primaryGradient">
@@ -223,7 +226,7 @@ class CreateSubmissionModal extends Component {
                                 <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setVideo}/>
                             </div>
                         </div>
-                    </Fragment>
+                    </Grid>
                 </Modal.Content>
                 <div>{this.displaySubmission()}</div>
                 <Button primary fluid loading={this.state.isSubmitLoading} disabled={this.state.isSubmitLoading} onClick={this.handleSubmitButton}>Submit</Button>
