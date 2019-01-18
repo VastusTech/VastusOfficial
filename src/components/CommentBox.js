@@ -1,10 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import {Button, Input, Label, Icon} from "semantic-ui-react";
-import { Storage } from 'aws-amplify';
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {Button, Input, Icon} from "semantic-ui-react";
 import connect from "react-redux/es/connect/connect";
-import Lambda from "../Lambda";
-import defaultProfilePicture from "../img/roundProfile.png";
 import MessageFunctions from "../databaseFunctions/MessageFunctions";
 import {addMessageToBoard} from "../redux_helpers/actions/messageActions";
 

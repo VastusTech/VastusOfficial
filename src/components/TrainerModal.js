@@ -2,32 +2,13 @@ import React from 'react'
 // import { Player } from 'video-react';
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
-import BuddyListProp from "../screens/BuddyList";
 import { consoleLog } from "../logic/DebuggingHelper";
-// import TrophyCaseProp from "./TrophyCase";
-// import { S3Image } from 'aws-amplify-react';
-// import ChallengeManagerProp from "./ManageChallenges";
-// import QL from '../GraphQL';
-// import Lambda from '../Lambda';
-// import ScheduledEventList from "./ScheduledEventList";
-// import CompletedEventList from "./CompletedEventList";
-// import OwnedEventList from "./OwnedEventList";
 import ChallengeList from "../components/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-// import AWSSetup from "../AppConfig";
-// import {logOut} from "../redux_helpers/actions/authActions";
-import ClientFunctions from "../databaseFunctions/ClientFunctions";
 import TrainerFunctions from "../databaseFunctions/TrainerFunctions";
-import {calculateAge} from "../logic/TimeHelper";
 import TrainerPostFeed from "../screens/TrainerPostFeed";
 import EventList from "./EventList";
-
-// AWSSetup();
-
-// Storage.configure({level: 'public'});
-
-// window.LOG_LEVEL='DEBUG';
 
 type Props = {
     trainerID: string,

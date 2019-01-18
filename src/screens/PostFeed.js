@@ -4,7 +4,6 @@ import {Visibility, Header, Grid} from 'semantic-ui-react'
 import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
-// import ScheduledEventsList from "./ScheduledEventList";
 import {
     fetchPost,
     putChallengeQuery,
@@ -17,18 +16,9 @@ import {
     fetchPostQuery
 } from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-// import CreateEventProp from "./CreateEvent";
-//import CreateChallengeProp from "./CreateChallenge";
-//import CreatePostProp from "./CreatePost";
 import PostManager from "./PostManager";
-// import NextEventProp from "../components/NextEvent";
 import NextChallengeProp from "../components/NextChallenge";
-import {getItemTypeFromID, switchHandleItemType} from "../logic/ItemType";
-// import * as AWS from "aws-sdk";
-
-// AWS.config.update({region: 'REGION'});
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+import {getItemTypeFromID} from "../logic/ItemType";
 
 /**
  * Event Feed

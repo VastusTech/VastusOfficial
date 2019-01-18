@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import { Message, List } from 'semantic-ui-react';
 import EventCard from "../components/EventCard";
-import QL from '../GraphQL';
 import { connect } from 'react-redux';
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {fetchEvent} from "../redux_helpers/actions/cacheActions";

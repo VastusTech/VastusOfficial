@@ -1,5 +1,5 @@
-import Lambda from "./Lambda";
-import QL from "./GraphQL";
+// import Lambda from "./Lambda";
+// import QL from "./GraphQL";
 
 /*
 Messages:

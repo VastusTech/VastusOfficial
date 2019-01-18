@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import {Checkbox, Modal, Button, Icon, Form, Segment, TextArea, Dropdown, Label, Image, Message} from 'semantic-ui-react';
-import Lambda from "../Lambda";
+import {Checkbox, Modal, Button, Form, Segment, TextArea, Dropdown, Label, Image, Message} from 'semantic-ui-react';
 import {connect} from "react-redux";
 import {setError} from "../redux_helpers/actions/infoActions";
 import VTLogo from "../img/vt_new.svg";
-import QL from "../GraphQL";
 import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 

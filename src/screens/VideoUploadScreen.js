@@ -1,9 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import VideoUpload from '../components/VideoUpload';
 import Comments from '../components/Comments';
-import {Grid, Card, Dimmer, Loader, Icon, Message} from "semantic-ui-react";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import connect from "react-redux/es/connect/connect";
+import {Icon, Message} from "semantic-ui-react";
 
 class VideoUploadScreen extends Component {
     state = {

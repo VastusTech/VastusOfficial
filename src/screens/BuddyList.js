@@ -1,11 +1,11 @@
-import React, {Component, Fragment} from 'react'
-import { Button, List, Message, Image } from 'semantic-ui-react';
+import React, {Component} from 'react'
+import { List, Message } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import ClientCard from "../components/ClientCard";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+import {consoleError} from "../logic/DebuggingHelper";
 
 class BuddyListProp extends Component {
     state = {

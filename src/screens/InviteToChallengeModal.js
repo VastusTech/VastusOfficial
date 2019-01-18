@@ -1,11 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import {Message, Button, Modal, Card} from 'semantic-ui-react';
-import EventCard from "../components/EventCard";
-// import QL from "../GraphQL";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-// import { inspect } from 'util';
-// import Lambda from "../Lambda";
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import ChallengeCard from "../components/ChallengeCard";

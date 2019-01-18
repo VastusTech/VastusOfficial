@@ -1,5 +1,4 @@
 import React, {Component, Fragment} from 'react'
-import _ from 'lodash';
 import {Grid, Button, Message, Image, Modal, Card, Icon, Form, Container, TextArea, Checkbox, Header} from 'semantic-ui-react';
 import { Storage } from 'aws-amplify';
 import {connect} from "react-redux";
@@ -7,10 +6,6 @@ import {setError} from "../redux_helpers/actions/infoActions";
 import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 import {
     fetchPost,
-    clearChallengeQuery,
-    fetchChallenge,
-    putChallenge,
-    putChallengeQuery,
     clearPostQuery,
     putPost,
     putPostQuery

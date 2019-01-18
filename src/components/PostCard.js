@@ -26,7 +26,7 @@ type Props = {
 * This is the generic view for how a post shows up in any feeds or lists.
 * It is used as a modal trigger in the feed.
  */
-class PostCard extends Component {
+class PostCard extends Component<Props> {
     state = {
         error: null,
         // isLoading: true,

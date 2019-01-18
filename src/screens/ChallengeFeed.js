@@ -4,19 +4,11 @@ import {Visibility, Header} from 'semantic-ui-react'
 import ChallengeCard from "../components/ChallengeCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
-// import ScheduledEventsList from "./ScheduledEventList";
-import {fetchChallenge, putClientQuery, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-// import CreateEventProp from "./CreateEvent";
 import CreateChallengeProp from "./CreateChallenge"
-// import NextEventProp from "../components/NextEvent";
 import NextChallengeProp from "../components/NextChallenge";
-import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
-// import * as AWS from "aws-sdk";
-
-// AWS.config.update({region: 'REGION'});
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+// import { Tab } from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 
 /**
  * Event Feed

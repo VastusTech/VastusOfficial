@@ -1,6 +1,6 @@
-import { setError, setIsLoading } from "./infoActions";
+import {setIsLoading } from "./infoActions";
 import QL from "../../GraphQL";
-import {getCache, getPutItemFunction, getPutQueryFunction, getQueryCache, getFetchQueryType, getFetchQueryFunction} from "./cacheActions";
+import {getPutItemFunction, getFetchQueryFunction} from "./cacheActions";
 import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 const ENABLE_TYPE = 'ENABLE_TYPE';

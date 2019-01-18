@@ -1,9 +1,8 @@
 import React, { Component } from 'react';
 import CommentBox from "../components/CommentBox";
 import Comments from '../components/Comments';
-import { Icon, Message, Divider, Grid } from "semantic-ui-react";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {fetchClient, fetchTrainer, fetchMessageQuery, getFetchItemFunction} from "../redux_helpers/actions/cacheActions";
+import { Icon, Message, Divider } from "semantic-ui-react";
+import {fetchClient, fetchTrainer} from "../redux_helpers/actions/cacheActions";
 import {
     queryNextMessagesFromBoard,
     clearBoard,
@@ -12,8 +11,6 @@ import {
 } from "../redux_helpers/actions/messageActions";
 import {setHandlerToBoard} from "../redux_helpers/actions/ablyActions";
 import connect from "react-redux/es/connect/connect";
-import QL from "../GraphQL";
-import { getItemTypeFromID } from "../logic/ItemType";
 import ScrollView from "react-inverted-scrollview";
 
 type Props = {

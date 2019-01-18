@@ -1,12 +1,9 @@
-import React, {Component, Fragment} from 'react'
-import {Menu, Icon, Tab, Modal, Button} from 'semantic-ui-react'
-import PostCard from "../components/PostCard";
-import QL from "../GraphQL";
+import React, {Component} from 'react'
+import {Icon, Modal, Button} from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CreateChallengeProp from "./CreateChallenge";
-import CreatePostProp from "./CreatePost";
 
 /**
  * Event Feed

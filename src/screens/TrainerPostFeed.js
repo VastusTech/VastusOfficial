@@ -2,19 +2,14 @@ import React, {Component, Fragment} from 'react';
 import _ from 'lodash';
 import {Visibility, Header, Icon, Message} from 'semantic-ui-react';
 import PostCard from "../components/PostCard";
-import QL from "../GraphQL";
 import {connect} from 'react-redux';
 import {
     fetchPost,
     fetchTrainer,
     forceFetchTrainer,
-    putClientQuery,
     putPost,
-    putPostQuery
 } from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
-import CreatePostProp from "./CreatePost";
 
 type Props = {
     trainerID: string
@@ -178,9 +173,6 @@ const mapDispatchToProps = (dispatch) => {
         putPost: (post) => {
             dispatch(putPost(post));
         },
-        // putPostQuery: (queryString, queryResult) => {
-        //     dispatch(putPostQuery(queryString, queryResult));
-        // },
     }
 };
 

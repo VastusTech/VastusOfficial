@@ -1,7 +1,7 @@
 import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import jwt_decode from "jwt-decode";
-import {fetchUser, clearUser, setUser, forceSetUser} from "./userActions";
+import {setUser, forceSetUser} from "./userActions";
 import {addHandlerToNotifications, removeAllHandlers} from "./ablyActions";
 import QL from "../../GraphQL";
 import ClientFunctions from "../../databaseFunctions/ClientFunctions";
