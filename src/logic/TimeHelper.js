@@ -79,7 +79,7 @@ export function daysLeft(dateTime) {
 }
 export function timeLeft(dateTime) {
     const now = new Date();
-    return dateTime.getTime() - dateTime.getTime();
+    return dateTime.getTime() - now.getTime();
 }
 function convertTime(time) {
     if (parseInt(time, 10) > 12) {
