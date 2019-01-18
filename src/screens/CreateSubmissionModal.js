@@ -64,6 +64,7 @@ class CreateSubmissionModal extends Component {
         for (let i = 0; i < this.state.videos.length; i++) {
             videos["videos/" + i] = this.state.videos[i];
         }
+        alert(JSON.stringify(pictures) + " vids: " + JSON.stringify(videos));
         PostFunctions.createSubmission(this.props.user.id, this.props.user.id, this.state.challengeID, "Submission", pictures, videos, finishHandler, (error) => {
             console.error(error);
         });
@@ -153,15 +154,15 @@ class CreateSubmissionModal extends Component {
         this.state.videos.push(event.target.files[0]);
         const path = "/" + this.props.user.id + "/temp/videos/" + index;
         Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
-        .then(() => {
-            Storage.get(path).then((url) => {
-                this.state.tempVideoURLs.push(url);
-                this.setState({});
+            .then(() => {
+                Storage.get(path).then((url) => {
+                    this.state.tempVideoURLs.push(url);
+                    this.setState({});
+                }).catch((error) => {
+                    console.error(error);
+                })
             }).catch((error) => {
-                console.error(error);
-            })
-        }).catch((error) => {
-                console.error(error);
+            console.error(error);
         });
         this.setState({});
     }
@@ -190,7 +191,6 @@ class CreateSubmissionModal extends Component {
         if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
                 <div>
-                    Before:
                     <Player>
                         <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
                     </Player>

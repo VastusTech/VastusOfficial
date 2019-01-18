@@ -17,8 +17,8 @@ class SubmissionsScreen extends Component {
         challengeID: null,
         loadedPostIDs: [],
         sentRequest: false,
-        challengeMembers: ['all'],
-        memberSelected: null
+        challengeMembers: [{text: 'all', value: 'all'}],
+        memberSelected: 'all'
     };
 
     // _isMounted = true;
@@ -62,13 +62,14 @@ class SubmissionsScreen extends Component {
                 this.state.isLoading = true;
                 this.state.sentRequest = true;
                 for (let i = 0; i < submissions.length; i++) {
-                    // console.log("Fetching: " + submissions[i]);
+                    alert("Fetching: " + submissions[i]);
                     props.fetchPost(submissions[i], ["id", "time_created", "by", "owner", "item_type", "postType", "about", "description", "videoPaths", "picturePaths", "title"],
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
-                            this.setState({challengeMembers: curChalMems.push(post.by)});
-                            alert(JSON.stringify(this.state.challengeMembers));
+                            alert("I'm running: " + post.by);
+                            this.setState({challengeMembers: curChalMems.push({text: this.getName(post.by), value: post.by})});
+                            //alert(JSON.stringify(this.state.challengeMembers));
                             this.state.loadedPostIDs.push(post.id);
                             this.setState({isLoading: false});
                         }
@@ -154,7 +155,7 @@ class SubmissionsScreen extends Component {
                 }
             }
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
-            alert(JSON.stringify(postIDs));
+            //alert(JSON.stringify(postIDs));
             for (const key in row) {
                 if(t.state.memberSelected === 'all' || t.state.memberSelected === row[key]) {
                     if (row.hasOwnProperty(key) === true) {
@@ -171,7 +172,8 @@ class SubmissionsScreen extends Component {
         }
         return (
             <Fragment>
-                <Dropdown fluid selection inverted options={this.state.challengeMembers} onChange={this.handleFilterChange}/>
+                {/*alert(JSON.stringify(this.state.challengeMembers))*/}
+                <Dropdown fluid selection inverted placeholder='all' defaultValue={this.state.challengeMembers[0]} options={this.state.challengeMembers} onChange={this.handleFilterChange}/>
                 {/*console.error("Comment screen render user: " + this.props.curUser)*/}
                 {this.getLoading()}
                 {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}
