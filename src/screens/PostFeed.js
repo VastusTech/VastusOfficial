@@ -19,6 +19,7 @@ import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import PostManager from "./PostManager";
 import NextChallengeProp from "../components/NextChallenge";
 import {getItemTypeFromID} from "../logic/ItemType";
+import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 
 /**
  * Event Feed
@@ -59,14 +60,14 @@ class PostFeedProp extends Component {
         //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
         //         (data) => {
         //             // When it has finished
-        //             console.log("Finished");
+        //             consoleLog("Finished");
         //             this.queryEvents();
         //         });
         // }
     }
 
     componentWillReceiveProps(newProps) {
-        // console.log("Set state to userID = " + newProps.userID);
+        // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.state.userID = newProps.userID;
             this.queryPosts();
@@ -120,7 +121,7 @@ class PostFeedProp extends Component {
                         }
                         if (data.items) {
                             // TODO We can see private events
-                            // console.log("got items");
+                            // consoleLog("got items");
                             // alert("Received " + data.items.length + " posts!");
                             const newlyQueriedPosts = [];
                             for (let i = 0; i < data.items.length; i++) {
@@ -143,12 +144,12 @@ class PostFeedProp extends Component {
                             }
                             this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
                             for (let i = 0; i < data.items.length; i++) {
-                                //console.log(data.items[i].time_created);
-                                // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+                                //consoleLog(data.items[i].time_created);
+                                // consoleLog("Putting in event: " + JSON.stringify(data.items[i]));
                                 // this.setState({events: [...this.state.events, data.items[i]]});
                                 this.props.putPost(data.items[i]);
                             }
-                            // console.log("events in the end: " + JSON.stringify(this.state.events));
+                            // consoleLog("events in the end: " + JSON.stringify(this.state.events));
                             this.setState({nextToken: data.nextToken});
                         }
                         else {
@@ -156,9 +157,8 @@ class PostFeedProp extends Component {
                         }
                         this.setState({isLoading: false});
                     }, (error) => {
-                        console.log("Querying Posts failed!");
-                        console.log(error);
-                        console.error(error);
+                        consoleError("Querying Posts failed!");
+                        consoleError(error);
                         this.setState({isLoading: false, error: error});
                     }, this.props.cache.postQueries, this.props.putPostQuery);
             }
@@ -172,9 +172,9 @@ class PostFeedProp extends Component {
      */
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
-        // console.log(calculations.bottomVisible);
+        // consoleLog(calculations.bottomVisible);
         if (calculations.bottomVisible) {
-            console.log("Next Token: " + this.state.nextToken);
+            consoleLog("Next Token: " + this.state.nextToken);
             this.state.sentRequest = false;
             this.queryPosts();
         }
@@ -193,9 +193,9 @@ class PostFeedProp extends Component {
          */
         function rows(Posts) {
             // if(Posts != null && Posts.length > 0)
-            //     console.log(JSON.stringify(Posts[0].id));
-            // console.log("EVENTS TO PRINT: ");
-            // console.log(JSON.stringify(Posts));
+            //     consoleLog(JSON.stringify(Posts[0].id));
+            // consoleLog("EVENTS TO PRINT: ");
+            // consoleLog(JSON.stringify(Posts));
             return _.times(Posts.length, i => (
                 <Fragment key={i + 1}>
                     {/*alert(JSON.stringify(Posts[i].id))*/}
