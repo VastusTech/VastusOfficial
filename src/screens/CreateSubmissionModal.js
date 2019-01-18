@@ -32,8 +32,7 @@ class CreateSubmissionModal extends Component {
         super(props);
         this.handleSubmitButton = this.handleSubmitButton.bind(this);
         this.setVideo = this.setVideo.bind(this);
-        this.displayBeforeVideo = this.displayBeforeVideo.bind(this);
-        this.displayAfterVideo = this.displayAfterVideo.bind(this);
+        this.displayVideo = this.displayVideo.bind(this);
     }
 
     componentDidMount() {
@@ -187,27 +186,13 @@ class CreateSubmissionModal extends Component {
         }
     }
 
-    displayBeforeVideo() {
+    displayVideo() {
         if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 0) {
             return(
                 <div>
                     Before:
                     <Player>
                         <source src={this.state.tempVideoURLs[0]} type="video/mp4"/>
-                    </Player>
-                </div>
-            );
-        }
-        return null;
-    }
-
-    displayAfterVideo() {
-        if (this.state.tempVideoURLs && this.state.tempVideoURLs.length > 1) {
-            return(
-                <div>
-                    After:
-                    <Player>
-                        <source src={this.state.tempVideoURLs[1]} type="video/mp4"/>
                     </Player>
                 </div>
             );
@@ -230,23 +215,13 @@ class CreateSubmissionModal extends Component {
             <Modal centered open={this.props.open} onClose={this.props.onClose.bind(this)} closeIcon>
                 <Modal.Header className="u-bg--bg">Create A Submission</Modal.Header>
                 <Modal.Content className="u-bg--bg">
-                    {this.displayBeforeVideo()}
-                    {this.displayAfterVideo()}
+                    {this.displayVideo()}
                     <Grid centered>
                         <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
                             <div>
                                 <Button primary fluid as="label" htmlFor="proPicUpload" className="u-bg--primaryGradient">
                                     <Icon name="camera" className='u-margin-right--0' inverted />
-                                    Upload Before Video
-                                </Button>
-                                <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setVideo}/>
-                            </div>
-                        </div>
-                        <div className="uploadImage u-flex u-flex-align--center u-margin-top--2">
-                            <div>
-                                <Button primary fluid as="label" htmlFor="proPicUpload" className="u-bg--primaryGradient">
-                                    <Icon name="camera" className='u-margin-right--0' inverted />
-                                    Upload After Video
+                                    Upload Video
                                 </Button>
                                 <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setVideo}/>
                             </div>
