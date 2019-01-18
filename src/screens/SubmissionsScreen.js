@@ -19,7 +19,7 @@ class SubmissionsScreen extends Component {
         sentRequest: false,
         challengeMembers: [{key: 0, text: 'All', value: 'all'}],
         memberSelected: 'all',
-        alreadyInDropdown: false
+        alreadyInDropdown: false,
     };
 
     // _isMounted = true;
@@ -34,6 +34,7 @@ class SubmissionsScreen extends Component {
         this.getLoading = this.getLoading.bind(this);
         this.getName = this.getName.bind(this);
         this.getPostAttribute = this.getPostAttribute.bind(this);
+        this.compare = this.compare.bind(this);
     }
 
     componentDidMount() {
@@ -164,20 +165,37 @@ class SubmissionsScreen extends Component {
         return null;
     }
 
+    compare(a, b) {
+        const timeCreatedA = this.getPostAttribute(a, "time_created");
+        const timeCreatedB = this.getPostAttribute(b, "time_created");
+        
+        //(timeCreatedA + " THIS IS IN THE MIDDLE FOR VISIBILITY " + timeCreatedB);
+
+        let comparison = 0;
+        if (timeCreatedA > timeCreatedB) {
+            comparison = 1;
+        } else if (timeCreatedA < timeCreatedB) {
+            comparison = -1;
+        }
+        return comparison;
+    }
+
     handleFilterChange = (e, data) => {
         this.setState({memberSelected: data.value});
     };
 
     render() {
-        function rows(postIDs, memberSelected, getPostAttribute) {
+        function rows(postIDs, memberSelected, getPostAttribute, compare) {
             const row = [];
             const rowProps = [];
+            let here = this;
             for (const key in postIDs) {
                 if (postIDs.hasOwnProperty(key)) {
                     //console.log(JSON.stringify(events[key]));
                     row.push(
                         postIDs[key]
                     );
+                    row.sort(compare).reverse();
                 }
             }
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
@@ -207,7 +225,7 @@ class SubmissionsScreen extends Component {
                 {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                                 challengeChannel={this.channelName}/> */}
                 {/*<Comments comments={this.state.comments}/>*/}
-                {rows(this.state.loadedPostIDs, this.state.memberSelected, this.getPostAttribute)}
+                {rows(this.state.loadedPostIDs, this.state.memberSelected, this.getPostAttribute, this.compare)}
             </Fragment>
         );
     }
