@@ -66,7 +66,6 @@ class SubmissionsScreen extends Component {
                     props.fetchPost(submissions[i], ["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
-                        alert("Got a post! ID = " + post.id);
                         if (post && post.id) {
                             this.setState({challengeMembers: [...curChalMems, post.by]});
                             alert(JSON.stringify(this.state.challengeMembers));
@@ -154,8 +153,7 @@ class SubmissionsScreen extends Component {
                 }
             }
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
-            alert("ROW " + JSON.stringify(row));
-            alert("MEM SEL " + memberSelected);
+            // alert(JSON.stringify(postIDs));
             for (const key in row) {
                 if (memberSelected === 'all' || memberSelected === row[key]) {
                     if (row.hasOwnProperty(key) === true) {
@@ -172,7 +170,8 @@ class SubmissionsScreen extends Component {
         }
         return (
             <Fragment>
-                <Dropdown fluid selection inverted options={this.state.challengeMembers} onChange={this.handleFilterChange}/>
+                {/*alert(JSON.stringify(this.state.challengeMembers))*/}
+                <Dropdown fluid selection inverted placeholder='all' defaultValue={this.state.challengeMembers[0]} options={this.state.challengeMembers} onChange={this.handleFilterChange}/>
                 {/*console.error("Comment screen render user: " + this.props.curUser)*/}
                 {this.getLoading()}
                 {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}
