@@ -1,12 +1,9 @@
-import React, {Component, Fragment} from 'react'
-import {Menu, Icon, Tab, Modal, Button} from 'semantic-ui-react'
-import PostCard from "../components/PostCard";
-import QL from "../GraphQL";
+import React, {Component} from 'react'
+import {Icon, Modal, Button} from 'semantic-ui-react'
 import { connect } from 'react-redux';
 import {fetchPost, putChallengeQuery, putPost, putPostQuery, fetchChallenge, putChallenge, fetchClient} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import CreateChallengeProp from "./CreateChallenge";
-import CreatePostProp from "./CreatePost";
 
 /**
  * Event Feed
@@ -45,20 +42,20 @@ class PostManager extends Component {
         //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
         //         (data) => {
         //             // When it has finished
-        //             console.log("Finished");
+        //             consoleLog("Finished");
         //             this.queryEvents();
         //         });
         // }
     }
 
     componentWillReceiveProps(newProps) {
-        // console.log("Set state to userID = " + newProps.userID);
+        // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
-            // console.log("fetchin user attributes");
+            // consoleLog("fetchin user attributes");
             this.props.fetchUserAttributes(["friends", "invitedChallenges", "name"],
                 (data) => {
-                    // console.log("finished");
+                    // consoleLog("finished");
                     this.queryPosts()
                 });
         }
@@ -67,7 +64,7 @@ class PostManager extends Component {
     queryPosts() {
         this.setState({isLoading: true});
         if (!this.state.ifFinished) {
-            // console.log(JSON.stringify(this.props.cache.eventQueries));
+            // consoleLog(JSON.stringify(this.props.cache.eventQueries));
 
             // QL.queryPosts(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
             //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.PostFeedLength,
@@ -87,7 +84,7 @@ class PostManager extends Component {
                     }
                     if (data.items) {
                         // TODO We can see private events
-                        // console.log("got items");
+                        // consoleLog("got items");
                         const newlyQueriedPosts = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const post = data.items[i];
@@ -99,12 +96,12 @@ class PostManager extends Component {
                         }
                         this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
                         for (let i = 0; i < data.items.length; i++) {
-                            //console.log(data.items[i].time_created);
-                            // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+                            //consoleLog(data.items[i].time_created);
+                            // consoleLog("Putting in event: " + JSON.stringify(data.items[i]));
                             // this.setState({events: [...this.state.events, data.items[i]]});
                             this.props.putPost(data.items[i]);
                         }
-                        // console.log("events in the end: " + JSON.stringify(this.state.events));
+                        // consoleLog("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
                     }
                     else {
@@ -112,9 +109,9 @@ class PostManager extends Component {
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
-                    console.log("Querying Posts failed!");
-                    console.log(error);
-                    console.error(error);
+                    consoleLog("Querying Posts failed!");
+                    consoleLog(error);
+                    consoleError(error);
                     this.setState({isLoading: false, error: error});
                 }, this.props.cache.postQueries, this.props.putPostQuery);
         }

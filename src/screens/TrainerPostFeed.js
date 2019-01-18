@@ -2,28 +2,14 @@ import React, {Component, Fragment} from 'react';
 import _ from 'lodash';
 import {Visibility, Header, Icon, Message} from 'semantic-ui-react';
 import PostCard from "../components/PostCard";
-import QL from "../GraphQL";
 import {connect} from 'react-redux';
-// import ScheduledEventsList from "./ScheduledEventList";
 import {
     fetchPost,
     fetchTrainer,
     forceFetchTrainer,
-    putClientQuery,
     putPost,
-    putPostQuery
 } from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import CreatePostProp from "./CreatePost";
-// import CreateEventProp from "./CreateEvent";
-// import WorkoutSelectionList from "./WorkoutSelectionList";
-// import CreateChallengeProp from "./CreateChallenge"
-// import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
-// import * as AWS from "aws-sdk";
-
-// AWS.config.update({region: 'REGION'});
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
 
 type Props = {
     trainerID: string
@@ -65,7 +51,7 @@ class TrainerPostFeed extends Component<Props> {
     }
 
     componentWillReceiveProps(newProps) {
-        // console.log("Set state to userID = " + newProps.userID);
+        // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.trainerID !== newProps.trainerID) {
             this.setState({isLoading: true, trainerID: newProps.trainerID});
             this.props.fetchTrainer(newProps.trainerID, ["posts"], (trainer) => {
@@ -84,10 +70,10 @@ class TrainerPostFeed extends Component<Props> {
                         }
                     }
             });
-            // console.log("fetchin user attributes");
+            // consoleLog("fetchin user attributes");
             // this.props.fetchUserAttributes(["friends"],
             //     (data) => {
-            //         // console.log("finished");
+            //         // consoleLog("finished");
             //         this.queryPosts()
             //     });
         }
@@ -104,7 +90,7 @@ class TrainerPostFeed extends Component<Props> {
      */
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
-        // console.log(calculations.bottomVisible);
+        // consoleLog(calculations.bottomVisible);
         if (calculations.bottomVisible) {
             //this.addAnotherPost();
         }
@@ -116,9 +102,9 @@ class TrainerPostFeed extends Component<Props> {
 
     rows() {
         // if(events != null && events.length > 0)
-        //     console.log(JSON.stringify(events[0].id));
-        // console.log("EVENTS TO PRINT: ");
-        // console.log(JSON.stringify(events));
+        //     consoleLog(JSON.stringify(events[0].id));
+        // consoleLog("EVENTS TO PRINT: ");
+        // consoleLog(JSON.stringify(events));
         //alert("rows should be running");
         //alert(JSON.stringify(this.state.hiddenPostIDs));
         return _.times(this.state.hiddenPostIDs.length, i => (
@@ -187,9 +173,6 @@ const mapDispatchToProps = (dispatch) => {
         putPost: (post) => {
             dispatch(putPost(post));
         },
-        // putPostQuery: (queryString, queryResult) => {
-        //     dispatch(putPostQuery(queryString, queryResult));
-        // },
     }
 };
 

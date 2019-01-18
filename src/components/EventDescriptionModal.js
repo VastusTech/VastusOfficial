@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, List, Divider, Grid, Message} from 'semantic-ui-react';
+import {Modal, Button, List, Grid, Message} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-import Lambda from '../Lambda';
 import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
-// import QL from '../GraphQL';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import CommentScreen from "../screens/CommentScreen";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import EventFunctions from "../databaseFunctions/EventFunctions";
 import VideoUploadScreen from "../screens/VideoUploadScreen";

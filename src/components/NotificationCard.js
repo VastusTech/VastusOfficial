@@ -5,13 +5,6 @@ import TrainerModal from "./TrainerModal";
 import EventDescriptionModal from "./EventDescriptionModal";
 import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
 import { connect } from "react-redux";
-import {
-    fetchClient,
-    fetchEvent,
-    fetchChallenge,
-    fetchTrainer,
-    fetchInvite
-} from "../redux_helpers/actions/cacheActions";
 import UserFunctions from "../databaseFunctions/UserFunctions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
 import EventFunctions from "../databaseFunctions/EventFunctions";

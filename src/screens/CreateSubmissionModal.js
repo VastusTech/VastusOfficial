@@ -1,6 +1,5 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Modal, Message, Button, Grid, Icon } from "semantic-ui-react";
-import ClientCard from "../components/ClientCard";
 import { Storage } from 'aws-amplify';
 import { Player } from "video-react";
 import { connect } from "react-redux";
@@ -15,7 +14,7 @@ type Props = {
 /**
  * Takes in open, onClose, and challengeID
  */
-class CreateSubmissionModal extends Component {
+class CreateSubmissionModal extends Component<Props> {
     state = {
         challengeID: null,
         isSubmitLoading: false,

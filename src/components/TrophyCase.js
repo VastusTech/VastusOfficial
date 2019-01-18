@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React, { Component, Fragment } from 'react';
-import { Grid, Label, Icon } from 'semantic-ui-react';
+import { Label, Icon } from 'semantic-ui-react';
 
 // TODO: Feature to be implemented later don't worry about this file.
 class TrophyCase extends Component {

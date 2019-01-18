@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
-import {Popup, List, Header, Divider, Segment, Grid, Form, Button} from "semantic-ui-react";
+import {Popup, List, Divider, Grid, Form, Button} from "semantic-ui-react";
 import {switchReturnItemType} from "../logic/ItemType";
 import ClientCard from "../components/ClientCard";
 import EventCard from "../components/EventCard";

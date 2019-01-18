@@ -1,10 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import {Button, Input, Grid, Label, Icon} from "semantic-ui-react";
+import {Button, Icon} from "semantic-ui-react";
 import { Storage } from 'aws-amplify';
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import connect from "react-redux/es/connect/connect";
-import Lambda from "../Lambda";
-import defaultProfilePicture from "../img/roundProfile.png";
 
 type Props = {
 

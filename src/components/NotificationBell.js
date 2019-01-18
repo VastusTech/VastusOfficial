@@ -1,5 +1,5 @@
-import React, {Component, Fragment} from 'react'
-import {Dimmer, Loader, Grid, Message, Icon, Label} from 'semantic-ui-react'
+import React, {Component} from 'react'
+import {Icon} from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 import {fetchChallenge, fetchEvent, fetchGroup, fetchInvite} from "../redux_helpers/actions/cacheActions";
@@ -64,7 +64,7 @@ class NotificationBellProp extends Component {
                     }
                 }
                 if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
-                    alert("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
+                    // alert("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
                     for (let i = 0; i < data.ownedChallenges.length; i++) {
                         fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
                     }

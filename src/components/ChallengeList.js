@@ -4,7 +4,6 @@ import ChallengeCard from "../components/ChallengeCard";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
-import ChallengeFeed from "../screens/ChallengeFeed";
 
 type Props = {
     challengeIDs: [string]

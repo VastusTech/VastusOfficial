@@ -1,32 +1,15 @@
-import React, {Fragment} from 'react'
-import { Player } from 'video-react';
+import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "./BuddyList";
-// import TrophyCaseProp from "./TrophyCase";
-import { S3Image } from 'aws-amplify-react';
+// import { S3Image } from 'aws-amplify-react';
 import _ from 'lodash'
-// import ChallengeManagerProp from "./ManageChallenges";
-// import QL from '../GraphQL';
-import Lambda from '../Lambda';
-// import ScheduledEventList from "./ScheduledEventList";
-// import CompletedEventList from "./CompletedEventList";
-// import OwnedEventList from "./OwnedEventList";
 import ChallengeList from "../components/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-// import AWSSetup from "../AppConfig";
 import {logOut} from "../redux_helpers/actions/authActions";
 import ClientFunctions from "../databaseFunctions/ClientFunctions";
 import ReactSwipe from "react-swipe";
-import ChallengeCard from "../components/ChallengeCard";
-
-// AWSSetup();
-
-// Storage.configure({level: 'public'});
-
-// window.LOG_LEVEL='DEBUG';
-
 
 /**
 * Profile

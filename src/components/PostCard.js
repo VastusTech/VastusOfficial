@@ -14,6 +14,7 @@ import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
 import {convertFromISO} from "../logic/TimeHelper";
 import ClientModal from "./ClientModal";
 import TrainerModal from "./TrainerModal";
+import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 
 type Props = {
     postID: string
@@ -25,7 +26,7 @@ type Props = {
 * This is the generic view for how a post shows up in any feeds or lists.
 * It is used as a modal trigger in the feed.
  */
-class PostCard extends Component {
+class PostCard extends Component<Props> {
     state = {
         error: null,
         // isLoading: true,
@@ -59,10 +60,10 @@ class PostCard extends Component {
     // if (this.props.event) {
     //     let ifOwned = false;
     //     let ifJoined = false;
-    //     //console.log("Membahs: " + this.props.event.members);
-    //     //console.log(this.props.owner + "vs. " + this.props.event.owner);
+    //     //consoleLog("Membahs: " + this.props.event.members);
+    //     //consoleLog(this.props.owner + "vs. " + this.props.event.owner);
     //     if (this.props.user.id === this.props.event.owner) {
-    //         //console.log("Same owner and cur user for: " + this.props.event.id);
+    //         //consoleLog("Same owner and cur user for: " + this.props.event.id);
     //         ifOwned = true;
     //     }
     //     if (this.props.event.members && this.props.event.members.includes(this.props.user.id)) {
@@ -74,7 +75,7 @@ class PostCard extends Component {
     // }
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
-        console.log("Post Card Prop: " + this.props.postID);
+        consoleLog("Post Card Prop: " + this.props.postID);
         //this.props.fetchPost(this.props.postID, ["id", "postType", "Description"])
         //this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
     }
@@ -109,7 +110,7 @@ class PostCard extends Component {
 
     getTrainerAttribute(attribute) {
         if (this.getPostAttribute("by")) {
-            //console.log(this.getPostAttribute("by"));
+            //consoleLog(this.getPostAttribute("by"));
             let trainer = this.props.cache.trainers[this.getPostAttribute("by")];
             if (trainer) {
                 if (attribute.substr(attribute.length - 6) === "Length") {
@@ -157,7 +158,7 @@ class PostCard extends Component {
                 Storage.get(video).then((url) => {
                     this.setState({videoURL: url});
                 }).catch((error) => {
-                    console.error(error);
+                    consoleError(error);
                 });
             }
             else {
@@ -218,7 +219,7 @@ class PostCard extends Component {
 
     getClientAttribute(attribute) {
         if (this.getPostAttribute("by")) {
-            //console.log(this.getPostAttribute("by"));
+            //consoleLog(this.getPostAttribute("by"));
             let client = this.props.cache.clients[this.getPostAttribute("by")];
             if (client) {
                 //alert("Found Client in Challenge");
@@ -313,7 +314,6 @@ class PostCard extends Component {
                 this.setState({clientModalOpen: true});
                 this.props.fetchClient(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
             }
-        ;
         }
         else if (this.getPostAttribute("by").substr(0, 2) === "TR") {
             //alert("opening trainer modal");
@@ -322,14 +322,15 @@ class PostCard extends Component {
                 this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
             }
         }
-    }
+    };
+
     closeClientModal = () => {
-        console.log("Closing client modal");
+        consoleLog("Closing client modal");
         this.setState({clientModalOpen: false})
     };
 
     closeTrainerModal = () => {
-        console.log("Closing trainer modal");
+        consoleLog("Closing trainer modal");
         this.setState({trainerModalOpen: false})
     };
 

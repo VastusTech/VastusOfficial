@@ -1,10 +1,6 @@
 import React, { Component } from 'react'
-import _ from 'lodash';
-import {Grid, Button, Message, Image, Modal, Card, Icon, Form, Container, TextArea, Checkbox, Header} from 'semantic-ui-react';
-import CreateEventProp from "./CreateEvent";
-import VTLogo from "../img/vt_new.svg"
+import {Grid, Button, Message, Image, Modal, Form, Container, Checkbox, Header} from 'semantic-ui-react';
 import {connect} from "react-redux";
-// import Lambda from "../Lambda";
 import {setError} from "../redux_helpers/actions/infoActions";
 import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";

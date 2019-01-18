@@ -4,7 +4,6 @@ import {Visibility, Header, Grid} from 'semantic-ui-react'
 import PostCard from "../components/PostCard";
 import QL from "../GraphQL";
 import { connect } from 'react-redux';
-// import ScheduledEventsList from "./ScheduledEventList";
 import {
     fetchPost,
     putChallengeQuery,
@@ -17,18 +16,10 @@ import {
     fetchPostQuery
 } from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-// import CreateEventProp from "./CreateEvent";
-//import CreateChallengeProp from "./CreateChallenge";
-//import CreatePostProp from "./CreatePost";
 import PostManager from "./PostManager";
-// import NextEventProp from "../components/NextEvent";
 import NextChallengeProp from "../components/NextChallenge";
-import {getItemTypeFromID, switchHandleItemType} from "../logic/ItemType";
-// import * as AWS from "aws-sdk";
-
-// AWS.config.update({region: 'REGION'});
-// AWS.config.credentials = new AWS.CognitoIdentityCredentials(
-//     {IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'});
+import {getItemTypeFromID} from "../logic/ItemType";
+import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 
 /**
  * Event Feed
@@ -69,14 +60,14 @@ class PostFeedProp extends Component {
         //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
         //         (data) => {
         //             // When it has finished
-        //             console.log("Finished");
+        //             consoleLog("Finished");
         //             this.queryEvents();
         //         });
         // }
     }
 
     componentWillReceiveProps(newProps) {
-        // console.log("Set state to userID = " + newProps.userID);
+        // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.state.userID = newProps.userID;
             this.queryPosts();
@@ -99,10 +90,10 @@ class PostFeedProp extends Component {
 
      */
     queryPosts() {
-        alert("BEFORE: " + this.state.sentRequest);
+        // alert("BEFORE: " + this.state.sentRequest);
         if (!this.state.sentRequest) {
             this.state.sentRequest = true;
-            alert("AFTER: " + this.state.sentRequest);
+            // alert("AFTER: " + this.state.sentRequest);
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
                 const filter = QL.generateFilter({
@@ -122,7 +113,7 @@ class PostFeedProp extends Component {
                     }
                 );
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                alert("QUerying posts!");
+                // alert("QUerying posts!");
                 this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                     filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                         if (!data.nextToken) {
@@ -130,8 +121,8 @@ class PostFeedProp extends Component {
                         }
                         if (data.items) {
                             // TODO We can see private events
-                            // console.log("got items");
-                            alert("Received " + data.items.length + " posts!");
+                            // consoleLog("got items");
+                            // alert("Received " + data.items.length + " posts!");
                             const newlyQueriedPosts = [];
                             for (let i = 0; i < data.items.length; i++) {
                                 const post = data.items[i];
@@ -144,7 +135,7 @@ class PostFeedProp extends Component {
                                 } else if (aboutItemType === "Event") {
 
                                 } else if (aboutItemType === "Challenge") {
-                                    alert("Fetching challenge for post in post feed");
+                                    // alert("Fetching challenge for post in post feed");
                                     this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
                                 } else if (aboutItemType === "Post") {
                                     this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
@@ -153,12 +144,12 @@ class PostFeedProp extends Component {
                             }
                             this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
                             for (let i = 0; i < data.items.length; i++) {
-                                //console.log(data.items[i].time_created);
-                                // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+                                //consoleLog(data.items[i].time_created);
+                                // consoleLog("Putting in event: " + JSON.stringify(data.items[i]));
                                 // this.setState({events: [...this.state.events, data.items[i]]});
                                 this.props.putPost(data.items[i]);
                             }
-                            // console.log("events in the end: " + JSON.stringify(this.state.events));
+                            // consoleLog("events in the end: " + JSON.stringify(this.state.events));
                             this.setState({nextToken: data.nextToken});
                         }
                         else {
@@ -166,9 +157,8 @@ class PostFeedProp extends Component {
                         }
                         this.setState({isLoading: false});
                     }, (error) => {
-                        console.log("Querying Posts failed!");
-                        console.log(error);
-                        console.error(error);
+                        consoleError("Querying Posts failed!");
+                        consoleError(error);
                         this.setState({isLoading: false, error: error});
                     }, this.props.cache.postQueries, this.props.putPostQuery);
             }
@@ -182,9 +172,9 @@ class PostFeedProp extends Component {
      */
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
-        // console.log(calculations.bottomVisible);
+        // consoleLog(calculations.bottomVisible);
         if (calculations.bottomVisible) {
-            console.log("Next Token: " + this.state.nextToken);
+            consoleLog("Next Token: " + this.state.nextToken);
             this.state.sentRequest = false;
             this.queryPosts();
         }
@@ -203,9 +193,9 @@ class PostFeedProp extends Component {
          */
         function rows(Posts) {
             // if(Posts != null && Posts.length > 0)
-            //     console.log(JSON.stringify(Posts[0].id));
-            // console.log("EVENTS TO PRINT: ");
-            // console.log(JSON.stringify(Posts));
+            //     consoleLog(JSON.stringify(Posts[0].id));
+            // consoleLog("EVENTS TO PRINT: ");
+            // consoleLog(JSON.stringify(Posts));
             return _.times(Posts.length, i => (
                 <Fragment key={i + 1}>
                     {/*alert(JSON.stringify(Posts[i].id))*/}

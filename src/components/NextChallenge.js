@@ -1,11 +1,11 @@
 import React, {Component, Fragment} from 'react'
-import {Icon, Message, Label, Header} from 'semantic-ui-react';
+import {Icon, Message} from 'semantic-ui-react';
 import ChallengeCard from "./ChallengeCard";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
-import {daysLeft, parseISOString} from "../logic/TimeHelper";
+import {parseISOString, timeLeft} from "../logic/TimeHelper";
 
 class NextChallengeProp extends Component {
     state = {
@@ -13,7 +13,7 @@ class NextChallengeProp extends Component {
         isFetching: false,
         sentRequest: false,
         nearestChallenge: null,
-        nearestDaysLeft: null,
+        nearestTimeLeft: null,
         error: null
     };
 
@@ -51,13 +51,13 @@ class NextChallengeProp extends Component {
             this.props.fetchUserAttributes(["challenges"], (user) => {
                 if (user.challenges) {
                     for (let i = 0; i < user.challenges.length; i++) {
-                        alert("Fetching challenge for next challenge");
+                        // alert("Fetching challenge for next challenge");
                         this.props.fetchChallenge(user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction", "submissions"], (challenge) => {
                             if (challenge && challenge.endTime) {
-                                const challengeDaysLeft = daysLeft(parseISOString(challenge.endTime));
-                                if (challengeDaysLeft >= 0) {
-                                    if ((!this.state.nearestChallenge) || (challenge.endTime && challengeDaysLeft < this.state.nearestDaysLeft)) {
-                                        this.state.nearestDaysLeft = challengeDaysLeft;
+                                const challengeTimeLeft = timeLeft(parseISOString(challenge.endTime));
+                                if (challengeTimeLeft >= 0) {
+                                    if ((!this.state.nearestChallenge) || (challenge.endTime && challengeTimeLeft < this.state.nearestTimeLeft)) {
+                                        this.state.nearestTimeLeft = challengeTimeLeft;
                                         this.state.nearestChallenge = challenge;
                                     }
                                 }

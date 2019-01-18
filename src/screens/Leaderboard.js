@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from "react";
 import _ from "lodash";
-import { Visibility, Grid, Header, Message } from "semantic-ui-react";
+import { Visibility, Message } from "semantic-ui-react";
 import { connect } from "react-redux";
 import ClientCard from "../components/ClientCard";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";

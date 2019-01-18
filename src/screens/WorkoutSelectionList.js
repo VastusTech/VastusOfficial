@@ -1,10 +1,8 @@
 import React, { Component } from 'react'
-import _ from 'lodash';
-import {Grid, Button, Message, Image, Modal, Item, Segment, Dropdown, TextArea, Checkbox, Icon} from 'semantic-ui-react';
+import {Grid, Button, Image, Modal, Icon} from 'semantic-ui-react';
 import CreateEventProp from "./CreateEvent";
-import VTLogo from "../img/vt_new.svg"
 import {connect} from "react-redux";
-import {Form} from "semantic-ui-react/dist/commonjs/collections/Form/Form";
+// import {Form} from "semantic-ui-react/dist/commonjs/collections/Form/Form";
 
 class WorkoutSelectionList extends Component {
     state = {

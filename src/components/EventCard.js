@@ -3,7 +3,7 @@ import { Card } from 'semantic-ui-react';
 import EventDescriptionModal from './EventDescriptionModal';
 import { connect } from 'react-redux';
 import {fetchEvent} from "../redux_helpers/actions/cacheActions";
-import {convertFromISO, convertFromIntervalISO} from "../logic/TimeHelper";
+import {convertFromISO} from "../logic/TimeHelper";
 
 type Props = {
     eventID: string

@@ -1,8 +1,5 @@
-import QL from '../../GraphQL';
-import { Storage } from "aws-amplify";
-import {setError, clearError, setIsLoading, setIsNotLoading} from './infoActions';
+import {setIsNotLoading} from './infoActions';
 import { fetchClient, forceFetchClient } from "./cacheActions";
-import defaultProfilePicture from "../../img/roundProfile.png";
 
 // TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {

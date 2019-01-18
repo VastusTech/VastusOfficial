@@ -1,6 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import Comment from './Comment';
-import ScrollView from 'react-inverted-scrollview';
 
 type Props = {
     board: string

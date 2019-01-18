@@ -2,6 +2,7 @@ import { API, graphqlOperation} from 'aws-amplify';
 import { ifDebug } from "./Constants";
 import _ from 'lodash';
 import {switchReturnItemType} from "./logic/ItemType";
+import { consoleLog, consoleError } from "./logic/DebuggingHelper";
 
 class GraphQL {
     // Gives back function with parameters (id, variablesList, successHandler, failureHandler)
@@ -151,7 +152,7 @@ class GraphQL {
     static getClients(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetClients", "getClients", null, variableList, idList, true),
@@ -160,7 +161,7 @@ class GraphQL {
     static getTrainers(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetTrainers", "getTrainers", null, variableList, idList, true),
@@ -169,7 +170,7 @@ class GraphQL {
     static getGyms(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetGyms", "getGyms", null, variableList, idList, true),
@@ -178,7 +179,7 @@ class GraphQL {
     static getWorkouts(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrieved Items list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetWorkouts", "getWorkouts", null, variableList, idList, true),
@@ -187,7 +188,7 @@ class GraphQL {
     static getReviews(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetReviews", "getReviews", null, variableList, idList, true),
@@ -196,7 +197,7 @@ class GraphQL {
     static getEvents(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetEvents", "getEvents", null, variableList, idList, true),
@@ -205,7 +206,7 @@ class GraphQL {
     static getChallenges(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetChallenges", "getChallenges", null, variableList, idList, true),
@@ -214,7 +215,7 @@ class GraphQL {
     static getInvites(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetInvites", "getInvites", null, variableList, idList, true),
@@ -223,7 +224,7 @@ class GraphQL {
     static getPosts(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetPosts", "getPosts", null, variableList, idList, true),
@@ -232,7 +233,7 @@ class GraphQL {
     static getGroups(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetGroups", "getGroups", null, variableList, idList, true),
@@ -241,7 +242,7 @@ class GraphQL {
     static getComments(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetComments", "getComments", null, variableList, idList, true),
@@ -250,7 +251,7 @@ class GraphQL {
     static getSponsors(ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetSponsors", "getSponsors", null, variableList, idList, true),
@@ -259,7 +260,7 @@ class GraphQL {
     static getMessages(board, ids, variableList, successHandler, failureHandler) {
         if (ids && ids.length > 100) {
             // TODO Make sure we actually test GraphQL so that GraphQL error will pop up!
-            console.log("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
+            consoleLog("Be prepared to have some IDs returned in the unretrievedItems list!!!!");
         }
         const idList = GraphQL.generateIDList(ids);
         GraphQL.execute(GraphQL.constructQuery("GetMessages", "getSponsors", {board}, variableList, idList, true),
@@ -559,47 +560,43 @@ class GraphQL {
     }
     static execute(query, queryFunctionName, successHandler, failureHandler, queryCache, putQuery) {
         const queryString = JSON.stringify(query.query) + JSON.stringify(query.variables);
-        // console.log(queryString);
+        // consoleLog(queryString);
         if (queryCache && queryCache[queryString]) {
-            // console.log("Received query from the cache");
-            console.log("Received the query from the cache");
-            // console.log(JSON.stringify(queryCache[queryString]));
+            // consoleLog("Received query from the cache");
+            consoleLog("Received the query from the cache");
+            // consoleLog(JSON.stringify(queryCache[queryString]));
             if (successHandler) { successHandler(queryCache[queryString]); }
         }
         else {
-            console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+            consoleLog("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             if (ifDebug) {
                 alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
-                console.log("GraphQL operation succeeded!");
+                consoleLog("GraphQL operation succeeded!");
                 if (!data.data || !data.data[queryFunctionName]) {
-                    console.log("Object returned nothing!!! Something wrong?");
-                    // failureHandler("Object had returned null");
+                    consoleLog("Object returned nothing!!! Something wrong?");
                     if (successHandler) { successHandler(null); }
                     return;
                 }
-                // console.log("Returned!");
-                console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                consoleLog("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 if (ifDebug) {
                     alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 }
-                // console.log(JSON.stringify(queryCache));
                 if (putQuery) {
-                    // console.log("Putting the query in!");
                     putQuery(queryString, data.data[queryFunctionName]);
                 }
-                console.log("Handling the successHandler...");
-                console.log("QL S H = " + successHandler.toString());
+                consoleLog("Handling the successHandler...");
+                consoleLog("QL S H = " + successHandler.toString());
                 if (successHandler) { successHandler(data.data[queryFunctionName]); }
             }).catch((error) => {
-                console.log("GraphQL operation failed...");
+                consoleError("GraphQL operation failed...");
                 if (error.message) {
                     error = error.message;
                 }
-                console.log(JSON.stringify(error));
-                console.log("Handling the failureHandler...");
-                console.log("QL F H = " + failureHandler.toString());
+                consoleError(JSON.stringify(error));
+                consoleError("Handling the failureHandler...");
+                consoleError("QL F H = " + failureHandler.toString());
                 if (failureHandler) { failureHandler(error); }
             });
         }

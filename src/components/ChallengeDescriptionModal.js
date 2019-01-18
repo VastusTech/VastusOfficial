@@ -1,16 +1,11 @@
 import React, { Component, Fragment } from 'react';
-import {Icon, Modal, Button, Header, List, Divider, Grid, Message, Image, Tab, Dimmer, Label, Loader, Segment } from 'semantic-ui-react';
+import {Icon, Modal, Button, Divider, Grid, Message, Image, Tab, Dimmer, Label, Loader } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-// import Lambda from '../Lambda';
-// import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
-// import QL from '../GraphQL';
-import { convertFromISO } from "../logic/TimeHelper";
-import {fetchTrainer, fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import { clearBoard } from "../redux_helpers/actions/messageActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import VideoUploadScreen from "../screens/VideoUploadScreen";
 import CommentScreen from "../screens/CommentScreen";
 import ChallengeMemberList from "../screens/ChallengeMemberList";
 import UserFunctions from "../databaseFunctions/UserFunctions";

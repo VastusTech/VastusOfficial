@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from "react";
+import React, { Component } from "react";
 import { Modal, Message, Button, Card } from "semantic-ui-react";
 import ClientCard from "../components/ClientCard";
 import { connect } from "react-redux";
