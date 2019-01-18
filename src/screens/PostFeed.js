@@ -44,8 +44,9 @@ class PostFeedProp extends Component {
         challenges: [],
         loadedPostIDs: [],
         clientNames: {}, // id to name
-        postFeedLength: 10,
+        postFeedLength: 25,
         challengeFeedLength: 10,
+        sentRequest: false,
         nextToken: null,
         ifFinished: false,
         calculations: {
@@ -78,81 +79,9 @@ class PostFeedProp extends Component {
         // console.log("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.state.userID = newProps.userID;
-            // this.setState({userID: newProps.userID});
-            // console.log("fetchin user attributes");
-            this.props.fetchUserAttributes(["friends", "invitedChallenges", "name"],
-                (data) => {
-                    // console.log("finished");
-                    this.queryPosts();
-                });
+            this.queryPosts();
         }
     }
-
-    // queryChallenges() {
-    //     this.setState({isLoading: true});
-    //     if (!this.state.ifFinished) {
-    //         // console.log(JSON.stringify(this.props.cache.eventQueries));
-    //         const filter = QL.generateFilter({
-    //             and: [
-    //                 {
-    //                     ifCompleted: {
-    //                         eq: "$ifCompleted"
-    //                     }
-    //                 }
-    //             ]
-    //         }, {
-    //             ifCompleted: "false"
-    //         });
-    //         // QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
-    //         //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.challengeFeedLength,
-    //         //     this.state.nextToken, (data) => {
-    //         QL.queryChallenges(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize", "submissions"],
-    //             filter, this.state.challengeFeedLength, this.state.nextToken, (data) => {
-    //                 if (!data.nextToken) {
-    //                     this.setState({ifFinished: true});
-    //                 }
-    //                 if (data.items) {
-    //                     // TODO We can see private events
-    //                     // console.log("got items");
-    //                     const newlyQueriedChallenges = [];
-    //                     for (let i = 0; i < data.items.length; i++) {
-    //                         const challenge = data.items[i];
-    //                         // console.log(JSON.stringify(challenge));
-    //                         if (challenge.access === 'public') {
-    //                             newlyQueriedChallenges.push(challenge);
-    //                         }
-    //                         else if (this.props.user.id && this.props.user.id === challenge.owner) {
-    //                             newlyQueriedChallenges.push(challenge);
-    //                         }
-    //                         else if (this.props.user.friends && this.props.user.friends.includes(challenge.owner)) {
-    //                             newlyQueriedChallenges.push(challenge);
-    //                         }
-    //                         else if (this.props.user.invitedChallenges && this.props.user.invitedChallenges.includes(challenge.id)) {
-    //                             newlyQueriedChallenges.push(challenge);
-    //                         }
-    //                     }
-    //                     this.setState({challenges: [...this.state.challenges, ...newlyQueriedChallenges]});
-    //                     for (let i = 0; i < data.items.length; i++) {
-    //                         //console.log(data.items[i].time_created);
-    //                         // console.log("Putting in event: " + JSON.stringify(data.items[i]));
-    //                         // this.setState({events: [...this.state.events, data.items[i]]});
-    //                         this.props.putChallenge(data.items[i]);
-    //                     }
-    //                     // console.log("events in the end: " + JSON.stringify(this.state.events));
-    //                     this.setState({nextToken: data.nextToken});
-    //                 }
-    //                 else {
-    //                     // TODO Came up with no events
-    //                 }
-    //                 this.setState({isLoading: false});
-    //             }, (error) => {
-    //                 console.log("Querying challenges failed!");
-    //                 console.log(error);
-    //                 console.error(error);
-    //                 this.setState({isLoading: false, error: error});
-    //             }, this.props.cache.challengeQueries, this.props.putChallengeQuery);
-    //     }
-    // }
 
     /*
     Here we have a feed of posts that we are querying.
@@ -170,73 +99,79 @@ class PostFeedProp extends Component {
 
      */
     queryPosts() {
-        this.setState({isLoading: true});
-        if (!this.state.ifFinished) {
-            // console.log(JSON.stringify(this.props.cache.eventQueries));
-
-            // QL.queryPosts(["id", "title", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "goal", "access", "restriction", "tags", "prize"], QL.generateFilter("and",
-            //     {"ifCompleted": "eq"}, {"ifCompleted": "false"}), this.state.PostFeedLength,
-            //     this.state.nextToken, (data) => {
-            const filter = QL.generateFilter({
-                or: [{
-                    postType: {
-                        eq: "$postType1"
-                    }
-                },{
-                    postType: {
-                        eq: "$postType2"
-                    }
-                }]}
-                ,{postType1: "Challenge",
-                postType2: "newChallenge"}
-            );
-            // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-            this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                filter, this.state.postFeedLength, this.state.nextToken, (data) => {
-                    if (!data.nextToken) {
-                        this.setState({ifFinished: true});
-                    }
-                    if (data.items) {
-                        // TODO We can see private events
-                        // console.log("got items");
-                        const newlyQueriedPosts = [];
-                        for (let i = 0; i < data.items.length; i++) {
-                            const post = data.items[i];
-                            //alert(JSON.stringify("")
-                            const aboutItemType = getItemTypeFromID(post.about);
-                            if (aboutItemType === "Client") {
-                                this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
-                            } else if (aboutItemType === "Trainer") {
-                                this.props.fetchTrainer(data.items[i].about, ["id", "profileImagePath", "name"]);
-                            } else if (aboutItemType === "Event") {
-
-                            } else if (aboutItemType === "Challenge") {
-                                this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
-                            } else if (aboutItemType === "Post") {
-                                this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
+        alert("BEFORE: " + this.state.sentRequest);
+        if (!this.state.sentRequest) {
+            this.state.sentRequest = true;
+            alert("AFTER: " + this.state.sentRequest);
+            if (!this.state.ifFinished) {
+                this.setState({isLoading: true});
+                const filter = QL.generateFilter({
+                        or: [{
+                            postType: {
+                                eq: "$postType1"
                             }
-                            newlyQueriedPosts.push(post);
-                        }
-                        this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
-                        for (let i = 0; i < data.items.length; i++) {
-                            //console.log(data.items[i].time_created);
-                            // console.log("Putting in event: " + JSON.stringify(data.items[i]));
-                            // this.setState({events: [...this.state.events, data.items[i]]});
-                            this.props.putPost(data.items[i]);
-                        }
-                        // console.log("events in the end: " + JSON.stringify(this.state.events));
-                        this.setState({nextToken: data.nextToken});
+                        }, {
+                            postType: {
+                                eq: "$postType2"
+                            }
+                        }]
                     }
-                    else {
-                        // TODO Came up with no events
+                    , {
+                        postType1: "Challenge",
+                        postType2: "newChallenge"
                     }
-                    this.setState({isLoading: false});
-                }, (error) => {
-                    console.log("Querying Posts failed!");
-                    console.log(error);
-                    console.error(error);
-                    this.setState({isLoading: false, error: error});
-                }, this.props.cache.postQueries, this.props.putPostQuery);
+                );
+                // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                alert("QUerying posts!");
+                this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                    filter, this.state.postFeedLength, this.state.nextToken, (data) => {
+                        if (!data.nextToken) {
+                            this.setState({ifFinished: true});
+                        }
+                        if (data.items) {
+                            // TODO We can see private events
+                            // console.log("got items");
+                            alert("Received " + data.items.length + " posts!");
+                            const newlyQueriedPosts = [];
+                            for (let i = 0; i < data.items.length; i++) {
+                                const post = data.items[i];
+                                //alert(JSON.stringify("")
+                                const aboutItemType = getItemTypeFromID(post.about);
+                                if (aboutItemType === "Client") {
+                                    this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
+                                } else if (aboutItemType === "Trainer") {
+                                    this.props.fetchTrainer(data.items[i].about, ["id", "profileImagePath", "name"]);
+                                } else if (aboutItemType === "Event") {
+
+                                } else if (aboutItemType === "Challenge") {
+                                    alert("Fetching challenge for post in post feed");
+                                    this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
+                                } else if (aboutItemType === "Post") {
+                                    this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
+                                }
+                                newlyQueriedPosts.push(post);
+                            }
+                            this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
+                            for (let i = 0; i < data.items.length; i++) {
+                                //console.log(data.items[i].time_created);
+                                // console.log("Putting in event: " + JSON.stringify(data.items[i]));
+                                // this.setState({events: [...this.state.events, data.items[i]]});
+                                this.props.putPost(data.items[i]);
+                            }
+                            // console.log("events in the end: " + JSON.stringify(this.state.events));
+                            this.setState({nextToken: data.nextToken});
+                        }
+                        else {
+                            // TODO Came up with no events
+                        }
+                        this.setState({isLoading: false});
+                    }, (error) => {
+                        console.log("Querying Posts failed!");
+                        console.log(error);
+                        console.error(error);
+                        this.setState({isLoading: false, error: error});
+                    }, this.props.cache.postQueries, this.props.putPostQuery);
+            }
         }
     }
 
@@ -250,6 +185,7 @@ class PostFeedProp extends Component {
         // console.log(calculations.bottomVisible);
         if (calculations.bottomVisible) {
             console.log("Next Token: " + this.state.nextToken);
+            this.state.sentRequest = false;
             this.queryPosts();
         }
     };
@@ -281,7 +217,7 @@ class PostFeedProp extends Component {
         //This displays the rows in a grid format, with visibility enabled so that we know when the bottom of the page
         //is hit by the user.
         return (
-            <Visibility onUpdate={this.handleUpdate}>
+            <Visibility onUpdate={_.debounce(this.handleUpdate, 500)}>
                 {/*<Grid className='ui center aligned'>
                     <Grid.Column floated='center' width={15}>
                         <CreateChallengeProp queryChallenges={this.queryChallenges} queryPosts={this.queryPosts}/>

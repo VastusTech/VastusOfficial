@@ -88,7 +88,7 @@ class Profile extends React.PureComponent {
     componentDidMount() {
         // console.log("componentDidMount");
         this.update();
-        this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+        // this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         //alert(JSON.stringify(this.props.user.profileImagePaths));
         //alert(JSON.stringify(this.state.galleryURLS));
     }

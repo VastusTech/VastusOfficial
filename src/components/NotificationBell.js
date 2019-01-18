@@ -53,31 +53,31 @@ class NotificationBellProp extends Component {
         if (!this.state.sentRequest) {
             this.state.sentRequest = true;
             this.setState({isLoading: true});
-            props.fetchUserAttributes(["receivedInvites", "ownedEvents", "ownedChallenges", "ownedGroups"], (data) => {
-                if (data) {
-                    if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
-                        this.state.numNotifications += data.receivedInvites.length;
-                    }
-                    if (data.hasOwnProperty("ownedEvents") && data.ownedEvents) {
-                        for (let i = 0; i < data.ownedEvents.length; i++) {
-                            fetchAndAddReceivedInvites("Event", data.ownedEvents[i]);
-                        }
-                    }
-                    if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
-                        for (let i = 0; i < data.ownedChallenges.length; i++) {
-                            fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
-                        }
-                    }
-                    if (data.hasOwnProperty("ownedGroups") && data.ownedGroups) {
-                        for (let i = 0; i < data.ownedGroups.length; i++) {
-                            fetchAndAddReceivedInvites("Group", data.ownedGroups[i]);
-                        }
+            const data = this.props.user;
+            if (data) {
+                if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
+                    this.state.numNotifications += data.receivedInvites.length;
+                }
+                if (data.hasOwnProperty("ownedEvents") && data.ownedEvents) {
+                    for (let i = 0; i < data.ownedEvents.length; i++) {
+                        fetchAndAddReceivedInvites("Event", data.ownedEvents[i]);
                     }
                 }
-                else {
-                    this.setState({isLoading: false});
+                if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
+                    alert("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
+                    for (let i = 0; i < data.ownedChallenges.length; i++) {
+                        fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
+                    }
                 }
-            });
+                if (data.hasOwnProperty("ownedGroups") && data.ownedGroups) {
+                    for (let i = 0; i < data.ownedGroups.length; i++) {
+                        fetchAndAddReceivedInvites("Group", data.ownedGroups[i]);
+                    }
+                }
+            }
+            else {
+                this.setState({isLoading: false});
+            }
         }
     };
 

@@ -79,12 +79,12 @@ class Leaderboard extends Component {
                     });
             }
         }
-        else if (!props.info.isLoading) {
-            if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
-                props.fetchUserAttributes(["friends", "challengesWon"]);
-                this.setState({sentRequest: true});
-            }
-        }
+        // else if (!props.info.isLoading) {
+        //     if (!this.state.sentRequest && !props.info.error && props.user.id != null) {
+        //         props.fetchUserAttributes(["friends", "challengesWon"]);
+        //         this.setState({sentRequest: true});
+        //     }
+        // }
     }
 
     // TODO Soon, we will need to address the User vs Client issue
