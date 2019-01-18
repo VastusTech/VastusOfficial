@@ -17,8 +17,9 @@ class SubmissionsScreen extends Component {
         challengeID: null,
         loadedPostIDs: [],
         sentRequest: false,
-        challengeMembers: [],
-        memberSelected: 'all'
+        challengeMembers: [{key: 0, text: 'All', value: 'all'}],
+        memberSelected: 'all',
+        alreadyInDropdown: false
     };
 
     // _isMounted = true;
@@ -32,6 +33,7 @@ class SubmissionsScreen extends Component {
         this.getChallengeAttribute = this.getChallengeAttribute.bind(this);
         this.getLoading = this.getLoading.bind(this);
         this.getName = this.getName.bind(this);
+        this.getPostAttribute = this.getPostAttribute.bind(this);
     }
 
     componentDidMount() {
@@ -53,7 +55,6 @@ class SubmissionsScreen extends Component {
     }
 
     update(props) {
-        let curChalMems = this.state.challengeMembers;
         // TODO Change this if we want to actually be able to do something while it's loading
         if (this.getChallengeAttribute("id")) {
             // console.log("Updating!");
@@ -67,10 +68,22 @@ class SubmissionsScreen extends Component {
                         (post) => {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
-                            this.setState({challengeMembers: [...curChalMems, post.by]});
-                            alert(JSON.stringify(this.state.challengeMembers));
+                            for(let i = 0; i < this.state.challengeMembers.length; i++) {
+                                if(this.state.challengeMembers[i].value === post.by) {this.setState({alreadyInDropdown: true})}
+                            }
+                            if(!this.state.alreadyInDropdown) {
+                                this.setState({
+                                    challengeMembers: [...this.state.challengeMembers, {
+                                        key: (i + 1),
+                                        value: post.by,
+                                        text: this.getName(post.by)
+                                    }]
+                                });
+                            }
+                            //this.setState({challengeMembers: curChalMems.push({key: (i+1), value: post.by, text: this.getName(post.by)})});
+                            //alert("List of options: " + JSON.stringify(this.state.challengeMembers));
                             this.state.loadedPostIDs.push(post.id);
-                            this.setState({isLoading: false});
+                            this.setState({isLoading: false, alreadyInDropdown: false});
                         }
                     })
                 }
@@ -91,6 +104,27 @@ class SubmissionsScreen extends Component {
             // }
         }
         return null;
+    }
+
+    getPostAttribute(postID, attribute) {
+        if (postID) {
+            let post = this.props.cache.posts[postID];
+            if (post) {
+                if (attribute.substr(attribute.length - 6) === "Length") {
+                    attribute = attribute.substr(0, attribute.length - 6);
+                    if (post[attribute] && post[attribute].length) {
+                        return post[attribute].length;
+                    }
+                    else {
+                        return 0;
+                    }
+                }
+                return post[attribute];
+            }
+        }
+        else {
+            return null;
+        }
     }
 
     getChallengeAttribute(attribute) {
@@ -132,16 +166,10 @@ class SubmissionsScreen extends Component {
 
     handleFilterChange = (e, data) => {
         this.setState({memberSelected: data.value});
-        //console.log(this.eventState.duration);
-        // this.setState({
-        //     duration: data.value,
-        // }, () => {
-        //     console.log('value',this.state.duration);
-        // });
     };
 
     render() {
-        function rows(postIDs, memberSelected) {
+        function rows(postIDs, memberSelected, getPostAttribute) {
             const row = [];
             const rowProps = [];
             for (const key in postIDs) {
@@ -155,7 +183,8 @@ class SubmissionsScreen extends Component {
             // row.sort(function(a,b){return b.time_created.localeCompare(a.time_created)});
             // alert(JSON.stringify(postIDs));
             for (const key in row) {
-                if (memberSelected === 'all' || memberSelected === row[key]) {
+                //alert(getPostAttribute(row[key], "by"));
+                if (memberSelected === 'all' || memberSelected === getPostAttribute(row[key], "by")) {
                     if (row.hasOwnProperty(key) === true) {
                         rowProps.push(
                             <List.Item key={key}>
@@ -178,7 +207,7 @@ class SubmissionsScreen extends Component {
                 {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                                 challengeChannel={this.channelName}/> */}
                 {/*<Comments comments={this.state.comments}/>*/}
-                {rows(this.state.loadedPostIDs, this.state.memberSelected)}
+                {rows(this.state.loadedPostIDs, this.state.memberSelected, this.getPostAttribute)}
             </Fragment>
         );
     }
