@@ -3,6 +3,7 @@ import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import BuddyListProp from "../screens/BuddyList";
+import { consoleLog } from "../logic/DebuggingHelper";
 // import TrophyCaseProp from "./TrophyCase";
 // import { S3Image } from 'aws-amplify-react';
 // import ChallengeManagerProp from "./ManageChallenges";
@@ -54,8 +55,7 @@ class TrainerModal extends React.PureComponent<Props> {
     toggle = () => this.setState({ checked: !this.state.checked });
 
     constructor(props) {
-        // console.log("constructor");
-        // console.log("constructor props: " + JSON.stringify(props));
+        // consoleLog("constructor props: " + JSON.stringify(props));
         super(props);
         // this.setState({isLoading: true, checked: false, error: null});
         // ("Got into Profile constructor");
@@ -85,13 +85,13 @@ class TrainerModal extends React.PureComponent<Props> {
     }
 
     componentDidMount() {
-        // console.log("componentDidMount");
+        // consoleLog("componentDidMount");
         this.update();
     }
 
     componentWillReceiveProps(newProps, nextContext) {
-        // console.log("componentWillReceiveProps");
-        // console.log("receive props: " + JSON.stringify(newProps));
+        // consoleLog("componentWillReceiveProps");
+        // consoleLog("receive props: " + JSON.stringify(newProps));
         if (newProps.user.profileImagePath) {
             this.setState({isLoading: true});
         }
@@ -103,9 +103,9 @@ class TrainerModal extends React.PureComponent<Props> {
 
     update() {
         const user = this.props.user;
-        // console.log("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
+        // consoleLog("Updating. User = " + JSON.stringify(user) + ". State = " + JSON.stringify(this.state));
         if (!user.id) {
-            // console.log("ID is not set inside profile... This means a problem has occurred");
+            // consoleLog("ID is not set inside profile... This means a problem has occurred");
         }
 
         if (!this.props.info.isLoading && !this.state.sentRequest && !(user.id && user.name && user.username && user.birthday && user.profilePicture)) {
@@ -119,7 +119,7 @@ class TrainerModal extends React.PureComponent<Props> {
 
     getTrainerAttribute(attribute) {
         if (this.props.trainerID) {
-            //console.log(this.props.trainerID);
+            //consoleLog(this.props.trainerID);
             let trainer = this.props.cache.trainers[this.props.trainerID];
             if (trainer) {
                 if (attribute.substr(attribute.length - 6) === "Length") {
@@ -140,29 +140,29 @@ class TrainerModal extends React.PureComponent<Props> {
     }
 
     setPicture(event) {
-        //console.log(JSON.stringify(this.props));
+        //consoleLog(JSON.stringify(this.props));
         if (this.props.user.id) {
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
-            //console.log("Calling storage put");
-            //console.log("File = " + JSON.stringify(event.target.files[0]));
+            //consoleLog("Calling storage put");
+            //consoleLog("File = " + JSON.stringify(event.target.files[0]));
             Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" }).then((result) => {
                 // Now we update the database object to reflect this
-                //console.log("resulttt:" + JSON.stringify(result));
-                //console.log("Successfully put the image, now putting the data into the database!");
+                //consoleLog("resulttt:" + JSON.stringify(result));
+                //consoleLog("Successfully put the image, now putting the data into the database!");
                 TrainerFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
                     (data) => {
-                        //console.log("successfully editted client");
-                        //console.log(JSON.stringify(data));
+                        //consoleLog("successfully editted client");
+                        //consoleLog(JSON.stringify(data));
                         this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
                         this.setState({isLoading: true});
                     }, (error) => {
-                        console.log("Failed edit client attribute");
-                        console.log(JSON.stringify(error));
+                        consoleLog("Failed edit client attribute");
+                        consoleLog(JSON.stringify(error));
                     });
                 this.setState({isLoading: true});
             }).catch((error) => {
-                console.log("failed storage put");
-                console.log(error);
+                consoleLog("failed storage put");
+                consoleLog(error);
             });
         }
     }
@@ -183,7 +183,7 @@ class TrainerModal extends React.PureComponent<Props> {
                     <input type="file" accept="video/*;capture=camcorder" id="proPicUpload" hidden={true} onChange={this.setPicture}/>
                 </div>
             );*/
-            //console.log("PROPICIMAGE!!!!: " + this.props.user.profilePicture);
+            //consoleLog("PROPICIMAGE!!!!: " + this.props.user.profilePicture);
             return (
                 <div>
                     <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.getTrainerAttribute("profilePicture")})`}}>
@@ -201,17 +201,17 @@ class TrainerModal extends React.PureComponent<Props> {
     }
 
     handleLogOut() {
-        // console.log("logging out");
+        // consoleLog("logging out");
         this.props.logOut();
         // this.setState({isLoading: true});
         // Auth.signOut({global: true}).then((data) => {
-        //     console.log("Successfully signed out!");
-        //     console.log(data);
+        //     consoleLog("Successfully signed out!");
+        //     consoleLog(data);
         //     this.setState({isLoading: false, username: null});
         //     this.props.signOut();
         // }).catch((error) => {
-        //     console.log("Sign out has failed :(");
-        //     console.log(error);
+        //     consoleLog("Sign out has failed :(");
+        //     consoleLog(error);
         //     this.setState({error: error, isLoading: false});
         // });
     }
@@ -227,7 +227,7 @@ class TrainerModal extends React.PureComponent<Props> {
 
 
     render() {
-        //console.log(JSON.stringify(this.state));
+        //consoleLog(JSON.stringify(this.state));
         /**
          * This creates an error message from the given error string
          * @param error A string containing the error message that was invoked

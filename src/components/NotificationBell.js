@@ -64,7 +64,7 @@ class NotificationBellProp extends Component {
                     }
                 }
                 if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
-                    alert("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
+                    // alert("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
                     for (let i = 0; i < data.ownedChallenges.length; i++) {
                         fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
                     }

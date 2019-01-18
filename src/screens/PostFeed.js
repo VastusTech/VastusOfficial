@@ -99,10 +99,10 @@ class PostFeedProp extends Component {
 
      */
     queryPosts() {
-        alert("BEFORE: " + this.state.sentRequest);
+        // alert("BEFORE: " + this.state.sentRequest);
         if (!this.state.sentRequest) {
             this.state.sentRequest = true;
-            alert("AFTER: " + this.state.sentRequest);
+            // alert("AFTER: " + this.state.sentRequest);
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
                 const filter = QL.generateFilter({
@@ -122,7 +122,7 @@ class PostFeedProp extends Component {
                     }
                 );
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                alert("QUerying posts!");
+                // alert("QUerying posts!");
                 this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                     filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                         if (!data.nextToken) {
@@ -131,7 +131,7 @@ class PostFeedProp extends Component {
                         if (data.items) {
                             // TODO We can see private events
                             // console.log("got items");
-                            alert("Received " + data.items.length + " posts!");
+                            // alert("Received " + data.items.length + " posts!");
                             const newlyQueriedPosts = [];
                             for (let i = 0; i < data.items.length; i++) {
                                 const post = data.items[i];
@@ -144,7 +144,7 @@ class PostFeedProp extends Component {
                                 } else if (aboutItemType === "Event") {
 
                                 } else if (aboutItemType === "Challenge") {
-                                    alert("Fetching challenge for post in post feed");
+                                    // alert("Fetching challenge for post in post feed");
                                     this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
                                 } else if (aboutItemType === "Post") {
                                     this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);

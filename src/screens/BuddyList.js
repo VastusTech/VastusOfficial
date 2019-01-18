@@ -1,14 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import { Button, List, Message, Image } from 'semantic-ui-react';
-import ClientModal from "../components/ClientModal";
-import QL from "../GraphQL";
 import { connect } from "react-redux";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import Lambda from "../Lambda";
+import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
-import proPic from '../img/BlakeProfilePic.jpg';
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
 import ClientCard from "../components/ClientCard";
+import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 
 class BuddyListProp extends Component {
     state = {
@@ -33,7 +30,7 @@ class BuddyListProp extends Component {
     //     // TODO Change this if we want to actually be able to do something while it's loading
     //     const user = this.props.user;
     //     if (!user.id) {
-    //         console.error("Pretty bad error");
+    //         consoleError("Pretty bad error");
     //         this.setState({isLoading: true});
     //     }
     //
@@ -64,7 +61,7 @@ class BuddyListProp extends Component {
         const user = props.user;
         //console.log("Updating Scheduled Events");
         if (!user.id) {
-            console.error("Pretty bad error");
+            consoleError("Pretty bad error");
             this.setState({isLoading: true});
         }
 

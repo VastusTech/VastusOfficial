@@ -1,4 +1,5 @@
 import {setIsLoading, setIsNotLoading} from "./infoActions";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 const ADD_HANDLER = 'ADD_HANDLER';
 const SET_HANDLER = 'SET_HANDLER';
@@ -22,7 +23,7 @@ export function addHandlerToNotifications(handler) {
             dispatch(addHandler(channelName, handler));
         }
         else {
-            console.error("Can't set handler to notifications when the USER ID isn't set!");
+            consoleError("Can't set handler to notifications when the USER ID isn't set!");
         }
         dispatch(setIsNotLoading());
     };
@@ -45,7 +46,7 @@ export function setHandlerToNotifications(handler) {
             dispatch(setHandler(channelName, handler));
         }
         else {
-            console.error("Can't set handler to notifications when the USER ID isn't set!");
+            consoleError("Can't set handler to notifications when the USER ID isn't set!");
         }
         dispatch(setIsNotLoading());
     };
@@ -82,7 +83,7 @@ function subscribeToChannel(channelName, dispatch, getStore) {
 }
 function getMessageHandler(channelName, getStore) {
     return (message) => {
-        console.log("RECEIVED ABLY MESSAGE = " + JSON.stringify(message));
+        consoleLog("RECEIVED ABLY MESSAGE = " + JSON.stringify(message));
         const handlers = getStore().ably.notificationHandlers[channelName];
         if (handlers && handlers.length > 0) {
             for (let i = 0; i < handlers.length; i++) {

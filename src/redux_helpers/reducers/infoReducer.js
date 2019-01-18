@@ -1,3 +1,5 @@
+import {consoleError} from "../../logic/DebuggingHelper";
+
 const SET_ERROR = 'SET_ERROR';
 const CLEAR_ERROR = 'CLEAR_ERROR';
 const SET_IS_LOADING = 'SET_IS_LOADING';
@@ -12,7 +14,7 @@ const initialState = {
 export default (state = initialState, action) => {
     switch (action.type) {
         case SET_ERROR:
-            console.log("Error inside a redux action/reducer! (Leo wrote this) Error = " + JSON.stringify(action.payload));
+            consoleError("Error inside a redux action/reducer! (Leo wrote this) Error = " + JSON.stringify(action.payload));
             state = {
                 ...state,
                 error: action.payload

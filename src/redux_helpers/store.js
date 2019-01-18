@@ -9,7 +9,15 @@ import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
 import message from "./reducers/messageReducer";
 
-const middleware = applyMiddleware(logger, thunk);
+import { ifLogging } from "../Constants";
+
+let middleware;
+if (ifLogging) {
+    middleware = applyMiddleware(logger, thunk);
+}
+else {
+    middleware = applyMiddleware(thunk);
+}
 
 const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
