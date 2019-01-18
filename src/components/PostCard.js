@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import {Button, Card, Dimmer, Grid, Loader} from 'semantic-ui-react';
+import {Button, Card, Dimmer, Grid, Label, Loader} from 'semantic-ui-react';
 import PostDescriptionModal from './PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
@@ -341,6 +341,18 @@ class PostCard extends Component<Props> {
         }
     }
 
+    displayTag() {
+        if(this.props.first) {
+            return (<Label size='large' as='a' color='purple' tag>
+                First
+            </Label>)
+        }
+        else if(this.props.last) {
+            return (<Label size='large' as='a' color='purple' tag>
+                Last
+            </Label>);
+        }
+    }
 
     render() {
         if (!this.getPostAttribute("id")) {
@@ -359,6 +371,7 @@ class PostCard extends Component<Props> {
             <Card color='purple' fluid raised>
                 {/*this.getPostAttribute("about")*/}
                 <Grid style={{marginLeft: '10px', marginTop: '2px', marginBottom: '2px'}}>
+                    <Grid.Row>
                     <Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
                         <Grid style={{marginLeft: '10px', marginTop: '10px'}}>
                             <Grid.Column width={6}>
@@ -371,6 +384,7 @@ class PostCard extends Component<Props> {
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getPostAttribute("by")}/>
                         <TrainerModal open={this.state.trainerModalOpen} onClose={this.closeTrainerModal} trainerID={this.getPostAttribute("by")}/>
                     </Button>
+                    </Grid.Row>
                 </Grid>
                 {this.openOnce()}
                 <Card.Content>

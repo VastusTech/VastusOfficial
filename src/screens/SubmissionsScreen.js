@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import {List, Icon, Message, Dropdown} from "semantic-ui-react";
+import {List, Icon, Message, Dropdown, Label} from "semantic-ui-react";
 import PostCard from "../components/PostCard";
 import connect from "react-redux/es/connect/connect";
 import {fetchPost, fetchChallenge} from "../redux_helpers/actions/cacheActions";
@@ -17,6 +17,9 @@ class SubmissionsScreen extends Component<Props> {
         challengeMembers: [{key: 0, text: 'All', value: 'all'}],
         memberSelected: 'all',
         alreadyInDropdown: false,
+        firstPosts: [],
+        lastPosts: [],
+        largestUserPost: 0
     };
 
     // _isMounted = true;
@@ -67,7 +70,16 @@ class SubmissionsScreen extends Component<Props> {
                         // console.log("Returned a value! Post: " + JSON.stringify(post));
                         if (post && post.id) {
                             for(let i = 0; i < this.state.challengeMembers.length; i++) {
-                                if(this.state.challengeMembers[i].value === post.by) {this.setState({alreadyInDropdown: true})}
+                                if(this.state.challengeMembers[i].value === post.by) {
+                                    this.setState({alreadyInDropdown: true});
+                                }
+                                /*if(this.state.lastPosts.indexOf(post.by) === -1) {
+                                    this.setState({lastPosts: [...this.state.lastPosts, post.id]})
+                                }
+                                else {
+                                    let lastPostTemp = this.state.lastPosts;
+                                    lastPostTemp[this.state.lastPosts.indexOf(post.by)]
+                                }*/
                             }
                             if(!this.state.alreadyInDropdown) {
                                 this.setState({
@@ -75,8 +87,14 @@ class SubmissionsScreen extends Component<Props> {
                                         key: (i + 1),
                                         value: post.by,
                                         text: this.getName(post.by)
-                                    }]
+                                    }], firstPosts: [...this.state.firstPosts, post.id]
                                 });
+                            }
+                            else {
+                                let lastPostTemp = this.state.lastPosts;
+
+                                //if(!this.state.firstPosts.includes(post.id))
+                                //lastPostTemp[this.state.lastPosts.indexOf(post.id)] = post.id
                             }
                             //this.setState({challengeMembers: curChalMems.push({key: (i+1), value: post.by, text: this.getName(post.by)})});
                             //alert("List of options: " + JSON.stringify(this.state.challengeMembers));
@@ -181,8 +199,24 @@ class SubmissionsScreen extends Component<Props> {
         this.setState({memberSelected: data.value});
     };
 
+    displayFirst() {
+        if (this.state.memberSelected !== 'all') {
+            return (<Label size='large' as='a' color='purple'>
+                First
+            </Label>);
+        }
+    }
+
+    displayLast() {
+        if(this.state.memberSelected !== 'all') {
+            return (<Label size='large' as='a' color='purple'>
+                Latest
+            </Label>);
+        }
+    }
+
     render() {
-        function rows(postIDs, memberSelected, getPostAttribute, compare) {
+        function rows(postIDs, memberSelected, getPostAttribute, compare, firstPosts, lastPosts, challengeMembers) {
             const row = [];
             const rowProps = [];
             let here = this;
@@ -201,6 +235,22 @@ class SubmissionsScreen extends Component<Props> {
                 //alert(getPostAttribute(row[key], "by"));
                 if (memberSelected === 'all' || memberSelected === getPostAttribute(row[key], "by")) {
                     if (row.hasOwnProperty(key) === true) {
+                        /*if(firstPosts.includes(row[key])) {
+                            rowProps.push(
+                                <List.Item key={key}>
+                                    <PostCard postID={row[key]} first={true} last={false}/>
+                                </List.Item>
+                            );
+                        }
+                        /*
+                        if(lastPosts.includes(row[key])) {
+                            rowProps.push(
+                                <List.Item key={key}>
+                                    <PostCard postID={row[key]} first={false} last={true}/>
+                                </List.Item>
+                            );
+                        }
+                        else {*/
                         rowProps.push(
                             <List.Item key={key}>
                                 <PostCard postID={row[key]}/>
@@ -221,8 +271,9 @@ class SubmissionsScreen extends Component<Props> {
                 {/* TODO: This should be removed and replaced at the ChallengeDescriptionModal */}
                 {/* <VideoUpload handleAddComment={this.handleAddComment} curUser={this.props.curUser} curUserID={this.props.curUserID}
                                 challengeChannel={this.channelName}/> */}
-                {/*<Comments comments={this.state.comments}/>*/}
-                {rows(this.state.loadedPostIDs, this.state.memberSelected, this.getPostAttribute, this.compare)}
+                {this.displayLast()}
+                {rows(this.state.loadedPostIDs, this.state.memberSelected, this.getPostAttribute, this.compare, this.state.firstPosts, this.state.lastPosts, this.state.challengeMembers)}
+                {this.displayFirst()}
             </Fragment>
         );
     }

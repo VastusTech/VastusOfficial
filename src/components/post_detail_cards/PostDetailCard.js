@@ -5,7 +5,7 @@
 // TODO This will be for a post that is sharing an existing Post with your friends!
 
 import React, { Component } from 'react';
-import {Card, Modal, Button, Header, Icon, Divider, Image, Message, Dimmer, Loader} from 'semantic-ui-react';
+import {Card, Modal, Button, Label, Icon, Divider, Image, Message, Dimmer, Loader} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {fetchClient, fetchTrainer, forceFetchPost, fetchPost, removeItem} from "../../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../../logic/TimeHelper";
