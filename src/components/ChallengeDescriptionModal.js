@@ -108,22 +108,21 @@ class ChallengeDescriptionModal extends Component<Props> {
     componentWillReceiveProps(newProps) {
         if (newProps.challengeID !== this.state.challengeID) {
             // alert("resetting state to " + newProps.challengeID);
+            this.state.challengeID = newProps.challengeID;
             this.resetState(newProps.challengeID);
         }
 
         const members = this.getChallengeAttribute("members");
         const owner = this.getChallengeAttribute("owner");
-        if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
+        if (!this.props.open && newProps.open && members && members.length > 0) {
             for (let i = 0; i < members.length; i++) {
                 const itemType = getItemTypeFromID(members[i]);
                 if (itemType === "Client") {
-                    alert("Fetching client = " + members[i]);
                     this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
                         this.setState({});
                     });
                 }
                 else if (itemType === "Trainer") {
-                    alert("Fetching trainer = " + members[i]);
                     this.props.fetchTrainer(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
                         this.setState({});
                     });
