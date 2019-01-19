@@ -24,7 +24,7 @@ export function updateAuth() {
                     consoleLog("REDUX: Successfully updated the authentication credentials");
                     dispatch(setUser(user));
                     dispatch(addHandlerToNotifications((message) => {
-                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
                     }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
@@ -40,7 +40,7 @@ export function updateAuth() {
                     consoleLog("REDUX: Successfully updated the authentication credentials for federated identity");
                     dispatch(setUser(user));
                     dispatch(addHandlerToNotifications((message) => {
-                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
                     }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
@@ -71,7 +71,7 @@ export function logIn(username, password) {
                     dispatch(setUser(user));
                 }
                 dispatch(addHandlerToNotifications((message) => {
-                    alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
                 }));
                 dispatch(setIsNotLoading());
             }, (error) => {
@@ -80,8 +80,8 @@ export function logIn(username, password) {
                 dispatch(setIsNotLoading());
             });
         }).catch((error) => {
-            // alert(JSON.stringify(error));
-            // alert(error.code);
+            // console.log(JSON.stringify(error));
+            // console.log(error.code);
             if (error.code === "UserNotConfirmedException") {
                 // This means that the user has not been confirmed yet!
                 dispatch(authSignUp());
@@ -147,7 +147,7 @@ export function googleSignIn(googleUser) {
                         dispatch(setUser(client));
                     }
                     dispatch(addHandlerToNotifications((message) => {
-                        alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
                     }));
                     dispatch(setIsNotLoading());
                 }
@@ -174,7 +174,7 @@ export function googleSignIn(googleUser) {
                                 dispatch(setUser(client));
                             }
                             dispatch(addHandlerToNotifications((message) => {
-                                alert("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                                console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
                             }));
                             dispatch(setIsNotLoading());
                         }, (error) => {

@@ -77,7 +77,7 @@ class Comment extends Component<Props> {
                 }
             }
             else {
-                alert("Unrecognized message type = " + type);
+                console.log("Unrecognized message type = " + type);
             }
         }
         else {

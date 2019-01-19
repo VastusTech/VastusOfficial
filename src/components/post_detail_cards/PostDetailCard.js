@@ -89,12 +89,12 @@ class PostDetailCard extends Component {
 
     getClientAttribute(attribute) {
         if (this.getPostAttribute("by")) {
-            //alert(this.getPostAttribute("by"));
+            //console.log(this.getPostAttribute("by"));
             let client = this.props.cache.clients[this.getPostAttribute("by")];
             let trainer = this.props.cache.trainers[this.getPostAttribute("by")];
-            //alert(JSON.stringify(this.props.cache.trainers));
+            //console.log(JSON.stringify(this.props.cache.trainers));
             if (client) {
-                //alert("Found the Client!");
+                //console.log("Found the Client!");
                 if (attribute.substr(attribute.length - 6) === "Length") {
                     attribute = attribute.substr(0, attribute.length - 6);
                     if (client[attribute] && client[attribute].length) {
@@ -129,7 +129,7 @@ class PostDetailCard extends Component {
         if (owner) {
             if (this.props.cache.clients[owner] || this.props.cache.trainers[owner]) {
                 const itemType = getItemTypeFromID(owner);
-                //alert(itemType);
+                //console.log(itemType);
                 if(itemType === "Trainer") {
                     return this.props.cache.trainers[owner].name
                 }
@@ -152,7 +152,7 @@ class PostDetailCard extends Component {
                 consoleLog("Setting URLS: " + this.state.galleryURLS);
                 this.setState({urlsSet: true});
             }*/
-            //alert(this.getClientAttribute("profilePicture"));
+            //console.log(this.getClientAttribute("profilePicture"));
             return(
                 <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
             );
@@ -192,7 +192,7 @@ class PostDetailCard extends Component {
     closeClientModal() { this.setState({clientModalOpen: false}); }
 
     forceUpdate = (postID) => {
-        // alert("FORCE UPDATE = " + postID);
+        // console.log("FORCE UPDATE = " + postID);
         this.props.removeItem("Post", postID);
         // this.props.forceFetchPost(postID, ["time_created", "by", "description", "about", "access", "postType", "picturePaths", "videoPaths"]);
     };
@@ -209,13 +209,13 @@ class PostDetailCard extends Component {
 
     getDisplayMedia() {
         // TODO How to properly display videos and pictures?
-        //alert("Displaying Media");
+        //console.log("Displaying Media");
         const pictures = this.getPostAttribute("picturePaths");
         const videos = this.getPostAttribute("videoPaths");
-        //alert(pictures + " and " + videos);
+        //console.log(pictures + " and " + videos);
         if ((videos && videos.length > 0) || (pictures && pictures.length > 0)) {
             if (!this.state.videoURL && videos) {
-                //alert("getting video URL");
+                //console.log("getting video URL");
                 const video = videos[0];
                 Storage.get(video).then((url) => {
                     this.setState({videoURL: url});
@@ -224,7 +224,7 @@ class PostDetailCard extends Component {
                 });
             }
             else if(!this.state.pictureURL && pictures) {
-                //alert("getting picture URL");
+                //console.log("getting picture URL");
                 const picture = pictures[0];
                 Storage.get(picture).then((url) => {
                     this.setState({pictureURL: url});
@@ -233,7 +233,7 @@ class PostDetailCard extends Component {
                 })
             }
             else if(this.state.videoURL && !this.state.pictureURL) {
-                //alert(this.state.videoURL);
+                //console.log(this.state.videoURL);
                 return (
                     <Player inline={true}>
                         <source src={this.state.videoURL} type="video/mp4"/>
@@ -241,13 +241,13 @@ class PostDetailCard extends Component {
                 );
             }
             else if(!this.state.videoURL && this.state.pictureURL) {
-                //alert(this.state.pictureURL);
+                //console.log(this.state.pictureURL);
                 return (
                     <Image src={this.state.pictureURL}/>
                 );
             }
             else if((this.state.videoURL && this.state.pictureURL)) {
-                //alert(this.state.pictureURL + "and" + this.state.videoURL);
+                //console.log(this.state.pictureURL + "and" + this.state.videoURL);
                 return (
                     <div>
                         {/*this.state.videoURL*/}

@@ -75,7 +75,7 @@ class App extends Component {
     componentDidMount() {
         this.props.updateAuth();
         /*this.props.setOnMessage((payload) => {
-            alert(JSON.stringify(payload));
+            console.log(JSON.stringify(payload));
         });*/
     }
 

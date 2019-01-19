@@ -88,7 +88,7 @@ class Lambda {
     static invokeLambda(functionName, payload, successHandler, failureHandler) {
         consoleLog("Sending lambda payload: " + JSON.stringify(payload));
         if (ifDebug) {
-            alert("Sending lambda payload: " + JSON.stringify(payload));
+            console.log("Sending lambda payload: " + JSON.stringify(payload));
         }
         lambda.invoke({
             FunctionName : functionName,
@@ -97,7 +97,7 @@ class Lambda {
             if (error) {
                 consoleError(error);
                 consoleError("Lambda failure: " + JSON.stringify(error));
-                if (ifDebug) { alert("Lambda failure: " + JSON.stringify(error))}
+                if (ifDebug) { console.log("Lambda failure: " + JSON.stringify(error))}
                 if (failureHandler) { failureHandler(error); }
             } else if (data.Payload) {
                 //consoleLog(data.Payload);
@@ -105,13 +105,13 @@ class Lambda {
                 if (payload.errorMessage) {
                     consoleError("Bad payload!: " + JSON.stringify(payload));
                     consoleError(payload.errorMessage);
-                    alert("Bad payload!: " + JSON.stringify(payload));
+                    console.log("Bad payload!: " + JSON.stringify(payload));
                     if (failureHandler) { failureHandler(payload.errorMessage); }
                 }
                 else {
                     consoleLog("Successfully invoked lambda function!");
                     if (ifDebug) {
-                        alert("Successful Lambda, received " + JSON.stringify(payload));
+                        console.log("Successful Lambda, received " + JSON.stringify(payload));
                     }
                     if (successHandler) { successHandler(payload); }
                 }

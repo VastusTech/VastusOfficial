@@ -55,7 +55,7 @@ class NextChallengeProp extends Component {
                     let numChallenges = 0;
                     let numTotal = user.challenges.length;
                     for (let i = 0; i < user.challenges.length; i++) {
-                        // alert("Fetching challenge for next challenge");
+                        // console.log("Fetching challenge for next challenge");
                         this.props.fetchChallenge(user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction", "submissions"], (challenge) => {
                             if (challenge && challenge.endTime) {
                                 const challengeTimeLeft = timeLeft(parseISOString(challenge.endTime));

@@ -203,7 +203,7 @@ class SubmissionDetailCard extends Component {
                 });
             }
             else {
-                //alert("Video URL:" + this.state.videoURL);
+                //console.log("Video URL:" + this.state.videoURL);
                 return (
                     <Player inline={true}>
                         <source src={this.state.videoURL} type="video/mp4"/>

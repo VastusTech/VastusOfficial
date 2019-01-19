@@ -143,7 +143,7 @@ class TrainerDetailCard extends Component {
                 consoleLog("Setting URLS: " + this.state.galleryURLS);
                 this.setState({urlsSet: true});
             }*/
-            //alert(this.getClientAttribute("profilePicture"));
+            //console.log(this.getClientAttribute("profilePicture"));
             return(
                 <div avatar align="center" className="ui u-avatar" style={{backgroundImage: `url(${this.getClientAttribute("profilePicture")})`}}></div>
             );

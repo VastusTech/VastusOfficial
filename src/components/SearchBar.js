@@ -125,7 +125,7 @@ class SearchBarProp extends Component {
             for (const i in results) {
                 if (results.hasOwnProperty(i)) {
                     const result = results[i];
-                    // alert(JSON.stringify(result));
+                    // console.log(JSON.stringify(result));
                     if (result.hasOwnProperty("item_type") && result.item_type) {
                         let formattedResult = switchReturnItemType(result.item_type,
                             { // Client
