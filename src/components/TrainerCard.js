@@ -46,6 +46,7 @@ class TrainerCard extends Component<Props> {
         if (newProps.trainerID && !this.state.trainerID) {
             this.setState({trainerID: newProps.trainerID});
         }
+        this.setState({});
     }
 
     getTrainerAttribute(attribute) {
@@ -61,7 +62,7 @@ class TrainerCard extends Component<Props> {
                         return 0;
                     }
                 }
-                return this.props.cache.trainers[this.state.trainerID][attribute];
+                return trainer[attribute];
             }
         }
         return null;
@@ -89,9 +90,7 @@ class TrainerCard extends Component<Props> {
         const { rank } = this.props;
         if (!this.getTrainerAttribute("id")) {
             return(
-                <Card color='purple' fluid raised>
-                    <h1>Loading...</h1>
-                </Card>
+                null
             );
         }
         return(

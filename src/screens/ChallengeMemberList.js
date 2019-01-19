@@ -3,6 +3,8 @@ import _ from 'lodash';
 import {Grid, Message} from 'semantic-ui-react';
 import connect from "react-redux/es/connect/connect";
 import ClientCard from "../components/ClientCard";
+import TrainerCard from "../components/TrainerCard";
+import {getItemTypeFromID} from "../logic/ItemType";
 
 type Props = {
     challengeID: string
@@ -61,11 +63,25 @@ class ChallengeMemberList extends Component<Props> {
         function rows(userID, members, handleClientPress)
         {
             //console.log(members);
-            return _.times(members.length, i => (
-                <Grid.Row key={i} className="ui one column stackable center aligned page grid">
-                    <ClientCard rank={i} clientID={members[i]}/>
-                </Grid.Row>
-            ));
+            const row = [];
+            for (let i = 0; i < members.length; i++) {
+                const itemType = getItemTypeFromID(members[i]);
+                if (itemType === "Client") {
+                    row.push(
+                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
+                            <ClientCard rank={i} clientID={members[i]}/>
+                        </Grid.Row>
+                    );
+                }
+                else if (itemType === "Trainer") {
+                    row.push(
+                        <Grid.Row key={i} className="ui one column stackable center aligned page grid">
+                            <TrainerCard rank={i} trainerID={members[i]}/>
+                        </Grid.Row>
+                    );
+                }
+            }
+            return row;
         }
         if (this.state.isLoading) {
             return(

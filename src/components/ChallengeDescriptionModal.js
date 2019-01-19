@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import {Icon, Modal, Button, Divider, Grid, Message, Image, Tab, Dimmer, Label, Loader } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import { connect } from 'react-redux';
-import {fetchClient, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, fetchTrainer, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import { clearBoard } from "../redux_helpers/actions/messageActions";
 import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
@@ -108,16 +108,25 @@ class ChallengeDescriptionModal extends Component<Props> {
     componentWillReceiveProps(newProps) {
         if (newProps.challengeID !== this.state.challengeID) {
             // alert("resetting state to " + newProps.challengeID);
+            this.state.challengeID = newProps.challengeID;
             this.resetState(newProps.challengeID);
         }
 
         const members = this.getChallengeAttribute("members");
         const owner = this.getChallengeAttribute("owner");
-        if (!this.props.open && newProps.open && newProps.eventID && members && members.length > 0) {
+        if (!this.props.open && newProps.open && members && members.length > 0) {
             for (let i = 0; i < members.length; i++) {
-                this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
-                    this.setState({});
-                });
+                const itemType = getItemTypeFromID(members[i]);
+                if (itemType === "Client") {
+                    this.props.fetchClient(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
+                        this.setState({});
+                    });
+                }
+                else if (itemType === "Trainer") {
+                    this.props.fetchTrainer(members[i], ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture"], () => {
+                        this.setState({});
+                    });
+                }
                 if(owner) {
                     if (owner.substr(0, 2) === "TR") {
                         if(!this.state.fetchedTrainer) {
@@ -542,6 +551,9 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchClient: (id, variablesList) => {
+            dispatch(fetchClient(id, variablesList));
+        },
+        fetchTrainer: (id, variablesList) => {
             dispatch(fetchClient(id, variablesList));
         },
         forceFetchUserAttributes: (attributeList) => {
