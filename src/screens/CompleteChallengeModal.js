@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Modal, Message, Button, Card } from "semantic-ui-react";
-import ClientCard from "../components/ClientCard";
+import ClientCard from "../components/cards/ClientCard";
 import { connect } from "react-redux";
 import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
 

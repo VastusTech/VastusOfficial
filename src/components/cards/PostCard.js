@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import {Button, Card, Dimmer, Grid, Loader} from 'semantic-ui-react';
-import PostDescriptionModal from './PostDescriptionModal';
+import PostDescriptionModal from '../modals/PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
-import { fetchPost, fetchChallenge, fetchClient, fetchTrainer} from "../redux_helpers/actions/cacheActions";
-import ItemType from "../logic/ItemType";
+import { fetchPost, fetchChallenge, fetchClient, fetchTrainer} from "../../redux_helpers/actions/cacheActions";
+import ItemType from "../../logic/ItemType";
 import { Storage } from "aws-amplify";
-import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
-import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
-import PostDetailCard from "./post_detail_cards/PostDetailCard";
-import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
-import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
-import {convertFromISO} from "../logic/TimeHelper";
-import ClientModal from "./ClientModal";
-import TrainerModal from "./TrainerModal";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+import SubmissionDetailCard from "../post_detail_cards/SubmissionDetailCard";
+import ChallengeDetailCard from "../post_detail_cards/ChallengeDetailCard";
+import PostDetailCard from "../post_detail_cards/PostDetailCard";
+import ClientDetailCard from "../post_detail_cards/ClientDetailCard";
+import TrainerDetailCard from "../post_detail_cards/TrainerDetailCard";
+import {convertFromISO} from "../../logic/TimeHelper";
+import ClientModal from "../modals/ClientModal";
+import TrainerModal from "../modals/TrainerModal";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 type Props = {
     postID: string

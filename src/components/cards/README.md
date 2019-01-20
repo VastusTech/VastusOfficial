@@ -1,0 +1,1 @@
+You need to fetch everything for the Cards before you display them.

@@ -9,6 +9,7 @@
     "gulp-help": "^1.6.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
+    "prop-types": "^15.6.2",
     "re-carousel": "^2.3.0",
     "react": "^16.6.3",
     "react-dom": "^16.6.3",

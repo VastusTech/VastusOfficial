@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { Card, Dimmer, Loader, Grid, Header } from 'semantic-ui-react';
-import TrainerPortalModal from './TrainerModal';
+import TrainerPortalModal from '../modals/TrainerModal';
 import { connect } from 'react-redux';
-import { fetchTrainer } from "../redux_helpers/actions/cacheActions";
+import { fetchTrainer } from "../../redux_helpers/actions/cacheActions";
 
 /*
 * Trainer Card

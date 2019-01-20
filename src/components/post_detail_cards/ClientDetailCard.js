@@ -9,7 +9,7 @@ import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loade
 import { connect } from 'react-redux';
 import { fetchClient } from "../../redux_helpers/actions/cacheActions";
 import PostFunctions from "../../databaseFunctions/PostFunctions.js";
-import ClientCard from "../ClientCard";
+import ClientCard from "../cards/ClientCard";
 import {consoleLog} from "../../logic/DebuggingHelper";
 
 /*

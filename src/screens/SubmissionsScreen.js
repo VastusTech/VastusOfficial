@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import {List, Icon, Message, Dropdown} from "semantic-ui-react";
-import PostCard from "../components/PostCard";
+import PostCard from "../components/cards/PostCard";
 import connect from "react-redux/es/connect/connect";
 import {fetchPost, fetchChallenge} from "../redux_helpers/actions/cacheActions";
 

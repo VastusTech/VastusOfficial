@@ -1,5 +1,5 @@
 import { setIsNotLoading, setError, setIsLoading } from "./infoActions";
-import QL from "../../GraphQL";
+import QL from "../../api/GraphQL";
 import { Storage } from "aws-amplify";
 import defaultProfilePicture from "../../img/roundProfile.png";
 import {switchReturnItemType} from "../../logic/ItemType";
@@ -191,32 +191,50 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
         else { consoleLog("No failure handler...");}
         QL[QLFunctionName](id, variablesList, (data) => {
             // consoleLog("Successfully retrieved the QL info");
-            if (profilePictureIndex !== -1) {
-                // consoleLog("Adding profile image to the data");
-                addProfilePictureToData(data, (updatedData) => {
-                    // consoleLog("Dispatching the profile image + data");
+            if (data) {
+                if (profilePictureIndex !== -1) {
+                    // consoleLog("Adding profile image to the data");
+                    addProfilePictureToData(data, (updatedData) => {
+                        // consoleLog("Dispatching the profile image + data");
+                        dispatch({
+                            type: fetchDispatchType,
+                            payload: {
+                                id,
+                                data: updatedData
+                            }
+                        });
+                        dispatch(setIsNotLoading());
+                        if (dataHandler) {
+                            dataHandler(getStore().cache[cacheSet][id]);
+                        }
+                    });
+                }
+                else {
+                    // consoleLog("Just dispatching the normal data");
                     dispatch({
                         type: fetchDispatchType,
                         payload: {
                             id,
-                            data: updatedData
+                            data
                         }
                     });
                     dispatch(setIsNotLoading());
-                    if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
-                });
+                    if (dataHandler) {
+                        dataHandler(getStore().cache[cacheSet][id]);
+                    }
+                }
             }
             else {
-                // consoleLog("Just dispatching the normal data");
-                dispatch({
-                    type: fetchDispatchType,
-                    payload: {
-                        id,
-                        data
-                    }
-                });
+                // Then the fetch came up with nothing!
+                const error = Error("Couldn't find an object in the database with ID = " + id);
+                // alert(error);
+                consoleError(error);
+                dispatch(setError(error));
                 dispatch(setIsNotLoading());
-                if (dataHandler) { dataHandler(getStore().cache[cacheSet][id]);}
+                if (failureHandler) {
+                    consoleLog("F H " + failureHandler.toString());
+                    failureHandler(error);
+                }
             }
         }, (error) => {
             consoleError("Error in retrieval");
@@ -464,6 +482,9 @@ export function overwriteFetchQuery(itemType, queryString, nextToken, dataHandle
         if (failureHandler) { failureHandler(error);}
     });
 }
+export function fetchItem(itemType, id, variableList, dataHandler, failureHandler) {
+    return getFetchItemFunction(itemType)(id, variableList, dataHandler, failureHandler);
+}
 export function fetchClient(id, variablesList, dataHandler, failureHandler) {
     return fetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler, failureHandler);
 }
@@ -499,6 +520,9 @@ export function fetchComment(id, variablesList, dataHandler, failureHandler) {
 }
 export function fetchSponsor(id, variablesList, dataHandler, failureHandler) {
     return fetch(id, variablesList, "sponsors", "getSponsor", "FETCH_SPONSOR", dataHandler, failureHandler);
+}
+export function forceFetchItem(itemType, id, variablesList, dataHandler, failureHandler) {
+    return getForceFetchItemFunction(itemType)(id, variablesList, dataHandler, failureHandler);
 }
 export function forceFetchClient(id, variablesList, dataHandler, failureHandler) {
     return forceFetch(id, variablesList, "clients", "getClient", "FETCH_CLIENT", dataHandler, failureHandler);
@@ -1036,9 +1060,14 @@ export function getPutItemFunction(itemType) {
     return switchReturnItemType(itemType, putClient, putTrainer, putGym, putWorkout, putReview, putEvent, putChallenge, putInvite,
         putPost, putGroup, putComment, putSponsor, null, "Retrieve put item function item type not implemented");
 }
-export function getFetchItemFunction(itemType) {
+function getFetchItemFunction(itemType) {
     return switchReturnItemType(itemType, fetchClient, fetchTrainer, fetchGym, fetchWorkout, fetchReview, fetchEvent,
         fetchChallenge, fetchInvite, fetchPost, fetchGroup, fetchComment, fetchSponsor, null, "Retrieve fetch item function not implemented");
+}
+function getForceFetchItemFunction(itemType) {
+    return switchReturnItemType(itemType, forceFetchClient, forceFetchTrainer, forceFetchGym, forceFetchWorkout, forceFetchReview,
+        forceFetchEvent, forceFetchChallenge, forceFetchInvite, forceFetchPost, forceFetchGroup, forceFetchComment, forceFetchSponsor,
+        null, "Retrieve force fetch item function not implemented for item type");
 }
 export function getFetchQueryFunction(itemType) {
     return switchReturnItemType(itemType, fetchClientQuery, fetchTrainerQuery, fetchGymQuery, fetchWorkoutQuery,

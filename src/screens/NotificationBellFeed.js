@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import _ from 'lodash'
 import {Dimmer, Loader, Message} from 'semantic-ui-react'
-import NotificationCard from "../components/NotificationCard";
+import NotificationCard from "../components/cards/NotificationCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 import {
@@ -75,7 +75,7 @@ class NotificationFeed extends React.PureComponent {
                 } else if (toItemType === "Event") {
                     props.fetchEvent(invite.to, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
                 } else if (toItemType === "Challenge") {
-                    props.fetchChallenge(invite.to, ["id", "title", "time", "time_created", "owner", "members", "capacity", "difficulty"]);
+                    props.fetchChallenge(invite.to, ["id", "title", "endTime", "time_created", "owner", "members", "capacity", "difficulty"]);
                 } else if (toItemType === "Group") {
                     // TODO FETCH THIS?
                     alert("not implemented!");

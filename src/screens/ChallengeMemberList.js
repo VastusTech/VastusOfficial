@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import _ from 'lodash';
 import {Grid, Message} from 'semantic-ui-react';
 import connect from "react-redux/es/connect/connect";
-import ClientCard from "../components/ClientCard";
-import TrainerCard from "../components/TrainerCard";
+import ClientCard from "../components/cards/ClientCard";
+import TrainerCard from "../components/cards/TrainerCard";
 import {getItemTypeFromID} from "../logic/ItemType";
 
 type Props = {

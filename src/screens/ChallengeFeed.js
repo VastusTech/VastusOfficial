@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Visibility, Header} from 'semantic-ui-react'
-import ChallengeCard from "../components/ChallengeCard";
-import QL from "../GraphQL";
+import ChallengeCard from "../components/cards/ChallengeCard";
+import QL from "../api/GraphQL";
 import { connect } from 'react-redux';
 import {fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";

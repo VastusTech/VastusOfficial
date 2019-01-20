@@ -1,6 +1,6 @@
 import React, {Component, Fragment} from 'react'
 import {Icon, Message} from 'semantic-ui-react';
-import EventCard from "./EventCard";
+import EventCard from "./cards/EventCard";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';

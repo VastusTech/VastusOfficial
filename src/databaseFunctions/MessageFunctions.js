@@ -1,5 +1,5 @@
-import Lambda from "../Lambda";
-import S3 from "../S3Storage";
+import Lambda from "../api/Lambda";
+import S3 from "../api/S3Storage";
 
 const itemType = "Message";
 

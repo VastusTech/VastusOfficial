@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { inspect } from 'util';
 import {fetchClient} from "../redux_helpers/actions/cacheActions";
-import ClientCard from "../components/ClientCard";
+import ClientCard from "../components/cards/ClientCard";
 import {consoleError} from "../logic/DebuggingHelper";
 
 class BuddyListProp extends Component {

@@ -2,18 +2,18 @@ import React, { Component, Fragment } from 'react';
 import {Icon, Modal, Button, Divider, Grid, Message, Image, Tab, Dimmer, Label, Loader } from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import { connect } from 'react-redux';
-import {fetchClient, fetchTrainer, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../redux_helpers/actions/cacheActions";
-import { clearBoard } from "../redux_helpers/actions/messageActions";
-import CompleteChallengeModal from "../screens/CompleteChallengeModal";
-import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import CommentScreen from "../screens/CommentScreen";
-import ChallengeMemberList from "../screens/ChallengeMemberList";
-import UserFunctions from "../databaseFunctions/UserFunctions";
-import InviteFunctions from "../databaseFunctions/InviteFunctions";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
-import CreateSubmissionModal from "../screens/CreateSubmissionModal";
-import SubmissionsScreen from "../screens/SubmissionsScreen";
-import {getItemTypeFromID} from "../logic/ItemType";
+import {fetchClient, fetchTrainer, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../../redux_helpers/actions/cacheActions";
+import { clearBoard } from "../../redux_helpers/actions/messageActions";
+import CompleteChallengeModal from "../../screens/CompleteChallengeModal";
+import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import CommentScreen from "../messaging/CommentScreen";
+import ChallengeMemberList from "../../screens/ChallengeMemberList";
+import UserFunctions from "../../databaseFunctions/UserFunctions";
+import InviteFunctions from "../../databaseFunctions/InviteFunctions";
+import ChallengeFunctions from "../../databaseFunctions/ChallengeFunctions";
+import CreateSubmissionModal from "../../screens/CreateSubmissionModal";
+import SubmissionsScreen from "../../screens/SubmissionsScreen";
+import {getItemTypeFromID} from "../../logic/ItemType";
 
 type Props = {
     open: boolean,
@@ -149,33 +149,33 @@ class ChallengeDescriptionModal extends Component<Props> {
         if(tags) {
             if (tags.length === 1) {
                 return (
-                    <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
+                    <Image avatar src={require('../../img/' + tags[0] + '_icon.png')}/>
                 );
             }
             else if (tags.length === 2) {
                 return (
                     <div>
-                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[1] + '_icon.png')}/>
                     </div>
                 );
             }
             else if (tags.length === 3) {
                 return(
                     <div>
-                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[2] + '_icon.png')}/>
                     </div>
                 );
             }
             else if (tags.length === 4) {
                 return(
                     <div>
-                        <Image avatar src={require('../img/' + tags[0] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[1] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[2] + '_icon.png')}/>
-                        <Image avatar src={require('../img/' + tags[3] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[0] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[1] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[2] + '_icon.png')}/>
+                        <Image avatar src={require('../../img/' + tags[3] + '_icon.png')}/>
                     </div>
                 );
             }
