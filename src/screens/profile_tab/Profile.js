@@ -1,6 +1,7 @@
 import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
+import S3 from "../../api/S3Storage";
 import _ from 'lodash'
 import ChallengeList from "../../components/lists/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
@@ -11,6 +12,7 @@ import ReactSwipe from "react-swipe";
 import { parseISOString } from "../../logic/TimeHelper";
 import ClientList from "../../components/lists/ClientList";
 import DatabaseObjectList from "../../components/lists/DatabaseObjectList";
+import UploadImage from "../../components/manager/UploadImage";
 
 /**
 * Profile
@@ -23,6 +25,8 @@ class Profile extends React.PureComponent {
         isLoading: true,
         checked: false,
         sentRequest: false,
+        tempProfilePictureURL: null,
+        uploadProfileModalOpen: false,
         buddyModalOpen: false,
         scheduledModalOpen: false,
         ownedModalOpen: false,
@@ -43,6 +47,9 @@ class Profile extends React.PureComponent {
         this.setGalleryPicture = this.setGalleryPicture.bind(this);
         this.update = this.update.bind(this);
         this.profilePicture = this.profilePicture.bind(this);
+        this.uploadProfilePicture = this.uploadProfilePicture.bind(this);
+        this.openUploadProfileModal = this.openUploadProfileModal.bind(this);
+        this.closeUploadProfileModal = this.closeUploadProfileModal.bind(this);
         this.openBuddyModal = this.openBuddyModal.bind(this);
         this.closeBuddyModal = this.closeBuddyModal.bind(this);
         this.openScheduledModal = this.openScheduledModal.bind(this);
@@ -111,6 +118,7 @@ class Profile extends React.PureComponent {
     setPicture(event) {
         //alert("This is calling regular set picture");
         if (this.props.user.id) {
+
             const path = "/ClientFiles/" + this.props.user.id + "/profileImage";
             //console.log("Calling storage put");
             //console.log("File = " + JSON.stringify(event.target.files[0]));
@@ -130,6 +138,33 @@ class Profile extends React.PureComponent {
                     });
                 this.setState({isLoading: true});
             }).catch((error) => {
+                console.log("failed storage put");
+                console.log(error);
+            });
+        }
+    }
+
+    uploadProfilePicture(picture) {
+
+        if (this.props.user.id) {
+            const path = "ClientFiles/" + this.props.user.id + "/profileImage";
+            //console.log("Calling storage put");
+            //console.log("File = " + JSON.stringify(event.target.files[0]));
+            // Storage.put(path, picture, { contentType: "video/*;image/*" }).then((result) => {
+            S3.putImage(path, picture, (result) => {
+                // Now we update the database object to reflect this
+                console.log("resulttt:" + JSON.stringify(result));
+                //console.log("Successfully put the image, now putting the data into the database!");
+                ClientFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
+                    (data) => {
+                        this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
+                        this.setState({isLoading: true});
+                    }, (error) => {
+                        console.log("Failed edit client attribute");
+                        console.log(JSON.stringify(error));
+                    });
+                this.setState({isLoading: true});
+            }, (error) => {
                 console.log("failed storage put");
                 console.log(error);
             });
@@ -221,7 +256,7 @@ class Profile extends React.PureComponent {
                 </div>
             ));
         }
-    }
+    };
 
     profilePicture() {
         if (this.props.user.profilePicture) {
@@ -232,8 +267,12 @@ class Profile extends React.PureComponent {
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
                     </Label>
-                    <input type="file" accept="image/*" id="proPicUpload" hidden={true} onChange={this.setPicture}
+                    <input type="file" accept="image/*" id="proPicUpload" hidden={true}
+                           onChange={(event) => {this.setState({tempProfilePictureURL: event.target.files[0]});this.openUploadProfileModal();}}
                            onClick={this.setState()}/>
+                    <Modal basic size='mini' open={this.state.uploadProfileModalOpen} onClose={this.closeUploadProfileModal}>
+                        <UploadImage imageURL={this.state.tempProfilePictureURL} callback={(picture) => {this.uploadProfilePicture(picture);this.closeUploadProfileModal();}}/>
+                    </Modal>
                 </div>
             );
         }
@@ -262,6 +301,8 @@ class Profile extends React.PureComponent {
         // });
     }
 
+    openUploadProfileModal = () => { this.setState({uploadProfileModalOpen: true}); };
+    closeUploadProfileModal = () => { this.setState({uploadProfileModalOpen: false}); };
     openBuddyModal = () => { this.setState({buddyModalOpen: true}); };
     closeBuddyModal = () => { this.setState({buddyModalOpen: false}); };
     openScheduledModal = () => { this.setState({scheduledModalOpen: true}); };

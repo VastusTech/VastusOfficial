@@ -1,3 +1,3 @@
-export const ifDebug = true;
+export const ifDebug = false;
 export const log = true;
-export const ifCallLambdaAtStart = false;
+export const ifCallLambdaAtStart = true;

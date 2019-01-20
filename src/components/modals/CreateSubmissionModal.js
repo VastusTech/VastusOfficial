@@ -149,21 +149,23 @@ class CreateSubmissionModal extends Component<Props> {
     }
 
     setVideo(event) {
-        const index = this.state.videos.length;
+        // const index = this.state.videos.length;
         this.state.videos.push(event.target.files[0]);
-        const path = "/" + this.props.user.id + "/temp/videos/" + index;
-        Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
-            .then(() => {
-                Storage.get(path).then((url) => {
-                    this.state.tempVideoURLs.push(url);
-                    this.setState({});
-                }).catch((error) => {
-                    console.error(error);
-                })
-            }).catch((error) => {
-            console.error(error);
-        });
+        this.state.tempVideoURLs.push(URL.createObjectURL(event.target.files[0]));
         this.setState({});
+        // const path = "/" + this.props.user.id + "/temp/videos/" + index;
+        // Storage.put(path, event.target.files[0], { contentType: "video/*;image/*" })
+        //     .then(() => {
+        //         Storage.get(path).then((url) => {
+        //             this.state.tempVideoURLs.push(url);
+        //             this.setState({});
+        //         }).catch((error) => {
+        //             console.error(error);
+        //         })
+        //     }).catch((error) => {
+        //     console.error(error);
+        // });
+        // this.setState({});
     }
 
     handleSubmitButton() {
