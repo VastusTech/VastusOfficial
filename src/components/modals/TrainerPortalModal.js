@@ -16,8 +16,8 @@ import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/ac
 import { connect } from "react-redux";
 // import AWSSetup from "../AppConfig";
 // import {logOut} from "../redux_helpers/actions/authActions";
-import ClientFunctions from "../databaseFunctions/ClientFunctions";
-import TrainerFunctions from "../databaseFunctions/TrainerFunctions";
+import ClientFunctions from "../database_functions/ClientFunctions";
+import TrainerFunctions from "../database_functions/TrainerFunctions";
 import {calculateAge} from "../logic/TimeHelper";
 import TrainerPostFeed from "../screens/TrainerPostFeed";
 import EventList from "./EventList";

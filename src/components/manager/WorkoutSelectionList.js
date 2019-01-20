@@ -30,21 +30,21 @@ class WorkoutSelectionList extends Component {
                     <Grid>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/vastus-tech-icons-03.svg')} />
+                                <Image size='small' src={require('../../img/vastus-tech-icons-03.svg')} />
                                     HIIT
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/vastus-tech-icons-04.svg')} />
+                                <Image size='small' src={require('../../img/vastus-tech-icons-04.svg')} />
                                     Strength
                             </Grid.Column>
                         </Grid.Row>
                         <Grid.Row>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/vastus-tech-icons-02.svg')} />
+                                <Image size='small' src={require('../../img/vastus-tech-icons-02.svg')} />
                                     Performance
                             </Grid.Column>
                             <Grid.Column width={8}>
-                                <Image size='small' src={require('../img/vastus-tech-icons-01.svg')} />
+                                <Image size='small' src={require('../../img/vastus-tech-icons-01.svg')} />
                                     Endurance
                             </Grid.Column>
                         </Grid.Row>

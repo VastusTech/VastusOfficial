@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import {Popup, List, Divider, Grid, Form, Button} from "semantic-ui-react";
-import {switchReturnItemType} from "../logic/ItemType";
-import ClientCard from "../components/cards/ClientCard";
-import EventCard from "../components/cards/EventCard";
-import ChallengeCard from "../components/cards/ChallengeCard";
-import PostCard from "../components/cards/PostCard";
-import {disableSearchBar, enableSearchBar} from "../redux_helpers/actions/searchActions";
+import {switchReturnItemType} from "../../logic/ItemType";
+import ClientCard from "../../components/cards/ClientCard";
+import EventCard from "../../components/cards/EventCard";
+import ChallengeCard from "../../components/cards/ChallengeCard";
+import PostCard from "../../components/cards/PostCard";
+import {disableSearchBar, enableSearchBar} from "../../redux_helpers/actions/searchActions";
 
 // This is going to be for every search functionality we really want.
 // We'll have a filter section and a search bar

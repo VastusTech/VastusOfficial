@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import {Checkbox, Modal, Button, Form, Segment, TextArea, Dropdown, Label, Image, Message} from 'semantic-ui-react';
 import {connect} from "react-redux";
-import {setError} from "../redux_helpers/actions/infoActions";
-import VTLogo from "../img/vt_new.svg";
-import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../redux_helpers/actions/cacheActions";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import {setError} from "../../redux_helpers/actions/infoActions";
+import VTLogo from "../../img/vt_new.svg";
+import {clearEventQuery, fetchEvent, putEvent, putEventQuery} from "../../redux_helpers/actions/cacheActions";
+import ChallengeFunctions from "../../database_functions/ChallengeFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677

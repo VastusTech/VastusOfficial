@@ -1,3 +1,3 @@
-export const numPrefix = 2;
-export const ifDebug = false;
+export const ifDebug = true;
 export const log = true;
+export const ifCallLambdaAtStart = false;

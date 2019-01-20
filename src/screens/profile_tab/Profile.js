@@ -2,15 +2,15 @@ import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import _ from 'lodash'
-import ChallengeList from "../components/lists/ChallengeList";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import ChallengeList from "../../components/lists/ChallengeList";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-import {logOut} from "../redux_helpers/actions/authActions";
-import ClientFunctions from "../databaseFunctions/ClientFunctions";
+import {logOut} from "../../redux_helpers/actions/authActions";
+import ClientFunctions from "../../database_functions/ClientFunctions";
 import ReactSwipe from "react-swipe";
-import { parseISOString } from "../logic/TimeHelper";
-import ClientList from "../components/lists/ClientList";
-import DatabaseObjectList from "../components/lists/DatabaseObjectList";
+import { parseISOString } from "../../logic/TimeHelper";
+import ClientList from "../../components/lists/ClientList";
+import DatabaseObjectList from "../../components/lists/DatabaseObjectList";
 
 /**
 * Profile
@@ -356,16 +356,16 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Buddy List</Button>
                             <Modal basic size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
-                                    {/*<DatabaseObjectList*/}
-                                        {/*ids={this.props.user.friends}*/}
-                                        {/*noObjectsMessage={"No friends yet!"}*/}
-                                    {/*/>*/}
-
-                                    <ClientList
-                                        clientIDs={this.props.user.friends}
-                                        noClientsMessage={"No Friends yet!"}
-                                        // sortFunction={(a, b) => {}}
+                                    <DatabaseObjectList
+                                        ids={this.props.user.friends}
+                                        noObjectsMessage={"No friends yet!"}
+                                        acceptedItemTypes={["Client", "Trainer"]}
                                     />
+                                    {/*<ClientList*/}
+                                        {/*clientIDs={this.props.user.friends}*/}
+                                        {/*noClientsMessage={"No Friends yet!"}*/}
+                                        {/*// sortFunction={(a, b) => {}}*/}
+                                    {/*/>*/}
                                 </Modal.Content>
                             </Modal>
                         </List.Item>

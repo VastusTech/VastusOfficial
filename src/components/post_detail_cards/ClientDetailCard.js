@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loader} from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import { fetchClient } from "../../redux_helpers/actions/cacheActions";
-import PostFunctions from "../../databaseFunctions/PostFunctions.js";
+import PostFunctions from "../../database_functions/PostFunctions.js";
 import ClientCard from "../cards/ClientCard";
 import {consoleLog} from "../../logic/DebuggingHelper";
 

@@ -3,7 +3,7 @@ import { Modal, Message, Button, Grid, Icon } from "semantic-ui-react";
 import { Storage } from 'aws-amplify';
 import { Player } from "video-react";
 import { connect } from "react-redux";
-import PostFunctions from "../databaseFunctions/PostFunctions";
+import PostFunctions from "../../database_functions/PostFunctions";
 
 type Props = {
     open: boolean,

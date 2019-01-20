@@ -4,7 +4,7 @@ import jwt_decode from "jwt-decode";
 import {setUser, forceSetUser} from "./userActions";
 import {addHandlerToNotifications, removeAllHandlers} from "./ablyActions";
 import QL from "../../api/GraphQL";
-import ClientFunctions from "../../databaseFunctions/ClientFunctions";
+import ClientFunctions from "../../database_functions/ClientFunctions";
 import {consoleLog} from "../../logic/DebuggingHelper";
 
 export function updateAuth() {

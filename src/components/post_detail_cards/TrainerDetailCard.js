@@ -14,7 +14,7 @@ import {Card, Modal, Button, Header, List, Divider, Grid, Message, Dimmer, Loade
 // import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
 import { fetchClient } from "../../redux_helpers/actions/cacheActions";
-import PostFunctions from "../../databaseFunctions/PostFunctions.js";
+import PostFunctions from "../../database_functions/PostFunctions.js";
 import TrainerCard from "../cards/TrainerCard";
 import {consoleLog} from "../../logic/DebuggingHelper";
 

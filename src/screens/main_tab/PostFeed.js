@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Visibility, Header, Grid} from 'semantic-ui-react'
-import PostCard from "../components/cards/PostCard";
-import QL from "../api/GraphQL";
+import PostCard from "../../components/cards/PostCard";
+import QL from "../../api/GraphQL";
 import { connect } from 'react-redux';
 import {
     fetchPost,
@@ -14,12 +14,12 @@ import {
     fetchClient,
     fetchTrainer,
     fetchPostQuery
-} from "../redux_helpers/actions/cacheActions";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import PostManager from "./PostManager";
-import NextChallengeProp from "../components/NextChallenge";
-import {getItemTypeFromID} from "../logic/ItemType";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+} from "../../redux_helpers/actions/cacheActions";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import PostManager from "../../components/manager/PostManager";
+import NextChallengeProp from "./NextChallenge";
+import {getItemTypeFromID} from "../../logic/ItemType";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 /**
  * Event Feed
@@ -53,7 +53,7 @@ class PostFeedProp extends Component {
         //this.queryChallenges = this.queryChallenges.bind(this);
     }
 
-    componentDidMount() {
+    // componentDidMount() {
         // this.componentWillReceiveProps(this.props);
         // if (this.props.userID) {
         //     this.setState({userID: this.props.userID});
@@ -64,7 +64,7 @@ class PostFeedProp extends Component {
         //             this.queryEvents();
         //         });
         // }
-    }
+    // }
 
     componentWillReceiveProps(newProps) {
         // consoleLog("Set state to userID = " + newProps.userID);

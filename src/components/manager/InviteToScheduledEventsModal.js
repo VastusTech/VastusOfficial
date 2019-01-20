@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import {Message, Button, Modal, Card} from 'semantic-ui-react';
-import EventCard from "../components/cards/EventCard";
+import EventCard from "../cards/EventCard";
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {fetchEvent} from "../redux_helpers/actions/cacheActions";
-import InviteFunctions from "../databaseFunctions/InviteFunctions";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import {fetchEvent} from "../../redux_helpers/actions/cacheActions";
+import InviteFunctions from "../../database_functions/InviteFunctions";
 
 class InviteToScheduledEventsModalProp extends Component {
     state = {

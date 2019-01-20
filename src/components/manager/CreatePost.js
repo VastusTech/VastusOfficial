@@ -2,15 +2,15 @@ import React, {Component, Fragment} from 'react'
 import {Grid, Button, Message, Image, Modal, Card, Icon, Form, Container, TextArea, Checkbox, Header} from 'semantic-ui-react';
 import { Storage } from 'aws-amplify';
 import {connect} from "react-redux";
-import {setError} from "../redux_helpers/actions/infoActions";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+import {setError} from "../../redux_helpers/actions/infoActions";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 import {
     fetchPost,
     clearPostQuery,
     putPost,
     putPostQuery
-} from "../redux_helpers/actions/cacheActions";
-import PostFunctions from "../databaseFunctions/PostFunctions";
+} from "../../redux_helpers/actions/cacheActions";
+import PostFunctions from "../../database_functions/PostFunctions";
 import {Player} from "video-react";
 
 // Take from StackOverflow, nice snippit!

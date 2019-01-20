@@ -2,9 +2,9 @@ import React, { Component, Fragment } from "react";
 import _ from "lodash";
 import { Visibility, Message } from "semantic-ui-react";
 import { connect } from "react-redux";
-import ClientCard from "../components/cards/ClientCard";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {fetchClient} from "../redux_helpers/actions/cacheActions";
+import ClientCard from "../../components/cards/ClientCard";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import {fetchClient} from "../../redux_helpers/actions/cacheActions";
 
 class Leaderboard extends Component {
     state = {

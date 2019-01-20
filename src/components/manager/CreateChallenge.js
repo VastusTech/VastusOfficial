@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import {Grid, Button, Message, Image, Modal, Form, Container, Checkbox, Header} from 'semantic-ui-react';
 import {connect} from "react-redux";
-import {setError} from "../redux_helpers/actions/infoActions";
-import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../redux_helpers/actions/cacheActions";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
-import PostFunctions from "../databaseFunctions/PostFunctions";
+import {setError} from "../../redux_helpers/actions/infoActions";
+import {clearChallengeQuery, fetchChallenge, putChallenge, putChallengeQuery} from "../../redux_helpers/actions/cacheActions";
+import ChallengeFunctions from "../../database_functions/ChallengeFunctions";
+import PostFunctions from "../../database_functions/PostFunctions";
 
 // Take from StackOverflow, nice snippit!
 // https://stackoverflow.com/a/17415677
@@ -304,13 +304,13 @@ class CreateChallengeProp extends Component {
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Button inverted={this.state.hiitPressed} basic={!this.state.hiitPressed}>
-                                    <Image dark size='medium' src={require('../img/vastus-tech-icons-03.svg')} onClick={() => {this.handleTag("HIIT")}}/>
+                                    <Image dark size='medium' src={require('../../img/vastus-tech-icons-03.svg')} onClick={() => {this.handleTag("HIIT")}}/>
                                     <div style={{color: 'white'}}>HIIT</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.strengthPressed} basic={!this.state.strengthPressed}>
-                                    <Image size='medium' src={require('../img/vastus-tech-icons-04.svg')} onClick={() => {this.handleTag("Strength")}}/>
+                                    <Image size='medium' src={require('../../img/vastus-tech-icons-04.svg')} onClick={() => {this.handleTag("Strength")}}/>
                                     <div style={{color: 'white'}}>Strength</div>
                                 </Button>
                             </Grid.Column>
@@ -318,13 +318,13 @@ class CreateChallengeProp extends Component {
                         <Grid.Row>
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.performancePressed} basic={!this.state.performancePressed}>
-                                    <Image size='medium' src={require('../img/vastus-tech-icons-02.svg')} onClick={() => {this.handleTag("Performance")}}/>
+                                    <Image size='medium' src={require('../../img/vastus-tech-icons-02.svg')} onClick={() => {this.handleTag("Performance")}}/>
                                     <div style={{color: 'white'}}>Performance</div>
                                 </Button>
                             </Grid.Column>
                             <Grid.Column width={8}>
                                 <Button inverted inverted={this.state.endurancePressed} basic={!this.state.endurancePressed}>
-                                    <Image size='medium' src={require('../img/vastus-tech-icons-01.svg')} onClick={() => {this.handleTag("Endurance")}}/>
+                                    <Image size='medium' src={require('../../img/vastus-tech-icons-01.svg')} onClick={() => {this.handleTag("Endurance")}}/>
                                     <div style={{color: 'white'}}>Endurance</div>
                                 </Button>
                             </Grid.Column>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { fetchClient, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
-import PostFunctions from "../../databaseFunctions/PostFunctions";
+import PostFunctions from "../../database_functions/PostFunctions";
 import {Player} from "video-react";
 import { Storage } from "aws-amplify";
 import {consoleError} from "../../logic/DebuggingHelper";

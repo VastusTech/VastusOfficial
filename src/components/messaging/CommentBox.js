@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import {Button, Input, Icon} from "semantic-ui-react";
 import connect from "react-redux/es/connect/connect";
-import MessageFunctions from "../../databaseFunctions/MessageFunctions";
+import MessageFunctions from "../../database_functions/MessageFunctions";
 import {addMessageToBoard} from "../../redux_helpers/actions/messageActions";
 
 type Props = {

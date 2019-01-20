@@ -1,11 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import {Icon, Message} from 'semantic-ui-react';
-import ChallengeCard from "./cards/ChallengeCard";
+import ChallengeCard from "../../components/cards/ChallengeCard";
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
-import {parseISOString, timeLeft} from "../logic/TimeHelper";
-import Spinner from "./Spinner";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import {fetchChallenge} from "../../redux_helpers/actions/cacheActions";
+import {parseISOString, timeLeft} from "../../logic/TimeHelper";
+import Spinner from "../../components/props/Spinner";
 
 class NextChallengeProp extends Component {
     state = {

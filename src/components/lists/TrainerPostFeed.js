@@ -1,15 +1,15 @@
 import React, {Component, Fragment} from 'react';
 import _ from 'lodash';
 import {Visibility, Header, Icon, Message} from 'semantic-ui-react';
-import PostCard from "../components/cards/PostCard";
+import PostCard from "../cards/PostCard";
 import {connect} from 'react-redux';
 import {
     fetchPost,
     fetchTrainer,
     forceFetchTrainer,
     putPost,
-} from "../redux_helpers/actions/cacheActions";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+} from "../../redux_helpers/actions/cacheActions";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 
 type Props = {
     trainerID: string

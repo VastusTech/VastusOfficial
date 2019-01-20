@@ -1,10 +1,10 @@
 import React, {Component, Fragment} from 'react'
 import {Icon, Message} from 'semantic-ui-react';
-import EventCard from "./cards/EventCard";
+import EventCard from "../../components/cards/EventCard";
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import { inspect } from 'util';
-import {fetchEvent} from "../redux_helpers/actions/cacheActions";
+import {fetchEvent} from "../../redux_helpers/actions/cacheActions";
 
 class NextEventProp extends Component {
     state = {

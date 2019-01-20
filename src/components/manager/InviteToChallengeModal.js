@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
 import {Message, Button, Modal, Card} from 'semantic-ui-react';
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
-import InviteFunctions from "../databaseFunctions/InviteFunctions";
-import ChallengeCard from "../components/cards/ChallengeCard";
+import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import {fetchChallenge} from "../../redux_helpers/actions/cacheActions";
+import InviteFunctions from "../../database_functions/InviteFunctions";
+import ChallengeCard from "../cards/ChallengeCard";
 
 class InviteToChallengeModalProp extends Component {
     state = {

@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Modal, Message, Button, Card } from "semantic-ui-react";
-import ClientCard from "../components/cards/ClientCard";
+import ClientCard from "../cards/ClientCard";
 import { connect } from "react-redux";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
+import ChallengeFunctions from "../../database_functions/ChallengeFunctions";
 
 /**
  * Takes in open, onClose, and challengeID

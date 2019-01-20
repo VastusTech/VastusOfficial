@@ -3,7 +3,7 @@ import { List, Message } from 'semantic-ui-react';
 import ClientCard from "../cards/ClientCard";
 import { connect } from "react-redux";
 import { fetchClient } from "../../redux_helpers/actions/cacheActions";
-import Spinner from "../Spinner";
+import Spinner from "../props/Spinner";
 
 type Props = {
     clientIDs: [string],
@@ -54,7 +54,7 @@ class ClientList extends Component<Props> {
             for (const key in clientList) {
                 if (clientList.hasOwnProperty(key)) {
                     components.push(
-                        <List.Item>
+                        <List.Item key={key}>
                             <ClientCard rank={parseInt(key) + 1} clientID={clientList[key].id}/>
                         </List.Item>
                     );

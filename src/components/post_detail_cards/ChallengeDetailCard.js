@@ -7,7 +7,7 @@ import { fetchClient, forceFetchPost, fetchPost, fetchChallenge, forceFetchChall
 // import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
-import PostFunctions from "../../databaseFunctions/PostFunctions.js";
+import PostFunctions from "../../database_functions/PostFunctions.js";
 import {Player} from "video-react";
 import ChallengeCard from "../cards/ChallengeCard";
 import { Storage } from "aws-amplify";
