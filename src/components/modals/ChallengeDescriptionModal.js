@@ -6,7 +6,7 @@ import {fetchClient, fetchTrainer, forceFetchChallenge, fetchChallenge, clearCha
 import { clearBoard } from "../../redux_helpers/actions/messageActions";
 import CompleteChallengeModal from "../manager/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import CommentScreen from "../messaging/CommentScreen";
+import CommentScreen from "../messaging/MessageBoard";
 import UserFunctions from "../../database_functions/UserFunctions";
 import InviteFunctions from "../../database_functions/InviteFunctions";
 import ChallengeFunctions from "../../database_functions/ChallengeFunctions";

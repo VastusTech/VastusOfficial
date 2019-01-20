@@ -8,7 +8,7 @@ type Props = {
     board: string
 }
 
-class CommentBox extends Component<Props> {
+class MessageInput extends Component<Props> {
     state = {
         board: null,
         imagePath: '',
@@ -20,7 +20,7 @@ class CommentBox extends Component<Props> {
 
     constructor(props) {
         super(props);
-        this.addComment = this.addComment.bind(this);
+        this.addMessage = this.addMessage.bind(this);
         this.addPicture = this.addPicture.bind(this);
         this.addVideo = this.addVideo.bind(this);
         this.setPictureOrVideo = this.setPictureOrVideo.bind(this);
@@ -38,18 +38,18 @@ class CommentBox extends Component<Props> {
         //console.error("Comment User: " + JSON.stringify(this.props));
     }
 
-    addComment(e) {
+    addMessage(e) {
         // Prevent the default behaviour of form submit
         e.preventDefault();
 
         // Get the value of the comment box
         // and make sure it not some empty strings
-        let comment = e.target.elements.comment.value.trim();
+        let message = e.target.elements.message.value.trim();
 
         // Make sure name and comment boxes are filled
-        if (comment) {
+        if (message) {
             this.setState({sendLoading: true});
-            MessageFunctions.createTextMessage(this.props.user.id, this.props.user.id, this.props.user.name, this.state.board, comment, () => {
+            MessageFunctions.createTextMessage(this.props.user.id, this.props.user.id, this.props.user.name, this.state.board, message, () => {
                 console.log("Successfully sent message!");
                 this.setState({sendLoading: false});
             }, (error) => {
@@ -58,7 +58,7 @@ class CommentBox extends Component<Props> {
             });
 
             // Clear input fields
-            e.target.elements.comment.value = '';
+            e.target.elements.message.value = '';
         }
     }
 
@@ -110,8 +110,8 @@ class CommentBox extends Component<Props> {
         // }
         return (
             <Fragment>
-                <form onSubmit={this.addComment} className='u-margin-top--2'>
-                    <Input type='text' action fluid className="textarea" name="comment" placeholder="Write Message...">
+                <form onSubmit={this.addMessage} className='u-margin-top--2'>
+                    <Input type='text' action fluid className="textarea" name="message" placeholder="Write Message...">
                         <input />
                         <Button as='label' for='proPicUpload'  >
                             <Icon name='camera' size = "Large"/>
@@ -138,4 +138,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentBox);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageInput);

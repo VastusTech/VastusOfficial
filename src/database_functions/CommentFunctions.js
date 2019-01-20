@@ -22,7 +22,7 @@ class CommentFunctions {
         Lambda.create(fromID, itemType, {
             by,
             on,
-            comment,
+            message: comment,
         }, successHandler, failureHandler)
     }
     static updateAdd(fromID, commentID, attributeName, attributeValue, successHandler, failureHandler) {

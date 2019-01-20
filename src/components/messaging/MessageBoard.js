@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import CommentBox from "./CommentBox";
-import Comments from './Comments';
+import CommentBox from "./MessageInput";
+import Messages from './Messages';
 import { Icon, Message, Divider } from "semantic-ui-react";
 import {fetchClient, fetchTrainer} from "../../redux_helpers/actions/cacheActions";
 import {
@@ -17,7 +17,7 @@ type Props = {
     board: string,
 };
 
-class CommentScreen extends Component<Props> {
+class MessageBoard extends Component<Props> {
     state = {
         board: null,
         messages: [],
@@ -140,7 +140,7 @@ class CommentScreen extends Component<Props> {
                         ref={ref => (this.scrollView = ref)}
                         onScroll={this.handleScroll}
                     >
-                        <Comments board={this.state.board} comments={this.getBoardMessages()}/>
+                        <Messages board={this.state.board} comments={this.getBoardMessages()}/>
                     </ScrollView>
                     <Divider className='u-margin-top--2' />
                     <CommentBox board={this.state.board}/>
@@ -181,4 +181,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CommentScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(MessageBoard);
