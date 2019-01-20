@@ -29,7 +29,7 @@ class ChallengeList extends Component<Props> {
 
     componentWillReceiveProps(newProps) {
         if (newProps.challengeIDs && this.state.challengeIDs !== newProps.challengeIDs) {
-            alert("received challengeIDs = " + JSON.stringify(newProps.challengeIDs));
+            // alert("received challengeIDs = " + JSON.stringify(newProps.challengeIDs));
             this.setState({isLoading: true, challengeIDs: newProps.challengeIDs, challenges: []}, () => {
                 for (let i = 0; i < newProps.challengeIDs.length; i++) {
                     this.props.fetchChallenge(newProps.challengeIDs[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction", "submissions"], (challenge) => {

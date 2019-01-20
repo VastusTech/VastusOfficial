@@ -29,7 +29,7 @@ class EventList extends Component<Props> {
 
     componentWillReceiveProps(newProps) {
         if (newProps.eventIDs && this.state.eventIDs !== newProps.eventIDs) {
-            alert("received eventIDs = " + JSON.stringify(newProps.eventIDs));
+            // alert("received eventIDs = " + JSON.stringify(newProps.eventIDs));
             this.setState({isLoading: true, eventIDs: newProps.eventIDs, events: []}, () => {
                 this.update(newProps);
             });

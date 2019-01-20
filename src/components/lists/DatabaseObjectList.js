@@ -31,7 +31,7 @@ class DatabaseObjectList extends Component<Props> {
 
     componentWillReceiveProps(newProps) {
         if (newProps.ids && this.state.ids !== newProps.ids) {
-            alert("received ids = " + JSON.stringify(newProps.ids));
+            // alert("received ids = " + JSON.stringify(newProps.ids));
             this.setState({marker: this.state.marker + 1, isLoading: true, ids: newProps.ids, objects: []}, () => {
                 const marker = this.state.marker;
                 const addObject = (object) => {

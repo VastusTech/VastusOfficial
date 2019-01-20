@@ -29,7 +29,7 @@ class ClientList extends Component<Props> {
 
     componentWillReceiveProps(newProps) {
         if (newProps.clientIDs && this.state.clientIDs !== newProps.clientIDs) {
-            alert("received clientIDs = " + JSON.stringify(newProps.clientIDs));
+            // alert("received clientIDs = " + JSON.stringify(newProps.clientIDs));
             this.setState({isLoading: true, clientIDs: newProps.clientIDs, clients: []}, () => {
                 for (let i = 0; i < newProps.clientIDs.length; i++) {
                     this.props.fetchClient(newProps.clientIDs[i], ["id", "username", "gender", "birthday", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture", "friendRequests"], (client) => {
