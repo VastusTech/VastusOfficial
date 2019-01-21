@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import {Modal, Button, List, Grid, Message} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-import EventMemberList from "../screens/EventMemberList";
+import EventMemberList from "../../screens/EventMemberList";
 import { connect } from 'react-redux';
-import {fetchClient, forceFetchEvent, fetchEvent} from "../redux_helpers/actions/cacheActions";
-import CompleteChallengeModal from "../screens/CompleteChallengeModal";
-import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import UserFunctions from "../databaseFunctions/UserFunctions";
-import EventFunctions from "../databaseFunctions/EventFunctions";
-import VideoUploadScreen from "../screens/VideoUploadScreen";
+import {fetchClient, forceFetchEvent, fetchEvent} from "../../redux_helpers/actions/cacheActions";
+import CompleteChallengeModal from "../../screens/CompleteChallengeModal";
+import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import UserFunctions from "../../databaseFunctions/UserFunctions";
+import EventFunctions from "../../databaseFunctions/EventFunctions";
+import VideoUploadScreen from "../../screens/VideoUploadScreen";
 
 type Props = {
     open: boolean,

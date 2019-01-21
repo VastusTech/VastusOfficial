@@ -1,15 +1,16 @@
 import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
-import BuddyListProp from "./BuddyList";
-// import { S3Image } from 'aws-amplify-react';
 import _ from 'lodash'
-import ChallengeList from "../components/ChallengeList";
+import ChallengeList from "../components/lists/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import {logOut} from "../redux_helpers/actions/authActions";
 import ClientFunctions from "../databaseFunctions/ClientFunctions";
 import ReactSwipe from "react-swipe";
+import { parseISOString } from "../logic/TimeHelper";
+import ClientList from "../components/lists/ClientList";
+import DatabaseObjectList from "../components/lists/DatabaseObjectList";
 
 /**
 * Profile
@@ -355,7 +356,16 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openBuddyModal.bind(this)}><Icon name="users" /> Buddy List</Button>
                             <Modal basic size='mini' open={this.state.buddyModalOpen} onClose={this.closeBuddyModal.bind(this)} closeIcon>
                                 <Modal.Content image>
-                                    <BuddyListProp/>
+                                    {/*<DatabaseObjectList*/}
+                                        {/*ids={this.props.user.friends}*/}
+                                        {/*noObjectsMessage={"No friends yet!"}*/}
+                                    {/*/>*/}
+
+                                    <ClientList
+                                        clientIDs={this.props.user.friends}
+                                        noClientsMessage={"No Friends yet!"}
+                                        // sortFunction={(a, b) => {}}
+                                    />
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -364,7 +374,7 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Created Challenges</Button>
                             <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <ChallengeList challengeIDs={this.props.user.ownedChallenges}/>
+                                    <ChallengeList challengeIDs={this.props.user.ownedChallenges} noChallengesMessage={"No Owned Challenges Yet!"}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -372,7 +382,7 @@ class Profile extends React.PureComponent {
                             <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Challenges</Button>
                             <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <ChallengeList challengeIDs={this.props.user.challenges}/>
+                                    <ChallengeList challengeIDs={this.props.user.challenges} noChallengesMessage={"No Scheduled Challenges Yet!"}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>
@@ -380,7 +390,7 @@ class Profile extends React.PureComponent {
                             <Button fluid size="large" onClick={this.openCompletedModal.bind(this)}><Icon name="bookmark outline" />Completed Challenges</Button>
                             <Modal basic size='mini' open={this.state.completedModalOpen} onClose={this.closeCompletedModal.bind(this)} closeIcon>
                                 <Modal.Content>
-                                    <ChallengeList challengeIDs={this.props.user.completedChallenges}/>
+                                    <ChallengeList challengeIDs={this.props.user.completedChallenges} noChallengesMessage={"No completed challenges yet!"}/>
                                 </Modal.Content>
                             </Modal>
                         </List.Item>

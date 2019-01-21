@@ -1,15 +1,15 @@
 import React, {Component} from 'react'
 import {Image, Button, Card, Feed, Divider} from 'semantic-ui-react'
-import ClientModal from "./ClientModal";
-import TrainerModal from "./TrainerModal";
-import EventDescriptionModal from "./EventDescriptionModal";
-import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
+import ClientModal from "../modals/ClientModal";
+import TrainerModal from "../modals/TrainerModal";
+import EventDescriptionModal from "../modals/EventDescriptionModal";
+import ChallengeDescriptionModal from "../modals/ChallengeDescriptionModal";
 import { connect } from "react-redux";
-import UserFunctions from "../databaseFunctions/UserFunctions";
-import InviteFunctions from "../databaseFunctions/InviteFunctions";
-import EventFunctions from "../databaseFunctions/EventFunctions";
-import ChallengeFunctions from "../databaseFunctions/ChallengeFunctions";
-import {getItemTypeFromID, switchReturnItemType} from "../logic/ItemType";
+import UserFunctions from "../../databaseFunctions/UserFunctions";
+import InviteFunctions from "../../databaseFunctions/InviteFunctions";
+import EventFunctions from "../../databaseFunctions/EventFunctions";
+import ChallengeFunctions from "../../databaseFunctions/ChallengeFunctions";
+import {getItemTypeFromID, switchReturnItemType} from "../../logic/ItemType";
 
 type Props = {
     inviteID: string

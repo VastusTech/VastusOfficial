@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import {Card, Image} from 'semantic-ui-react';
-import ChallengeDescriptionModal from './ChallengeDescriptionModal';
+import ChallengeDescriptionModal from '../modals/ChallengeDescriptionModal';
 import { connect } from 'react-redux';
-import { fetchChallenge } from "../redux_helpers/actions/cacheActions";
+import { fetchChallenge } from "../../redux_helpers/actions/cacheActions";
+import {daysLeft, parseISOString} from "../../logic/TimeHelper";
 
 Date.prototype.toIsoString = function() {
     var tzo = -this.getTimezoneOffset(),
@@ -29,18 +30,22 @@ Date.daysBetween = function( date1, date2 ) {   //Get 1 day in milliseconds
     return Math.round(difference_ms/one_day);
 };
 
-/*
-* Challenge Card
-*
-* This is the generic view for how a challenge shows up in any feeds or lists.
-* It is used as a modal trigger in the feed.
+type Props = {
+    challengeID: string
+};
+
+/**
+ * Challenge Card
+ *
+ * This is the generic view for how a challenge shows up in any feeds or lists.
+ * It is used as a modal trigger in the feed.
  */
-class ChallengeCard extends Component {
+class ChallengeCard extends Component<Props> {
     static pictures = {
-        Performance: require('../img/Performance_icon.png'),
-        Strength: require('../img/Strength_icon.png'),
-        Endurance: require('../img/Endurance_icon.png'),
-        HIIT: require('../img/HIIT_icon.png')
+        Performance: require('../../img/Performance_icon.png'),
+        Strength: require('../../img/Strength_icon.png'),
+        Endurance: require('../../img/Endurance_icon.png'),
+        HIIT: require('../../img/HIIT_icon.png')
     };
 
     state = {
@@ -107,26 +112,7 @@ class ChallengeCard extends Component {
     }
 
     getDaysLeft() {
-        let curDate = this.getTodayDateString();
-        let endTime = this.getChallengeAttribute("endTime");
-        let curMonth = this.convertMonth(curDate.substr(4, 3));
-        let endMonth = "";
-        if(endTime) {
-            endMonth = endTime.substr(5, 2);
-        }
-        //console.log(endMonth + " vs " + curMonth + " = " + (endMonth - curMonth));
-        if(endTime && curDate) {
-            endTime = parseInt(endTime.substr(8, 2), 10);
-            curDate = parseInt(curDate.substr(8, 2), 10);
-            //console.log(endMonth - curMonth);
-            if((endMonth - curMonth) < 0) {
-                //console.log((endTime + (30 * (endMonth - curMonth + 12))));
-                return ((endTime + (30 * (endMonth - curMonth + 12))) - curDate);
-            }
-            else {
-                return ((endTime + (30 * (endMonth - curMonth))) - curDate);
-            }
-        }
+        return daysLeft(parseISOString(this.getChallengeAttribute("endTime")));
     }
 
     displayTagIcons(tags) {

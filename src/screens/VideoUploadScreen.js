@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import Comments from '../components/Comments';
+import Comments from '../components/messaging/Comments';
 import {Icon, Message} from "semantic-ui-react";
 
 class VideoUploadScreen extends Component {

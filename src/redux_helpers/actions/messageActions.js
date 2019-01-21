@@ -1,5 +1,5 @@
-import QL from "../../GraphQL";
-import S3 from "../../S3Storage";
+import QL from "../../api/GraphQL";
+import S3 from "../../api/S3Storage";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import {consoleError} from "../../logic/DebuggingHelper";
 

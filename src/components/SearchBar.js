@@ -1,14 +1,14 @@
 import _ from 'lodash'
 import React, { Component, Fragment } from 'react'
 import {Search } from 'semantic-ui-react'
-import EventDescriptionModal from "./EventDescriptionModal";
-import ClientModal from "./ClientModal";
-import TrainerModal from "./TrainerModal";
+import EventDescriptionModal from "./modals/EventDescriptionModal";
+import ClientModal from "./modals/ClientModal";
+import TrainerModal from "./modals/TrainerModal";
 import {connect} from "react-redux";
 import {fetchClient, fetchEvent, putClientQuery, putEventQuery} from "../redux_helpers/actions/cacheActions";
 import {newSearch, loadMoreResults} from "../redux_helpers/actions/searchActions";
 import {switchReturnItemType} from "../logic/ItemType";
-import ChallengeDescriptionModal from "./ChallengeDescriptionModal";
+import ChallengeDescriptionModal from "./modals/ChallengeDescriptionModal";
 import {consoleLog} from "../logic/DebuggingHelper";
 
 class SearchBarProp extends Component {

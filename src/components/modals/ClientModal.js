@@ -2,15 +2,15 @@ import React, { Component, Fragment } from 'react';
 import ReactSwipe from 'react-swipe';
 import {Modal, Button, List, Dimmer, Loader, Message, Icon, Image, Label, Grid} from 'semantic-ui-react';
 import { connect } from "react-redux";
-import InviteToChallengeModalProp from "../screens/InviteToChallengeModal";
+import InviteToChallengeModalProp from "../../screens/InviteToChallengeModal";
 import _ from "lodash";
-import {fetchClient} from "../redux_helpers/actions/cacheActions";
-import {forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
-import InviteFunctions from "../databaseFunctions/InviteFunctions";
-import UserFunctions from "../databaseFunctions/UserFunctions";
+import {fetchClient} from "../../redux_helpers/actions/cacheActions";
+import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
+import InviteFunctions from "../../databaseFunctions/InviteFunctions";
+import UserFunctions from "../../databaseFunctions/UserFunctions";
 import { Storage } from 'aws-amplify';
-import PostFunctions from "../databaseFunctions/PostFunctions";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+import PostFunctions from "../../databaseFunctions/PostFunctions";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 type Props = {
     open: boolean,

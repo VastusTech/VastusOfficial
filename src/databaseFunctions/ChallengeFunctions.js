@@ -1,4 +1,4 @@
-import Lambda from "../Lambda";
+import Lambda from "../api/Lambda";
 import UserFunctions from "./UserFunctions";
 
 const itemType = "Challenge";

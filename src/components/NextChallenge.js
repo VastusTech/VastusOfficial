@@ -1,11 +1,11 @@
 import React, {Component, Fragment} from 'react'
 import {Icon, Message} from 'semantic-ui-react';
-import ChallengeCard from "./ChallengeCard";
+import ChallengeCard from "./cards/ChallengeCard";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
-import { inspect } from 'util';
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import {parseISOString, timeLeft} from "../logic/TimeHelper";
+import Spinner from "./Spinner";
 
 class NextChallengeProp extends Component {
     state = {
@@ -59,6 +59,8 @@ class NextChallengeProp extends Component {
                         this.props.fetchChallenge(user.challenges[i], ["id", "tags", "title", "goal", "endTime", "time_created", "owner", "ifCompleted", "members", "capacity", "difficulty", "access", "restriction", "submissions"], (challenge) => {
                             if (challenge && challenge.endTime) {
                                 const challengeTimeLeft = timeLeft(parseISOString(challenge.endTime));
+                                // alert("Received challenge = " + JSON.stringify(challenge));
+                                // alert("Time left = " + challengeTimeLeft);
                                 if (challengeTimeLeft >= 0) {
                                     challenges.push({
                                         challenge,
@@ -76,6 +78,11 @@ class NextChallengeProp extends Component {
                             if (numChallenges >= numTotal) {
                                 this.setState({challenges: challenges});
                             }
+                        }, () => {
+                            numChallenges++;
+                            if (numChallenges >= numTotal) {
+                                this.setState({challenges: challenges});
+                            }
                         });
                     }
                 }
@@ -87,16 +94,8 @@ class NextChallengeProp extends Component {
     render() {
         if (this.state.isLoading) {
             return(
-                <Message icon>
-                    <Icon name='spinner' size="small" loading />
-                    <Message.Content>
-                        <Message.Header>
-                            Loading...
-                        </Message.Header>
-                    </Message.Content>
-
-                </Message>
-            )
+                <Spinner/>
+            );
         }
         if (this.state.challenges && this.state.challenges.length > 0) {
             let challenges = [...this.state.challenges];
@@ -131,8 +130,8 @@ const mapDispatchToProps = (dispatch) => {
         fetchUserAttributes: (attributeList, dataHandler) => {
             dispatch(fetchUserAttributes(attributeList, dataHandler));
         },
-        fetchChallenge: (id, variablesList, dataHandler) => {
-            dispatch(fetchChallenge(id, variablesList, dataHandler));
+        fetchChallenge: (id, variablesList, dataHandler, failureHandler) => {
+            dispatch(fetchChallenge(id, variablesList, dataHandler, failureHandler));
         }
     };
 };

@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import {fetchUserAttributes} from "../redux_helpers/actions/userActions";
 import {fetchChallenge} from "../redux_helpers/actions/cacheActions";
 import InviteFunctions from "../databaseFunctions/InviteFunctions";
-import ChallengeCard from "../components/ChallengeCard";
+import ChallengeCard from "../components/cards/ChallengeCard";
 
 class InviteToChallengeModalProp extends Component {
     state = {

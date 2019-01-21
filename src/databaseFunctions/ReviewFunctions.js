@@ -1,4 +1,4 @@
-import Lambda from "../Lambda";
+import Lambda from "../api/Lambda";
 
 const itemType = "Review";
 

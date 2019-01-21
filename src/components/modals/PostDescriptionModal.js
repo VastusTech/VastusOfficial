@@ -2,10 +2,10 @@ import React, { Component } from 'react';
 import {Modal, Button, List, Message} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
 import { connect } from 'react-redux';
-import { fetchClient, forceFetchPost, fetchPost } from "../redux_helpers/actions/cacheActions";
-import { convertFromISO } from "../logic/TimeHelper";
-import { forceFetchUserAttributes } from "../redux_helpers/actions/userActions";
-import PostFunctions from "../databaseFunctions/PostFunctions";
+import { fetchClient, forceFetchPost, fetchPost } from "../../redux_helpers/actions/cacheActions";
+import { convertFromISO } from "../../logic/TimeHelper";
+import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
+import PostFunctions from "../../databaseFunctions/PostFunctions";
 
 /*
 * Event Description Modal

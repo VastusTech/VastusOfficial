@@ -1,15 +1,15 @@
 import React, { Component } from 'react';
-import CommentBox from "../components/CommentBox";
-import Comments from '../components/Comments';
+import CommentBox from "./CommentBox";
+import Comments from './Comments';
 import { Icon, Message, Divider } from "semantic-ui-react";
-import {fetchClient, fetchTrainer} from "../redux_helpers/actions/cacheActions";
+import {fetchClient, fetchTrainer} from "../../redux_helpers/actions/cacheActions";
 import {
     queryNextMessagesFromBoard,
     clearBoard,
     addMessageToBoard,
     addMessageFromNotification
-} from "../redux_helpers/actions/messageActions";
-import {setHandlerToBoard} from "../redux_helpers/actions/ablyActions";
+} from "../../redux_helpers/actions/messageActions";
+import {setHandlerToBoard} from "../../redux_helpers/actions/ablyActions";
 import connect from "react-redux/es/connect/connect";
 import ScrollView from "react-inverted-scrollview";
 

@@ -9,10 +9,10 @@ import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
 import message from "./reducers/messageReducer";
 
-import { ifLogging } from "../Constants";
+import { log } from "../logic/Constants";
 
 let middleware;
-if (ifLogging) {
+if (log) {
     middleware = applyMiddleware(logger, thunk);
 }
 else {

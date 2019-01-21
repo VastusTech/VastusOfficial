@@ -1,8 +1,8 @@
 import { API, graphqlOperation} from 'aws-amplify';
-import { ifDebug } from "./Constants";
+import { ifDebug } from "../logic/Constants";
 import _ from 'lodash';
-import {switchReturnItemType} from "./logic/ItemType";
-import { consoleLog, consoleError } from "./logic/DebuggingHelper";
+import {switchReturnItemType} from "../logic/ItemType";
+import { consoleLog, consoleError } from "../logic/DebuggingHelper";
 
 class GraphQL {
     // Gives back function with parameters (id, variablesList, successHandler, failureHandler)

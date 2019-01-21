@@ -1,12 +1,12 @@
-import { ifLogging } from "../Constants";
+import { log } from "./Constants";
 
 export function consoleLog(message) {
-    if (ifLogging) {
+    if (log) {
         console.log(message);
     }
 }
 export function consoleError(message) {
-    if (ifLogging) {
+    if (log) {
         console.error(message);
     }
 }

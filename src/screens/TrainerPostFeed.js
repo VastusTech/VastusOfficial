@@ -1,7 +1,7 @@
 import React, {Component, Fragment} from 'react';
 import _ from 'lodash';
 import {Visibility, Header, Icon, Message} from 'semantic-ui-react';
-import PostCard from "../components/PostCard";
+import PostCard from "../components/cards/PostCard";
 import {connect} from 'react-redux';
 import {
     fetchPost,

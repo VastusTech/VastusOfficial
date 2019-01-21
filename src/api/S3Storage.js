@@ -1,5 +1,5 @@
 import { Storage } from "aws-amplify";
-import { consoleLog, consoleError } from "./logic/DebuggingHelper";
+import { consoleLog, consoleError } from "../logic/DebuggingHelper";
 
 class S3Storage {
     // User-Level Functions

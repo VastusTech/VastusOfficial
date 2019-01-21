@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Visibility, Header, Grid} from 'semantic-ui-react'
-import PostCard from "../components/PostCard";
-import QL from "../GraphQL";
+import PostCard from "../components/cards/PostCard";
+import QL from "../api/GraphQL";
 import { connect } from 'react-redux';
 import {
     fetchPost,

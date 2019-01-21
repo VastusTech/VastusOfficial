@@ -2,13 +2,13 @@ import React from 'react'
 // import { Player } from 'video-react';
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
-import { consoleLog } from "../logic/DebuggingHelper";
-import ChallengeList from "../components/ChallengeList";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
+import { consoleLog } from "../../logic/DebuggingHelper";
+import ChallengeList from "../lists/ChallengeList";
+import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-import TrainerFunctions from "../databaseFunctions/TrainerFunctions";
-import TrainerPostFeed from "../screens/TrainerPostFeed";
-import EventList from "./EventList";
+import TrainerFunctions from "../../databaseFunctions/TrainerFunctions";
+import TrainerPostFeed from "../../screens/TrainerPostFeed";
+import EventList from "../lists/EventList";
 
 type Props = {
     trainerID: string,

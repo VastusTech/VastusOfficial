@@ -1,5 +1,5 @@
 import {setIsLoading } from "./infoActions";
-import QL from "../../GraphQL";
+import QL from "../../api/GraphQL";
 import {getPutItemFunction, getFetchQueryFunction} from "./cacheActions";
 import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 

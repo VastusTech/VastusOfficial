@@ -1,10 +1,7 @@
 // import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
-import {ifDebug} from "./Constants";
-import {consoleLog, consoleError} from "./logic/DebuggingHelper";
-
-// TODO Use this instead?
-// AWSConfig();
+import {ifDebug} from "../logic/Constants";
+import {consoleLog, consoleError} from "../logic/DebuggingHelper";
 
 /// Configure AWS SDK for JavaScript
 AWS.config.update({region: 'us-east-1'});
@@ -13,6 +10,9 @@ AWS.config.credentials = new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us
 // Prepare to call Lambda function
 let lambda = new AWS.Lambda({region: 'us-east-1', apiVersion: '2015-03-31'});
 
+/**
+ * This is the static class that allows us to invoke the AWS Lambda function using the predefined JSON structure.
+ */
 class Lambda {
     // All the basic CRUD Functions with my own personally defined JSONs
     // TODO Is there a case where we would need specify action yet?
@@ -75,6 +75,11 @@ class Lambda {
                 objectID
             ],
         }, successHandler, failureHandler)
+    }
+    static ping(successHandler, failureHandler) {
+        this.invokeDatabaseLambda({
+            action: "PING"
+        }, successHandler, failureHandler);
     }
     static invokeDatabaseLambda(payload, successHandler, failureHandler) {
         this.invokeLambda("VastusDatabaseLambdaFunction", payload, successHandler, failureHandler);

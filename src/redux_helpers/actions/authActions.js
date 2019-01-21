@@ -3,7 +3,7 @@ import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
 import jwt_decode from "jwt-decode";
 import {setUser, forceSetUser} from "./userActions";
 import {addHandlerToNotifications, removeAllHandlers} from "./ablyActions";
-import QL from "../../GraphQL";
+import QL from "../../api/GraphQL";
 import ClientFunctions from "../../databaseFunctions/ClientFunctions";
 import {consoleLog} from "../../logic/DebuggingHelper";
 

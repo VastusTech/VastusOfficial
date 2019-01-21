@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
-import {Button, Card, Dimmer, Grid, Label, Loader} from 'semantic-ui-react';
-import PostDescriptionModal from './PostDescriptionModal';
+import {Button, Card, Dimmer, Grid, Loader} from 'semantic-ui-react';
+import PostDescriptionModal from '../modals/PostDescriptionModal';
 import {Player} from "video-react";
 import { connect } from 'react-redux';
-import { fetchPost, fetchChallenge, fetchClient, fetchTrainer} from "../redux_helpers/actions/cacheActions";
-import ItemType from "../logic/ItemType";
+import { fetchPost, fetchChallenge, fetchClient, fetchTrainer} from "../../redux_helpers/actions/cacheActions";
+import ItemType from "../../logic/ItemType";
 import { Storage } from "aws-amplify";
-import SubmissionDetailCard from "./post_detail_cards/SubmissionDetailCard";
-import ChallengeDetailCard from "./post_detail_cards/ChallengeDetailCard";
-import PostDetailCard from "./post_detail_cards/PostDetailCard";
-import ClientDetailCard from "./post_detail_cards/ClientDetailCard";
-import TrainerDetailCard from "./post_detail_cards/TrainerDetailCard";
-import {convertFromISO} from "../logic/TimeHelper";
-import ClientModal from "./ClientModal";
-import TrainerModal from "./TrainerModal";
-import {consoleLog, consoleError} from "../logic/DebuggingHelper";
+import SubmissionDetailCard from "../post_detail_cards/SubmissionDetailCard";
+import ChallengeDetailCard from "../post_detail_cards/ChallengeDetailCard";
+import PostDetailCard from "../post_detail_cards/PostDetailCard";
+import ClientDetailCard from "../post_detail_cards/ClientDetailCard";
+import TrainerDetailCard from "../post_detail_cards/TrainerDetailCard";
+import {convertFromISO} from "../../logic/TimeHelper";
+import ClientModal from "../modals/ClientModal";
+import TrainerModal from "../modals/TrainerModal";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 type Props = {
     postID: string
@@ -89,7 +89,7 @@ class PostCard extends Component<Props> {
     }
 
     getPostAttribute(attribute) {
-        //console.log(this.props.postID);
+        //alert(this.props.postID);
         if (this.state.postID) {
             let post = this.props.cache.posts[this.state.postID];
             if (post) {
@@ -152,7 +152,7 @@ class PostCard extends Component<Props> {
         const pictures = this.getPostAttribute("picturePaths");
         const videos = this.getPostAttribute("videoPaths");
         if (videos && videos.length > 0) {
-            //console.log(videos[0]);
+            //alert(videos[0]);
             if (!this.state.videoURL) {
                 const video = videos[0];
                 Storage.get(video).then((url) => {
@@ -173,11 +173,11 @@ class PostCard extends Component<Props> {
 
     getOwnerName() {
         const owner = this.getPostAttribute("by");
-        //console.log(owner.substr(0, 2));
+        //alert(owner.substr(0, 2));
         if (owner.substr(0, 2) === "CL") {
             if (this.props.cache.clients[owner]) {
-                //console.log(JSON.stringify(this.props.cache.trainers));
-                //console.log(JSON.stringify(this.props.cache.clients[owner]));
+                //alert(JSON.stringify(this.props.cache.trainers));
+                //alert(JSON.stringify(this.props.cache.clients[owner]));
                 return this.props.cache.clients[owner].name;
             }
             // else if (!this.props.info.isLoading) {
@@ -186,7 +186,7 @@ class PostCard extends Component<Props> {
         }
         else if (owner.substr(0, 2) === "TR") {
             if (this.props.cache.trainers[owner]) {
-                //console.log(JSON.stringify(this.props.cache.trainers));
+                //alert(JSON.stringify(this.props.cache.trainers));
                 return this.props.cache.trainers[owner].name;
             }
             // else if (!this.props.info.isLoading) {
@@ -222,7 +222,7 @@ class PostCard extends Component<Props> {
             //consoleLog(this.getPostAttribute("by"));
             let client = this.props.cache.clients[this.getPostAttribute("by")];
             if (client) {
-                //console.log("Found Client in Challenge");
+                //alert("Found Client in Challenge");
                 if (attribute.substr(attribute.length - 6) === "Length") {
                     attribute = attribute.substr(0, attribute.length - 6);
                     if (client[attribute] && client[attribute].length) {
@@ -244,17 +244,17 @@ class PostCard extends Component<Props> {
         let postType = this.getPostAttribute("postType");
         let itemType = this.getPostAttribute("item_type");
         if (postType && postType.length) {
-            //console.log("Item Type: " + itemType);
+            //alert("Item Type: " + itemType);
             if (postType.substr(0, 3) === "new") {
                 // TODO This indicates that this is for a newly created Item
                 postType = ItemType[postType.substring(3, postType.length)];
             }
-            //console.log(itemType);
+            //alert(itemType);
             if (postType) {
-                //console.log("Post Type: " + postType);
+                //alert("Post Type: " + postType);
                 // TODO Switch the post types
                 if (postType === "Client") {
-                    //console.log("Client Share Post Spotted!");
+                    //alert("Client Share Post Spotted!");
                     if(!this.state.postMessageSet) {
                         this.setState({postMessage: "shared a user profile", postMessageSet: true});
                     }
@@ -299,7 +299,7 @@ class PostCard extends Component<Props> {
             }
         }
         else if(itemType) {
-            //console.log("Item Type: " + itemType);
+            //alert("Item Type: " + itemType);
             if(!this.state.postMessageSet) {
                 this.setState({postMessage: "posted", postMessageSet: true});
             }
@@ -316,7 +316,7 @@ class PostCard extends Component<Props> {
             }
         }
         else if (this.getPostAttribute("by").substr(0, 2) === "TR") {
-            //console.log("opening trainer modal");
+            //alert("opening trainer modal");
             if (!this.state.trainerModalOpen) {
                 this.setState({trainerModalOpen: true});
                 this.props.fetchTrainer(this.getPostAttribute("by"), ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
@@ -341,18 +341,6 @@ class PostCard extends Component<Props> {
         }
     }
 
-    displayTag() {
-        if(this.props.first) {
-            return (<Label size='large' as='a' color='purple' tag>
-                First
-            </Label>)
-        }
-        else if(this.props.last) {
-            return (<Label size='large' as='a' color='purple' tag>
-                Last
-            </Label>);
-        }
-    }
 
     render() {
         if (!this.getPostAttribute("id")) {
@@ -365,13 +353,12 @@ class PostCard extends Component<Props> {
         if (!this.getChallengeAttribute("id")) {
             return null;
         }
-        //console.log(JSON.stringify(this.props.cache.clients));
+        //alert(JSON.stringify(this.props.cache.clients));
         return (
             // This is displays a few important pieces of information about the challenge for the feed view.
             <Card color='purple' fluid raised>
                 {/*this.getPostAttribute("about")*/}
                 <Grid style={{marginLeft: '10px', marginTop: '2px', marginBottom: '2px'}}>
-                    <Grid.Row>
                     <Button className="u-button--flat" onClick={ () => {this.openClientModal()}}>
                         <Grid style={{marginLeft: '10px', marginTop: '10px'}}>
                             <Grid.Column width={6}>
@@ -384,7 +371,6 @@ class PostCard extends Component<Props> {
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getPostAttribute("by")}/>
                         <TrainerModal open={this.state.trainerModalOpen} onClose={this.closeTrainerModal} trainerID={this.getPostAttribute("by")}/>
                     </Button>
-                    </Grid.Row>
                 </Grid>
                 {this.openOnce()}
                 <Card.Content>

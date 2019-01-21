@@ -1,9 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import { Card, Dimmer, Loader, Grid, Header } from 'semantic-ui-react';
-import ClientModal from './ClientModal';
+import ClientModal from '../modals/ClientModal';
 import { connect } from 'react-redux';
-import { fetchClient } from "../redux_helpers/actions/cacheActions";
-import {consoleLog} from "../logic/DebuggingHelper";
+import { fetchClient } from "../../redux_helpers/actions/cacheActions";
+import {consoleLog} from "../../logic/DebuggingHelper";
 
 /*
 * Event Card
