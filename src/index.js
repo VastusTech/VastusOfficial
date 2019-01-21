@@ -15,7 +15,7 @@ import {ifCallLambdaAtStart} from "./logic/Constants";
 import Lambda from "./api/Lambda";
 
 // AWSConfig();
-window.LOG_LEVEL='DEBUG';
+// window.LOG_LEVEL='DEBUG';
 
 require('./api/Ably');
 

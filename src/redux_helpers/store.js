@@ -8,11 +8,10 @@ import info from "./reducers/infoReducer";
 import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
 import message from "./reducers/messageReducer";
-
-import { log } from "../logic/Constants";
+import { reduxLog } from "../logic/Constants";
 
 let middleware;
-if (log) {
+if (reduxLog) {
     middleware = applyMiddleware(logger, thunk);
 }
 else {
