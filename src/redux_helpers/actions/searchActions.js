@@ -1,6 +1,7 @@
-import { setError, setIsLoading } from "./infoActions";
-import QL from "../../GraphQL";
-import {getCache, getPutItemFunction, getPutQueryFunction, getQueryCache, getFetchQueryType, getFetchQueryFunction} from "./cacheActions";
+import {setIsLoading } from "./infoActions";
+import QL from "../../api/GraphQL";
+import {getPutItemFunction, getFetchQueryFunction} from "./cacheActions";
+import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
 
 const ENABLE_TYPE = 'ENABLE_TYPE';
 const DISABLE_TYPE = 'DISABLE_TYPE';
@@ -23,7 +24,7 @@ export function newSearch(queryString, dataHandler) {
             performAllQueries(queryString, dispatch, getStore, dataHandler);
         }
         else {
-            console.log("I refuse to search for an empty string");
+            consoleLog("I refuse to search for an empty string");
             dataHandler([]);
         }
     };
@@ -52,7 +53,7 @@ export function performAllQueries(searchQuery, dispatch, getStore, dataHandler) 
                         results.push(...data.items);
                     }
                     else {
-                        console.error("Received a weird value from query in the newSearch search redux function. Value = " + JSON.stringify(data));
+                        consoleError("Received a weird value from query in the newSearch search redux function. Value = " + JSON.stringify(data));
                     }
                     numResults++;
                     if (numTypesEnabled <= numResults) {
@@ -84,7 +85,7 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
         const limit = typeQuery.limit;
         const nextToken = typeQuery.nextToken;
         const ifFirst = typeQuery.ifFirst;
-        console.log("nextToken = " + nextToken);
+        consoleLog("nextToken = " + nextToken);
         if (nextToken || ifFirst) {
             const putItemFunction = getPutItemFunction(itemType);
             const fetchQueryFunction = getFetchQueryFunction(itemType);
@@ -103,7 +104,7 @@ function performQuery(itemType, dispatch, getStore, successHandler, failureHandl
                     }
                 }
                 else {
-                    console.error("Query function returned null?");
+                    consoleError("Query function returned null?");
                 }
             }, (error) => {
                 if (failureHandler) { failureHandler(error); }

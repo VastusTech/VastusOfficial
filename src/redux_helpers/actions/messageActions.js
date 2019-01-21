@@ -1,6 +1,7 @@
-import QL from "../../GraphQL";
-import S3 from "../../S3Storage";
+import QL from "../../api/GraphQL";
+import S3 from "../../api/S3Storage";
 import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
+import {consoleError} from "../../logic/DebuggingHelper";
 
 const ADD_MESSAGE = 'ADD_MESSAGE';
 const ADD_QUERY = 'ADD_QUERY';
@@ -27,14 +28,14 @@ export function queryNextMessagesFromBoard(board, limit, dataHandler, failureHan
                 }
                 else {
                     const error = new Error("query messages came back with null?");
-                    console.error(JSON.stringify(error));
+                    consoleError(JSON.stringify(error));
                     dispatch(setError(error));
                     dispatch(setIsNotLoading());
                     if (failureHandler) { failureHandler(error); }
                 }
             }, (error) => {
-                console.error("ERROR INSIDE GET NEXT MESSAGES");
-                console.error(JSON.stringify(error));
+                consoleError("ERROR INSIDE GET NEXT MESSAGES");
+                consoleError(JSON.stringify(error));
                 dispatch(setError(error));
                 dispatch(setIsNotLoading());
                 if (failureHandler) { failureHandler(error); }
@@ -58,7 +59,7 @@ function addURLToMessages(messages, dataHandler) {
                     dataHandler(messages);
                 }
             }, (error) => {
-                console.error("FAILED TO RECEIVE URL FOR MEDIA IN MESSAGE! ERROR = " + JSON.stringify(error));
+                consoleError("FAILED TO RECEIVE URL FOR MEDIA IN MESSAGE! ERROR = " + JSON.stringify(error));
                 messagesReturned++;
                 message.message = "";
                 if (messagesReturned >= messagesLength) {
@@ -88,7 +89,7 @@ export function addMessageFromNotification(board, message, dataHandler, failureH
                 dispatch(setIsNotLoading());
             }, (error) => {
                 message.message = "";
-                console.error("Error getting media for message from notification! Error = " + JSON.stringify(error));
+                consoleError("Error getting media for message from notification! Error = " + JSON.stringify(error));
                 dispatch(addMessageToBoard(board, message));
                 if (failureHandler) { failureHandler(error); }
                 dispatch(setError(error));

@@ -6,43 +6,15 @@
 
 import React, { Component } from 'react';
 import {Card, Modal, Button, Header, Icon, Divider, Image, Message, Dimmer, Loader} from 'semantic-ui-react';
-// import EventMemberList from "../screens/EventMemberList";
 import { connect } from 'react-redux';
-// import QL from '../GraphQL';
 import {fetchClient, fetchTrainer, forceFetchPost, fetchPost, removeItem} from "../../redux_helpers/actions/cacheActions";
-// import CompleteChallengeModal from "../screens/CompleteChallengeModal";
 import { convertFromISO } from "../../logic/TimeHelper";
 import { forceFetchUserAttributes } from "../../redux_helpers/actions/userActions";
-import PostFunctions from "../../databaseFunctions/PostFunctions";
+import PostFunctions from "../../database_functions/PostFunctions";
 import {Player} from "video-react";
 import { Storage } from "aws-amplify";
 import {getItemTypeFromID} from "../../logic/ItemType";
-// import CommentScreen from "../screens/CommentScreen";
-// import VideoUploadScreen from "../screens/VideoUploadScreen";
-
-// function convertTime(time) {
-//     if (parseInt(time, 10) > 12) {
-//         return "0" + (parseInt(time, 10) - 12) + time.substr(2, 3) + "pm";
-//     }
-//     else if (parseInt(time, 10) === 12) {
-//         return time + "pm";
-//     }
-//     else if (parseInt(time, 10) === 0) {
-//         return "0" + (parseInt(time, 10) + 12) + time.substr(2, 3) + "am"
-//     }
-//     else {
-//         return time + "am"
-//     }
-// }
-//
-// function convertDate(date) {
-//     let dateString = String(date);
-//     let year = dateString.substr(0, 4);
-//     let month = dateString.substr(5, 2);
-//     let day = dateString.substr(8, 2);
-//
-//     return month + "/" + day + "/" + year;
-// }
+import {consoleError} from "../../logic/DebuggingHelper";
 
 /*
 * Event Description Modal
@@ -81,7 +53,7 @@ class PostDetailCard extends Component {
     componentDidMount() {
         // this.isJoined();
         this.isOwned();
-        //console.log("Mount Owned: " + this.state.isOwned);
+        //consoleLog("Mount Owned: " + this.state.isOwned);
     }
 
     componentWillReceiveProps(newProps) {
@@ -175,9 +147,9 @@ class PostDetailCard extends Component {
     profilePicture() {
         if (this.getClientAttribute("profileImagePaths") !== [] || this.getClientAttribute("profileImagePaths") !== null) {
             /*if(!this.state.urlsSet) {
-                console.log(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
+                consoleLog(JSON.stringify("Paths being passed in: " + this.props.user.profileImagePaths));
                 this.setURLS(this.getClientAttribute("profileImagePaths"));
-                console.log("Setting URLS: " + this.state.galleryURLS);
+                consoleLog("Setting URLS: " + this.state.galleryURLS);
                 this.setState({urlsSet: true});
             }*/
             //alert(this.getClientAttribute("profilePicture"));
@@ -195,14 +167,14 @@ class PostDetailCard extends Component {
     }
 
     handleDeletePostButton() {
-        //console.log("Handling deleting the event");
+        //consoleLog("Handling deleting the event");
         this.setState({isLoading: true});
         PostFunctions.delete(this.props.user.id, this.getPostAttribute("id"), () => {
             this.forceUpdate(this.getPostAttribute("id"));
-            // console.log(JSON.stringify(data));
+            // consoleLog(JSON.stringify(data));
             this.setState({isDeleteLoading: false, event: null, isOwned: false});
         }, (error) => {
-            // console.log(JSON.stringify(error));
+            // consoleLog(JSON.stringify(error));
             this.setState({isDeleteLoading: false, error: error});
         })
     }
@@ -248,7 +220,7 @@ class PostDetailCard extends Component {
                 Storage.get(video).then((url) => {
                     this.setState({videoURL: url});
                 }).catch((error) => {
-                    console.error(error);
+                    consoleError(error);
                 });
             }
             else if(!this.state.pictureURL && pictures) {
@@ -257,7 +229,7 @@ class PostDetailCard extends Component {
                 Storage.get(picture).then((url) => {
                     this.setState({pictureURL: url});
                 }).catch((error) => {
-                    console.error(error);
+                    consoleError(error);
                 })
             }
             else if(this.state.videoURL && !this.state.pictureURL) {
@@ -293,16 +265,16 @@ class PostDetailCard extends Component {
     render() {
         if(this.state.canCallChecks) {
             this.isOwned();
-            //console.log("Render Owned: " + this.state.isOwned);
+            //consoleLog("Render Owned: " + this.state.isOwned);
             this.setState({canCallChecks: false});
-            //console.log("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
+            //consoleLog("Members: " + this.getChallengeAttribute("members") + "Joined?:  " + this.state.isJoined);
         }
 
         //This modal displays the challenge information and at the bottom contains a button which allows the user
         //to join a challenge.
         function createCorrectButton(isOwned, deleteHandler, isDeleteLoading) {
-            //console.log("Owned: " + isOwned + " Joined: " + isJoined);
-            // console.log(ifCompleted);
+            //consoleLog("Owned: " + isOwned + " Joined: " + isJoined);
+            // consoleLog(ifCompleted);
             if(isOwned) {
                 // TODO This should also link the choose winner button
                 return(
@@ -312,12 +284,12 @@ class PostDetailCard extends Component {
                 );
             }
             else {
-                //console.log(isJoinLoading);
+                //consoleLog(isJoinLoading);
                 return null;
             }
         }
 
-        //console.log("Challenge Info: " + JSON.stringify(this.state.event));
+        //consoleLog("Challenge Info: " + JSON.stringify(this.state.event));
         return(
             <Card>
                 <Card.Header>

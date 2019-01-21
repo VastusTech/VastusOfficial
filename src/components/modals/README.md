@@ -1,0 +1,1 @@
+Modals fetch everything they need to survive.

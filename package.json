@@ -11,6 +11,7 @@
     "lodash": "^4.17.11",
     "re-carousel": "^2.3.0",
     "react": "^16.6.3",
+    "react-avatar-editor": "^11.0.4",
     "react-dom": "^16.6.3",
     "react-inverted-scrollview": "^1.0.7",
     "react-redux": "^5.1.0",

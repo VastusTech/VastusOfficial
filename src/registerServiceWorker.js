@@ -1,3 +1,4 @@
+import {consoleError} from "./logic/DebuggingHelper";
 // In production, we register a service worker to serve assets from local cache.
 
 // This lets the app load faster on subsequent visits in production, and gives
@@ -81,7 +82,7 @@ function registerValidSW(swUrl) {
         };
     })
     .catch(error => {
-        console.error('Error during service worker registration:', error);
+        consoleError('Error during service worker registration:', error);
     });
 }
 

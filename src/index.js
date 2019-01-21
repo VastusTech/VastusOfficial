@@ -10,10 +10,18 @@ import App from './App';
 import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
+import AWSConfig from "./AppConfig";
+import {ifCallLambdaAtStart} from "./logic/Constants";
+import Lambda from "./api/Lambda";
 
-require('./Ably');
+// AWSConfig();
+window.LOG_LEVEL='DEBUG';
+
+require('./api/Ably');
 
 // ReactDOM.render(<App />, document.getElementById('root'));
+AWSConfig();
+if (ifCallLambdaAtStart) { Lambda.ping(); }
 ReactDOM.render(
     <Provider store={store}>
         <App />

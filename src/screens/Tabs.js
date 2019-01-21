@@ -1,18 +1,11 @@
 import { Fragment } from 'react';
-import {Tab, Menu, Icon, Header, Feed } from "semantic-ui-react";
-// import EventFeed from "./EventFeed";
-import NotificationFeed from "./NotificationBellFeed";
-import ProfileProp from "./Profile";
+import {Tab, Menu, Icon, Header } from "semantic-ui-react";
+import NotificationFeed from "./notification_tab/NotificationBellFeed";
+import ProfileProp from "./profile_tab/Profile";
 import React from "react";
-// import CreateEventProp from "./CreateEvent";
-// import NextEventProp from "../components/NextWorkout";
-import LeaderBoard from "./Leaderboard";
-// import VideoUploadScreen from "./VideoUploadScreen";
-// import PaymentScreen from "./PaymentScreen";
-import NotificationBellProp from "../components/NotificationBell";
-import ChallengeFeed from "./ChallengeFeed";
-import PostFeedProp from "./PostFeed";
-import SearchScreen from "./SearchScreen";
+import LeaderBoard from "./leaderboard_tab/Leaderboard";
+import NotificationBellProp from "./notification_tab/NotificationBell";
+import PostFeedProp from "./main_tab/PostFeed";
 
 /**
 * Tabs TODO Potentially clean this up
