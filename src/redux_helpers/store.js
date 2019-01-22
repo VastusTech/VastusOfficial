@@ -9,20 +9,17 @@ import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
 import message from "./reducers/messageReducer";
 import { reduxLog } from "../logic/Constants";
-
-<<<<<<< HEAD
 import { log } from "../logic/Constants";
 
 let middleware;
 if (log) {
-=======
-let middleware;
-if (reduxLog) {
->>>>>>> f758de6db119aad10477eb63190be557b500f683
-    middleware = applyMiddleware(logger, thunk);
-}
-else {
-    middleware = applyMiddleware(thunk);
+    let middleware;
+    if (reduxLog) {
+        middleware = applyMiddleware(logger, thunk);
+    }
+    else {
+        middleware = applyMiddleware(thunk);
+    }
 }
 
 const composeEnhancers =
