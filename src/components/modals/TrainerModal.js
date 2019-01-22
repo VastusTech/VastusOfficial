@@ -6,8 +6,8 @@ import { consoleLog } from "../../logic/DebuggingHelper";
 import ChallengeList from "../lists/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-import TrainerFunctions from "../../databaseFunctions/TrainerFunctions";
-import TrainerPostFeed from "../../screens/TrainerPostFeed";
+import TrainerFunctions from "../../database_functions/TrainerFunctions";
+import TrainerPostFeed from "../lists/TrainerPostFeed";
 import EventList from "../lists/EventList";
 
 type Props = {

@@ -12,6 +12,7 @@
     "prop-types": "^15.6.2",
     "re-carousel": "^2.3.0",
     "react": "^16.6.3",
+    "react-avatar-editor": "^11.0.4",
     "react-dom": "^16.6.3",
     "react-inverted-scrollview": "^1.0.7",
     "react-redux": "^5.1.0",
@@ -26,7 +27,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "webpack --mode production",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },

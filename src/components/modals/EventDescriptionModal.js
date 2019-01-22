@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import {Modal, Button, List, Grid, Message} from 'semantic-ui-react';
 import ClientModal from "./ClientModal";
-import EventMemberList from "../../screens/EventMemberList";
+// import EventMemberList from "../../screens/EventMemberList";
 import { connect } from 'react-redux';
 import {fetchClient, forceFetchEvent, fetchEvent} from "../../redux_helpers/actions/cacheActions";
-import CompleteChallengeModal from "../../screens/CompleteChallengeModal";
+import CompleteChallengeModal from "../manager/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import UserFunctions from "../../databaseFunctions/UserFunctions";
-import EventFunctions from "../../databaseFunctions/EventFunctions";
-import VideoUploadScreen from "../../screens/VideoUploadScreen";
+import UserFunctions from "../../database_functions/UserFunctions";
+import EventFunctions from "../../database_functions/EventFunctions";
+// import VideoUploadScreen from "../../screens/VideoUploadScreen";
+import DatabaseObjectList from "../lists/DatabaseObjectList";
 
 type Props = {
     open: boolean,
@@ -262,7 +263,7 @@ class EventDescriptionModal extends Component<Props> {
                                     <Button primary fluid size="large" onClick={completeHandler}>Select Winner</Button>
                                 </Grid.Column>
                             </Grid>
-                            <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                            {/*<VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>*/}
                         </div>
                     )
                 }
@@ -270,7 +271,7 @@ class EventDescriptionModal extends Component<Props> {
                     return(
                         <div>
                             <Button loading={isDeleteLoading} fluid negative size="large" disabled={isDeleteLoading} onClick={deleteHandler}>Delete</Button>
-                            <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                            {/*<VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>*/}
                         </div>
                     );
                 }
@@ -279,7 +280,7 @@ class EventDescriptionModal extends Component<Props> {
                 return (
                     <div>
                         <Button loading={isLeaveLoading} fluid inverted size="large" disabled={isLeaveLoading} onClick={leaveHandler}>Leave</Button>
-                        <VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>
+                        {/*<VideoUploadScreen curUser={username} curUserID={curUserID} challengeChannel={channelName}/>*/}
                     </div>
                 )
             }
@@ -328,7 +329,8 @@ class EventDescriptionModal extends Component<Props> {
                                 <List.Content>
                                     <Modal trigger={<Button className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                         <Modal.Content>
-                                            <EventMemberList eventID={this.state.eventID} />
+                                            {/*<EventMemberList eventID={this.state.eventID} />*/}
+                                            <DatabaseObjectList ids={this.getEventAttribute("members")} noObjectsMessage={"No members yet!"}/>
                                         </Modal.Content>
                                     </Modal>
                                 </List.Content>

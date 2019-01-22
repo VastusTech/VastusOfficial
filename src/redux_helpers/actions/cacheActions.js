@@ -226,14 +226,13 @@ function overwriteFetch(id, variablesList, cacheSet, QLFunctionName, fetchDispat
             }
             else {
                 // Then the fetch came up with nothing!
-                const error = Error("Couldn't find an object in the database with ID = " + id);
+                // const error = Error("Couldn't find an object in the database with ID = " + id);
                 // alert(error);
-                consoleError(error);
-                dispatch(setError(error));
+                consoleLog("Couldn't find ID = " + id + " with action = " + QLFunctionName);
                 dispatch(setIsNotLoading());
-                if (failureHandler) {
-                    consoleLog("F H " + failureHandler.toString());
-                    failureHandler(error);
+                if (dataHandler) {
+                    consoleLog("D H " + dataHandler.toString());
+                    dataHandler(null);
                 }
             }
         }, (error) => {

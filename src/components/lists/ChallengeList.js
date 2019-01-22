@@ -3,7 +3,7 @@ import { List, Message } from 'semantic-ui-react';
 import ChallengeCard from "../cards/ChallengeCard";
 import { connect } from "react-redux";
 import { fetchChallenge } from "../../redux_helpers/actions/cacheActions";
-import Spinner from "../Spinner";
+import Spinner from "../props/Spinner";
 
 type Props = {
     challengeIDs: [string],
@@ -54,7 +54,7 @@ class ChallengeList extends Component<Props> {
             for (const key in challengeList) {
                 if (challengeList.hasOwnProperty(key)) {
                     components.push(
-                        <List.Item>
+                        <List.Item key={key}>
                             <ChallengeCard challengeID={challengeList[key].id}/>
                         </List.Item>
                     );

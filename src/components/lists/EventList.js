@@ -3,7 +3,7 @@ import { List, Message } from 'semantic-ui-react';
 import EventCard from "../cards/EventCard";
 import { connect } from "react-redux";
 import { fetchEvent } from "../../redux_helpers/actions/cacheActions";
-import Spinner from "../Spinner";
+import Spinner from "../props/Spinner";
 
 type Props = {
     eventIDs: [string],
@@ -67,7 +67,7 @@ class EventList extends Component<Props> {
             for (const key in row) {
                 if (row.hasOwnProperty(key) === true) {
                     rowProps.push(
-                        <List.Item>
+                        <List.Item key={key}>
                             <EventCard eventID={row[key].id}/>
                         </List.Item>
                     );

@@ -5,10 +5,10 @@ import TrainerModal from "../modals/TrainerModal";
 import EventDescriptionModal from "../modals/EventDescriptionModal";
 import ChallengeDescriptionModal from "../modals/ChallengeDescriptionModal";
 import { connect } from "react-redux";
-import UserFunctions from "../../databaseFunctions/UserFunctions";
-import InviteFunctions from "../../databaseFunctions/InviteFunctions";
-import EventFunctions from "../../databaseFunctions/EventFunctions";
-import ChallengeFunctions from "../../databaseFunctions/ChallengeFunctions";
+import UserFunctions from "../../database_functions/UserFunctions";
+import InviteFunctions from "../../database_functions/InviteFunctions";
+import EventFunctions from "../../database_functions/EventFunctions";
+import ChallengeFunctions from "../../database_functions/ChallengeFunctions";
 import {getItemTypeFromID, switchReturnItemType} from "../../logic/ItemType";
 
 type Props = {

@@ -364,7 +364,7 @@ class PostCard extends Component<Props> {
                             <Grid.Column width={6}>
                                 {this.profilePicture()}
                             </Grid.Column>
-                            <Grid.Column width={20} style={{marginTop: '15px'}}>
+                            <Grid.Column width={16} style={{marginTop: '15px'}}>
                                 {this.getOwnerName() + " "} {/*this.state.postMessage*/}
                             </Grid.Column>
                         </Grid>

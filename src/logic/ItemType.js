@@ -1,4 +1,3 @@
-import { numPrefix } from "./Constants";
 import {consoleLog} from "./DebuggingHelper";
 
 const ItemType = {
@@ -18,6 +17,7 @@ const ItemType = {
 };
 
 export function getItemTypeFromID(id) {
+    const numPrefix = 2;
     const prefix = id.substring(0, numPrefix);
     const itemTypeKeys = Object.keys(ItemType);
     for (let i = 0; i < itemTypeKeys.length; i++) {

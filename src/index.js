@@ -10,6 +10,8 @@ import App from './App';
 import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
+import Lambda from "./api/Lambda";
+import {ifCallLambdaAtStart} from "./logic/Constants";
 
 require('./api/Ably');
 
@@ -21,3 +23,4 @@ ReactDOM.render(
     document.getElementById('root')
 );
 registerServiceWorker();
+if (ifCallLambdaAtStart) { Lambda.ping(); }

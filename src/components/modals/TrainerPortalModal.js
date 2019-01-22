@@ -14,13 +14,13 @@ import BuddyListProp from "../screens/BuddyList";
 import ChallengeList from "../components/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
-// import AWSSetup from "../AppConfig";
-// import {logOut} from "../redux_helpers/actions/authActions";
-import ClientFunctions from "../databaseFunctions/ClientFunctions";
-import TrainerFunctions from "../databaseFunctions/TrainerFunctions";
+import MessageHandler from "../../api/MessageHandler"
+import ClientFunctions from "../database_functions/ClientFunctions";
+import TrainerFunctions from "../database_functions/TrainerFunctions";
 import {calculateAge} from "../logic/TimeHelper";
 import TrainerPostFeed from "../screens/TrainerPostFeed";
 import EventList from "./EventList";
+import CommentScreen from "../messaging/MessageBoard";
 
 // AWSSetup();
 
@@ -280,6 +280,7 @@ class TrainerPortalModal extends React.PureComponent<Props> {
                         <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{this.props.user.name}</Card.Header>
                         <Card.Meta>Age: {calculateAge(this.getTrainerAttribute("birthday"))}</Card.Meta>
                         <Card.Meta>Event Wins: {this.getTrainerAttribute("challengesWonLength")}</Card.Meta>
+                        <div>hey yah</div>
                         <List id = "profile buttons">
                             <List.Item>
                                 <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Current Challenges</Button>
@@ -295,6 +296,11 @@ class TrainerPortalModal extends React.PureComponent<Props> {
                                     <Modal.Content>
                                         <EventList eventIDs={this.props.user.scheduledEvents}/>
                                     </Modal.Content>
+                                </Modal>
+                            </List.Item>
+                            <List.Item>
+                                <Modal trigger={<Button primary fluid><Icon name="checked calendar" /> Trainer Chat</Button>}>
+                                    <CommentScreen board={MessageHandler.getBoard([this.getTrainerAttribute("id"), this.props.user.id])}/>
                                 </Modal>
                             </List.Item>
                         </List>

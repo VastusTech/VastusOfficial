@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
 import {Menu, Container, Message, Icon} from "semantic-ui-react";
-import SearchBarProp from "./components/SearchBar";
+import SearchBarProp from "./components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "./redux_helpers/actions/userActions";
 

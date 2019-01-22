@@ -3,7 +3,7 @@ import { List, Message } from 'semantic-ui-react';
 import ClientCard from "../cards/ClientCard";
 import { connect } from "react-redux";
 import {fetchItem} from "../../redux_helpers/actions/cacheActions";
-import Spinner from "../Spinner";
+import Spinner from "../props/Spinner";
 import {getItemTypeFromID, switchHandleItemType, switchReturnItemType} from "../../logic/ItemType";
 import TrainerCard from "../cards/TrainerCard";
 import EventCard from "../cards/EventCard";
@@ -76,7 +76,7 @@ class DatabaseObjectList extends Component<Props> {
                     const itemType = objectList[key].item_type;
                     const rank = parseInt(key) + 1;
                     components.push(
-                        <List.Item>
+                        <List.Item key={key}>
                             {switchReturnItemType(itemType,
                                 <ClientCard rank={rank} clientID={id}/>,
                                 <TrainerCard rank={rank} trainerID={id}/>,

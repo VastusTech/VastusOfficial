@@ -4,16 +4,16 @@ import ClientModal from "./ClientModal";
 import { connect } from 'react-redux';
 import {fetchClient, fetchTrainer, forceFetchChallenge, fetchChallenge, clearChallengeQuery} from "../../redux_helpers/actions/cacheActions";
 import { clearBoard } from "../../redux_helpers/actions/messageActions";
-import CompleteChallengeModal from "../../screens/CompleteChallengeModal";
+import CompleteChallengeModal from "../manager/CompleteChallengeModal";
 import {forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import CommentScreen from "../messaging/CommentScreen";
-import ChallengeMemberList from "../../screens/ChallengeMemberList";
-import UserFunctions from "../../databaseFunctions/UserFunctions";
-import InviteFunctions from "../../databaseFunctions/InviteFunctions";
-import ChallengeFunctions from "../../databaseFunctions/ChallengeFunctions";
-import CreateSubmissionModal from "../../screens/CreateSubmissionModal";
-import SubmissionsScreen from "../../screens/SubmissionsScreen";
+import CommentScreen from "../messaging/MessageBoard";
+import UserFunctions from "../../database_functions/UserFunctions";
+import InviteFunctions from "../../database_functions/InviteFunctions";
+import ChallengeFunctions from "../../database_functions/ChallengeFunctions";
+import CreateSubmissionModal from "./CreateSubmissionModal";
+import SubmissionsScreen from "../lists/SubmissionsScreen";
 import {getItemTypeFromID} from "../../logic/ItemType";
+import DatabaseObjectList from "../lists/DatabaseObjectList";
 
 type Props = {
     open: boolean,
@@ -513,7 +513,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             <Grid.Row>
                                 <Icon name='users' /><Modal trigger={<Button primary className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                     <Modal.Content>
-                                        <ChallengeMemberList challengeID={this.state.challengeID} />
+                                        <DatabaseObjectList ids={this.getChallengeAttribute("members")} noObjectsMessage={"No members yet!"}/>
                                     </Modal.Content>
                                 </Modal>
                             </Grid.Row>
