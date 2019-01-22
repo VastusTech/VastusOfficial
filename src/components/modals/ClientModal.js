@@ -413,7 +413,7 @@ class ClientModal extends Component<Props> {
                 <Modal.Content>
                     {this.createSuccessLabel()}
                 </Modal.Content>
-                <Modal trigger={<Button primary fluid><Icon name="wechat" /> Trainer Chat</Button>}>
+                <Modal trigger={<Button primary fluid><Icon name="wechat" /> Chat </Button>}>
                     <MessageBoard board={MessageHandler.getBoard([this.getClientAttribute("id"), this.props.user.id])}/>
                 </Modal>
             </Modal>
