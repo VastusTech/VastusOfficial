@@ -2,12 +2,12 @@ import React from 'react';
 import { Label, Grid, Icon } from 'semantic-ui-react'
 import { Player } from "video-react";
 
-export default (props: {message: any}) => {
+export default (props: {message: any, userID: string}) => {
     const from = props.message.from;
     const name = props.message.name;
     const message = props.message.message;
-    const type = this.props.message.type;
-    const ifSelf = from === this.props.user.id;
+    const type = props.message.type;
+    const ifSelf = from === props.userID;
     if (type) {
         // Image or video message
         if (type === "picture") {
