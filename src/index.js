@@ -10,11 +10,6 @@ import App from './App';
 import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
-<<<<<<< HEAD
-import Lambda from "./api/Lambda";
-import {ifCallLambdaAtStart} from "./logic/Constants";
-
-=======
 import AWSConfig from "./AppConfig";
 import {ifCallLambdaAtStart} from "./logic/Constants";
 import Lambda from "./api/Lambda";
@@ -22,7 +17,6 @@ import Lambda from "./api/Lambda";
 // AWSConfig();
 // window.LOG_LEVEL='DEBUG';
 
->>>>>>> f758de6db119aad10477eb63190be557b500f683
 require('./api/Ably');
 
 // ReactDOM.render(<App />, document.getElementById('root'));
@@ -35,4 +29,3 @@ ReactDOM.render(
     document.getElementById('root')
 );
 registerServiceWorker();
-if (ifCallLambdaAtStart) { Lambda.ping(); }
