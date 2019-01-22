@@ -11,6 +11,8 @@ import UserFunctions from "../../database_functions/UserFunctions";
 import { Storage } from 'aws-amplify';
 import PostFunctions from "../../database_functions/PostFunctions";
 import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
+import MessageHandler from "../../api/MessageHandler";
+import MessageBoard from "../messaging/MessageBoard";
 
 type Props = {
     open: boolean,
@@ -411,6 +413,9 @@ class ClientModal extends Component<Props> {
                 <Modal.Content>
                     {this.createSuccessLabel()}
                 </Modal.Content>
+                <Modal trigger={<Button primary fluid><Icon name="wechat" /> Trainer Chat</Button>}>
+                    <MessageBoard board={MessageHandler.getBoard([this.getClientAttribute("id"), this.props.user.id])}/>
+                </Modal>
             </Modal>
         );
     }
