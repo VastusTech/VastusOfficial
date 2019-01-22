@@ -1,4 +1,3 @@
-// import AWSConfig from "./AppConfig";
 import * as AWS from "aws-sdk";
 import {ifDebug} from "../logic/Constants";
 import {consoleLog, consoleError} from "../logic/DebuggingHelper";

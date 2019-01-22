@@ -3,6 +3,12 @@ import { ifDebug } from "../logic/Constants";
 import _ from 'lodash';
 import {switchReturnItemType} from "../logic/ItemType";
 import { consoleLog, consoleError } from "../logic/DebuggingHelper";
+<<<<<<< HEAD:src/api/GraphQL.js
+=======
+import AppConfig from "../AppConfig";
+
+// AppConfig();
+>>>>>>> f758de6db119aad10477eb63190be557b500f683:src/api/GraphQL.js
 
 class GraphQL {
     // Gives back function with parameters (id, variablesList, successHandler, failureHandler)
