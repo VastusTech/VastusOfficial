@@ -1,5 +1,4 @@
 import {setIsNotLoading} from './infoActions';
-import { fetchClient, forceFetchClient } from "./cacheActions";
 import { fetchItem, forceFetchItem } from "./cacheActions";
 import {getItemTypeFromID} from "../../logic/ItemType";
 

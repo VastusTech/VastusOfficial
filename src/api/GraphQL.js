@@ -5,6 +5,8 @@ import {switchReturnItemType} from "../logic/ItemType";
 import { consoleLog, consoleError } from "../logic/DebuggingHelper";
 import AppConfig from "../AppConfig";
 
+// AppConfig();
+
 class GraphQL {
     // Gives back function with parameters (id, variablesList, successHandler, failureHandler)
     static getGetByIDFunction(itemType) {
@@ -571,7 +573,7 @@ class GraphQL {
         else {
             consoleLog("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             if (ifDebug) {
-                console.log("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
+                alert("Sending ql = " + query.query + "\nWith variables = " + JSON.stringify(query.variables));
             }
             API.graphql(graphqlOperation(query.query, query.variables)).then((data) => {
                 consoleLog("GraphQL operation succeeded!");
@@ -582,7 +584,7 @@ class GraphQL {
                 }
                 consoleLog("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 if (ifDebug) {
-                    console.log("Returned: " + JSON.stringify(data.data[queryFunctionName]));
+                    alert("Returned: " + JSON.stringify(data.data[queryFunctionName]));
                 }
                 if (putQuery) {
                     putQuery(queryString, data.data[queryFunctionName]);

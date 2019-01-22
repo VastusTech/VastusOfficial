@@ -140,7 +140,7 @@ class MessageBoard extends Component<Props> {
                         ref={ref => (this.scrollView = ref)}
                         onScroll={this.handleScroll}
                     >
-                        <Messages board={this.state.board} comments={this.getBoardMessages()}/>
+                        <Messages board={this.state.board} comments={this.getBoardMessages()} userID={this.props.user.id}/>
                     </ScrollView>
                     <Divider className='u-margin-top--2' />
                     <CommentBox board={this.state.board}/>

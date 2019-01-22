@@ -9,17 +9,13 @@ import search from "./reducers/searchReducer";
 import ably from "./reducers/ablyReducer";
 import message from "./reducers/messageReducer";
 import { reduxLog } from "../logic/Constants";
-import { log } from "../logic/Constants";
 
 let middleware;
-if (log) {
-    //let middleware;
-    if (reduxLog) {
-        middleware = applyMiddleware(logger, thunk);
-    }
-    else {
-        middleware = applyMiddleware(thunk);
-    }
+if (reduxLog) {
+    middleware = applyMiddleware(logger, thunk);
+}
+else {
+    middleware = applyMiddleware(thunk);
 }
 
 const composeEnhancers =

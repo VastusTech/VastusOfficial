@@ -4,12 +4,12 @@ import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers
 import connect from "react-redux/es/connect/connect";
 import {Player} from "video-react";
 
-export default (props: {message: any}) => {
+export default (props: {message: any, userID: string}) => {
     const from = props.message.from;
     const name = props.message.name;
     const message = props.message.message;
-    const type = this.props.message.type;
-    const ifSelf = from === this.props.user.id;
+    const type = props.message.type;
+    const ifSelf = from === props.userID;
     if (type) {
         // Image or video message
         if (type === "picture") {

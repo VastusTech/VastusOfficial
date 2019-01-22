@@ -1,5 +1,4 @@
 import React from 'react'
-// import { Player } from 'video-react';
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider } from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
 import { consoleLog } from "../../logic/DebuggingHelper";
@@ -9,6 +8,8 @@ import { connect } from "react-redux";
 import TrainerFunctions from "../../database_functions/TrainerFunctions";
 import TrainerPostFeed from "../lists/TrainerPostFeed";
 import EventList from "../lists/EventList";
+import MessageBoard from "../messaging/MessageBoard";
+import MessageHandler from "../../api/MessageHandler";
 
 type Props = {
     trainerID: string,
@@ -263,7 +264,7 @@ class TrainerModal extends React.PureComponent<Props> {
                                 <Button primary fluid size="large" onClick={this.openOwnedModal.bind(this)}><Icon name="trophy" /> Current Challenges</Button>
                                 <Modal basic size='mini' open={this.state.ownedModalOpen} onClose={this.closeOwnedModal.bind(this)} closeIcon>
                                     <Modal.Content>
-                                        <ChallengeList challengeIDs={this.props.user.ownedChallenges}/>
+                                        <ChallengeList challengeIDs={this.props.user.ownedChallenges} noChallengesMessage="No owned challenges yet!"/>
                                     </Modal.Content>
                                 </Modal>
                             </List.Item>
@@ -271,8 +272,13 @@ class TrainerModal extends React.PureComponent<Props> {
                                 <Button primary fluid size="large" onClick={this.openScheduledModal.bind(this)}><Icon name="checked calendar" /> Scheduled Events</Button>
                                 <Modal basic size='mini' open={this.state.scheduledModalOpen} onClose={this.closeScheduledModal.bind(this)} closeIcon>
                                     <Modal.Content>
-                                        <EventList eventIDs={this.props.user.scheduledEvents}/>
+                                        <EventList eventIDs={this.props.user.scheduledEvents} noEventsMessage="No scheduled events yet!"/>
                                     </Modal.Content>
+                                </Modal>
+                            </List.Item>
+                            <List.Item>
+                                <Modal trigger={<Button primary fluid><Icon name="wechat" /> Trainer Chat</Button>}>
+                                    <MessageBoard board={MessageHandler.getBoard([this.getTrainerAttribute("id"), this.props.user.id])}/>
                                 </Modal>
                             </List.Item>
                         </List>

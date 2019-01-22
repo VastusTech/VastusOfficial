@@ -10,9 +10,8 @@ import App from './App';
 import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
-import {ifCallLambdaAtStart} from "./logic/Constants";
-
 import AWSConfig from "./AppConfig";
+import {ifCallLambdaAtStart} from "./logic/Constants";
 import Lambda from "./api/Lambda";
 
 // AWSConfig();
@@ -30,4 +29,3 @@ ReactDOM.render(
     document.getElementById('root')
 );
 registerServiceWorker();
-if (ifCallLambdaAtStart) { Lambda.ping(); }
