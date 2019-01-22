@@ -13,7 +13,7 @@ import { log } from "../logic/Constants";
 
 let middleware;
 if (log) {
-    let middleware;
+    //let middleware;
     if (reduxLog) {
         middleware = applyMiddleware(logger, thunk);
     }

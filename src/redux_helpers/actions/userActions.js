@@ -1,10 +1,7 @@
 import {setIsNotLoading} from './infoActions';
-<<<<<<< HEAD
 import { fetchClient, forceFetchClient } from "./cacheActions";
-=======
 import { fetchItem, forceFetchItem } from "./cacheActions";
 import {getItemTypeFromID} from "../../logic/ItemType";
->>>>>>> f758de6db119aad10477eb63190be557b500f683
 
 // TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {
