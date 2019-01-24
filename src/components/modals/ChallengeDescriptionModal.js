@@ -492,24 +492,24 @@ class ChallengeDescriptionModal extends Component<Props> {
                     </Modal.Header>
                 <Modal.Content align='center'>
                     <Grid>
+                        <Grid.Row centered>
+                            <Icon.Group size='large'>
+                                <Icon name='bullseye' />
+                            </Icon.Group> {this.getChallengeAttribute("goal")}
+                        </Grid.Row>
+                        <Grid.Row centered>
+                            <div>
+                                <Icon.Group size='large'>
+                                    <Icon name='trophy' />
+                                </Icon.Group> {this.getChallengeAttribute("prize")}
+                            </div>
+                        </Grid.Row>
                         <Grid.Column floated='left' width={6}>
-                            <Grid.Row>
-                                    <Icon.Group size='large'>
-                                        <Icon name='bullseye' />
-                                    </Icon.Group> {this.getChallengeAttribute("goal")}
-                            </Grid.Row>
                             <Grid.Row>
                                 <Icon name='user'/><Button className="u-button--flat" onClick={this.openClientModal}>{this.getOwnerName()}</Button>
                             </Grid.Row>
                         </Grid.Column>
                         <Grid.Column floated='right' width={6}>
-                            <Grid.Row>
-                                <div>
-                                    <Icon.Group size='large'>
-                                        <Icon name='trophy' />
-                                    </Icon.Group> {this.getChallengeAttribute("prize")}
-                                </div>
-                            </Grid.Row>
                             <Grid.Row>
                                 <Icon name='users' /><Modal trigger={<Button primary className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
                                     <Modal.Content>
@@ -519,6 +519,7 @@ class ChallengeDescriptionModal extends Component<Props> {
                             </Grid.Row>
                         </Grid.Column>
                     </Grid>
+                    <Divider/>
                     <Modal.Description>
                         <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
                         <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
