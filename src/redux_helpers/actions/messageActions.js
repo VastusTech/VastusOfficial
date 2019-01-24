@@ -24,7 +24,7 @@ export function queryNextMessagesFromBoard(board, limit, dataHandler, failureHan
                     // console.log(JSON.stringify(data));
                     if (!data.items) { data.items = []; }
                     addURLToMessages(data.items, "message", "messageURL", notFoundPicture, (message) => {return message.type}, (messages) => {
-                        addURLToMessages(data.items, "profileImagePath", "profilePicture", defaultProfilePicture, (message) => {return message.profileImagePath}, (messages) => {
+                        addURLToMessages(messages, "profileImagePath", "profilePicture", defaultProfilePicture, (message) => {return message.profileImagePath}, (messages) => {
                             dispatch(addQueryToBoard(board, messages, data.nextToken));
                             if (dataHandler) {
                                 dataHandler(messages);
