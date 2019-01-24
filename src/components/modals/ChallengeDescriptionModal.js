@@ -481,64 +481,64 @@ class ChallengeDescriptionModal extends Component<Props> {
         //console.log("Challenge Info: " + JSON.stringify(this.state.event));
         return(
         	<div>
-            <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
-                <Icon className='close' onClick={() => this.props.onClose()}/>
-                <Modal.Header align='center'><div>
-                {this.getChallengeAttribute("title")}</div>
-                    <div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
-                    <div>
-                        {this.props.daysLeft} days left
-                    </div>
-                    </Modal.Header>
-                <Modal.Content align='center'>
-                    <Grid>
-                        <Grid.Row centered>
-                            <Icon.Group size='large'>
-                                <Icon name='bullseye' />
-                            </Icon.Group> {this.getChallengeAttribute("goal")}
-                        </Grid.Row>
-                        <Grid.Row centered>
-                            <div>
+                <Modal open={this.props.open} onClose={this.props.onClose.bind(this)}>
+                    <Icon className='close' onClick={() => this.props.onClose()}/>
+                    <Modal.Header align='center'><div>
+                    {this.getChallengeAttribute("title")}</div>
+                        <div>{this.displayTagIcons(this.getChallengeAttribute("tags"))}</div>
+                        <div>
+                            {this.props.daysLeft} days left
+                        </div>
+                        </Modal.Header>
+                    <Modal.Content align='center'>
+                        <Grid>
+                            <Grid.Row centered>
                                 <Icon.Group size='large'>
-                                    <Icon name='trophy' />
-                                </Icon.Group> {this.getChallengeAttribute("prize")}
-                            </div>
-                        </Grid.Row>
-                        <Grid.Column floated='left' width={6}>
-                            <Grid.Row>
-                                <Icon name='user'/><Button className="u-button--flat" onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                                    <Icon name='bullseye' />
+                                </Icon.Group> {this.getChallengeAttribute("goal")}
                             </Grid.Row>
-                        </Grid.Column>
-                        <Grid.Column floated='right' width={6}>
-                            <Grid.Row>
-                                <Icon name='users' /><Modal trigger={<Button primary className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
-                                    <Modal.Content>
-                                        <DatabaseObjectList ids={this.getChallengeAttribute("members")} noObjectsMessage={"No members yet!"}/>
-                                    </Modal.Content>
-                                </Modal>
-                            </Grid.Row>
-                        </Grid.Column>
-                    </Grid>
-                    <Divider/>
-                    <Modal.Description>
-                        <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
-                        <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
-                        <CreateSubmissionModal open={this.state.submitModalOpen} onClose={this.closeSubmitModal} challengeID={this.getChallengeAttribute("id")}/>
-                        {this.createCorrectButton()}
-                    </Modal.Description>
-                    <div>{this.displayError()}{this.challengeDeleted()}</div>
-                    {/*
-                        <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
-                            <Grid>
-                                <div id="ui center align">
-
+                            <Grid.Row centered>
+                                <div>
+                                    <Icon.Group size='large'>
+                                        <Icon name='trophy' />
+                                    </Icon.Group> {this.getChallengeAttribute("prize")}
                                 </div>
-                            </Grid>
-                        </Modal>
-                        */}
-                </Modal.Content>
-            </Modal>
-        {this.challengeDeleted()}
+                            </Grid.Row>
+                            <Grid.Column floated='left' width={6}>
+                                <Grid.Row>
+                                    <Icon name='user'/><Button className="u-button--flat" onClick={this.openClientModal}>{this.getOwnerName()}</Button>
+                                </Grid.Row>
+                            </Grid.Column>
+                            <Grid.Column floated='right' width={6}>
+                                <Grid.Row>
+                                    <Icon name='users' /><Modal trigger={<Button primary className="u-button--flat u-padding-left--1">Members</Button>} closeIcon>
+                                        <Modal.Content>
+                                            <DatabaseObjectList ids={this.getChallengeAttribute("members")} noObjectsMessage={"No members yet!"}/>
+                                        </Modal.Content>
+                                    </Modal>
+                                </Grid.Row>
+                            </Grid.Column>
+                        </Grid>
+                        <Divider/>
+                        <Modal.Description>
+                            <ClientModal open={this.state.clientModalOpen} onClose={this.closeClientModal} clientID={this.getChallengeAttribute("owner")}/>
+                            <CompleteChallengeModal open={this.state.completeModalOpen} onClose={this.closeCompleteModal} challengeID={this.getChallengeAttribute("id")}/>
+                            <CreateSubmissionModal open={this.state.submitModalOpen} onClose={this.closeSubmitModal} challengeID={this.getChallengeAttribute("id")}/>
+                            {this.createCorrectButton()}
+                        </Modal.Description>
+                        <div>{this.displayError()}{this.challengeDeleted()}</div>
+                        {/*
+                            <Modal trigger={<Button primary id="ui center aligned"><Icon name="comment outline"/></Button>}>
+                                <Grid>
+                                    <div id="ui center align">
+
+                                    </div>
+                                </Grid>
+                            </Modal>
+                            */}
+                    </Modal.Content>
+                </Modal>
+            {this.challengeDeleted()}
         </div>
         );
     }
