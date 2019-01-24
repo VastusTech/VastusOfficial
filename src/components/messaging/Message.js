@@ -106,7 +106,7 @@ export default (props: {message: any, userID: string}) => {
                             <strong>{name}</strong>
                         </div>
                     </Grid.Column>
-                    <Grid.Column width={6}>
+                    <Grid.Column width={1}>
                         <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${profilePicture})`, width: '50px', height: '50px'}}></div>
                     </Grid.Column>
                 </Grid>
@@ -116,7 +116,7 @@ export default (props: {message: any, userID: string}) => {
             // Other text
             return (
                 <Grid style={{marginLeft: '10px'}}>
-                    <Grid.Column width={6}>
+                    <Grid.Column width={1}>
                         <div avatar align="center" className="ui u-avatar tiny" style={{backgroundImage: `url(${profilePicture})`, width: '50px', height: '50px'}}></div>
                     </Grid.Column>
                     <Grid.Column floated='left' width={10}>
