@@ -2,7 +2,7 @@ import React, {Component} from 'react'
 import {Icon} from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
-import {fetchChallenge, fetchEvent, fetchGroup, fetchInvite} from "../../redux_helpers/actions/cacheActions";
+import {fetchChallenge, fetchEvent, fetchGroup, fetchInvite} from "../../vastuscomponents/redux_actions/cacheActions";
 
 /*
 * NotificationCard Feed

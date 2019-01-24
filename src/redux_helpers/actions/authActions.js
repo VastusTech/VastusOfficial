@@ -1,11 +1,11 @@
 import { Auth } from "aws-amplify";
-import {setError, setIsLoading, setIsNotLoading} from "./infoActions";
+import {setError, setIsLoading, setIsNotLoading} from "../../vastuscomponents/redux_actions/infoActions";
 import jwt_decode from "jwt-decode";
 import {setUser, forceSetUser} from "./userActions";
-import {addHandlerToNotifications, removeAllHandlers} from "./ablyActions";
-import QL from "../../api/GraphQL";
-import ClientFunctions from "../../database_functions/ClientFunctions";
-import {consoleLog} from "../../logic/DebuggingHelper";
+import {addHandlerToNotifications, removeAllHandlers} from "../../vastuscomponents/redux_actions/ablyActions";
+import QL from "../../vastuscomponents/api/GraphQL";
+import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
+import {consoleLog} from "../../vastuscomponents/logic/DebuggingHelper";
 
 export function updateAuth() {
     return (dispatch) => {

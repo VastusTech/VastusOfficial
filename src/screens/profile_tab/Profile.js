@@ -1,18 +1,18 @@
 import React from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
 import { Storage } from 'aws-amplify';
-import S3 from "../../api/S3Storage";
+import S3 from "../../vastuscomponents/api/S3Storage";
 import _ from 'lodash'
-import ChallengeList from "../../components/lists/ChallengeList";
+import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import { connect } from "react-redux";
 import {logOut} from "../../redux_helpers/actions/authActions";
-import ClientFunctions from "../../database_functions/ClientFunctions";
+import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
 import ReactSwipe from "react-swipe";
-import { parseISOString } from "../../logic/TimeHelper";
-import ClientList from "../../components/lists/ClientList";
-import DatabaseObjectList from "../../components/lists/DatabaseObjectList";
-import UploadImage from "../../components/manager/UploadImage";
+import { parseISOString } from "../../vastuscomponents/logic/TimeHelper";
+import ClientList from "../../vastuscomponents/components/lists/ClientList";
+import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
+import UploadImage from "../../vastuscomponents/components/manager/UploadImage";
 
 /**
 * Profile

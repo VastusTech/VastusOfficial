@@ -8,8 +8,8 @@ import { updateAuth } from "./redux_helpers/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 // import AWSConfig from './AppConfig';
-import {ifCallLambdaAtStart} from "./logic/Constants";
-import Lambda from "./api/Lambda";
+import {ifCallLambdaAtStart} from "./Constants";
+import Lambda from "./vastuscomponents/api/Lambda";
 // import ItemType, { getItemTypeFromID } from "./ItemType";
 
 // const myServiceWorker = await ServiceWorker.register("/service-worker.js", "/");

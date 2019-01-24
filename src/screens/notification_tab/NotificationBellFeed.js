@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import _ from 'lodash'
 import {Dimmer, Loader, Message} from 'semantic-ui-react'
-import NotificationCard from "../../components/cards/NotificationCard";
+import NotificationCard from "../../vastuscomponents/components/cards/NotificationCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 import {
@@ -11,8 +11,8 @@ import {
     fetchGroup,
     fetchClient,
     fetchTrainer
-} from "../../redux_helpers/actions/cacheActions";
-import {getItemTypeFromID} from "../../logic/ItemType";
+} from "../../vastuscomponents/redux_actions/cacheActions";
+import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 /*
 * NotificationCard Feed

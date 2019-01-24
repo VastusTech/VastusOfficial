@@ -11,13 +11,13 @@ import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
 import store from './redux_helpers/store';
 import AWSConfig from "./AppConfig";
-import {ifCallLambdaAtStart} from "./logic/Constants";
-import Lambda from "./api/Lambda";
+import {ifCallLambdaAtStart} from "./Constants";
+import Lambda from "./vastuscomponents/api/Lambda";
 
 // AWSConfig();
 // window.LOG_LEVEL='DEBUG';
 
-require('./api/Ably');
+require('./vastuscomponents/api/Ably');
 
 // ReactDOM.render(<App />, document.getElementById('root'));
 AWSConfig();
