@@ -55,7 +55,7 @@ Use Cases:
 
  */
 
-class SearchScreen extends Component {
+class SearchTab extends Component {
     state = {
 
     };
@@ -158,4 +158,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(SearchTab);

@@ -6,7 +6,7 @@ import ClientCard from "../../vastuscomponents/components/cards/ClientCard";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {fetchClient} from "../../vastuscomponents/redux_actions/cacheActions";
 
-class Leaderboard extends Component {
+class LeaderBoardTab extends Component {
     state = {
         isLoading: true,
         isFetching: true,
@@ -164,4 +164,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Leaderboard);
+export default connect(mapStateToProps, mapDispatchToProps)(LeaderBoardTab);

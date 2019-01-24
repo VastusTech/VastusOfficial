@@ -15,11 +15,11 @@ import DatabaseObjectList from "../../vastuscomponents/components/lists/Database
 import UploadImage from "../../vastuscomponents/components/manager/UploadImage";
 
 /**
-* Profile
+* ProfileTab
 *
 * This is the profile page which displays information about the current user.
  */
-class Profile extends React.PureComponent {
+class ProfileTab extends React.PureComponent {
 
     state = {
         isLoading: true,
@@ -42,7 +42,7 @@ class Profile extends React.PureComponent {
         // console.log("constructor props: " + JSON.stringify(props));
         super(props);
         // this.setState({isLoading: true, checked: false, error: null});
-        // ("Got into Profile constructor");
+        // ("Got into ProfileTab constructor");
         this.setPicture = this.setPicture.bind(this);
         this.setGalleryPicture = this.setGalleryPicture.bind(this);
         this.update = this.update.bind(this);
@@ -474,4 +474,4 @@ const mapDispatchToProps = (dispatch) => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfileTab);
