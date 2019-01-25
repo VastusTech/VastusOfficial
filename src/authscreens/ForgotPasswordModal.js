@@ -8,7 +8,7 @@ import {
     openSignUpModal
 } from "../redux_helpers/actions/authActions";
 import { connect } from "react-redux";
-import {setError} from "../redux_helpers/actions/infoActions";
+import {setError} from "../vastuscomponents/redux_actions/infoActions";
 
 class ForgotPasswordModal extends Component {
     authState = {

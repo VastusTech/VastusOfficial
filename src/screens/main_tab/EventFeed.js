@@ -1,12 +1,12 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Visibility, Header} from 'semantic-ui-react'
-import EventCard from "../../components/cards/EventCard";
-import QL from "../../api/GraphQL";
+import EventCard from "../../vastuscomponents/components/cards/EventCard";
+import QL from "../../vastuscomponents/api/GraphQL";
 import { connect } from 'react-redux';
-import {fetchEvent, putEvent, putEventQuery} from "../../redux_helpers/actions/cacheActions";
+import {fetchEvent, putEvent, putEventQuery} from "../../vastuscomponents/redux_actions/cacheActions";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import CreateChallengeProp from "../../components/manager/CreateChallenge"
+import CreateChallengeProp from "../../vastuscomponents/components/manager/CreateChallenge"
 import NextEventProp from "./NextEvent";
 // import {Tab} from "semantic-ui-react/dist/commonjs/modules/Tab/Tab";
 

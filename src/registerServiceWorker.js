@@ -1,4 +1,4 @@
-import {consoleError} from "./logic/DebuggingHelper";
+import {consoleError} from "./vastuscomponents/logic/DebuggingHelper";
 // In production, we register a service worker to serve assets from local cache.
 
 // This lets the app load faster on subsequent visits in production, and gives

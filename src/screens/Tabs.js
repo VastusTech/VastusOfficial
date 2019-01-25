@@ -1,10 +1,10 @@
 import { Fragment } from 'react';
 import {Tab, Menu, Icon, Header } from "semantic-ui-react";
-import NotificationFeed from "./notification_tab/NotificationBellFeed";
-import ProfileProp from "./profile_tab/Profile";
+import NotificationFeed from "./notifications_tab/NotificationBellFeed";
+import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
-import LeaderBoard from "./leaderboard_tab/Leaderboard";
-import NotificationBellProp from "./notification_tab/NotificationBell";
+import LeaderBoardTab from "./leaderboard_tab/LeaderBoardTab";
+import NotificationBellProp from "./notifications_tab/NotificationBell";
 import PostFeedProp from "./main_tab/PostFeed";
 
 /**
@@ -31,7 +31,7 @@ export default () => (
                         <Icon name='user circle outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <ProfileProp/>
+                    <ProfileTab/>
                 </Tab.Pane>
             },
             {
@@ -40,7 +40,7 @@ export default () => (
                         <Icon name='winner' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <LeaderBoard />
+                    <LeaderBoardTab />
                 </Tab.Pane>
             },
             {

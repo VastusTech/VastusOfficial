@@ -1,8 +1,8 @@
 import React, {Component, Fragment} from 'react'
 import _ from 'lodash'
 import {Visibility, Header, Grid} from 'semantic-ui-react'
-import PostCard from "../../components/cards/PostCard";
-import QL from "../../api/GraphQL";
+import PostCard from "../../vastuscomponents/components/cards/PostCard";
+import QL from "../../vastuscomponents/api/GraphQL";
 import { connect } from 'react-redux';
 import {
     fetchPost,
@@ -14,12 +14,12 @@ import {
     fetchClient,
     fetchTrainer,
     fetchPostQuery
-} from "../../redux_helpers/actions/cacheActions";
+} from "../../vastuscomponents/redux_actions/cacheActions";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import PostManager from "../../components/manager/PostManager";
+import PostManager from "../../vastuscomponents/components/manager/PostManager";
 import NextChallengeProp from "./NextChallenge";
-import {getItemTypeFromID} from "../../logic/ItemType";
-import {consoleLog, consoleError} from "../../logic/DebuggingHelper";
+import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
+import {consoleLog, consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
 
 /**
  * Event Feed

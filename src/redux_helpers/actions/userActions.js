@@ -1,6 +1,6 @@
-import {setIsNotLoading} from './infoActions';
-import { fetchItem, forceFetchItem } from "./cacheActions";
-import {getItemTypeFromID} from "../../logic/ItemType";
+import {setIsNotLoading} from '../../vastuscomponents/redux_actions/infoActions';
+import { fetchItem, forceFetchItem } from "../../vastuscomponents/redux_actions/cacheActions";
+import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 // TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {
