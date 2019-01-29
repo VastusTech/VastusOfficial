@@ -2,14 +2,21 @@ import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
 import user from "./reducers/userReducer";
-import cache from "./reducers/cacheReducer";
+import cache from "../vastuscomponents/redux_reducers/cacheReducer";
 import auth from "./reducers/authReducer";
-import info from "./reducers/infoReducer";
-import search from "./reducers/searchReducer";
-import ably from "./reducers/ablyReducer";
-import message from "./reducers/messageReducer";
+import info from "../vastuscomponents/redux_reducers/infoReducer";
+import search from "../vastuscomponents/redux_reducers/searchReducer";
+import ably from "../vastuscomponents/redux_reducers/ablyReducer";
+import message from "../vastuscomponents/redux_reducers/messageReducer";
+import { reduxLog } from "../Constants";
 
-const middleware = applyMiddleware(logger, thunk);
+let middleware;
+if (reduxLog) {
+    middleware = applyMiddleware(logger, thunk);
+}
+else {
+    middleware = applyMiddleware(thunk);
+}
 
 const composeEnhancers =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

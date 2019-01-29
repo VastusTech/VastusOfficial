@@ -5,7 +5,7 @@ import Semantic, { Modal, Button, Form, Message, Dimmer, Loader, Popup, Divider 
 // import appConfig from '../AppConfig';
 import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux_helpers/actions/authActions";
 import { connect } from "react-redux";
-import {clearError, setError} from "../redux_helpers/actions/infoActions";
+import {clearError, setError} from "../vastuscomponents/redux_actions/infoActions";
 
 class SignUpModal extends Component {
     constructor(props) {
