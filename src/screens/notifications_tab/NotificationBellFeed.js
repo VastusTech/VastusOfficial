@@ -50,6 +50,7 @@ class NotificationFeed extends React.PureComponent {
         }
 
         const fetchAboutAndFromInfo = (invite) => {
+            // TODO We don't need this much stuff....
             if (invite && invite.from && invite.to && invite.inviteType && invite.about) {
                 // Fetch from user information
                 const fromItemType = getItemTypeFromID(invite.from);
@@ -108,7 +109,7 @@ class NotificationFeed extends React.PureComponent {
         };
 
         const fetchAndAddInvite = (inviteID) => {
-            props.fetchInvite(inviteID, ["time_created", "from", "to", "inviteType", "about", "description"], (data) => {
+            props.fetchInvite(inviteID, NotificationCard.fetchVariableList, (data) => {
                 this.state.notifications.push(data.id);
                 fetchAboutAndFromInfo(data);
                 this.setState({isLoading: false});

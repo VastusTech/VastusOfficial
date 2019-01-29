@@ -20,6 +20,10 @@ import PostManager from "../../vastuscomponents/components/manager/PostManager";
 import NextChallengeProp from "./NextChallenge";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 import {consoleLog, consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
+import ClientDetailCard from "../../vastuscomponents/components/post_detail_cards/ClientDetailCard";
+import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
+import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
+import PostDetailCard from "../../vastuscomponents/components/post_detail_cards/PostDetailCard";
 
 /**
  * Event Feed
@@ -53,19 +57,6 @@ class PostFeedProp extends Component {
         //this.queryChallenges = this.queryChallenges.bind(this);
     }
 
-    // componentDidMount() {
-        // this.componentWillReceiveProps(this.props);
-        // if (this.props.userID) {
-        //     this.setState({userID: this.props.userID});
-        //     this.props.fetchUserAttributes(["friends", "invitedEvents"],
-        //         (data) => {
-        //             // When it has finished
-        //             consoleLog("Finished");
-        //             this.queryEvents();
-        //         });
-        // }
-    // }
-
     componentWillReceiveProps(newProps) {
         // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
@@ -76,18 +67,11 @@ class PostFeedProp extends Component {
 
     /*
     Here we have a feed of posts that we are querying.
-
     For one query, we only change the nextToken to get the next stuff
-
     PostQuery nextToken = null (1)
-
     PostQuery nextToken = 1 (2)
-
     PostQuery nextToken = 2 (null)
-
     Done...
-
-
      */
     queryPosts(userID) {
         // console.log("BEFORE: " + this.state.sentRequest);
@@ -120,8 +104,7 @@ class PostFeedProp extends Component {
                 );
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                 // console.log("QUerying posts!");
-                this.props.fetchPostQuery(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                    filter, this.state.postFeedLength, this.state.nextToken, (data) => {
+                this.props.fetchPostQuery(PostCard.fetchVariableList, filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                         if (!data.nextToken) {
                             this.setState({ifFinished: true});
                         }
@@ -135,16 +118,16 @@ class PostFeedProp extends Component {
                                 //console.log(JSON.stringify("")
                                 const aboutItemType = getItemTypeFromID(post.about);
                                 if (aboutItemType === "Client") {
-                                    this.props.fetchClient(data.items[i].about, ["id", "profileImagePath", "name"]);
+                                    this.props.fetchClient(data.items[i].about, ClientDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Trainer") {
-                                    this.props.fetchTrainer(data.items[i].about, ["id", "profileImagePath", "name"]);
+                                    this.props.fetchTrainer(data.items[i].about, TrainerDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Event") {
 
                                 } else if (aboutItemType === "Challenge") {
                                     // console.log("Fetching challenge for post in post feed");
-                                    this.props.fetchChallenge(data.items[i].about, ["title", "endTime", "tags", "time_created", "capacity", "members", "prize", "goal", "owner", "restriction", "submissions"]);
+                                    this.props.fetchChallenge(data.items[i].about, ChallengeDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Post") {
-                                    this.props.fetchPost(data.items[i].about, ["about", "by", "description", "picturePaths", "videoPaths"]);
+                                    this.props.fetchPost(data.items[i].about, PostDetailCard.fetchVariableList);
                                 }
                                 newlyQueriedPosts.push(post);
                             }
