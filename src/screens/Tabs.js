@@ -37,10 +37,10 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='winner' size='large' />
+                        <Icon name='group' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <LeaderBoardTab />
+                    Community Tab Goes Here :)
                 </Tab.Pane>
             },
             {
