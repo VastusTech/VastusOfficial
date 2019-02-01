@@ -3,7 +3,7 @@ import {Tab, Menu, Icon, Header } from "semantic-ui-react";
 import NotificationFeed from "./notifications_tab/NotificationBellFeed";
 import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
-import LeaderBoardTab from "./leaderboard_tab/LeaderBoardTab";
+import CommunityTab from "./community_tab/CommunityTab";
 import NotificationBellProp from "./notifications_tab/NotificationBell";
 import PostFeedProp from "./main_tab/PostFeed";
 
@@ -28,19 +28,19 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={1}>
-                        <Icon name='user circle outline' size='large' />
+                        <Icon name='group' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab/>
+                    <CommunityTab/>
                 </Tab.Pane>
             },
             {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='group' size='large' />
+                        <Icon name='user circle outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    Community Tab Goes Here :)
+                    <ProfileTab/>
                 </Tab.Pane>
             },
             {
