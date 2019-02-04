@@ -7,8 +7,6 @@
     "aws-amplify": "^1.1.6",
     "aws-amplify-react": "^2.0.7",
     "braintree-web": "^3.42.0",
-    "enzyme": "^3.8.0",
-    "enzyme-adapter-react-16": "^1.8.0",
     "gulp-help": "^1.6.1",
     "jwt-decode": "^2.2.0",
     "lodash": "^4.17.11",
@@ -44,6 +42,8 @@
   ],
   "devDependencies": {
     "chai": "^4.2.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-react-16": "^1.8.0",
     "redux-mock-store": "^1.5.3",
     "webpack-cli": "^3.2.1"
   }
