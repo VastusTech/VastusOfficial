@@ -1,6 +1,6 @@
 import React, {Fragment} from 'react'
 import _ from 'lodash'
-import {Dimmer, Loader, Message} from 'semantic-ui-react'
+import {Dimmer, Loader, Message, Grid} from 'semantic-ui-react'
 import NotificationCard from "../../vastuscomponents/components/cards/NotificationCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
@@ -193,7 +193,7 @@ class NotificationFeed extends React.PureComponent {
         }
         else {
             return(
-                <Message>No notifications!</Message>
+                <Message><div align="center">No Notifications!</div></Message>
             );
         }
     }
