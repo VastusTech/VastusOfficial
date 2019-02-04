@@ -3,13 +3,8 @@ import { connect } from "react-redux";
 import {Grid, Button, Modal} from 'semantic-ui-react'
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import CreateGroupProp from "../../vastuscomponents/components/manager/CreateGroup";
-import QL from "../../vastuscomponents/api/GraphQL";
 import GroupCard from "../../vastuscomponents/components/cards/GroupCard";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
-import ClientDetailCard from "../../vastuscomponents/components/post_detail_cards/ClientDetailCard";
-import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
-import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
-import PostDetailCard from "../../vastuscomponents/components/post_detail_cards/PostDetailCard";
 import {consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
 import {
     fetchClient,
@@ -58,69 +53,18 @@ class CommunityTab extends Component {
             // console.log("AFTER: " + this.state.sentRequest);
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
-                /*const filter = QL.generateFilter({
-                        and: [{
-                            or: [{
-                                postType: {
-                                    eq: "$postType1"
-                                }
-                            }, {
-                                postType: {
-                                    eq: "$postType2"
-                                }
-                            }]
-                        }, {
-                            access: {
-                                eq: "$access"
-                            }
-                        }]
-                    }, {
-                        postType1: "Challenge",
-                        postType2: "newChallenge",
-                        access: "public"
-                    }
-                );*/
-                // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                // console.log("QUerying posts!");
                 this.props.fetchGroupQuery(GroupCard.fetchVariableList, null, this.state.groupFeedLength, this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
                     }
                     if (data.items) {
-                        // TODO We can see private events
-                        // consoleLog("got items");
-                        // console.log("Received " + data.items.length + " posts!");
-                        const newlyQueriedGroups = [];
                         for (let i = 0; i < data.items.length; i++) {
                             const group = data.items[i];
-                            //console.log(JSON.stringify("")
-                            const aboutItemType = getItemTypeFromID(group.about);
-                            alert(aboutItemType);
-                            if (aboutItemType === "Client") {
-                                this.props.fetchClient(data.items[i].about, ClientDetailCard.fetchVariableList);
-                            } else if (aboutItemType === "Trainer") {
-                                this.props.fetchTrainer(data.items[i].about, TrainerDetailCard.fetchVariableList);
-                            } else if (aboutItemType === "Event") {
 
-                            } else if (aboutItemType === "Challenge") {
-                                // console.log("Fetching challenge for post in post feed");
-                                this.props.fetchChallenge(data.items[i].about, ChallengeDetailCard.fetchVariableList);
-                            } else if (aboutItemType === "Post") {
-                                this.props.fetchPost(data.items[i].about, PostDetailCard.fetchVariableList);
-                            }
-                            else if (aboutItemType === "Group") {
-                                this.props.fetchGroup(data.items[i].about, GroupCard.fetchVariableList);
-                            }
-                            newlyQueriedGroups.push(group);
+                            // TODO Fetch all the information that we need to about the groups
+
+                            this.state.groups.push(group);
                         }
-                        this.setState({groups: [...this.state.groups, ...newlyQueriedGroups]});
-                        for (let i = 0; i < data.items.length; i++) {
-                            //consoleLog(data.items[i].time_created);
-                            // consoleLog("Putting in event: " + JSON.stringify(data.items[i]));
-                            // this.setState({events: [...this.state.events, data.items[i]]});
-                            this.props.putGroup(data.items[i]);
-                        }
-                        // consoleLog("events in the end: " + JSON.stringify(this.state.events));
                         this.setState({nextToken: data.nextToken});
                     }
                     else {
@@ -128,7 +72,6 @@ class CommunityTab extends Component {
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
-                    alert("Querying Groups Failed :(");
                     consoleError("Querying Groups failed!");
                     consoleError(error);
                     this.setState({isLoading: false, error: error});

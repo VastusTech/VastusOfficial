@@ -16,7 +16,7 @@ import {
     fetchPostQuery
 } from "../../vastuscomponents/redux_actions/cacheActions";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import PostManager from "../../vastuscomponents/components/manager/PostManager";
+// import PostManager from "../../vastuscomponents/components/manager/PostManager";
 import NextChallengeProp from "./NextChallenge";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 import {consoleLog, consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
@@ -61,7 +61,7 @@ class PostFeedProp extends Component {
         // consoleLog("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.state.userID = newProps.userID;
-            this.queryPosts(newProps.userID);
+            this.queryPosts();
         }
     }
 
@@ -73,7 +73,7 @@ class PostFeedProp extends Component {
     PostQuery nextToken = 2 (null)
     Done...
      */
-    queryPosts(userID) {
+    queryPosts() {
         // console.log("BEFORE: " + this.state.sentRequest);
         if (!this.state.sentRequest) {
             this.state.sentRequest = true;
@@ -81,64 +81,49 @@ class PostFeedProp extends Component {
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
                 const filter = QL.generateFilter({
-                        and: [{
-                            or: [{
-                                postType: {
-                                    eq: "$postType1"
-                                }
-                            }, {
-                                postType: {
-                                    eq: "$postType2"
-                                }
-                            }]
+                        or: [{
+                            postType: {
+                                eq: "$postType1"
+                            }
                         }, {
-                            access: {
-                                eq: "$access"
+                            postType: {
+                                eq: "$postType2"
                             }
                         }]
                     }, {
                         postType1: "Challenge",
                         postType2: "newChallenge",
-                        access: "public"
                     }
                 );
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
-                // console.log("QUerying posts!");
                 this.props.fetchPostQuery(PostCard.fetchVariableList, filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                         if (!data.nextToken) {
                             this.setState({ifFinished: true});
                         }
                         if (data.items) {
-                            // TODO We can see private events
-                            // consoleLog("got items");
-                            // console.log("Received " + data.items.length + " posts!");
-                            const newlyQueriedPosts = [];
+                            // Fetch all the Card information for the received detail cards
                             for (let i = 0; i < data.items.length; i++) {
                                 const post = data.items[i];
-                                //console.log(JSON.stringify("")
-                                const aboutItemType = getItemTypeFromID(post.about);
+                                const about = post.about;
+                                const aboutItemType = getItemTypeFromID(about);
                                 if (aboutItemType === "Client") {
-                                    this.props.fetchClient(data.items[i].about, ClientDetailCard.fetchVariableList);
+                                    this.props.fetchClient(about, ClientDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Trainer") {
-                                    this.props.fetchTrainer(data.items[i].about, TrainerDetailCard.fetchVariableList);
+                                    this.props.fetchTrainer(about, TrainerDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Event") {
 
                                 } else if (aboutItemType === "Challenge") {
                                     // console.log("Fetching challenge for post in post feed");
-                                    this.props.fetchChallenge(data.items[i].about, ChallengeDetailCard.fetchVariableList);
+                                    this.props.fetchChallenge(about, ChallengeDetailCard.fetchVariableList);
                                 } else if (aboutItemType === "Post") {
-                                    this.props.fetchPost(data.items[i].about, PostDetailCard.fetchVariableList);
+                                    this.props.fetchPost(about, PostDetailCard.fetchVariableList);
                                 }
-                                newlyQueriedPosts.push(post);
+
+                                // Filter the results based on if we are able to see it
+                                if (post.access === "public" || this.props.user.friends.includes(post.by)) {
+                                    this.state.posts.push(post);
+                                }
                             }
-                            this.setState({posts: [...this.state.posts, ...newlyQueriedPosts]});
-                            for (let i = 0; i < data.items.length; i++) {
-                                //consoleLog(data.items[i].time_created);
-                                // consoleLog("Putting in event: " + JSON.stringify(data.items[i]));
-                                // this.setState({events: [...this.state.events, data.items[i]]});
-                                this.props.putPost(data.items[i]);
-                            }
-                            // consoleLog("events in the end: " + JSON.stringify(this.state.events));
                             this.setState({nextToken: data.nextToken});
                         }
                         else {
