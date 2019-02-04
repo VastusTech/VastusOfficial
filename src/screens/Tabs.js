@@ -5,6 +5,7 @@ import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
 import LeaderBoardTab from "./leaderboard_tab/LeaderBoardTab";
 import NotificationBellProp from "./notifications_tab/NotificationBell";
+import NotificationsTab from "./notifications_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
 
 /**
@@ -51,7 +52,7 @@ export default () => (
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>
                         <Header inverted textAlign={'center'}>Notification Feed</Header>
-                        <NotificationFeed/>
+                        <NotificationsTab/>
                     </Fragment>
                 </Tab.Pane>
             },
