@@ -99,14 +99,18 @@ class CommunityTab extends Component {
         }
 
         return (
-            <div>
+            <Grid fluid centered>
+                <Grid.Row height={20} style={{marginBottom: '15px', marginTop: '15px'}}>
                 <Modal trigger={<Grid centered><Button primary>Create New Group</Button></Grid>}>
                     <CreateGroupProp/>
                 </Modal>
-                <Grid centered>
-                    {rows(this.state.groups)}
-                </Grid>
-            </div>
+                </Grid.Row>
+                <Grid.Row>
+                    <Grid centered>
+                        {rows(this.state.groups)}
+                    </Grid>
+                </Grid.Row>
+            </Grid>
         );
     }
 }
