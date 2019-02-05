@@ -123,6 +123,9 @@ class PostFeedProp extends Component {
                                 if (post.access === "public" || this.props.user.friends.includes(post.by)) {
                                     this.state.posts.push(post);
                                 }
+                                else {
+                                    alert(JSON.stringify(post));
+                                }
                             }
                             this.setState({nextToken: data.nextToken});
                         }
