@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Menu, Container, Message, Icon} from "semantic-ui-react";
+import {Menu, Container, Message, Icon, Grid, Modal} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "./redux_helpers/actions/userActions";
+import NotificationBellProp from "./screens/notifications_tab/NotificationBell";
 
 /**
 * Auth App
@@ -73,8 +74,22 @@ class AuthApp extends Component {
             <div className="App">
                 <Menu borderless inverted vertical fluid widths={1} fixed="top">
                     <Menu.Item>
-                        <Container>
-                            <SearchBarProp />
+                        <Container fluid>
+                            <Grid columns="equal">
+                                <Grid.Row stretched>
+                                    <Grid.Column style={{marginTop: "12px", marginLeft: "6px", marginRight: "-6px"}}>
+                                        <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
+                                        </Modal>
+                                    </Grid.Column>
+                                    <Grid.Column width={14}>
+                                        <SearchBarProp />
+                                    </Grid.Column>
+                                    <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
+                                        <Modal trigger={<NotificationBellProp/>} closeIcon>
+                                        </Modal>
+                                    </Grid.Column>
+                                </Grid.Row>
+                            </Grid>
                         </Container>
                     </Menu.Item>
                 </Menu>
