@@ -36,7 +36,7 @@ class AuthApp extends Component {
     update() {
         if (!this.state.sentRequest && this.state.userID) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "profilePicture",
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath",
                 "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
                 "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
                 "invitedChallenges"], (data) => {

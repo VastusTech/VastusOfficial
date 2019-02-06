@@ -55,9 +55,9 @@ class NotificationFeed extends React.PureComponent {
                 // Fetch from user information
                 const fromItemType = getItemTypeFromID(invite.from);
                 if (fromItemType === "Client") {
-                    props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                    props.fetchClient(invite.from, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath"]);
                 } else if (fromItemType === "Trainer") {
-                    props.fetchTrainer(invite.from, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+                    props.fetchTrainer(invite.from, ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
                 } else if (fromItemType === "Gym") {
                     // TODO FETCH THIS?
                     console.log("not implemented!");
@@ -67,9 +67,9 @@ class NotificationFeed extends React.PureComponent {
 
                 const toItemType = getItemTypeFromID(invite.to);
                 if (toItemType === "Client") {
-                    props.fetchClient(invite.to, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                    props.fetchClient(invite.to, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath"]);
                 } else if (toItemType === "Trainer") {
-                    props.fetchTrainer(invite.to, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+                    props.fetchTrainer(invite.to, ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
                 } else if (toItemType === "Gym") {
                     // TODO FETCH THIS?
                     console.log("not implemented!");
@@ -86,9 +86,9 @@ class NotificationFeed extends React.PureComponent {
                 // Fetch about item information
                 const aboutItemType = getItemTypeFromID(invite.about);
                 if (aboutItemType === "Client") {
-                    props.fetchClient(invite.about, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath", "profilePicture"]);
+                    props.fetchClient(invite.about, ["id", "name", "friends", "challengesWon", "scheduledEvents", "profileImagePath"]);
                 } else if (aboutItemType === "Trainer") {
-                    props.fetchTrainer(invite.about, ["id", "name", "gender", "birthday", "profileImagePath", "profilePicture", "profileImagePaths"]);
+                    props.fetchTrainer(invite.about, ["id", "name", "gender", "birthday", "profileImagePath", "profileImagePaths"]);
                 } else if (aboutItemType === "Gym") {
                     // TODO FETCH THIS?
                     console.log("not implemented!");
