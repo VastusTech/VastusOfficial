@@ -124,7 +124,7 @@ class PostFeedProp extends Component {
                                     this.state.posts.push(post);
                                 }
                                 else {
-                                    alert(JSON.stringify(post));
+                                   //alert(JSON.stringify(post));
                                 }
                             }
                             this.setState({nextToken: data.nextToken});
