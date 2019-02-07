@@ -39,7 +39,7 @@ class PostFeedProp extends Component {
         challenges: [],
         loadedPostIDs: [],
         clientNames: {}, // id to name
-        postFeedLength: 25,
+        postFeedLength: 50,
         challengeFeedLength: 10,
         sentRequest: false,
         nextToken: null,
