@@ -4,8 +4,6 @@ import {Grid, Button, Modal} from 'semantic-ui-react'
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import CreateGroupProp from "../../vastuscomponents/components/manager/CreateGroup";
 import GroupCard from "../../vastuscomponents/components/cards/GroupCard";
-import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
-import {consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
 import {
     fetchClient,
     fetchGroupQuery,
@@ -15,6 +13,7 @@ import {
     putGroupQuery,
 } from "../../vastuscomponents/redux_actions/cacheActions";
 import _ from "lodash";
+import {err} from "../../Constants";
 
 class CommunityTab extends Component {
     state = {
@@ -72,8 +71,8 @@ class CommunityTab extends Component {
                     }
                     this.setState({isLoading: false});
                 }, (error) => {
-                    consoleError("Querying Groups failed!");
-                    consoleError(error);
+                    err&&console.error("Querying Groups failed!");
+                    err&&console.error(error);
                     this.setState({isLoading: false, error: error});
                 }, this.props.cache.groupQueries, this.props.putGroupQuery);
             }
@@ -88,9 +87,6 @@ class CommunityTab extends Component {
          */
         function rows(groups) {
             // if(Posts != null && Posts.length > 0)
-            //     consoleLog(JSON.stringify(Posts[0].id));
-            // consoleLog("EVENTS TO PRINT: ");
-            // consoleLog(JSON.stringify(Posts));
             return _.times(groups.length, i => (
                 <Fragment key={i + 1}>
                     <GroupCard groupID={groups[i].id}/>
