@@ -2,7 +2,7 @@ import { Auth } from "aws-amplify";
 import {setError, setIsLoading, setIsNotLoading} from "../../vastuscomponents/redux_actions/infoActions";
 import jwt_decode from "jwt-decode";
 import {setUser, forceSetUser} from "./userActions";
-import {addHandlerToNotifications, removeAllHandlers} from "../../vastuscomponents/redux_actions/ablyActions";
+import {removeAllHandlers} from "../../vastuscomponents/redux_actions/ablyActions";
 import QL from "../../vastuscomponents/api/GraphQL";
 import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
 import {consoleLog} from "../../vastuscomponents/logic/DebuggingHelper";
@@ -23,9 +23,9 @@ export function updateAuth() {
                 QL.getClientByUsername(user.username, ["id", "username"], (user) => {
                     consoleLog("REDUX: Successfully updated the authentication credentials");
                     dispatch(setUser(user));
-                    dispatch(addHandlerToNotifications((message) => {
-                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
-                    }));
+                    // dispatch(addHandlerToNotifications((message) => {
+                    //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    // }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
                 }, (error) => {
@@ -39,9 +39,9 @@ export function updateAuth() {
                 QL.getClientByFederatedID(user.sub, ["id", "username", "federatedID"], (user) => {
                     consoleLog("REDUX: Successfully updated the authentication credentials for federated identity");
                     dispatch(setUser(user));
-                    dispatch(addHandlerToNotifications((message) => {
-                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
-                    }));
+                    // dispatch(addHandlerToNotifications((message) => {
+                    //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    // }));
                     dispatch(authLogIn());
                     dispatch(setIsNotLoading());
                 }, (error) => {
@@ -70,9 +70,9 @@ export function logIn(username, password) {
                 else {
                     dispatch(setUser(user));
                 }
-                dispatch(addHandlerToNotifications((message) => {
-                    console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
-                }));
+                // dispatch(addHandlerToNotifications((message) => {
+                //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                // }));
                 dispatch(setIsNotLoading());
             }, (error) => {
                 console.log("REDUX: Could not fetch the client");
@@ -146,9 +146,9 @@ export function googleSignIn(googleUser) {
                     else {
                         dispatch(setUser(client));
                     }
-                    dispatch(addHandlerToNotifications((message) => {
-                        console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
-                    }));
+                    // dispatch(addHandlerToNotifications((message) => {
+                    //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                    // }));
                     dispatch(setIsNotLoading());
                 }
                 else {
@@ -173,9 +173,9 @@ export function googleSignIn(googleUser) {
                             else {
                                 dispatch(setUser(client));
                             }
-                            dispatch(addHandlerToNotifications((message) => {
-                                console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
-                            }));
+                            // dispatch(addHandlerToNotifications((message) => {
+                            //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
+                            // }));
                             dispatch(setIsNotLoading());
                         }, (error) => {
                             console.error("REDUX: Could not create the federated client!");
