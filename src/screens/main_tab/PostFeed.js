@@ -19,7 +19,7 @@ import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 // import PostManager from "../../vastuscomponents/components/manager/PostManager";
 import NextChallengeProp from "./NextChallenge";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
-import {consoleLog, consoleError} from "../../vastuscomponents/logic/DebuggingHelper";
+import {consoleLog, consoleError, debugAlert} from "../../vastuscomponents/logic/DebuggingHelper";
 import ClientDetailCard from "../../vastuscomponents/components/post_detail_cards/ClientDetailCard";
 import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
 import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
@@ -39,7 +39,7 @@ class PostFeedProp extends Component {
         challenges: [],
         loadedPostIDs: [],
         clientNames: {}, // id to name
-        postFeedLength: 25,
+        postFeedLength: 50,
         challengeFeedLength: 10,
         sentRequest: false,
         nextToken: null,
@@ -96,35 +96,52 @@ class PostFeedProp extends Component {
                     }
                 );
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
+                debugAlert("Fetching Post Feed Query");
                 this.props.fetchPostQuery(PostCard.fetchVariableList, filter, this.state.postFeedLength, this.state.nextToken, (data) => {
                         if (!data.nextToken) {
                             this.setState({ifFinished: true});
                         }
                         if (data.items) {
                             // Fetch all the Card information for the received detail cards
+                            debugAlert("Post Feed looping " + data.items.length + " times!");
                             for (let i = 0; i < data.items.length; i++) {
                                 const post = data.items[i];
-                                const about = post.about;
-                                const aboutItemType = getItemTypeFromID(about);
-                                if (aboutItemType === "Client") {
-                                    this.props.fetchClient(about, ClientDetailCard.fetchVariableList);
-                                } else if (aboutItemType === "Trainer") {
-                                    this.props.fetchTrainer(about, TrainerDetailCard.fetchVariableList);
-                                } else if (aboutItemType === "Event") {
-
-                                } else if (aboutItemType === "Challenge") {
-                                    // console.log("Fetching challenge for post in post feed");
-                                    this.props.fetchChallenge(about, ChallengeDetailCard.fetchVariableList);
-                                } else if (aboutItemType === "Post") {
-                                    this.props.fetchPost(about, PostDetailCard.fetchVariableList);
-                                }
-
                                 // Filter the results based on if we are able to see it
                                 if (post.access === "public" || this.props.user.friends.includes(post.by)) {
+                                    // Fetch the "by" information
+                                    const by = post.by;
+                                    const byItemType = getItemTypeFromID(by);
+                                    if (byItemType === "Client") {
+                                        debugAlert("Fetching Client for BY in post for Post Feed");
+                                        this.props.fetchClient(by, ["name", "profileImagePath"]);
+                                    }
+                                    else if (byItemType === "Trainer") {
+                                        debugAlert("Fetching Trainer for BY in post for Post Feed");
+                                        this.props.fetchTrainer(by, ["name", "profileImagePath"]);
+                                    }
+                                    // Fetch the "about" information
+                                    const about = post.about;
+                                    const aboutItemType = getItemTypeFromID(about);
+                                    if (aboutItemType === "Client") {
+                                        debugAlert("Fetching Client for ABOUT in post for Post Feed");
+                                        this.props.fetchClient(about, ClientDetailCard.fetchVariableList);
+                                    } else if (aboutItemType === "Trainer") {
+                                        debugAlert("Fetching Trainer for ABOUT in post for Post Feed");
+                                        this.props.fetchTrainer(about, TrainerDetailCard.fetchVariableList);
+                                    } else if (aboutItemType === "Event") {
+
+                                    } else if (aboutItemType === "Challenge") {
+                                        // console.log("Fetching challenge for post in post feed");
+                                        debugAlert("Fetching Challenge for ABOUT in post for Post Feed");
+                                        this.props.fetchChallenge(about, ChallengeDetailCard.fetchVariableList);
+                                    } else if (aboutItemType === "Post") {
+                                        debugAlert("Fetching Post for ABOUT in post for Post Feed");
+                                        this.props.fetchPost(about, PostDetailCard.fetchVariableList);
+                                    }
                                     this.state.posts.push(post);
                                 }
                                 else {
-                                   //alert(JSON.stringify(post));
+                                    debugAlert("NOT SHOWING: " + JSON.stringify(post));
                                 }
                             }
                             this.setState({nextToken: data.nextToken});

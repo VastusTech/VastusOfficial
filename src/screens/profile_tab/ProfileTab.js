@@ -105,7 +105,7 @@ class ProfileTab extends React.PureComponent {
         //this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         if (!this.state.sentRequest) {
             this.setState({sentRequest: true});
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "profilePicture", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
+            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath", "challengesWon", "friends", "challenges", "ownedChallenges", "completedChallenges", "profileImagePaths"]);
         }
         else {
             this.setState({isLoading: false});
@@ -130,7 +130,7 @@ class ProfileTab extends React.PureComponent {
                     (data) => {
                         //console.log("successfully editted client");
                         //console.log(JSON.stringify(data));
-                        this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
+                        this.props.forceFetchUserAttributes(["profileImagePath"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         console.log("Failed edit client attribute");
@@ -157,7 +157,7 @@ class ProfileTab extends React.PureComponent {
                 //console.log("Successfully put the image, now putting the data into the database!");
                 ClientFunctions.updateProfileImagePath(this.props.user.id, this.props.user.id, path,
                     (data) => {
-                        this.props.forceFetchUserAttributes(["profileImagePath", "profilePicture"]);
+                        this.props.forceFetchUserAttributes(["profileImagePath"]);
                         this.setState({isLoading: true});
                     }, (error) => {
                         console.log("Failed edit client attribute");
@@ -259,10 +259,10 @@ class ProfileTab extends React.PureComponent {
     };
 
     profilePicture() {
-        if (this.props.user.profilePicture) {
+        if (this.props.user.profileImage) {
             return (
                 <div>
-                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profilePicture})`}}>
+                    <div className="u-avatar u-avatar--large u-margin-x--auto u-margin-top--neg4" style={{backgroundImage: `url(${this.props.user.profileImage})`}}>
                     </div>
                     <Label as="label" htmlFor="proPicUpload" circular className="u-bg--primaryGradient">
                         <Icon name="upload" className='u-margin-right--0' size="large" inverted />
