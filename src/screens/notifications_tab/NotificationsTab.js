@@ -23,7 +23,7 @@ class NotificationsTab extends Component<{}> {
         return (
             <div>
                 <NotificationFeed/>
-                <Divider/>
+                {/*<Divider/>
                 <div>
                     <Grid>
                         <Grid.Row>
@@ -34,7 +34,7 @@ class NotificationsTab extends Component<{}> {
                             <MessageBoardFeed/>
                         </Grid.Row>
                     </Grid>
-                </div>
+                </div>*/}
             </div>
         );
     }
