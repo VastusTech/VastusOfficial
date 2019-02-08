@@ -16,10 +16,10 @@ import {
     fetchPostQuery
 } from "../../vastuscomponents/redux_actions/cacheActions";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-// import PostManager from "../../vastuscomponents/components/manager/PostManager";
 import NextChallengeProp from "./NextChallenge";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
-import {consoleLog, consoleError, debugAlert} from "../../vastuscomponents/logic/DebuggingHelper";
+import {log, err} from "../../Constants";
+import {debugAlert} from "../../vastuscomponents/logic/DebuggingHelper";
 import ClientDetailCard from "../../vastuscomponents/components/post_detail_cards/ClientDetailCard";
 import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
 import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
@@ -58,7 +58,7 @@ class PostFeedProp extends Component {
     }
 
     componentWillReceiveProps(newProps) {
-        // consoleLog("Set state to userID = " + newProps.userID);
+        // log&&console.log("Set state to userID = " + newProps.userID);
         if (this.state.userID !== newProps.userID) {
             this.state.userID = newProps.userID;
             this.queryPosts();
@@ -151,8 +151,8 @@ class PostFeedProp extends Component {
                         }
                         this.setState({isLoading: false});
                     }, (error) => {
-                        consoleError("Querying Posts failed!");
-                        consoleError(error);
+                        err&&console.error("Querying Posts failed!");
+                        err&&console.error(error);
                         this.setState({isLoading: false, error: error});
                     }, this.props.cache.postQueries, this.props.putPostQuery);
             }
@@ -166,9 +166,9 @@ class PostFeedProp extends Component {
      */
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
-        // consoleLog(calculations.bottomVisible);
+        // log&&console.log(calculations.bottomVisible);
         if (calculations.bottomVisible) {
-            consoleLog("Next Token: " + this.state.nextToken);
+            log&&console.log("Next Token: " + this.state.nextToken);
             this.state.sentRequest = false;
             this.queryPosts();
         }
@@ -187,9 +187,9 @@ class PostFeedProp extends Component {
          */
         function rows(Posts) {
             // if(Posts != null && Posts.length > 0)
-            //     consoleLog(JSON.stringify(Posts[0].id));
-            // consoleLog("EVENTS TO PRINT: ");
-            // consoleLog(JSON.stringify(Posts));
+            //     log&&console.log(JSON.stringify(Posts[0].id));
+            // log&&console.log("EVENTS TO PRINT: ");
+            // log&&console.log(JSON.stringify(Posts));
             return _.times(Posts.length, i => (
                 <Fragment key={i + 1}>
                     {/*console.log(JSON.stringify(Posts[i].id))*/}
