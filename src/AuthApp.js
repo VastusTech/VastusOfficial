@@ -75,7 +75,8 @@ class AuthApp extends Component {
                 <Menu borderless inverted vertical fluid widths={1} fixed="top">
                     <Menu.Item>
                         <Container fluid>
-                            <Grid columns="equal">
+                            <SearchBarProp />
+                            {/*<Grid columns="equal">
                                 <Grid.Row stretched>
                                     <Grid.Column style={{marginTop: "12px", marginLeft: "6px", marginRight: "-6px"}}>
                                         <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
@@ -89,7 +90,7 @@ class AuthApp extends Component {
                                         </Modal>
                                     </Grid.Column>
                                 </Grid.Row>
-                            </Grid>
+                            </Grid>*/}
                         </Container>
                     </Menu.Item>
                 </Menu>

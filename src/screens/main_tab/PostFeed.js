@@ -65,6 +65,10 @@ class PostFeedProp extends Component {
         }
     }
 
+    componentDidUpdate(newProps) {
+        this.queryPosts();
+    }
+
     /*
     Here we have a feed of posts that we are querying.
     For one query, we only change the nextToken to get the next stuff
