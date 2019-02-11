@@ -75,7 +75,7 @@ class AuthApp extends Component {
                 <Menu borderless inverted vertical fluid widths={1} fixed="top">
                     <Menu.Item>
                         <Container fluid>
-                            <SearchBarProp />
+                            <SearchBarProp/>
                             {/*<Grid columns="equal">
                                 <Grid.Row stretched>
                                     <Grid.Column style={{marginTop: "12px", marginLeft: "6px", marginRight: "-6px"}}>

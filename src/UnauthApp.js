@@ -19,7 +19,6 @@ class UnauthApp extends Component {
         return (
         <div>
         	<OpeningScreen/>
-            <SignInPage/>
             </div>
         );
     }
