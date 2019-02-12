@@ -77,7 +77,7 @@ class SignInPage extends Component {
             <Container className='login-form'>
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
-                <Grid textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
+                <Grid textAlign='center' style={{ height: '100vh' }}>
                     <Grid.Column style={{ maxWidth: 450 }}>
                         <Segment raised padded inverted>
                             <Segment basic>

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Amplify, { Auth, Analytics } from 'aws-amplify';
 import { inspect } from 'util';
+import _ from 'lodash';
 import Semantic, {
     Image,
     Container,
@@ -27,114 +28,40 @@ class OpeningScreen extends Component {
  	state = {
  	    visible: true,
         slideNum: 0,
-        reactSwipeEl: null
+        reactSwipeEl: null,
+        circles: ['circle', 'circle outline', 'circle outline']
  	};
 
- 	swipeRight(reactSwipeEl) {
- 	    if(this.state.slideNum < 2) {
- 	        this.setState({slideNum: this.state.slideNum + 1});
-        }
-        reactSwipeEl.next()
-    }
-
-    swipeLeft(reactSwipeEl) {
-        if(this.state.slideNum > 0) {
-            this.setState({slideNum: this.state.slideNum - 1});
-        }
-        reactSwipeEl.prev()
-    }
-
-    goToFirstPage(reactSwipeEl) {
- 	    if(this.state.slideNum === 2) {
-            this.swipeLeft(reactSwipeEl);
-            this.swipeLeft(reactSwipeEl);
-        }
-        else if(this.state.slideNum === 1) {
-            this.swipeLeft(reactSwipeEl);
-        }
-    }
-
-    goToSecondPage(reactSwipeEl) {
-        if(this.state.slideNum === 0) {
-            this.swipeRight(reactSwipeEl);
-        }
-        else if(this.state.slideNum === 2) {
-            this.swipeLeft(reactSwipeEl);
-        }
-    }
-
-    goToThirdPage(reactSwipeEl) {
-        if(this.state.slideNum === 0) {
-            this.swipeRight(reactSwipeEl);
-            this.swipeRight(reactSwipeEl);
-        }
-        else if(this.state.slideNum === 1) {
-            this.swipeRight(reactSwipeEl);
-        }
-    }
-
-    displayPage() {
- 	    let reactSwipeEl = this.state.reactSwipeEl;
+ 	swipeRight = (reactSwipeEl) => {
  	    if(this.state.slideNum === 0) {
- 	        return (
-                <Grid>
-                    <Grid.Column>
-                        <Icon name='circle' onClick={() => this.goToFirstPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToSecondPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToThirdPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                </Grid>
-                    );
+ 	        this.setState({slideNum: this.state.slideNum + 1});
+            this.setState({circles: ['circle outline', 'circle', 'circle outline']});
         }
-        else if(this.state.slideNum === 1) {
-            return (
-                <Grid>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToFirstPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle' onClick={() => this.goToSecondPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToThirdPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                </Grid>
-            );
+        if(this.state.slideNum === 1) {
+            this.setState({slideNum: this.state.slideNum + 1});
+            this.setState({circles: ['circle outline', 'circle outline', 'circle']});
         }
-        else if(this.state.slideNum === 2) {
-            return (
-                <Grid>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToFirstPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToSecondPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle' onClick={() => this.goToThirdPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                </Grid>
-            );
+        reactSwipeEl.next();
+    }
+
+    swipeLeft = (reactSwipeel) => {
+        if(this.state.slideNum === 2) {
+            this.setState({slideNum: this.state.slideNum - 1});
+            this.setState({circles: ['circle outline', 'circle', 'circle outline']});
         }
-        else {
-            return (
-                <Grid>
-                    <Grid.Column onClick={() => this.goToFirstPage(reactSwipeEl)}>
-                        <Icon name='circle outline' onClick={() => this.goToFirstPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToSecondPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                    <Grid.Column>
-                        <Icon name='circle outline' onClick={() => this.goToThirdPage(reactSwipeEl)}/>
-                    </Grid.Column>
-                </Grid>
-            );
+        if(this.state.slideNum === 1) {
+            this.setState({slideNum: this.state.slideNum - 1});
+            this.setState({circles: ['circle', 'circle outline', 'circle outline']});
         }
+        reactSwipeel.prev();
+    }
+
+    displayPage = () => {
+        return _.times(3, i => (
+            <Grid.Column>
+                <Icon name={this.state.circles[i]}/>
+            </Grid.Column>
+        ));
     }
 
  	toggleVisibility = () => this.setState({ visible: !this.state.visible });
@@ -142,18 +69,16 @@ class OpeningScreen extends Component {
     render() {
         let reactSwipeEl;
     	const { visible } = this.state;
-		return(
-  			<Transition visible={visible} animation='scale' duration={500}>
-				<Container className='login-form'>
-    	 			<Grid width='100%' textAlign='center' style={{ height: '100vh' }} verticalAlign='middle'>
-            			<Grid.Row style={{ maxWidth: 600, minWidth: 300}}>
+		return(<Container className='login-form'>
+    	 			<Grid>
+            			<Grid.Row centered>
 									<ReactSwipe
 										className="carousel"
 										swipeOptions={{ continuous: false }}
 										ref={el => (reactSwipeEl = el)}
 									>
 										<div>
-                                        <Segment raised padded inverted>
+                                        <Segment raised padded inverted style={{ maxHeight: 700, maxWidth: 600, minWidth: 300}}>
                                             <Image src={Logo} size = 'tiny' centered/>
                                             <h2>VASTUS</h2>
                                             <h2>The 21st Century Standard of Fitness</h2>
@@ -165,7 +90,7 @@ class OpeningScreen extends Component {
                                         </Segment>
 										</div>
 										<div>
-                                        <Segment raised padded inverted>
+                                        <Segment raised padded inverted style={{ maxHeight: 700, maxWidth: 600, minWidth: 300}}>
                                             <Image src={Logo} size = 'tiny' centered/>
                                             <h2>VASTUS</h2>
                                             <h2>How does it work?</h2>
@@ -179,26 +104,23 @@ class OpeningScreen extends Component {
                                         </Segment>
 										</div>
                                         <div>
+                                            <Segment raised padded inverted style={{ maxHeight: 700, maxWidth: 600, minWidth: 300}}>
                                             <SignInPage/>
+                                            </Segment>
                                         </div>
 									</ReactSwipe>
 						</Grid.Row>
-                        <Grid.Row>
-                            <Grid columns='equal'>
-                                <Grid.Column onClick={() => this.swipeLeft(reactSwipeEl)}>
-                                    <Icon size='large' name="chevron circle left"/>
-                                </Grid.Column>
-                                <Grid.Column>
-                                    {this.displayPage()}
-                                </Grid.Column>
-                                <Grid.Column onClick={() => this.swipeRight(reactSwipeEl)}>
-                                    <Icon size='large' name="chevron circle right"/>
-                                </Grid.Column>
-                            </Grid>
+                        <Grid.Row centered>
+                            <Grid.Column>
+                                <Icon size='large' name="chevron circle left" onClick={() => this.swipeLeft(reactSwipeEl)}/>
+                            </Grid.Column>
+                            {this.displayPage()}
+                            <Grid.Column>
+                                <Icon size='large' name="chevron circle right" onClick={() => this.swipeRight(reactSwipeEl)}/>
+                            </Grid.Column>
                         </Grid.Row>
 					</Grid>
 				</Container>
-			</Transition>
 		);
 	}
 }
