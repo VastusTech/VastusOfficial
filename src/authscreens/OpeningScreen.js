@@ -111,11 +111,10 @@ class OpeningScreen extends Component {
                                             <h2>VASTUS</h2>
                                             <h2>The 21st Century Standard of Fitness</h2>
                                             <Divider/>
-                                            <h3>Vastus is the latest technology
-                                            to upgrade your workout.</h3>
-                                            <h3>Compete with friends</h3>
-                                            <h3>Win prizes from fitness brands</h3>
-                                            <h3>Learn from fitness pros</h3>
+                                            <h3>Vastus Brings You a Cutting Edge Fitness Experience.</h3>
+                                            <h3>Compete with Friends</h3>
+                                            <h3>Train with Pros</h3>
+                                            <h3>Find your Path to Personal Greatness</h3>
                                             </Segment>
                                         </Grid>
                                     </Segment>
@@ -130,11 +129,13 @@ class OpeningScreen extends Component {
                                             <h2>VASTUS</h2>
                                             <h2>How does it work?</h2>
                                             <Divider/>
-                                            <h3>1. Sign in to a challenge
+                                            <h3>1. Pros, Forums, Challenges...
                                             </h3>
-                                            <h3>2. Send in videos of yourself completing the challenge
+                                            <h3>2. Pros and Forums provide advice and training.
                                             </h3>
-                                            <h3>3. The best video submission wins! </h3>
+                                            <h3>3. Join a challenge for enhanced motivation. Winners get free training.
+                                            </h3>
+                                            <h3>4. Achieve your fittest self. </h3>
                                             <Button content={visible ? 'Get Vastus Fit' : 'Get Vastus Fit'} onClick={() => this.swipeRight(reactSwipeEl)} color = 'purple' size = 'massive'/>
                                             </Segment>
                                         </Grid>
