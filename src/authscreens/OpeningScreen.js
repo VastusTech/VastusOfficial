@@ -104,12 +104,13 @@ class OpeningScreen extends Component {
                             >
                                 <div>
                                 <Grid centered>
-                                    <Segment raised padded inverted style={{ maxWidth: 700 }}>
+                                    <Segment raised padded inverted style={{ maxWidth: 500 }}>
                                         <Image src={Logo} size = 'tiny' centered/>
                                         <h2>VASTUS</h2>
                                         <h2>The 21st Century Standard of Fitness</h2>
                                         <Divider/>
-                                        <h3>Vastus is the latest technology to upgrade your workout.</h3>
+                                        <h3>Vastus is the latest technology
+                                        to upgrade your workout.</h3>
                                         <h3>Compete with friends</h3>
                                         <h3>Win prizes from fitness brands</h3>
                                         <h3>Learn from fitness pros</h3>
@@ -118,7 +119,7 @@ class OpeningScreen extends Component {
                                 </div>
                                 <div>
                                 <Grid centered>
-                                    <Segment raised padded inverted style={{ maxWidth: 700 }}>
+                                    <Segment raised padded inverted style={{ maxWidth: 500 }}>
                                         <Image src={Logo} size = 'tiny' centered/>
                                         <h2>VASTUS</h2>
                                         <h2>How does it work?</h2>
