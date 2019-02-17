@@ -103,7 +103,7 @@ class OpeningScreen extends Component {
                                 ref={el => (reactSwipeEl = el)}
                             >
                                 <div >
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 650}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
                                         <Segment raised padded inverted style={{ maxWidth: 600 }}>
                                             <Grid centered>
                                                 <Segment inverted style={{ maxWidth: 600, marginTop: '30px', marginBottom: '30px' }}>
@@ -121,7 +121,7 @@ class OpeningScreen extends Component {
                                     </Grid>
                                 </div>
                                 <div>
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 650}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
                                         <Segment inverted style={{ maxWidth: 500}}>
                                             <Grid centered textAlign='center' style={{ maxWidth: 500 }}>
                                                 <Segment inverted style={{ maxWidth: 600, marginTop: '30px', marginBottom: '30px' }}>
@@ -143,7 +143,7 @@ class OpeningScreen extends Component {
                                     </Grid>
                                 </div>
                                 <div>
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 650}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
                                         <Segment inverted style={{ maxWidth: 430}}>
                                             <SignInPage/>
                                         </Segment>
