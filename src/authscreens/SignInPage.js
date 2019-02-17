@@ -77,41 +77,39 @@ class SignInPage extends Component {
             <Container className='login-form'>
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
-                <Grid centered textAlign='center' style={{ minWidth: 430, maxWidth: 500 }}>
-                    <Grid.Column>
-                        <Segment raised padded inverted>
-                            <Segment basic>
-                                <Image src={Logo} size="tiny" centered />
-                                <Header as='h2' inverted textAlign='center'>
-									Join Below                               
-                                </Header>
-                            </Segment>
-                            <Form size='large'>
-                                <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={value => this.changeStateText("username", value)}/>
-                                <Form.Input
-                                    fluid
-                                    icon='lock'
-                                    iconPosition='left'
-                                    placeholder='Password'
-                                    type='password'
-                                    onChange={value => this.changeStateText("password", value)}
-                                />
-                                <Button primary fluid size='large' onClick={this.vastusSignIn}>
-                                    Log in
-                                </Button>
-                            </Form>
-                            <Divider horizontal inverted>or</Divider>
-                            <List>
-                            <List.Item>
-                                <SignUpModal/>
-                            </List.Item>
-                            <List.Item>
-                                <ForgotPasswordModal/>
-                                </List.Item>
-                                <GoogleSignUp/>
-                            </List>
+                <Grid centered textAlign='center'>
+                    <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570}}>
+                        <Segment basic>
+                            <Image src={Logo} size="tiny" centered />
+                            <Header as='h2' inverted textAlign='center'>
+                                Join Below
+                            </Header>
                         </Segment>
-                    </Grid.Column>
+                        <Form size='large'>
+                            <Form.Input fluid icon='user' iconPosition='left' placeholder='Username' onChange={value => this.changeStateText("username", value)}/>
+                            <Form.Input
+                                fluid
+                                icon='lock'
+                                iconPosition='left'
+                                placeholder='Password'
+                                type='password'
+                                onChange={value => this.changeStateText("password", value)}
+                            />
+                            <Button primary fluid size='large' onClick={this.vastusSignIn}>
+                                Log in
+                            </Button>
+                        </Form>
+                        <Divider horizontal inverted>or</Divider>
+                        <List>
+                        <List.Item>
+                            <SignUpModal/>
+                        </List.Item>
+                        <List.Item>
+                            <ForgotPasswordModal/>
+                            </List.Item>
+                            <GoogleSignUp/>
+                        </List>
+                    </Segment>
                 </Grid>
             </Container>
         );
