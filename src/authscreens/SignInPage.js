@@ -78,7 +78,7 @@ class SignInPage extends Component {
                 {loadingProp(this.props.info.isLoading)}
                 {errorMessage(this.props.info.error)}
                 <Grid centered textAlign='center'>
-                    <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570}}>
+                    <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570, marginBottom: '-60px'}}>
                         <Segment basic>
                             <Image src={Logo} size="tiny" centered />
                             <Header as='h2' inverted textAlign='center'>

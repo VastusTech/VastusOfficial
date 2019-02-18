@@ -103,14 +103,14 @@ class OpeningScreen extends Component {
                                 ref={el => (reactSwipeEl = el)}
                             >
                                 <div >
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '5px', height: 610}}>
                                         <Segment raised padded inverted style={{ maxWidth: 600 }}>
                                             <Grid centered>
-                                                <Segment inverted style={{ maxWidth: 600, marginTop: '30px', marginBottom: '30px' }}>
+                                                <Segment inverted style={{ maxWidth: 600, marginTop: '10px'}}>
                                                 <Image src={Logo} size = 'tiny' centered/>
                                                 <h2>VASTUS</h2>
                                                 <h2>The 21st Century Standard of Fitness</h2>
-                                                <Divider/>
+                                                <Divider style={{marginBottom: '30px'}}/>
                                                 <h3>Vastus Brings You a Cutting Edge Fitness Experience.</h3>
                                                 <h3>Compete with Friends</h3>
                                                 <h3>Train with Pros</h3>
@@ -121,21 +121,19 @@ class OpeningScreen extends Component {
                                     </Grid>
                                 </div>
                                 <div>
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '5px', height: 610}}>
                                         <Segment inverted style={{ maxWidth: 500}}>
                                             <Grid centered textAlign='center' style={{ maxWidth: 500 }}>
-                                                <Segment inverted style={{ maxWidth: 600, marginTop: '30px', marginBottom: '30px' }}>
+                                                <Segment inverted style={{ maxWidth: 600, marginTop: '10px'}}>
                                                 <Image src={Logo} size = 'tiny' centered/>
-                                                <h2>VASTUS</h2>
-                                                <h2>How does it work?</h2>
-                                                <Divider/>
-                                                <h3>1. Pros, Forums, Challenges...
+                                                <h2>VASTUS<br/>
+                                                How does it work?</h2>
+                                                <Divider style={{marginBottom: '-20px', marginTop: '-10px'}}/>
+                                                <h3>1. Pros, Forums, Challenges... <br/><br/>
+                                                    2. Pros and Forums provide advice and training.<br/><br/>
+                                                    3. Join a challenge for enhanced motivation. Winners get free training.<br/><br/>
+                                                    4. Achieve your fittest self.
                                                 </h3>
-                                                <h3>2. Pros and Forums provide advice and training.
-                                                </h3>
-                                                <h3>3. Join a challenge for enhanced motivation. Winners get free training.
-                                                </h3>
-                                                <h3>4. Achieve your fittest self. </h3>
                                                 <Button content={visible ? 'Get Vastus Fit' : 'Get Vastus Fit'} onClick={() => this.swipeRight(reactSwipeEl)} color = 'purple' size = 'massive'/>
                                                 </Segment>
                                             </Grid>
@@ -143,7 +141,7 @@ class OpeningScreen extends Component {
                                     </Grid>
                                 </div>
                                 <div>
-                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '15px', height: 680}}>
+                                    <Grid textAlign='center' centered style={{marginLeft: '30px', marginRight: '30px', marginTop: '5px', height: 610}}>
                                         <Segment inverted style={{ maxWidth: 430}}>
                                             <SignInPage/>
                                         </Segment>
@@ -151,7 +149,7 @@ class OpeningScreen extends Component {
                                 </div>
                             </ReactSwipe>
                 </Grid.Row>
-                <Grid.Row columns={5} style={{marginLeft: '76px', marginRight: '76px'}}>
+                <Grid.Row columns={5} style={{marginLeft: '76px', marginRight: '76px', marginTop: '-20px'}}>
                     <Grid.Column floated='left'>
                         <Icon size='large' name="chevron circle left" onClick={() => this.swipeLeft(reactSwipeEl)}/>
                     </Grid.Column>
