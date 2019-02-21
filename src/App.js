@@ -96,18 +96,14 @@ class App extends Component {
         if (this.props.auth.loggedIn) {
             // The actual App
             return (
-            
-                <div>
-                    <AuthApp/>
-                </div>
+
+                <AuthApp/>
             );
         }
         else {
             return (
-            	
-                <div>
-                    <UnauthApp/>
-                </div>
+
+                <UnauthApp/>
             );
         }
     }

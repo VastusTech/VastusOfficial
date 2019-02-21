@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Breakpoint, { BreakpointProvider } from 'react-socks';
 
 // Redux
 // import { createStore, applyMiddleware } from 'redux';
@@ -23,9 +24,11 @@ require('./vastuscomponents/api/Ably');
 AWSConfig();
 if (ifCallLambdaAtStart) { Lambda.ping(); }
 ReactDOM.render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
+    <BreakpointProvider>
+        <Provider store={store}>
+            <App />
+        </Provider>
+    </BreakpointProvider>,
     document.getElementById('root')
 );
 registerServiceWorker();
