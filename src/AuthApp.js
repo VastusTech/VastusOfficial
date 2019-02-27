@@ -6,6 +6,7 @@ import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "./redux_helpers/actions/userActions";
 import NotificationBellProp from "./screens/notifications_tab/NotificationBell";
+import NotificationFeed from "./screens/notifications_tab/NotificationBellFeed";
 
 /**
 * Auth App
@@ -75,10 +76,9 @@ class AuthApp extends Component {
                 <Menu borderless inverted vertical fluid widths={1} fixed="top">
                     <Menu.Item>
                         <Container fluid>
-                            <SearchBarProp/>
-                            {/*<Grid columns="equal">
+                            <Grid columns="equal">
                                 <Grid.Row stretched>
-                                    <Grid.Column style={{marginTop: "12px", marginLeft: "6px", marginRight: "-6px"}}>
+                                    <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
                                         <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
                                         </Modal>
                                     </Grid.Column>
@@ -86,11 +86,15 @@ class AuthApp extends Component {
                                         <SearchBarProp />
                                     </Grid.Column>
                                     <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
-                                        <Modal trigger={<NotificationBellProp/>} closeIcon>
+                                        <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
+                                            <Modal.Header align='center'>Notifcations</Modal.Header>
+                                            <Modal.Content>
+                                                <NotificationFeed/>
+                                            </Modal.Content>
                                         </Modal>
                                     </Grid.Column>
                                 </Grid.Row>
-                            </Grid>*/}
+                            </Grid>
                         </Container>
                     </Menu.Item>
                 </Menu>

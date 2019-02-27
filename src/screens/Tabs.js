@@ -47,12 +47,11 @@ export default () => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <NotificationBellProp/>
+                        <Icon name='comment outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>
-                        <Header inverted textAlign={'center'}>Notification Feed</Header>
-                        <NotificationsTab/>
+                        <Header inverted textAlign={'center'}>Message Page</Header>
                     </Fragment>
                 </Tab.Pane>
             },
