@@ -22,7 +22,7 @@ class NotificationsTab extends Component<{}> {
     render() {
         return (
             <div>
-                <NotificationFeed/>
+                <MessageBoardFeed/>
                 {/*<Divider/>
                 <div>
                     <Grid>

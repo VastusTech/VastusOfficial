@@ -7,6 +7,7 @@ import TrainerTab from "./trainer_tab/TrainerTab";
 import NotificationBellProp from "./notifications_tab/NotificationBell";
 import NotificationsTab from "./notifications_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
+import MessageTab from "./notifications_tab/MessageTab";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -51,7 +52,7 @@ export default () => (
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>
-                        <Header inverted textAlign={'center'}>Message Page</Header>
+                        <MessageTab/>
                     </Fragment>
                 </Tab.Pane>
             },
