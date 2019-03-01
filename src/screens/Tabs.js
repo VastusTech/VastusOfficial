@@ -1,13 +1,13 @@
 import { Fragment } from 'react';
 import {Tab, Menu, Icon, Header } from "semantic-ui-react";
-import NotificationFeed from "./notifications_tab/NotificationBellFeed";
+import NotificationFeed from "./messaging_tab/NotificationBellFeed";
 import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
 import TrainerTab from "./trainer_tab/TrainerTab";
-import NotificationBellProp from "./notifications_tab/NotificationBell";
-import NotificationsTab from "./notifications_tab/NotificationsTab";
+import NotificationBellProp from "./messaging_tab/NotificationBell";
+import NotificationsTab from "./messaging_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
-import MessageTab from "./notifications_tab/MessageTab";
+import MessageTab from "./messaging_tab/MessageTab";
 
 /**
 * Tabs TODO Potentially clean this up

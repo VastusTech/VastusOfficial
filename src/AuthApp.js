@@ -5,8 +5,9 @@ import {Menu, Container, Message, Icon, Grid, Modal} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes} from "./redux_helpers/actions/userActions";
-import NotificationBellProp from "./screens/notifications_tab/NotificationBell";
-import NotificationFeed from "./screens/notifications_tab/NotificationBellFeed";
+import NotificationBellProp from "./screens/messaging_tab/NotificationBell";
+import NotificationFeed from "./screens/messaging_tab/NotificationBellFeed";
+import Breakpoint from "react-socks";
 
 /**
 * Auth App
@@ -72,34 +73,70 @@ class AuthApp extends Component {
         }
 
         return (
-            <div className="App">
-                <Menu borderless inverted vertical fluid widths={1} fixed="top">
-                    <Menu.Item>
-                        <Container fluid>
-                            <Grid columns="equal">
-                                <Grid.Row stretched>
-                                    <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
-                                        <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
-                                        </Modal>
-                                    </Grid.Column>
-                                    <Grid.Column width={14}>
-                                        <SearchBarProp />
-                                    </Grid.Column>
-                                    <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
-                                        <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
-                                            <Modal.Header align='center'>Notifcations</Modal.Header>
-                                            <Modal.Content>
-                                                <NotificationFeed/>
-                                            </Modal.Content>
-                                        </Modal>
-                                    </Grid.Column>
-                                </Grid.Row>
-                            </Grid>
-                        </Container>
-                    </Menu.Item>
-                </Menu>
-                {getLoadingApp(this.state.isLoading)}
-                {/*<Tabs />*/}
+            <div>
+                <Breakpoint medium up>
+                <div className="App">
+                    <Menu borderless inverted vertical fluid widths={1} fixed="top">
+                        <Menu.Item>
+                            <Container fluid>
+                                <Grid columns="equal">
+                                    <Grid.Row stretched>
+                                        <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
+                                            <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
+                                            </Modal>
+                                        </Grid.Column>
+                                        <Grid.Column width={14}>
+                                            <SearchBarProp />
+                                        </Grid.Column>
+                                        <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
+                                            <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
+                                                <Modal.Header align='center'>Notifcations</Modal.Header>
+                                                <Modal.Content>
+                                                    <NotificationFeed/>
+                                                </Modal.Content>
+                                            </Modal>
+                                        </Grid.Column>
+                                    </Grid.Row>
+                                </Grid>
+                            </Container>
+                        </Menu.Item>
+                    </Menu>
+                    {getLoadingApp(this.state.isLoading)}
+                    {/*<Tabs />*/}
+                </div>
+                </Breakpoint>
+
+                <Breakpoint small down>
+                    <div className="App">
+                        <Menu borderless inverted vertical fluid widths={1} fixed="top">
+                            <Menu.Item>
+                                <Container fluid>
+                                    <Grid columns="equal">
+                                        <Grid.Row stretched>
+                                            <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
+                                                <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
+                                                </Modal>
+                                            </Grid.Column>
+                                            <Grid.Column width={10}>
+                                                <SearchBarProp />
+                                            </Grid.Column>
+                                            <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
+                                                <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
+                                                    <Modal.Header align='center'>Notifcations</Modal.Header>
+                                                    <Modal.Content>
+                                                        <NotificationFeed/>
+                                                    </Modal.Content>
+                                                </Modal>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    </Grid>
+                                </Container>
+                            </Menu.Item>
+                        </Menu>
+                        {getLoadingApp(this.state.isLoading)}
+                        {/*<Tabs />*/}
+                    </div>
+                </Breakpoint>
             </div>
         );
     }

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {Grid, Button, Modal} from "semantic-ui-react";
 import MessageBoardFeed from "./MessageBoardFeed";
-import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
+import MessageSelectionScreen from "./MessageSelectionScreen";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {logOut} from "../../redux_helpers/actions/authActions";
 import connect from "react-redux/es/connect/connect";
@@ -25,10 +25,10 @@ class MessageTab extends Component<{}> {
         return (
             <Grid centered>
                 <Grid.Row>
-                <Modal trigger={<Button primary>Start New Chat</Button>}>
-                    <DatabaseObjectList
+                <Modal trigger={<Button primary>Start New Chat</Button>} closeIcon>
+                    <MessageSelectionScreen
                         ids={this.props.user.friends}
-                        noObjectsMessage={"No friends yet!"}
+                        noObjectsMessage={"No clients or trainers to message"}
                         acceptedItemTypes={["Client", "Trainer"]}
                     />
                 </Modal>
