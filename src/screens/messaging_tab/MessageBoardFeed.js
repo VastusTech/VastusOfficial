@@ -6,7 +6,7 @@ import MessageBoardCard from "./MessageBoardCard";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 
 type Props = {
-
+    userID: string
 };
 
 /**
@@ -28,8 +28,7 @@ class MessageBoardFeed extends Component<Props> {
             this.state.userID = newProps.userID;
             this.state.isLoading = true;
             this.props.fetchUserAttributes(["messageBoards"], (user) => {
-                this.setState({messageBoards: user.messageBoards});
-                this.setState({isLoading: false});
+                this.setState({messageBoards: user.messageBoards, isLoading: false});
             });
         }
     }

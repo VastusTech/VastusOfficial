@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { List, Icon, Grid, Button, Message } from 'semantic-ui-react';
+import { List, Icon, Grid, Button, Message, Modal } from 'semantic-ui-react';
 import ClientCard from "../../vastuscomponents/components/cards/ClientCard";
 import { connect } from "react-redux";
 import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
@@ -10,6 +10,8 @@ import EventCard from "../../vastuscomponents/components/cards/EventCard";
 import ChallengeCard from "../../vastuscomponents/components/cards/ChallengeCard";
 import PostCard from "../../vastuscomponents/components/cards/PostCard";
 import MessageBoardCard from "../../screens/messaging_tab/MessageBoardCard";
+import MessageBoard from "../../vastuscomponents/components/messaging/MessageBoard";
+import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 
 type Props = {
     ids: [string],
@@ -23,8 +25,15 @@ class DatabaseObjectList extends Component<Props> {
         isLoading: true,
         ids: null,
         objects: [],
-        marker: 0
+        marker: 0,
+        board: null
     };
+
+    constructor(props) {
+        super(props);
+        this.handleMessagePress = this.handleMessagePress.bind(this);
+    }
+
 
     componentDidMount() {
         this.componentWillReceiveProps(this.props);
@@ -63,8 +72,23 @@ class DatabaseObjectList extends Component<Props> {
         }
     }
 
+    getMessageBoard() {
+        if (this.state.board) {
+            return (
+                <Modal open={true} onClose={() => {this.setState({board: null})}} closeIcon>
+                    <MessageBoard board={this.state.board}/>
+                </Modal>
+            );
+        }
+        return null;
+    }
+
+    handleMessagePress(otherUserID) {
+        this.setState({board: MessageHandler.getBoard([this.props.user.id, otherUserID])})
+    }
+
     render() {
-        function objectComponents(objects, sortFunction) {
+        function objectComponents(objects, sortFunction, handleMessagePressFunction) {
             const objectList = [...objects];
             const components = [];
             if (sortFunction) {
@@ -97,7 +121,7 @@ class DatabaseObjectList extends Component<Props> {
                                     )}
                                 </Grid.Column>
                                 <Grid.Column width={3}>
-                                    <Button primary fluid onClick = {() => {alert("open new message")}}><Icon name='comment outline' size='large' />
+                                    <Button primary fluid onClick={() => {handleMessagePressFunction(id)}}><Icon name='comment outline' size='large' />
                                         <Icon name='plus' size='large' /></Button>
                                 </Grid.Column>
                             </Grid>
@@ -116,7 +140,8 @@ class DatabaseObjectList extends Component<Props> {
         if (this.state.objects.length > 0) {
             return(
                 <List relaxed verticalAlign="middle">
-                    {objectComponents(this.state.objects, this.props.sortFunction)}
+                    {objectComponents(this.state.objects, this.props.sortFunction, this.handleMessagePress)}
+                    {this.getMessageBoard()}
                 </List>
             );
         }
@@ -128,7 +153,9 @@ class DatabaseObjectList extends Component<Props> {
     }
 }
 
-const mapStateToProps = () => ({});
+const mapStateToProps = (state) => ({
+    user: state.user
+});
 
 const mapDispatchToProps = (dispatch) => {
     return {

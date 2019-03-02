@@ -34,7 +34,7 @@ class MessageTab extends Component<{}> {
                 </Modal>
                 </Grid.Row>
                 <Grid.Row>
-                    <MessageBoardFeed/>
+                    <MessageBoardFeed userID={this.props.user.id}/>
                 </Grid.Row>
             </Grid>
         );
