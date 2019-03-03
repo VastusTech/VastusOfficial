@@ -9,12 +9,16 @@ import NotificationsTab from "./messaging_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
 import MessageTab from "./messaging_tab/MessageTab";
 
+type Props = {
+    user: any
+};
+
 /**
 * Tabs TODO Potentially clean this up
 *
 * The app is currently split up into three sections: home, profile, and notifications.
  */
-export default () => (
+export default (props: Props) => (
     <Tab menu={{fixed: "bottom", widths: 4, size: "large", inverted: true}} panes={
         [
             {
@@ -42,7 +46,7 @@ export default () => (
                         <Icon name='user circle outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab/>
+                    <ProfileTab user={props.user}/>
                 </Tab.Pane>
             },
             {

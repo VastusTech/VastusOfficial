@@ -4,7 +4,7 @@ import Tabs from './screens/Tabs.js';
 import {Menu, Container, Message, Icon, Grid, Modal} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
-import {fetchUserAttributes} from "./redux_helpers/actions/userActions";
+import {fetchUserAttributes, subscribeFetchUserAttributes} from "./redux_helpers/actions/userActions";
 import NotificationBellProp from "./screens/messaging_tab/NotificationBell";
 import NotificationFeed from "./screens/messaging_tab/NotificationBellFeed";
 import Breakpoint from "react-socks";
@@ -38,7 +38,7 @@ class AuthApp extends Component {
     update() {
         if (!this.state.sentRequest && this.state.userID) {
             this.state.sentRequest = true;
-            this.props.fetchUserAttributes(["name", "username", "birthday", "profileImagePath",
+            this.props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
                 "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
                 "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
                 "invitedChallenges"], (data) => {
@@ -50,7 +50,7 @@ class AuthApp extends Component {
     //This displays the search bar, log out button, and tab system inside of the grid.
     render() {
         // const { stickyRef } = this.state;
-        function getLoadingApp(isLoading) {
+        const getLoadingApp = (isLoading) => {
             if (isLoading) {
                 return (
                     <div>
@@ -67,7 +67,7 @@ class AuthApp extends Component {
             }
             else {
                 return (
-                    <Tabs />
+                    <Tabs user={this.props.user}/>
                 );
             }
         }
@@ -90,7 +90,7 @@ class AuthApp extends Component {
                                         </Grid.Column>
                                         <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
                                             <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
-                                                <Modal.Header align='center'>Notifcations</Modal.Header>
+                                                <Modal.Header align='center'>Notifications</Modal.Header>
                                                 <Modal.Content>
                                                     <NotificationFeed/>
                                                 </Modal.Content>
@@ -122,7 +122,7 @@ class AuthApp extends Component {
                                             </Grid.Column>
                                             <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
                                                 <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
-                                                    <Modal.Header align='center'>Notifcations</Modal.Header>
+                                                    <Modal.Header align='center'>Notifications</Modal.Header>
                                                     <Modal.Content>
                                                         <NotificationFeed/>
                                                     </Modal.Content>
@@ -148,6 +148,9 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => {
     return {
+        subscribeFetchUserAttributes: (variablesList, dataHandler) => {
+            dispatch(subscribeFetchUserAttributes(variablesList, dataHandler));
+        },
         fetchUserAttributes: (variablesList, dataHandler) => {
             dispatch(fetchUserAttributes(variablesList, dataHandler));
         }

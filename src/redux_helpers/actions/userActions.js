@@ -1,5 +1,5 @@
 import {setIsNotLoading} from '../../vastuscomponents/redux_actions/infoActions';
-import { fetchItem, forceFetchItem } from "../../vastuscomponents/redux_actions/cacheActions";
+import {fetchItem, forceFetchItem, subscribeFetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 // TODO Cache the user into the clients so that we actually are getting from there
@@ -47,6 +47,27 @@ export function fetchUserAttributes(variablesList, dataHandler) {
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
             })(dispatch, getStore);
+            // console.log("Filtering out results for fetch!");
+            // const userKeyList = Object.keys(user);
+            // // console.log("Originally asked for variablesList = " + JSON.stringify(variablesList));
+            // // console.log("UserKeyList = " + JSON.stringify(userKeyList));
+            // const filterVariablesList = variablesList.filter((v) => {
+            //     return !userKeyList.includes(v)
+            // });
+            // // console.log("Final filtered list is = " + JSON.stringify(filterVariablesList));
+            // overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch, getStore);
+        }
+    }
+}
+export function subscribeFetchUserAttributes(variablesList, dataHandler) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(subscribeFetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+                dispatch(setUser(client));
+                dispatch(setIsNotLoading());
+                if (dataHandler) { dataHandler(getStore().user); }
+            }));
             // console.log("Filtering out results for fetch!");
             // const userKeyList = Object.keys(user);
             // // console.log("Originally asked for variablesList = " + JSON.stringify(variablesList));
