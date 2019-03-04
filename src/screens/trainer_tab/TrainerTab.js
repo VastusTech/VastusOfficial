@@ -34,10 +34,8 @@ class CommunityTab extends Component {
         this.queryTrainers = this.queryTrainers.bind(this);
     }
 
-    componentDidMount() {
-    }
-
     componentWillReceiveProps(newProps, nextContext) {
+        alert(newProps.userID + " vs " + this.state.userID);
         if (this.state.userID !== newProps.userID) {
             this.setState({userID: newProps.userID});
             this.queryTrainers(newProps.userID);
