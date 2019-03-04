@@ -6,7 +6,7 @@ import MessageBoardCard from "./MessageBoardCard";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {log} from "../../Constants";
 import MessageHandler from "../../vastuscomponents/api/MessageHandler";
-import {getObjectAttribute} from "../../vastuscomponents/logic/ReduxHelper";
+import {getObjectAttribute} from "../../vastuscomponents/logic/CacheRetrievalHelper";
 import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";

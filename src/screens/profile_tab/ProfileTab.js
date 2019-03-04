@@ -1,26 +1,19 @@
 import React, {useState, useEffect} from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
-import { Storage } from 'aws-amplify';
-import S3 from "../../vastuscomponents/api/S3Storage";
-import _ from 'lodash'
 import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
-import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import { connect } from "react-redux";
-import {logOut} from "../../redux_helpers/actions/authActions";
-import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
-import ReactSwipe from "react-swipe";
-import { parseISOString } from "../../vastuscomponents/logic/TimeHelper";
-import ClientList from "../../vastuscomponents/components/lists/ClientList";
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
-import UploadImage from "../../vastuscomponents/components/manager/UploadImage";
-import {log} from "../../Constants";
 import ProfileImageGallery from "./ProfileImageGallery";
 import ProfileImage from "./ProfileImage";
 import LogOutButton from "./LogOutButton";
-import Spinner from "../../vastuscomponents/components/props/Spinner";
 
 type Props = {
-    user: any
+    user?: {
+        id: string,
+        profileImage: any,
+        challengesWon: [string],
+        ownedChallenges: [string],
+        completedChallenges: [string],
+    }
 };
 
 /**
@@ -29,17 +22,14 @@ type Props = {
 * This is the profile page which displays information about the current user.
  */
 const ProfileTab = (props: Props) => {
-    // ComponentWillReceiveProps
-    useEffect(() => {
-        log&&console.log("component will receive props equivalent");
-        // update();
-    }, [props]);
-    //
-    // function numChallengesWon(challengesWon) {
-    //     return challengesWon ? challengesWon.length : 0;
-    // }
-    //This displays some basic user information, a profile picture, buttons to modify some user related attributes,
-    return(
+    if (!props.user) {
+        return (
+            <Dimmer>
+                <Loader/>
+            </Dimmer>
+        )
+    }
+    return (
         <Card fluid raised className="u-margin-top--2">
             <Card.Content textAlign="center">
                 <ProfileImage userID={props.user.id} profileImage={props.user.profileImage}/>
