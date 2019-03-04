@@ -5,6 +5,7 @@ import MessageBoard from "../../vastuscomponents/components/messaging/MessageBoa
 type Props = {
     messageBoardTitle: string,
     messageBoardProPic: string,
+    messageBoardLastMessage: string,
     messageBoardID: string,
 };
 
@@ -22,7 +23,7 @@ const MessageBoardCard = (props: Props) => {
                                 <Header size='medium'>{props.messageBoardTitle}</Header>
                             </Grid.Row>
                             <Grid.Row>
-                                <div>The latest message will go here!</div>
+                                <div>{props.messageBoardLastMessage}</div>
                             </Grid.Row>
                         </Grid.Column>
                     </Grid>
