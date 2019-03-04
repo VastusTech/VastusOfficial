@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Header} from "semantic-ui-react";
+import {Dimmer, Header, Loader, Grid} from "semantic-ui-react";
 import {connect} from "react-redux";
 import Spinner from "../../vastuscomponents/components/props/Spinner";
 import MessageBoardCard from "./MessageBoardCard";
@@ -44,7 +44,7 @@ class MessageBoardFeed extends Component<Props> {
                                 const id = ids[key];
                                 const itemType = getItemTypeFromID(id);
                                 if (itemType === "Client" || itemType === "Trainer") {
-                                    this.props.fetchItem(getItemTypeFromID(id), id, ["name"]);
+                                    this.props.fetchItem(getItemTypeFromID(id), id, ["name", "profileImagePath"]);
                                 }
                             }
                         }
@@ -75,12 +75,33 @@ class MessageBoardFeed extends Component<Props> {
             }
             return "";
         };
+
+        const boardProPic = (board) => {
+            const ids = MessageHandler.getIDsFromBoard(board);
+            if (ids.length === 1) {
+                // challenge / event / group ? Will these be here? Actually totally yes!
+            }
+            else if (ids.length === 2) {
+                // other user(s)
+                // single chat
+                for (const key in ids) {
+                    if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
+                        const url = getObjectAttribute(ids[key], "profileImage", this.props.cache);
+                        return url;
+                    }
+                }
+            }
+            else {
+                // Multi-group chat
+            }
+            return "";
+        };
         function rows(messageBoardIDs) {
             const cards = [];
             for (let i = 0; i < messageBoardIDs.length; i++) {
                 const board = messageBoardIDs[i];
                 cards.push(
-                    <MessageBoardCard messageBoardTitle={boardTitle(board)} messageBoardID={board}/>
+                    <MessageBoardCard messageBoardProPic={boardProPic(board)} messageBoardTitle={boardTitle(board)} messageBoardID={board}/>
                 );
             }
             return cards;
@@ -93,10 +114,10 @@ class MessageBoardFeed extends Component<Props> {
         }
         else if (this.state.messageBoards && this.state.messageBoards.length > 0) {
             return (
-                <div>
+                <Grid fluid>
                     <Header> Message Boards: </Header>
                     {rows(this.state.messageBoards)}
-                </div>
+                </Grid>
             );
         }
         else {

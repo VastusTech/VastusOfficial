@@ -1,9 +1,10 @@
 import React from 'react';
-import { Card, Grid, Header, Modal } from "semantic-ui-react";
+import { Card, Grid, Header, Modal, Image } from "semantic-ui-react";
 import MessageBoard from "../../vastuscomponents/components/messaging/MessageBoard";
 
 type Props = {
     messageBoardTitle: string,
+    messageBoardProPic: string,
     messageBoardID: string,
 };
 
@@ -12,12 +13,18 @@ const MessageBoardCard = (props: Props) => {
         <Modal trigger={
             <Card fluid raised>
                 <Card.Content>
-                    <Grid divided verticalAlign='middle'>
-                        <Grid.Row>
-                            <Grid.Column width={4}>
-                                <Header size='large' textAlign='center'>{props.messageBoardTitle}</Header>
-                            </Grid.Column>
-                        </Grid.Row>
+                    <Grid columns={2}>
+                        <Grid.Column width={3}>
+                            <div className="u-avatar u-avatar--small" style={{backgroundImage: `url(${props.messageBoardProPic})`}}></div>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Grid.Row style={{marginBottom: '10px'}}>
+                                <Header size='medium'>{props.messageBoardTitle}</Header>
+                            </Grid.Row>
+                            <Grid.Row>
+                                <div>The latest message will go here!</div>
+                            </Grid.Row>
+                        </Grid.Column>
                     </Grid>
                 </Card.Content>
             </Card>
