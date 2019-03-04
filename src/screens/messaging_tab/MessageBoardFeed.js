@@ -9,6 +9,7 @@ import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 import {getObjectAttribute} from "../../vastuscomponents/logic/ReduxHelper";
 import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
+import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";
 
 type Props = {
     userID: string
@@ -37,6 +38,7 @@ class MessageBoardFeed extends Component<Props> {
                 for (const key in user.messageBoards) {
                     if (user.messageBoards.hasOwnProperty(key)) {
                         const board = user.messageBoards[key];
+                        this.props.queryNextMessagesFromBoard(board, 1);
                         const ids = MessageHandler.getIDsFromBoard(board);
                         for (const key in ids) {
                             if (ids.hasOwnProperty(key) && ids[key] !== newProps.userID) {
@@ -75,7 +77,14 @@ class MessageBoardFeed extends Component<Props> {
             }
             return "";
         };
-
+        const lastMessage = (board) => {
+            const boards = this.props.message.boards;
+            const messages = boards[board];
+            if (messages && messages.length > 0) {
+                return messages[0].message;
+            }
+            return "";
+        };
         const boardProPic = (board) => {
             const ids = MessageHandler.getIDsFromBoard(board);
             if (ids.length === 1) {
@@ -101,7 +110,11 @@ class MessageBoardFeed extends Component<Props> {
             for (let i = 0; i < messageBoardIDs.length; i++) {
                 const board = messageBoardIDs[i];
                 cards.push(
-                    <MessageBoardCard messageBoardProPic={boardProPic(board)} messageBoardTitle={boardTitle(board)} messageBoardID={board}/>
+                    <MessageBoardCard
+                        messageBoardProPic={boardProPic(board)}
+                        messageBoardTitle={boardTitle(board)}
+                        messageBoardLastMessage={lastMessage(board)}
+                        messageBoardID={board}/>
                 );
             }
             return cards;
@@ -133,7 +146,8 @@ class MessageBoardFeed extends Component<Props> {
 const mapStateToProps = (state) => ({
     user: state.user,
     cache: state.cache,
-    info: state.info
+    info: state.info,
+    message: state.message
 });
 
 const mapDispatchToProps = dispatch => {
@@ -143,6 +157,9 @@ const mapDispatchToProps = dispatch => {
         },
         fetchItem: (itemType, id, variableList, dataHandler, failureHandler) => {
             dispatch(fetchItem(itemType, id, variableList, dataHandler, failureHandler));
+        },
+        queryNextMessagesFromBoard: (board, limit, dataHandler, failureHandler) => {
+            dispatch(queryNextMessagesFromBoard(board, limit, dataHandler, failureHandler));
         }
     };
 };
