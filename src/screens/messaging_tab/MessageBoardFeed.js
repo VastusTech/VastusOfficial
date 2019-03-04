@@ -5,6 +5,10 @@ import Spinner from "../../vastuscomponents/components/props/Spinner";
 import MessageBoardCard from "./MessageBoardCard";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {log} from "../../Constants";
+import MessageHandler from "../../vastuscomponents/api/MessageHandler";
+import {getObjectAttribute} from "../../vastuscomponents/logic/ReduxHelper";
+import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
+import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 type Props = {
     userID: string
@@ -30,55 +34,53 @@ class MessageBoardFeed extends Component<Props> {
             this.state.isLoading = true;
             this.props.fetchUserAttributes(["messageBoards"], (user) => {
                 this.setState({messageBoards: user.messageBoards, isLoading: false});
+                for (const key in user.messageBoards) {
+                    if (user.messageBoards.hasOwnProperty(key)) {
+                        const board = user.messageBoards[key];
+                        const ids = MessageHandler.getIDsFromBoard(board);
+                        for (const key in ids) {
+                            if (ids.hasOwnProperty(key) && ids[key] !== newProps.userID) {
+                                // fetch the attributes
+                                const id = ids[key];
+                                const itemType = getItemTypeFromID(id);
+                                if (itemType === "Client" || itemType === "Trainer") {
+                                    this.props.fetchItem(getItemTypeFromID(id), id, ["name"]);
+                                }
+                            }
+                        }
+                    }
+                }
             });
         }
     }
 
-    getAttribute(attribute, messageBoardID) {
-        let id = messageBoardID.substr(12, 11);
-        alert(Object.keys(this.props.cache.clients).length);
-        alert(id);
-
-        if(id.substr(0, 2) === "CL") {
-            let client = this.props.cache.clients[id];
-            if (client) {
-                if (attribute.substr(attribute.length - 6) === "Length") {
-                    attribute = attribute.substr(0, attribute.length - 6);
-                    if (client[attribute] && client[attribute].length) {
-                        return client[attribute].length;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-                return client[attribute];
-            }
-        }
-        else if(id.substr(0, 2) === "TR") {
-            let trainer = this.props.cache.trainers[id];
-            if (trainer) {
-                if (attribute.substr(attribute.length - 6) === "Length") {
-                    attribute = attribute.substr(0, attribute.length - 6);
-                    if (trainer[attribute] && trainer[attribute].length) {
-                        return trainer[attribute].length;
-                    }
-                    else {
-                        return 0;
-                    }
-                }
-                return trainer[attribute];
-            }
-        }
-    }
-
     render() {
-        let they = this;
+        const boardTitle = (board) => {
+            const ids = MessageHandler.getIDsFromBoard(board);
+            if (ids.length === 1) {
+                // challenge / event / group ? Will these be here? Actually totally yes!
+            }
+            else if (ids.length === 2) {
+                // other user(s)
+                // single chat
+                for (const key in ids) {
+                    if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
+                        const title = getObjectAttribute(ids[key], "name", this.props.cache);
+                        return title;
+                    }
+                }
+            }
+            else {
+                // Multi-group chat
+            }
+            return "";
+        };
         function rows(messageBoardIDs) {
             const cards = [];
             for (let i = 0; i < messageBoardIDs.length; i++) {
+                const board = messageBoardIDs[i];
                 cards.push(
-                    <MessageBoardCard messageBoardID={messageBoardIDs[i]}
-                                      otherBoardUserName={they.getAttribute("name", messageBoardIDs[i])}/>
+                    <MessageBoardCard messageBoardTitle={boardTitle(board)} messageBoardID={board}/>
                 );
             }
             return cards;
@@ -117,6 +119,9 @@ const mapDispatchToProps = dispatch => {
     return {
         fetchUserAttributes: (variableList, dataHandler) => {
             dispatch(fetchUserAttributes(variableList, dataHandler));
+        },
+        fetchItem: (itemType, id, variableList, dataHandler, failureHandler) => {
+            dispatch(fetchItem(itemType, id, variableList, dataHandler, failureHandler));
         }
     };
 };
