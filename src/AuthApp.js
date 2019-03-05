@@ -89,7 +89,7 @@ class AuthApp extends Component {
                                             <SearchBarProp />
                                         </Grid.Column>
                                         <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
-                                            <Modal trigger={<Icon name="bell outline" size="big"/>} closeIcon>
+                                            <Modal trigger={<NotificationBellProp/>} closeIcon>
                                                 <Modal.Header align='center'>Notifications</Modal.Header>
                                                 <Modal.Content>
                                                     <NotificationFeed/>

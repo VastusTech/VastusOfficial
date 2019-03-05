@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Icon} from 'semantic-ui-react';
+import {Icon, Label} from 'semantic-ui-react';
 import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";
 import {connect} from "react-redux";
 import MessageHandler from "../../vastuscomponents/api/MessageHandler";
@@ -27,7 +27,8 @@ const MessageIcon = (props) => {
     if (unread) {
         return (
             <div>
-                <Icon name='comment' size='large' /> !!!
+                <Icon name='comment' size='large'/>
+                {props.user.messageBoards.length}
             </div>
         );
     }

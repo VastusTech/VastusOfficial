@@ -88,7 +88,7 @@ class NotificationBellProp extends Component {
             //console.log(JSON.stringify(this.props.user.receivedInvites));
             return (
                 <div>
-                    <Icon name='bell' size='large'/>
+                    <Icon name='bell' size='big'/>
                     {this.state.numNotifications}
                 </div>
             );
