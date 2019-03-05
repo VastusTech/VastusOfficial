@@ -7,16 +7,19 @@ type Props = {
     messageBoardProPic: string,
     messageBoardLastMessage: string,
     messageBoardID: string,
+    unread: boolean,
+    onClickCard: (board) => {}
 };
 
 const MessageBoardCard = (props: Props) => {
     return (
         <Modal trigger={
-            <Card fluid raised>
+            <Card fluid raised onClick={() => {props.onClickCard(props.messageBoardID)}}>
                 <Card.Content>
                     <Grid columns={2}>
+                        {props.unread ? "!!!" : null}
                         <Grid.Column width={3}>
-                            <div className="u-avatar u-avatar--small" style={{backgroundImage: `url(${props.messageBoardProPic})`}}></div>
+                            <div className="u-avatar u-avatar--small" style={{backgroundImage: `url(${props.messageBoardProPic})`}}/>
                         </Grid.Column>
                         <Grid.Column>
                             <Grid.Row style={{marginBottom: '10px'}}>

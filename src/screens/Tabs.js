@@ -8,6 +8,7 @@ import NotificationBellProp from "./messaging_tab/NotificationBell";
 import NotificationsTab from "./messaging_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
 import MessageTab from "./messaging_tab/MessageTab";
+import MessageIcon from "./messaging_tab/MessageIcon";
 
 type Props = {
     user: any
@@ -52,7 +53,7 @@ export default (props: Props) => (
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <Icon name='comment outline' size='large' />
+                        <MessageIcon/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>

@@ -4,12 +4,13 @@ import {connect} from "react-redux";
 import Spinner from "../../vastuscomponents/components/props/Spinner";
 import MessageBoardCard from "./MessageBoardCard";
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import {log} from "../../Constants";
+import {err, log} from "../../Constants";
 import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 import {getObjectAttribute} from "../../vastuscomponents/logic/CacheRetrievalHelper";
 import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";
+import MessageFunctions from "../../vastuscomponents/database_functions/MessageFunctions";
 
 type Props = {
     userID: string
@@ -38,7 +39,7 @@ class MessageBoardFeed extends Component<Props> {
                 for (const key in user.messageBoards) {
                     if (user.messageBoards.hasOwnProperty(key)) {
                         const board = user.messageBoards[key];
-                        this.props.queryNextMessagesFromBoard(board, 1);
+                        // this.props.queryNextMessagesFromBoard(board, 1);
                         const ids = MessageHandler.getIDsFromBoard(board);
                         for (const key in ids) {
                             if (ids.hasOwnProperty(key) && ids[key] !== newProps.userID) {
@@ -56,69 +57,88 @@ class MessageBoardFeed extends Component<Props> {
         }
     }
 
+    boardTitle(board) {
+        const ids = MessageHandler.getIDsFromBoard(board);
+        if (ids.length === 1) {
+            // challenge / event / group ? Will these be here? Actually totally yes!
+        }
+        else if (ids.length === 2) {
+            // other user(s)
+            // single chat
+            for (const key in ids) {
+                if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
+                    const title = getObjectAttribute(ids[key], "name", this.props.cache);
+                    return title;
+                }
+            }
+        }
+        else {
+            // Multi-group chat
+        }
+        return "";
+    };
+    lastMessage(board) {
+        const boards = this.props.message.boards;
+        const messages = boards[board];
+        if (messages && messages.length > 0) {
+            return messages[0].message;
+        }
+        return "";
+    };
+    boardProPic(board) {
+        const ids = MessageHandler.getIDsFromBoard(board);
+        if (ids.length === 1) {
+            // challenge / event / group ? Will these be here? Actually totally yes!
+        }
+        else if (ids.length === 2) {
+            // other user(s)
+            // single chat
+            for (const key in ids) {
+                if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
+                    const url = getObjectAttribute(ids[key], "profileImage", this.props.cache);
+                    return url;
+                }
+            }
+        }
+        else {
+            // Multi-group chat
+        }
+        return "";
+    };
+    unread(board) {
+        return MessageHandler.ifUnreadFor(this.props.user.id, this.props.message.boards[board][0]);
+    };
+    clickCard(board) {
+        alert("Reading boardID = " + board);
+        if (this.unread(board)) {
+            alert("SENDING LAMBDA FOR UNREAD");
+            MessageFunctions.addLastSeen(this.props.user.id, board, this.props.message.boards[board][0].id, this.props.user.id, () => {
+                log&&console.log("Updated message board read status successfully!");
+            }, (error) => {
+                err&&console.error("Could not update read status for message board!");
+                err&&console.error(error);
+            });
+        }
+    }
+
     render() {
-        const boardTitle = (board) => {
-            const ids = MessageHandler.getIDsFromBoard(board);
-            if (ids.length === 1) {
-                // challenge / event / group ? Will these be here? Actually totally yes!
-            }
-            else if (ids.length === 2) {
-                // other user(s)
-                // single chat
-                for (const key in ids) {
-                    if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
-                        const title = getObjectAttribute(ids[key], "name", this.props.cache);
-                        return title;
-                    }
-                }
-            }
-            else {
-                // Multi-group chat
-            }
-            return "";
-        };
-        const lastMessage = (board) => {
-            const boards = this.props.message.boards;
-            const messages = boards[board];
-            if (messages && messages.length > 0) {
-                return messages[0].message;
-            }
-            return "";
-        };
-        const boardProPic = (board) => {
-            const ids = MessageHandler.getIDsFromBoard(board);
-            if (ids.length === 1) {
-                // challenge / event / group ? Will these be here? Actually totally yes!
-            }
-            else if (ids.length === 2) {
-                // other user(s)
-                // single chat
-                for (const key in ids) {
-                    if (ids.hasOwnProperty(key) && this.state.userID !== ids[key]) {
-                        const url = getObjectAttribute(ids[key], "profileImage", this.props.cache);
-                        return url;
-                    }
-                }
-            }
-            else {
-                // Multi-group chat
-            }
-            return "";
-        };
-        function rows(messageBoardIDs) {
+        const rows = (messageBoardIDs) => {
             const cards = [];
             for (let i = 0; i < messageBoardIDs.length; i++) {
                 const board = messageBoardIDs[i];
                 cards.push(
                     <MessageBoardCard
-                        messageBoardProPic={boardProPic(board)}
-                        messageBoardTitle={boardTitle(board)}
-                        messageBoardLastMessage={lastMessage(board)}
-                        messageBoardID={board}/>
+                        messageBoardProPic={this.boardProPic(board)}
+                        messageBoardTitle={this.boardTitle(board)}
+                        messageBoardLastMessage={this.lastMessage(board)}
+                        messageBoardID={board}
+                        unread={this.unread(board)}
+                        onClickCard={this.clickCard.bind(this)}
+                    />
                 );
             }
             return cards;
-        }
+        };
 
         if (this.state.isLoading) {
             return(

@@ -41,7 +41,7 @@ class AuthApp extends Component {
             this.props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
                 "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
                 "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
-                "invitedChallenges"], (data) => {
+                "invitedChallenges", "messageBoards"], (data) => {
                 this.setState({isLoading: false});
             });
         }
