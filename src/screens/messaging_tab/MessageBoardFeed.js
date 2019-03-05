@@ -109,7 +109,7 @@ class MessageBoardFeed extends Component<Props> {
         return MessageHandler.ifUnreadFor(this.props.user.id, this.props.message.boards[board][0]);
     };
     clickCard(board) {
-        alert("Reading boardID = " + board);
+        // alert("Reading boardID = " + board);
         if (this.unread(board)) {
             alert("SENDING LAMBDA FOR UNREAD");
             MessageFunctions.addLastSeen(this.props.user.id, board, this.props.message.boards[board][0].id, this.props.user.id, () => {
