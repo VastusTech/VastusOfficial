@@ -5,30 +5,40 @@ import {connect} from "react-redux";
 import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 
 const MessageIcon = (props) => {
-    const [unread, setUnread] = useState(false);
-
     useEffect(() => {
         const boards = props.user.messageBoards;
         if (boards) {
-            for (let i = 0; i < boards.length; i++) {
+            const numBoards = boards.length;
+            for (let i = 0; i < numBoards; i++) {
                 const boardID = boards[i];
-                props.queryNextMessagesFromBoard(boardID, 1, () => {
-                    const board = props.message.boards[boardID];
-                    if (board && board.length > 0) {
-                        if (MessageHandler.ifUnreadFor(props.user.id, board[0])) {
-                            setUnread(true);
-                        }
-                    }
-                });
+                props.queryNextMessagesFromBoard(boardID, 1);
             }
         }
     }, []);
 
-    if (unread) {
+    const numUnread = () => {
+        let unread = 0;
+        const boards = props.user.messageBoards;
+        if (boards) {
+            const numBoards = boards.length;
+            for (let i = 0; i < numBoards; i++) {
+                const board = props.message.boards[boards[i]];
+                if (board && board.length > 0) {
+                    if (MessageHandler.ifUnreadFor(props.user.id, board[0])) {
+                        unread++;
+                    }
+                }
+            }
+        }
+        return unread;
+    };
+
+    let unread = numUnread();
+    if (unread > 0) {
         return (
             <div>
                 <Icon name='comment' size='large'/>
-                {props.user.messageBoards.length}
+                {unread}
             </div>
         );
     }
