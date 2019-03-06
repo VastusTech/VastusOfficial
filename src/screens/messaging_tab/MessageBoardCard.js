@@ -19,8 +19,11 @@ const MessageBoardCard = (props: Props) => {
                     props.onClickCard(props.messageBoardID)
                 }}>
                     <Card.Content>
-                        <Grid columns={2}>
-                            <Grid.Column width={3}>
+                        <Grid columns={3} verticalAlign='middle'>
+                            <Grid.Column width={1}>
+                                {props.unread ? <Label empty size='mini' circular color='purple'/> : null}
+                            </Grid.Column>
+                            <Grid.Column width={2}>
                                 <div className="u-avatar u-avatar--small"
                                      style={{backgroundImage: `url(${props.messageBoardProPic})`}}>
                                 </div>
@@ -30,14 +33,7 @@ const MessageBoardCard = (props: Props) => {
                                     <Header size='medium'>{props.messageBoardTitle}</Header>
                                 </Grid.Row>
                                 <Grid.Row>
-                                    <Grid columns={2}>
-                                        <Grid.Column width={1}>
-                                            {props.unread ? <Label empty size='mini' circular color='purple'/> : null}
-                                        </Grid.Column>
-                                        <Grid.Column>
-                                            <div>{props.messageBoardLastMessage}</div>
-                                        </Grid.Column>
-                                    </Grid>
+                                    <div>{props.messageBoardLastMessage}</div>
                                 </Grid.Row>
                             </Grid.Column>
                         </Grid>
@@ -56,8 +52,10 @@ const MessageBoardCard = (props: Props) => {
                 }}>
                     {props.unread ? <Label circular color='purple' floating/> : null}
                     <Card.Content>
-                        <Grid columns={2}>
-                            <Grid.Column width={3}>
+                        <Grid columns={3}>
+                            <Grid.Column width={1}>
+                            </Grid.Column>
+                            <Grid.Column width={2}>
                                 <div className="u-avatar u-avatar--small"
                                      style={{backgroundImage: `url(${props.messageBoardProPic})`}}>
                                 </div>
