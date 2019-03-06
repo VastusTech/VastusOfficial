@@ -106,7 +106,10 @@ class MessageBoardFeed extends Component<Props> {
         return "";
     };
     unread(board) {
-        return MessageHandler.ifUnreadFor(this.props.user.id, this.props.message.boards[board][0]);
+        if (board && this.props.message.boards[board] && this.props.message.boards[board].length > 0) {
+            return MessageHandler.ifUnreadFor(this.props.user.id, this.props.message.boards[board][0]);
+        }
+        return false;
     };
     clickCard(board) {
         // alert("Reading boardID = " + board);
