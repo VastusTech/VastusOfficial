@@ -5,7 +5,7 @@ import {setUser, forceSetUser} from "./userActions";
 import {removeAllHandlers} from "../../vastuscomponents/redux_actions/ablyActions";
 import QL from "../../vastuscomponents/api/GraphQL";
 import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
-import {log} from "../../Constants";
+import {err, log} from "../../Constants";
 
 export function updateAuth() {
     return (dispatch) => {
@@ -114,7 +114,7 @@ export function logOut() {
             dispatch(removeAllHandlers());
             dispatch(setIsNotLoading());
         }).catch((error) => {
-            console.error("REDUX: Failed log out...");
+            err&&console.error("REDUX: Failed log out...");
             dispatch(setError(error));
             dispatch(setIsNotLoading());
         });
