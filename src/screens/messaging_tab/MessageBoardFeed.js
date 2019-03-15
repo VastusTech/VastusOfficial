@@ -9,7 +9,7 @@ import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 import {getObjectAttribute} from "../../vastuscomponents/logic/CacheRetrievalHelper";
 import {fetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
-import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";
+import {queryNextMessagesFromBoard, setBoardRead} from "../../vastuscomponents/redux_actions/messageActions";
 import MessageFunctions from "../../vastuscomponents/database_functions/MessageFunctions";
 
 type Props = {
@@ -116,6 +116,7 @@ class MessageBoardFeed extends Component<Props> {
         if (this.unread(board)) {
             //alert("SENDING LAMBDA FOR UNREAD");
             MessageFunctions.addLastSeen(this.props.user.id, board, this.props.message.boards[board][0].id, this.props.user.id, () => {
+                this.props.setBoardRead(board, this.props.user.id);
                 log&&console.log("Updated message board read status successfully!");
             }, (error) => {
                 err&&console.error("Could not update read status for message board!");
@@ -183,6 +184,9 @@ const mapDispatchToProps = dispatch => {
         },
         queryNextMessagesFromBoard: (board, limit, dataHandler, failureHandler) => {
             dispatch(queryNextMessagesFromBoard(board, limit, dataHandler, failureHandler));
+        },
+        setBoardRead: (board, userID) => {
+            dispatch(setBoardRead(board, userID));
         }
     };
 };

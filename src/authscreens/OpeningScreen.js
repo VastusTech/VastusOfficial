@@ -25,7 +25,6 @@ import Breakpoint from "react-socks";
 const transition = 'browse';
 
 class OpeningScreen extends Component {
-
  	state = {
  	    visible: true,
         slideNum: 0,
