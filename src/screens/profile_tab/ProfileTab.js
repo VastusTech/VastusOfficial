@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid} from 'semantic-ui-react'
+import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid, Visibility} from 'semantic-ui-react'
 import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
 import ProfileImageGallery from "./ProfileImageGallery";
@@ -42,14 +42,17 @@ const ProfileTab = (props: Props) => {
                         </Modal>
                     </List.Item>
                     <List.Item>
-                        <Modal basic size='mini' closeIcon
+                        <Modal fluid size='huge' closeIcon
                             trigger={<Button primary fluid size="large"><Icon name="users" /> Buddy List</Button>}>
+                            <Modal.Header>Buddy List</Modal.Header>
                             <Modal.Content image>
-                                <DatabaseObjectList
-                                    ids={props.user.friends}
-                                    noObjectsMessage={"No friends yet!"}
-                                    acceptedItemTypes={["Client", "Trainer"]}
-                                />
+                                <Modal.Description>
+                                    <DatabaseObjectList
+                                        ids={props.user.friends}
+                                        noObjectsMessage={"No friends yet!"}
+                                        acceptedItemTypes={["Client", "Trainer"]}
+                                    />
+                                </Modal.Description>
                             </Modal.Content>
                         </Modal>
                     </List.Item>

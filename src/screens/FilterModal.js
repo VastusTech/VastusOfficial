@@ -4,6 +4,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 
+// TODO Take from the SearchTab.js file in order for inspiration / direct stealing :)
+
 type Props = {
 
 };
