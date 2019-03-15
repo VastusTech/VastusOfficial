@@ -114,7 +114,7 @@ class MessageBoardFeed extends Component<Props> {
     clickCard(board) {
         // alert("Reading boardID = " + board);
         if (this.unread(board)) {
-            alert("SENDING LAMBDA FOR UNREAD");
+            //alert("SENDING LAMBDA FOR UNREAD");
             MessageFunctions.addLastSeen(this.props.user.id, board, this.props.message.boards[board][0].id, this.props.user.id, () => {
                 this.props.setBoardRead(board, this.props.user.id);
                 log&&console.log("Updated message board read status successfully!");
