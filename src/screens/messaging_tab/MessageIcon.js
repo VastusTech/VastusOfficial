@@ -1,6 +1,8 @@
 import React, {useState, useEffect} from 'react';
 import {Icon, Label} from 'semantic-ui-react';
-import {queryNextMessagesFromBoard} from "../../vastuscomponents/redux_actions/messageActions";
+import {
+    peekAtFirstMessageFromBoard,
+} from "../../vastuscomponents/redux_actions/messageActions";
 import {connect} from "react-redux";
 import MessageHandler from "../../vastuscomponents/api/MessageHandler";
 
@@ -11,7 +13,7 @@ const MessageIcon = (props) => {
             const numBoards = boards.length;
             for (let i = 0; i < numBoards; i++) {
                 const boardID = boards[i];
-                props.queryNextMessagesFromBoard(boardID, 1);
+                props.peekAtFirstMessageFromBoard(boardID);
             }
         }
     }, []);
@@ -58,8 +60,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        queryNextMessagesFromBoard: (board, limit, dataHandler, failureHandler) => {
-            dispatch(queryNextMessagesFromBoard(board, limit, dataHandler, failureHandler));
+        peekAtFirstMessageFromBoard: (board) => {
+            dispatch(peekAtFirstMessageFromBoard(board));
         }
     }
 };
