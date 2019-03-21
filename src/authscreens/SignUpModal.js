@@ -22,6 +22,7 @@ class SignUpModal extends Component {
         birthday: "",
         email: "",
         confirmationCode: "",
+        enterpriseID: "",
     };
 
     changeStateText(key, value) {
@@ -33,16 +34,16 @@ class SignUpModal extends Component {
         // console.log("Setting state with isConfirming is true");
         // TODO Do extra checking for the specifications of the account!
         if (this.fieldsAreFilledCorrectly()) {
-            this.props.signUp(this.authState.username, this.authState.password, this.authState.name, this.authState.gender,
-                    this.authState.birthday, this.authState.email);
+            this.props.signUp(this.authState.username, this.authState.password, this.authState.name,
+                this.authState.email, this.authState.enterpriseID);
         }
     }
 
     fieldsAreFilledCorrectly() {
         // console.log("Setting state with isConfirming is true");
         // TODO Do extra checking for the specifications of the account!
-        if (this.authState.username && this.authState.password && this.authState.confirmPassword && this.authState.name &&
-            this.authState.birthday && this.authState.gender && this.authState.email) {
+        if (this.authState.username && this.authState.password && this.authState.confirmPassword && this.authState.name
+            /* && this.authState.birthday && this.authState.gender */ && this.authState.email) {
             if (this.authState.password !== this.authState.confirmPassword) {
                 this.props.setError(new Error("Password and confirm password do not match!"));
             }
@@ -144,16 +145,22 @@ class SignUpModal extends Component {
                     <Form>
                         <Form.Input type="text" iconPosition='left' icon='user' name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
                         <Popup position="left center" trigger={<Form.Input iconPosition='left' icon='lock' type="password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>}>
-                            Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number!
+                            Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number.
                         </Popup>
                         {/* <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/> */}
                         <Form.Input type="password" iconPosition='left' icon='lock' name="confirmPassword" placeholder="Confirm Password" onChange={value => this.changeStateText("confirmPassword", value)}/>
                         <Divider />
-                        <Form.Input type="text" iconPosition='left' icon='user circle' name="name" placeholder="Name" onChange={value => this.changeStateText("name", value)}/>
-                        <Form.Input type="text" iconPosition='left' icon='male' name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>
-                        <Divider />
-                        <Form.Input type="date" iconPosition='left' icon='calendar alternate outline' name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>
+                        <Popup position="left center" trigger={<Form.Input type="text" iconPosition='left' icon='user circle' name="name" placeholder="Screen Name" onChange={value => this.changeStateText("name", value)}/>}>
+                            This will be what your friends will see your name as.
+                        </Popup>
+                        {/*<Form.Input type="text" iconPosition='left' icon='male' name="gender" placeholder="Gender" onChange={value => this.changeStateText("gender", value)}/>*/}
+                        {/*<Divider />*/}
+                        {/*<Form.Input type="date" iconPosition='left' icon='calendar alternate outline' name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>*/}
                         <Form.Input type="text" iconPosition='left' icon='mail' name="email" placeholder="Email" onChange={value => this.changeStateText("email", value)}/>
+                        <Divider />
+                        <Popup position="left center" trigger={<Form.Input type="text" iconPosition='left' icon='id card' name='enterprise code' placeHolder="Company ID" onChange={value => this.changeStateText("enterpriseID", value)}/>}>
+                            If you are signing up with your company, input the given ID here.
+                        </Popup>
                         <div className="u-flex u-flex-justify--space-between u-padding-y--2 u-margin-top--2">
                             <Button negative onClick={this.handleCancelButton.bind(this)}>Cancel</Button>
                             <Button positive color='green' onClick={this.handleCreateButton.bind(this)}>Create</Button>

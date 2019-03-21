@@ -82,7 +82,7 @@ class AuthApp extends Component {
                                 <Grid columns="equal">
                                     <Grid.Row stretched>
                                         <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
-                                            <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
+                                            <Modal trigger={<Icon name="filter" size="big"/>} closeIcon>
                                             </Modal>
                                         </Grid.Column>
                                         <Grid.Column width={14}>

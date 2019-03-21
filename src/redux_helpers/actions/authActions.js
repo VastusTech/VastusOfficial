@@ -228,7 +228,7 @@ function generateGoogleUsername(name, usernameHandler, failureHandler, depth=0) 
         failureHandler(error);
     });
 }
-export function signUp(username, password, name, gender, birthday, email) {
+export function signUp(username, password, name, email, enterpriseID) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
         const params = {
@@ -236,11 +236,12 @@ export function signUp(username, password, name, gender, birthday, email) {
             password: password,
             attributes: {
                 name: name,
-                gender: gender,
-                birthdate: birthday,
+                gender: "~",
+                birthdate: "~",
                 email: email
             }
         };
+        // TODO Check the enterprise ID and then use it in the Creation!
         ClientFunctions.createClient("admin", name, email, username, (clientID) => {
             Auth.signUp(params).then((data) => {
                 log&&console.log("REDUX: Successfully signed up!");
