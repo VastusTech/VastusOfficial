@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, {useState, useEffect} from 'react'
 import {Icon} from 'semantic-ui-react'
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
@@ -9,97 +9,59 @@ import {fetchChallenge, fetchEvent, fetchGroup, fetchInvite} from "../../vastusc
 *
 * This is a feed which contains all of the buddy (friend) requests that have been sent to the current user.
  */
-class NotificationBellProp extends Component {
-    state = {
-        error: null,
-        isLoading: true,
-        sentRequest: false,
-        numNotifications: 0
-    };
+const NotificationBell = (props) => {
+    const [numNotifications, setNumNotifications] = useState(0);
 
-    constructor(props) {
-        super(props);
-        this.update = this.update.bind(this);
-    }
-
-    componentDidMount() {
-        this.update(this.props);
-    }
-
-    componentWillReceiveProps(newProps, nextContext) {
-        this.update(newProps);
-    }
-
-    update(props) {
-        const user = props.user;
-        //console.log("Updating Scheduled Events");
-        if (!user.id) {
-            console.error("Pretty bad error");
-            this.setState({isLoading: true});
-        }
-
-         const fetchAndAddReceivedInvites = (itemType, id) => {
+    useEffect(() => {
+        const fetchAndAddReceivedInvites = (itemType, id) => {
             let fetchFunction;
             if (itemType === "Event") { fetchFunction = props.fetchEvent; }
             if (itemType === "Challenge") { fetchFunction = props.fetchChallenge; }
             if (itemType === "Group") { fetchFunction = props.fetchGroup; }
             fetchFunction(id, ["receivedInvites"], (data) => {
                 if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
-                    this.state.numNotifications += data.receivedInvites.length;
+                    setNumNotifications((prevNumNotifications) => (prevNumNotifications + data.receivedInvites.length));
                 }
             });
         };
-
-        if (!this.state.sentRequest) {
-            this.state.sentRequest = true;
-            this.setState({isLoading: true});
-            const data = this.props.user;
-            if (data) {
-                if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
-                    this.state.numNotifications += data.receivedInvites.length;
-                }
-                if (data.hasOwnProperty("ownedEvents") && data.ownedEvents) {
-                    for (let i = 0; i < data.ownedEvents.length; i++) {
-                        fetchAndAddReceivedInvites("Event", data.ownedEvents[i]);
-                    }
-                }
-                if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
-                    // console.log("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
-                    for (let i = 0; i < data.ownedChallenges.length; i++) {
-                        fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
-                    }
-                }
-                if (data.hasOwnProperty("ownedGroups") && data.ownedGroups) {
-                    for (let i = 0; i < data.ownedGroups.length; i++) {
-                        fetchAndAddReceivedInvites("Group", data.ownedGroups[i]);
-                    }
+        const data = props.user;
+        if (data) {
+            if (data.hasOwnProperty("receivedInvites") && data.receivedInvites) {
+                setNumNotifications((prevNumNotifications) => (prevNumNotifications + data.receivedInvites.length));
+            }
+            if (data.hasOwnProperty("ownedEvents") && data.ownedEvents) {
+                for (let i = 0; i < data.ownedEvents.length; i++) {
+                    fetchAndAddReceivedInvites("Event", data.ownedEvents[i]);
                 }
             }
-            else {
-                this.setState({isLoading: false});
+            if (data.hasOwnProperty("ownedChallenges") && data.ownedChallenges) {
+                // console.log("Grabbing " + data.ownedChallenges.length + " challenges for notification bell");
+                for (let i = 0; i < data.ownedChallenges.length; i++) {
+                    fetchAndAddReceivedInvites("Challenge", data.ownedChallenges[i]);
+                }
+            }
+            if (data.hasOwnProperty("ownedGroups") && data.ownedGroups) {
+                for (let i = 0; i < data.ownedGroups.length; i++) {
+                    fetchAndAddReceivedInvites("Group", data.ownedGroups[i]);
+                }
             }
         }
-    };
+    }, [props.user.receivedInvites, props.user.ownedEvents, props.user.ownedChallenges, props.user.ownedGroups]);
 
-    //The buddy requests consists of a profile picture with the name of the user who has sent you a request.
-    //To the right of the request is two buttons, one to accept and one to deny the current request.
-    render() {
-        if (this.state.numNotifications > 0) {
-            //console.log(JSON.stringify(this.props.user.receivedInvites));
-            return (
-                <div>
-                    <Icon name='bell' size='big'/>
-                    {this.state.numNotifications}
-                </div>
-            );
-        }
-        else {
-            return (
-                <Icon name='bell outline' size='large'/>
-            );
-        }
+    if (numNotifications > 0) {
+        return (
+            <div {...props}>
+                <Icon name='bell' size='big'/>
+                {numNotifications}
+            </div>
+        );
     }
-}
+    else {
+        return (
+            <Icon name='bell outline' size='large'/>
+        );
+    }
+};
 
 const mapStateToProps = (state) => ({
     user: state.user,
@@ -129,4 +91,4 @@ const mapDispatchToProps = (dispatch) => {
     }
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationBellProp);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationBell);

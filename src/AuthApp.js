@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Menu, Container, Message, Icon, Grid, Modal} from "semantic-ui-react";
+import {Menu, Container, Message, Icon, Grid, Modal, Input} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes, subscribeFetchUserAttributes} from "./redux_helpers/actions/userActions";
