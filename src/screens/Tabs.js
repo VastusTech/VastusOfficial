@@ -9,6 +9,7 @@ import NotificationsTab from "./messaging_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
 import MessageTab from "./messaging_tab/MessageTab";
 import MessageIcon from "./messaging_tab/MessageIcon";
+import GroupFeed from "./trainer_tab/CommunityTab";
 
 type Props = {
     user: any
@@ -20,20 +21,11 @@ type Props = {
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default (props: Props) => (
-    <Tab menu={{fixed: "bottom", widths: 4, size: "large", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
         [
             {
-                menuItem: (
-                    <Menu.Item key={0}>
-                        <Icon name='group' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                    <TrainerTab/>
-                </Tab.Pane>
-            },
-            {
                 menuItem:
-                    (<Menu.Item key={1}>
+                    (<Menu.Item key={0}>
                         <Icon name='trophy' size='large' />
                     </Menu.Item>),
                 render: () =>
@@ -42,12 +34,22 @@ export default (props: Props) => (
                     </Tab.Pane>
             },
             {
+                menuItem:
+                    (<Menu.Item key={1}>
+                        <Icon name='group' size='large' />
+                    </Menu.Item>),
+                render: () =>
+                    <Tab.Pane basic attached={false}>
+                        <GroupFeed/>
+                    </Tab.Pane>
+            },
+            {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='user circle outline' size='large' />
+                        <Icon name='trophy' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab user={props.user}/>
+                    <TrainerTab/>
                 </Tab.Pane>
             },
             {
@@ -59,6 +61,15 @@ export default (props: Props) => (
                     <Fragment>
                         <MessageTab/>
                     </Fragment>
+                </Tab.Pane>
+            },
+            {
+                menuItem: (
+                    <Menu.Item key={4}>
+                        <Icon name='user circle outline' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <ProfileTab user={props.user}/>
                 </Tab.Pane>
             },
         ]
