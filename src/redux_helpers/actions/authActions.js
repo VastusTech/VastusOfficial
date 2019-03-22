@@ -236,8 +236,8 @@ export function signUp(username, password, name, email, enterpriseID) {
             password: password,
             attributes: {
                 name: name,
-                gender: "~",
-                birthdate: "~",
+                gender: "-",
+                birthdate: "-",
                 email: email
             }
         };
