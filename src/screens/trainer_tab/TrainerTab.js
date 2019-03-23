@@ -84,7 +84,7 @@ class CommunityTab extends Component {
 
     handleUpdate = (e, { calculations }) => {
         this.setState({ calculations });
-        // log&&console.log(calculations.bottomVisible);
+        log&&console.log(calculations.bottomVisible);
         if (calculations.bottomVisible) {
             log&&console.log("Next Token: " + this.state.nextToken);
             this.state.sentRequest = false;
