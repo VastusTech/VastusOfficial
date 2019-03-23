@@ -26,7 +26,7 @@ export default (props: Props) => (
             {
                 menuItem:
                     (<Menu.Item key={0}>
-                        <Icon name='trophy' size='large' />
+                        <Icon name='home' size='large' />
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
@@ -46,7 +46,7 @@ export default (props: Props) => (
             {
                 menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='trophy' size='large' />
+                        <Icon name='stopwatch' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <TrainerTab/>

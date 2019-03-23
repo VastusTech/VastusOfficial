@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimmer, Header, Loader, Grid} from "semantic-ui-react";
+import {Dimmer, Header, Divider, Grid} from "semantic-ui-react";
 import {connect} from "react-redux";
 import Spinner from "../../vastuscomponents/components/props/Spinner";
 import MessageBoardCard from "./MessageBoardCard";
@@ -151,7 +151,7 @@ class MessageBoardFeed extends Component<Props> {
         }
         else if (this.state.messageBoards && this.state.messageBoards.length > 0) {
             return (
-                <Grid fluid>
+                <Grid fluid centered>
                     <Header> Message Boards: </Header>
                     {rows(this.state.messageBoards)}
                 </Grid>
