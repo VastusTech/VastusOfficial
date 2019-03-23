@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {Grid, Button, Modal, Visibility} from 'semantic-ui-react';
 import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import CreateGroupProp from "../../vastuscomponents/components/manager/CreateGroup";
-import TrainerCard from "../../vastuscomponents/components/cards/TrainerCard";
+import TrainerCard, {TrainerCardInfo} from "../../vastuscomponents/components/cards/TrainerCard";
 import {
     fetchClient,
     fetchTrainerQuery,
@@ -55,7 +55,7 @@ class CommunityTab extends Component {
             this.state.sentRequest = true;
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
-                this.props.fetchTrainerQuery(TrainerCard.fetchVariableList, null, this.state.trainerFeedLength, this.state.nextToken, (data) => {
+                this.props.fetchTrainerQuery(TrainerCardInfo.fetchList, null, this.state.trainerFeedLength, this.state.nextToken, (data) => {
                     if (!data.nextToken) {
                         this.setState({ifFinished: true});
                     }
@@ -102,7 +102,7 @@ class CommunityTab extends Component {
             // if(Posts != null && Posts.length > 0)
             return _.times(trainers.length, i => (
                 <Grid.Row key={i + 1}>
-                    <TrainerCard rank={0} trainerID={trainers[i].id}/>
+                    <TrainerCard rank={0} trainer={trainers[i]}/>
                 </Grid.Row>
             ));
         }

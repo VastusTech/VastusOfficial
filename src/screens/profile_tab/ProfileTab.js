@@ -42,7 +42,7 @@ const ProfileTab = (props: Props) => {
                         </Modal>
                     </List.Item>
                     <List.Item>
-                        <Modal fluid size='huge' closeIcon
+                        <Modal fluid size='large' closeIcon
                             trigger={<Button primary fluid size="large"><Icon name="users" /> Buddy List</Button>}>
                             <Modal.Header>Buddy List</Modal.Header>
                             <Modal.Content image>

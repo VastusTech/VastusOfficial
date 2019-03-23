@@ -33,24 +33,6 @@ class GoogleSignUp extends React.Component {
             }
         );
     }
-    
-
-
-    // async getAWSCredentials(googleUser) {
-        // const { id_token, expires_at } = googleUser.getAuthResponse();
-        // const profile = googleUser.getBasicProfile();
-        // let user = {
-        //     email: profile.getEmail(),
-        //     name: profile.getName(),
-        //     //birthdate: profile.getBirthdays()
-        // };
-        // const credentials = await Auth.federatedSignIn(
-        //     'google',
-        //     { token: id_token, expires_at },
-        //     user
-        // );
-        // console.log('credentials', credentials);
-    // }
 
     createScript() {
         // load the Google SDK

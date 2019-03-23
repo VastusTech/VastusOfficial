@@ -20,6 +20,7 @@ import NextChallengeProp from "./NextChallenge";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 import {log, err} from "../../Constants";
 import {debugAlert} from "../../vastuscomponents/logic/DebuggingHelper";
+import ChallengeCard from "../../vastuscomponents/components/cards/ChallengeCard";
 import ClientDetailCard from "../../vastuscomponents/components/post_detail_cards/ClientDetailCard";
 import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
 import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
@@ -139,7 +140,7 @@ class PostFeedProp extends Component {
                                     } else if (aboutItemType === "Challenge") {
                                         // console.log("Fetching challenge for post in post feed");
                                         debugAlert("Fetching Challenge for ABOUT in post for Post Feed");
-                                        this.props.fetchChallenge(about, ChallengeDetailCard.fetchVariableList);
+                                        this.props.fetchChallenge(about, ChallengeCard.fetchVariableList);
                                     } else if (aboutItemType === "Post") {
                                         debugAlert("Fetching Post for ABOUT in post for Post Feed");
                                         this.props.fetchPost(about, PostDetailCard.fetchVariableList);
