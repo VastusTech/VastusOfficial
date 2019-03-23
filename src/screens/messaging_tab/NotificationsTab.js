@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {Divider, Button, Grid} from "semantic-ui-react";
 import NotificationFeed from "./NotificationBellFeed";
-import MessageBoardFeed from "./MessageBoardFeed";
+import MessageBoardFeed from "../../vastuscomponents/components/messaging/MessageBoardFeed";
 import StartChatModal from "./StartChatModal";
 
 class NotificationsTab extends Component<{}> {

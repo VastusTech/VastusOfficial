@@ -51,6 +51,11 @@ const ProfileTab = (props: Props) => {
                                         ids={props.user.friends}
                                         noObjectsMessage={"No friends yet!"}
                                         acceptedItemTypes={["Client", "Trainer"]}
+                                        // sortFunction={(a, b) => {
+                                        //     const aLen = a.challengesWon ? a.challengesWon.length : 0;
+                                        //     const bLen = b.challengesWon ? b.challengesWon.length : 0;
+                                        //     return bLen - aLen;
+                                        // }}
                                     />
                                 </Modal.Description>
                             </Modal.Content>

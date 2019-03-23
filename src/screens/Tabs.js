@@ -8,7 +8,7 @@ import NotificationBellProp from "../vastuscomponents/components/props/Notificat
 import NotificationsTab from "./messaging_tab/NotificationsTab";
 import PostFeedProp from "./main_tab/PostFeed";
 import MessageTab from "./messaging_tab/MessageTab";
-import MessageIcon from "./messaging_tab/MessageIcon";
+import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
 import GroupFeed from "./trainer_tab/CommunityTab";
 
 type Props = {
