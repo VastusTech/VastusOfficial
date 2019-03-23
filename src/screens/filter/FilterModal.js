@@ -4,7 +4,7 @@
 import React, {Component, Fragment} from 'react';
 import {connect} from 'react-redux';
 import {Grid, Form, Popup, Divider, Button, List} from "semantic-ui-react";
-import SearchBarProp from "../vastuscomponents/components/props/SearchBar";
+import SearchBarProp from "../../vastuscomponents/components/props/SearchBar";
 
 // TODO Take from the SearchTab.js file in order for inspiration / direct stealing :)
 

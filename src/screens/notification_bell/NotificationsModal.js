@@ -2,7 +2,7 @@
 // TODO. notifications.
 
 import React from 'react';
-import NotificationsFeed from "src/screens/messaging_tab/NotificationBellFeed";
+import NotificationsFeed from "src/screens/notification_bell/NotificationBellFeed";
 
 const NotificationsModal = () => {
     return (
