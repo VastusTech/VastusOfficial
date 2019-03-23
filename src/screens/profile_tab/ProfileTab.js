@@ -4,7 +4,7 @@ import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
 import ProfileImageGallery from "./ProfileImageGallery";
 import ProfileImage from "./ProfileImage";
-import LogOutButton from "./LogOutButton";
+import LogOutButton from "../../vastuscomponents/components/manager/LogOutButton";
 
 type Props = {
     user?: {

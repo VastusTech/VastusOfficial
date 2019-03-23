@@ -1,7 +1,7 @@
 import React, {Fragment} from 'react'
 import _ from 'lodash'
 import {Dimmer, Loader, Message, Grid} from 'semantic-ui-react'
-import NotificationCard from "../../vastuscomponents/components/cards/NotificationCard";
+import NotificationCard from "../../vastuscomponents/components/cards/InviteCard";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {connect} from 'react-redux';
 import {

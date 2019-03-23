@@ -5,7 +5,7 @@ import {Menu, Container, Message, Icon, Grid, Modal, Input} from "semantic-ui-re
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
 import {fetchUserAttributes, subscribeFetchUserAttributes} from "./redux_helpers/actions/userActions";
-import NotificationBellProp from "./vastuscomponents/components/props/NotificationBell";
+import NotificationBellProp from "./vastuscomponents/components/info/NotificationBell";
 import NotificationFeed from "./screens/messaging_tab/NotificationBellFeed";
 import Breakpoint from "react-socks";
 

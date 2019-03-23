@@ -4,7 +4,7 @@ import NotificationFeed from "./messaging_tab/NotificationBellFeed";
 import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
 import TrainerTab from "./trainer_tab/TrainerTab";
-import NotificationBellProp from "../vastuscomponents/components/props/NotificationBell";
+import NotificationBellProp from "../vastuscomponents/components/info/NotificationBell";
 import NotificationsTab from "./messaging_tab/NotificationsTab";
 import MainTab from "./main_tab/MainTab";
 import MessageTab from "./messaging_tab/MessageTab";

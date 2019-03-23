@@ -1,7 +1,7 @@
 import React from "react";
 import {Header} from "semantic-ui-react";
 import PostFeedProp from "../../vastuscomponents/components/feeds/PostFeed";
-import NextChallengeProp from "./NextChallenge";
+import NextChallengeProp from "../../vastuscomponents/components/info/NextChallenge";
 import QL from "../../vastuscomponents/api/GraphQL";
 
 const MainTab = () => {
