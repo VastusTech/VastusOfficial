@@ -24,6 +24,7 @@ import ClientDetailCard from "../../vastuscomponents/components/post_detail_card
 import TrainerDetailCard from "../../vastuscomponents/components/post_detail_cards/TrainerDetailCard";
 import ChallengeDetailCard from "../../vastuscomponents/components/post_detail_cards/ChallengeDetailCard";
 import PostDetailCard from "../../vastuscomponents/components/post_detail_cards/PostDetailCard";
+import {getNowISO} from "../../vastuscomponents/logic/TimeHelper";
 
 /**
  * Event Feed
@@ -85,6 +86,7 @@ class PostFeedProp extends Component {
             if (!this.state.ifFinished) {
                 this.setState({isLoading: true});
                 const filter = QL.generateFilter({
+                    and: [{
                         or: [{
                             postType: {
                                 eq: "$postType1"
@@ -94,11 +96,11 @@ class PostFeedProp extends Component {
                                 eq: "$postType2"
                             }
                         }]
-                    }, {
-                        postType1: "Challenge",
-                        postType2: "newChallenge",
                     }
-                );
+                ]}, {
+                    postType1: "Challenge",
+                    postType2: "newChallenge",
+                });
                 // QL.queryPosts(["id", "time_created", "by", "item_type", "postType", "about", "description", "videoPaths", "picturePaths"],
                 debugAlert("Fetching Post Feed Query");
                 this.props.fetchPostQuery(PostCard.fetchVariableList, filter, this.state.postFeedLength, this.state.nextToken, (data) => {

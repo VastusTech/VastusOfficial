@@ -59,11 +59,11 @@ class OpeningScreen extends Component {
 
     displayPage = () => {
         return _.times(3, i => (
-            <Grid.Column width={1}>
+            <Grid.Column width={1} key={i}>
                 <Icon name={this.state.circles[i]}/>
             </Grid.Column>
         ));
-    }
+    };
 
     adjustCircles(index) {
  	    if(0 <= index <= 2) {
