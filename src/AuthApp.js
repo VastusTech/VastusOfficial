@@ -74,21 +74,57 @@ class AuthApp extends Component {
 
         return (
             <div>
-                <Breakpoint medium up>
+                <Breakpoint large up>
+                    <div className="App">
+                        <Menu borderless inverted vertical fluid widths={1} fixed="top">
+                            <Menu.Item>
+                                <Container fluid>
+                                    <Grid columns="equal" centered>
+                                        <Grid.Row stretched>
+                                            <Grid.Column>
+                                                <Modal trigger={<Grid style={{marginTop: "6px", marginLeft: "-40px"}} centered>
+                                                    <Icon name="filter" size="big"/>
+                                                </Grid>} closeIcon>
+                                                </Modal>
+                                            </Grid.Column>
+                                            <Grid.Column width={13}>
+                                                <SearchBarProp />
+                                            </Grid.Column>
+                                            <Grid.Column>
+                                                <Modal trigger={<NotificationBellProp/>} closeIcon>
+                                                    <Modal.Header align='center'>Notifications</Modal.Header>
+                                                    <Modal.Content>
+                                                        <NotificationFeed/>
+                                                    </Modal.Content>
+                                                </Modal>
+                                            </Grid.Column>
+                                        </Grid.Row>
+                                    </Grid>
+                                </Container>
+                            </Menu.Item>
+                        </Menu>
+                        {getLoadingApp(this.state.isLoading)}
+                        {/*<Tabs />*/}
+                    </div>
+                </Breakpoint>
+
+                <Breakpoint medium>
                 <div className="App">
                     <Menu borderless inverted vertical fluid widths={1} fixed="top">
                         <Menu.Item>
                             <Container fluid>
-                                <Grid columns="equal">
+                                <Grid columns="equal" centered>
                                     <Grid.Row stretched>
-                                        <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
-                                            <Modal trigger={<Icon name="filter" size="big"/>} closeIcon>
+                                        <Grid.Column width={2}>
+                                            <Modal trigger={<Grid style={{marginTop: "6px", marginLeft: "-40px"}} centered>
+                                                <Icon name="filter" size="big"/>
+                                            </Grid>} closeIcon>
                                             </Modal>
                                         </Grid.Column>
-                                        <Grid.Column width={14}>
+                                        <Grid.Column width={12}>
                                             <SearchBarProp />
                                         </Grid.Column>
-                                        <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
+                                        <Grid.Column width={2}>
                                             <Modal trigger={<NotificationBellProp/>} closeIcon>
                                                 <Modal.Header align='center'>Notifications</Modal.Header>
                                                 <Modal.Content>
@@ -114,13 +150,15 @@ class AuthApp extends Component {
                                     <Grid columns="equal">
                                         <Grid.Row stretched>
                                             <Grid.Column style={{marginTop: "6px", marginLeft: "12px", marginRight: "-12px"}}>
-                                                <Modal trigger={<Icon name="search" size="big"/>} closeIcon>
+                                                <Modal trigger={<Grid style={{marginTop: "3px", marginLeft: "-60px"}} centered>
+                                                    <Icon name="filter" size="big"/>
+                                                </Grid>} closeIcon>
                                                 </Modal>
                                             </Grid.Column>
-                                            <Grid.Column width={10}>
+                                            <Grid.Column width={9}>
                                                 <SearchBarProp />
                                             </Grid.Column>
-                                            <Grid.Column style={{marginTop: "6px", marginLeft: "-6px"}}>
+                                            <Grid.Column style={{marginTop: "3px", marginLeft: "-6px"}}>
                                                 <Modal trigger={<NotificationBellProp/>} closeIcon>
                                                     <Modal.Header align='center'>Notifications</Modal.Header>
                                                     <Modal.Content>
