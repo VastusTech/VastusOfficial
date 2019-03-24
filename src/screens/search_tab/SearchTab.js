@@ -91,7 +91,7 @@ class SearchTab extends Component {
                     null,
                     null,
                     null,
-                    <EventCard eventID={result.id}/>,
+                    <EventCard event={result}/>,
                     <ChallengeCard challenge={result}/>,
                     null,
                     <PostCard postID={result.id}/>,
