@@ -6,9 +6,9 @@ import React from "react";
 import TrainerTab from "./trainer_tab/TrainerTab";
 import NotificationBellProp from "../vastuscomponents/components/props/NotificationBell";
 import NotificationsTab from "./messaging_tab/NotificationsTab";
-import PostFeedProp from "./main_tab/PostFeed";
+import MainTab from "./main_tab/MainTab";
 import MessageTab from "./messaging_tab/MessageTab";
-import MessageIcon from "./messaging_tab/MessageIcon";
+import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
 import GroupFeed from "./trainer_tab/CommunityTab";
 
 type Props = {
@@ -30,7 +30,7 @@ export default (props: Props) => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <PostFeedProp/>
+                        <MainTab/>
                     </Tab.Pane>
             },
             {

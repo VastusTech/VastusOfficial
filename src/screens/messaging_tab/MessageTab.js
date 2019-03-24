@@ -1,8 +1,8 @@
 // TODO Use this so that our structure is more scalable (as opposed to just putting NotificationFeed.js in there
 import React, {Component} from 'react';
 import {Grid, Button, Modal} from "semantic-ui-react";
-import MessageBoardFeed from "./MessageBoardFeed";
-import MessageSelectionScreen from "./MessageSelectionScreen";
+import MessageBoardFeed from "../../vastuscomponents/components/messaging/MessageBoardFeed";
+import MessageSelectionScreen from "../../vastuscomponents/components/messaging/MessageSelectionScreen";
 import {fetchUserAttributes, forceFetchUserAttributes} from "../../redux_helpers/actions/userActions";
 import {logOut} from "../../redux_helpers/actions/authActions";
 import connect from "react-redux/es/connect/connect";
