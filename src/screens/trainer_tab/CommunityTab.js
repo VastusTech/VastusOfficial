@@ -12,9 +12,9 @@ const CommunityTab = () => (
         </Modal>
         </Grid.Row>
         <Grid.Row>
-            <Grid centered>
+            {/*<Grid centered stretched>*/}
                 <GroupFeed filter={null}/>
-            </Grid>
+            {/*</Grid>*/}
         </Grid.Row>
     </Grid>
 );

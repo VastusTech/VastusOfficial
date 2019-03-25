@@ -1,3 +1,5 @@
+// Received from https://github.com/facebook/create-react-app/issues/3319#issuecomment-339926891
+// Helps with pre-loading all static files (i.e images) for the build.
 const fs = require('fs');
 const pathToEntry = './build/index.html';
 const bundlesRegExp = /\/static\/\w+\/\w+.[a-z0-9]+.\w{2,3}/g;
