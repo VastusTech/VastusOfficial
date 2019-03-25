@@ -8,6 +8,7 @@ import {fetchUserAttributes, subscribeFetchUserAttributes} from "./redux_helpers
 import NotificationBellProp from "./vastuscomponents/components/info/NotificationBell";
 import NotificationFeed from "./screens/notification_bell/NotificationBellFeed";
 import Breakpoint from "react-socks";
+import FilterModal from "./screens/filter/FilterModal";
 
 /**
 * Auth App
@@ -85,6 +86,7 @@ class AuthApp extends Component {
                                                 <Modal trigger={<Grid style={{marginTop: "6px", marginLeft: "-40px"}} centered>
                                                     <Icon name="filter" size="big"/>
                                                 </Grid>} closeIcon>
+                                                    <FilterModal/>
                                                 </Modal>
                                             </Grid.Column>
                                             <Grid.Column width={13}>
