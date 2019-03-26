@@ -1,8 +1,6 @@
 import React, { Component } from 'react';
-import Amplify, { Auth, Analytics } from 'aws-amplify';
-import { inspect } from 'util';
 import _ from 'lodash';
-import Semantic, {
+import {
     Image,
     Container,
     Reveal,
@@ -17,7 +15,6 @@ import Semantic, {
 import { connect } from "react-redux";
 import {logOut} from "../redux_helpers/actions/authActions";
 import SignInPage from './SignInPage';
-import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../vastuscomponents/img/the_logo.svg';
 import ReactSwipe from "react-swipe";
 import Breakpoint from "react-socks";
