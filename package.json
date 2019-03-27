@@ -7,6 +7,7 @@
     "aws-amplify": "^1.1.6",
     "aws-amplify-react": "^2.0.7",
     "braintree-web": "^3.42.0",
+    "fuse.js": "^3.4.4",
     "gulp-help": "^1.6.1",
     "handbrake-js": "^3.0.8",
     "jwt-decode": "^2.2.0",
