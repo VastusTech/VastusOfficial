@@ -50,8 +50,8 @@ const toggleTypeCheckbox = (type, setFilterTypes, enableType, disableType) => {
  * The Modal to filter out results from the search bar. Chooses which item types to include in the actual search
  * functionality.
  *
- * @param props
- * @return {*}
+ * @param props The props to put into the functional component.
+ * @return {*} The rendered component.
  * @constructor
  */
 const FilterModal = (props: Props) => {

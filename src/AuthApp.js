@@ -48,7 +48,7 @@ const AuthApp = (props) => {
             props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
                 "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
                 "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
-                "invitedChallenges", "messageBoards"], (data) => {
+                "invitedChallenges", "messageBoards", "streaks"], (data) => {
                 setIsLoading(false);
             });
         }
