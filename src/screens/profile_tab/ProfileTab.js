@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react'
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid, Visibility} from 'semantic-ui-react'
 import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
-import ProfileImageGallery from "./ProfileImageGallery";
-import ProfileImage from "./ProfileImage";
+import ProfileImageGallery from "../../vastuscomponents/components/props/ProfileImageGallery";
+import ProfileImage from "../../vastuscomponents/components/props/ProfileImage";
 import LogOutButton from "../../vastuscomponents/components/manager/LogOutButton";
 
 type Props = {
