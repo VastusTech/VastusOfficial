@@ -1,5 +1,5 @@
 import React from 'react';
-import {Grid, Modal, Checkbox} from "semantic-ui-react";
+import {Modal} from "semantic-ui-react";
 import FilterScreen from "../../vastuscomponents/components/props/FilterScreen";
 
 type Props = {
@@ -8,7 +8,7 @@ type Props = {
 };
 
 const FilterModal = (props: Props) => (
-    <Modal open={props.open} onClose={props.onClose} closeIcon>
+    <Modal size='huge' open={props.open} onClose={props.onClose} closeIcon>
         <FilterScreen/>
     </Modal>
 );
