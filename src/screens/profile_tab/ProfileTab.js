@@ -32,7 +32,7 @@ const ProfileTab = (props: Props) => {
     return (
         <Card fluid raised className="u-margin-top--2">
             <Card.Content textAlign="center">
-                <ProfileImage userID={props.user.id} profileImage={props.user.profileImage}/>
+                <ProfileImage userID={props.user.id} profileImage={props.user.profileImage} profileImages={props.user.profileImages} editable/>
                 <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{props.user.name}</Card.Header>
                 <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
                 <List id = "profile buttons">

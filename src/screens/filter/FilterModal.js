@@ -1,39 +1,93 @@
-// TODO This will be the modal that comes up with the button next to the search bar that allows us to filter
-// TODO our results in a customized way
-
-import React, {useState, Fragment} from 'react';
+import React, {useState, useEffect, Fragment} from 'react';
 import {connect} from 'react-redux';
-import {Grid, Form, Popup, Divider, Button, List} from "semantic-ui-react";
-import SearchBarProp from "../../vastuscomponents/components/props/SearchBar";
-
-// TODO Take from the SearchTab.js file in order for inspiration / direct stealing :)
+import {Grid, Modal, Checkbox} from "semantic-ui-react";
+import {disableType, enableType} from "../../vastuscomponents/redux_actions/searchActions";
 
 type Props = {
-
+    open: boolean,
+    onClose: () => void
 };
 
-const handleApplyButton = () => {
-    alert("ay lmao");
+const getCheckBoxes = (filterTypes, setFilterTypes, enableType, disableType) => {
+    const checkBoxes = [];
+    for (const type in filterTypes) {
+        if (filterTypes.hasOwnProperty(type)) {
+            checkBoxes.push(
+                <div key={type}>
+                    <Grid.Column>
+                        <Checkbox label={type} toggle
+                                  checked={filterTypes[type]}
+                                  onChange={() => toggleTypeCheckbox(type, setFilterTypes, enableType, disableType)}/>
+                    </Grid.Column>
+                </div>
+            )
+        }
+    }
+    return checkBoxes;
 };
 
+const toggleTypeCheckbox = (type, setFilterTypes, enableType, disableType) => {
+    setFilterTypes(p => {
+        if (p[type]) {
+            // Disable type
+            alert("disabling " + type);
+            disableType(type);
+        }
+        else {
+            // Enable type
+            alert("enabling " + type);
+            enableType(type);
+        }
+        return {
+            ...p,
+            [type]: !p[type]
+        }
+    });
+    // alert(JSON.stringify(event.target.checked))
+};
+
+/**
+ * The Modal to filter out results from the search bar. Chooses which item types to include in the actual search
+ * functionality.
+ *
+ * @param props
+ * @return {*}
+ * @constructor
+ */
 const FilterModal = (props: Props) => {
+    const [filterTypes, setFilterTypes] = useState({});
+
+    useEffect(() => {
+        if (props.open) {
+            setFilterTypes({});
+            const types = props.search.typeQueries;
+            for (const type in types) {
+                if (types.hasOwnProperty(type)) {
+                    if (["Client", "Trainer", "Event", "Challenge", "Group"].includes(type)) {
+                        setFilterTypes(p => ({
+                            ...p,
+                            [type]: types[type].enabled
+                        }));
+                    }
+                }
+            }
+        }
+    }, [props.open, props.search]);
+
     return (
-        <Fragment>
-            <Grid columns={2}>
-                <Grid.Column className="ui one column stackable center aligned page grid">
-                    <Form>
-                        <Form.Input type="text" iconPosition='left' icon='user' name="username" placeholder="Username" onChange={value => this.changeStateText("username", value)}/>
-                        <Popup position="left center" trigger={<Form.Input iconPosition='left' icon='lock' type="password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/>}>
-                            Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number.
-                        </Popup>
-                        <div className="u-flex u-flex-justify--space-between u-padding-y--2 u-margin-top--2">
-                            <Button positive color='green' onClick={() => handleApplyButton()}>Apply Filter</Button>
-                            <Button negative inverted onClick={() => alert("no")}>Set To Default</Button>
-                        </div>
-                    </Form>
-                </Grid.Column>
-            </Grid>
-        </Fragment>
+        <Modal open={props.open} onClose={props.onClose} closeIcon>
+            <Modal.Header>Filter</Modal.Header>
+            <Modal.Description>
+                Choose which item types show up in the search bar!
+            </Modal.Description>
+            <Modal.Actions>
+                <Fragment>
+                    <Grid stackable stretched columns={9}>
+                        {getCheckBoxes(filterTypes, setFilterTypes, props.enableType, props.disableType)}
+                    </Grid>
+                </Fragment>
+            </Modal.Actions>
+        </Modal>
     );
 };
 
@@ -43,8 +97,12 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => {
     return {
-        // TODO Functions to set the filter
-        // TODO and maybe set it back to default
+        enableType: (type) => {
+            dispatch(enableType(type));
+        },
+        disableType: (type) => {
+            dispatch(disableType(type));
+        }
     };
 };
 
