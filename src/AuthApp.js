@@ -19,7 +19,8 @@ class AuthApp extends Component {
     state = {
         userID: null,
         sentRequest: false,
-        isLoading: true
+        isLoading: true,
+        editing: false
     };
 
     // handleStickyRef = stickyRef => this.setState({ stickyRef })
