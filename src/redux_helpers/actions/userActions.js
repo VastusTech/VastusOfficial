@@ -1,5 +1,11 @@
 import {setIsNotLoading} from '../../vastuscomponents/redux_actions/infoActions';
-import {fetchItem, forceFetchItem, subscribeFetchItem} from "../../vastuscomponents/redux_actions/cacheActions";
+import {
+    addToItemAttribute,
+    fetchItem,
+    forceFetchItem, removeFromItemAttribute,
+    setItemAttribute, setItemAttributeIndex,
+    subscribeFetchItem
+} from "../../vastuscomponents/redux_actions/cacheActions";
 import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 // TODO Cache the user into the clients so that we actually are getting from there
@@ -21,7 +27,7 @@ export function forceFetchUserAttributes(variablesList, dataHandler) {
         // Just overwrite all the user attributes because we want to process them again
         const userID = getStore().user.id;
         if (userID) {
-            forceFetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+            forceFetchItem("Client", userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user);}
@@ -42,7 +48,7 @@ export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            fetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+            fetchItem("Client", userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
@@ -54,7 +60,7 @@ export function subscribeFetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            dispatch(subscribeFetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+            dispatch(subscribeFetchItem("Client", userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
@@ -62,7 +68,54 @@ export function subscribeFetchUserAttributes(variablesList, dataHandler) {
         }
     }
 }
-
+export function setUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function setUserAttributeAtIndex(attributeName, index, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setItemAttributeIndex(userID, attributeName, index, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function addToUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(addToItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function removeFromUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(removeFromItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function updateUserFromCache() {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setUser(getStore().cache.clients[userID]));
+        }
+    }
+}
 export function clearUser() {
     return {
         type: 'CLEAR_USER'

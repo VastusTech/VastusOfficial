@@ -1,27 +1,17 @@
 import React, {useState, useEffect} from 'react'
+import {connect} from "react-redux";
 import {Button, Card, Modal, Dimmer, Loader, List, Icon, Label, Divider, Image, Grid, Visibility} from 'semantic-ui-react'
 import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
-import ProfileImageGallery from "../../vastuscomponents/components/props/ProfileImageGallery";
 import ProfileImage from "../../vastuscomponents/components/props/ProfileImage";
 import LogOutButton from "../../vastuscomponents/components/manager/LogOutButton";
-
-type Props = {
-    user?: {
-        id: string,
-        profileImage: any,
-        challengesWon: [string],
-        ownedChallenges: [string],
-        completedChallenges: [string],
-    }
-};
 
 /**
 * ProfileTab
 *
 * This is the profile page which displays information about the current user.
  */
-const ProfileTab = (props: Props) => {
+const ProfileTab = (props) => {
     if (!props.user) {
         return (
             <Dimmer>
@@ -32,15 +22,15 @@ const ProfileTab = (props: Props) => {
     return (
         <Card fluid raised className="u-margin-top--2">
             <Card.Content textAlign="center">
-                <ProfileImage userID={props.user.id} profileImage={props.user.profileImage} profileImages={props.user.profileImages} editable/>
+                <ProfileImage userID={props.user.id} profileImage={props.user.profileImage} profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages} editable/>
                 <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{props.user.name}</Card.Header>
                 <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
                 <List id = "profile buttons">
-                    <List.Item>
-                        <Modal closeIcon trigger={<Button primary fluid size="large"><Icon name="picture" /> Photo Gallery</Button>} >
-                            <ProfileImageGallery />
-                        </Modal>
-                    </List.Item>
+                    {/*<List.Item>*/}
+                        {/*<Modal closeIcon trigger={<Button primary fluid size="large"><Icon name="picture" /> Photo Gallery</Button>} >*/}
+                            {/*<ProfileImageGallery />*/}
+                        {/*</Modal>*/}
+                    {/*</List.Item>*/}
                     <List.Item>
                         <Modal fluid size='large' closeIcon
                             trigger={<Button primary fluid size="large"><Icon name="users" /> Buddy List</Button>}>
@@ -96,4 +86,8 @@ const ProfileTab = (props: Props) => {
     );
 };
 
-export default ProfileTab;
+const mapStateToProps = state => ({
+    user: state.user,
+});
+
+export default connect(mapStateToProps)(ProfileTab);

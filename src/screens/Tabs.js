@@ -8,16 +8,12 @@ import MessageTab from "./messaging_tab/MessageTab";
 import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
 import GroupFeed from "./trainer_tab/CommunityTab";
 
-type Props = {
-    user: any
-};
-
 /**
 * Tabs TODO Potentially clean this up
 *
 * The app is currently split up into three sections: home, profile, and notifications.
  */
-export default (props: Props) => (
+export default () => (
     <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
         [
             {
@@ -66,7 +62,7 @@ export default (props: Props) => (
                         <Icon name='user circle outline' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab user={props.user}/>
+                    <ProfileTab/>
                 </Tab.Pane>
             },
         ]
