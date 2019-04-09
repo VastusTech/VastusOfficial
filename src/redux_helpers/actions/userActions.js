@@ -48,7 +48,7 @@ export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            fetchItem("Client", userID, variablesList, (client) => {
+            fetchItem(userID, "Client", variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
@@ -60,7 +60,7 @@ export function subscribeFetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            dispatch(subscribeFetchItem("Client", userID, variablesList, (client) => {
+            dispatch(subscribeFetchItem(userID, "Client", variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }

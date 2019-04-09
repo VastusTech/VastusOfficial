@@ -41,6 +41,7 @@ const ProfileTab = (props) => {
                                         ids={props.user.friends}
                                         noObjectsMessage={"No friends yet!"}
                                         acceptedItemTypes={["Client", "Trainer"]}
+                                        randomized
                                         // sortFunction={(a, b) => {
                                         //     const aLen = a.challengesWon ? a.challengesWon.length : 0;
                                         //     const bLen = b.challengesWon ? b.challengesWon.length : 0;
@@ -56,7 +57,13 @@ const ProfileTab = (props) => {
                         <Modal basic size='mini' closeIcon
                             trigger={<Button primary fluid size="large"><Icon name="trophy" /> Created Challenges</Button>}>
                             <Modal.Content>
-                                <ChallengeList challengeIDs={props.user.ownedChallenges} noChallengesMessage={"No Owned Challenges Yet!"}/>
+                                <DatabaseObjectList
+                                    ids={props.user.ownedChallenges}
+                                    noObjectsMessage={"No Owned Challenges yet!"}
+                                    acceptedItemTypes={["Challenge"]}
+                                    randomized
+                                />
+                                {/*<ChallengeList challengeIDs={props.user.ownedChallenges} noChallengesMessage={"No Owned Challenges Yet!"}/>*/}
                             </Modal.Content>
                         </Modal>
                     </List.Item>
@@ -64,7 +71,13 @@ const ProfileTab = (props) => {
                         <Modal basic size='mini' closeIcon
                             trigger={<Button primary fluid size="large"><Icon name="checked calendar" /> Scheduled Challenges</Button>}>
                             <Modal.Content>
-                                <ChallengeList challengeIDs={props.user.challenges} noChallengesMessage={"No Scheduled Challenges Yet!"}/>
+                                <DatabaseObjectList
+                                    ids={props.user.challenges}
+                                    noObjectsMessage={"No Scheduled Challenges Yet!"}
+                                    acceptedItemTypes={["Challenge"]}
+                                    randomized
+                                />
+                                {/*<ChallengeList challengeIDs={props.user.challenges} noChallengesMessage={"No Scheduled Challenges Yet!"}/>*/}
                             </Modal.Content>
                         </Modal>
                     </List.Item>
