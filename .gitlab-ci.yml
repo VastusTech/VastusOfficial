@@ -35,6 +35,7 @@ Build:
   tags:
     - node
   before_script: 
+    - npm install -g gulp
     - yarn add -D semantic-ui || true
     - yarn config set cache-folder .yarn
     - yarn install 
