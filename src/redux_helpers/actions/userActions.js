@@ -6,7 +6,6 @@ import {
     setItemAttribute, setItemAttributeIndex,
     subscribeFetchItem
 } from "../../vastuscomponents/redux_actions/cacheActions";
-import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
 
 // TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {
