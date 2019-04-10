@@ -35,7 +35,7 @@ Build:
   tags:
     - node
   before_script: 
-    - yarn add -D semantic-ui
+    - yarn add -D semantic-ui || true
     - yarn config set cache-folder .yarn
     - yarn install 
     - cd src/semantic/
