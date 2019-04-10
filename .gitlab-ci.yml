@@ -41,7 +41,6 @@ Build:
     - yarn install 
     - cd src/semantic/
     - npm link gulp
-    - node link gulp
     - gulp build
     - cd ../..
   script:
