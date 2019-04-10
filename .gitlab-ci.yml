@@ -7,17 +7,22 @@
 # Uses NodeJS V 9.4.0
 image: node:11.1.0
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # And to cache them as well.
-cache:
-  paths:
-    - node_modules/
-    - .yarn
+# cache:
+  # paths:
+    # - node_modules/
+    # - .yarn
 
 # We tell GitLab to install all the packages
 # before running anything.
 # Docker images come with yarn preinstalled
 before_script:  
-  - apt-get update -qq && apt-get install
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
+  # - apt-get update -qq && apt-get install
 
 # You specify the stages. Those are the steps that GitLab will go through 
 # Order matters. 
@@ -30,7 +35,7 @@ Build:
   tags:
     - node
   before_script: 
-    - yarn config set cache-folder .yarn
+    # - yarn config set cache-folder .yarn
     - yarn install 
   script:
     - yarn build
@@ -40,13 +45,13 @@ Test:
   tags:
   - node
   before_script: 
-    - yarn config set cache-folder .yarn
+    # - yarn config set cache-folder .yarn
     - yarn install 
   script:
   # Installs Chrome
-    - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub |  apt-key add -
-    - echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' |  tee /etc/apt/sources.list.d/google-chrome.list
-    - apt-get update 
-    - apt-get install google-chrome-stable -y
+    # - wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub |  apt-key add -
+    # - echo 'deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main' |  tee /etc/apt/sources.list.d/google-chrome.list
+    # - apt-get update 
+    # - apt-get install google-chrome-stable -y
   # Runs the tests.
     - yarn test .
