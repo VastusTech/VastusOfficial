@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware, compose } from 'redux';
 import thunk from 'redux-thunk';
 import logger from 'redux-logger';
+import asyncDispatch from '../vastuscomponents/redux_helpers/AsyncDispatchMiddleware';
 import user from "./reducers/userReducer";
 import cache from "../vastuscomponents/redux_reducers/cacheReducer";
 import auth from "./reducers/authReducer";
@@ -12,10 +13,10 @@ import { reduxLog } from "../Constants";
 
 let middleware;
 if (reduxLog) {
-    middleware = applyMiddleware(logger, thunk);
+    middleware = applyMiddleware(logger, thunk, asyncDispatch);
 }
 else {
-    middleware = applyMiddleware(thunk);
+    middleware = applyMiddleware(thunk, asyncDispatch);
 }
 
 const composeEnhancers =

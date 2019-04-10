@@ -1,4 +1,3 @@
-import {consoleError} from "./vastuscomponents/logic/DebuggingHelper";
 // In production, we register a service worker to serve assets from local cache.
 
 // This lets the app load faster on subsequent visits in production, and gives
@@ -8,6 +7,8 @@ import {consoleError} from "./vastuscomponents/logic/DebuggingHelper";
 
 // To learn more about the benefits of this model, read https://goo.gl/KwvDNy.
 // This link also includes instructions on opting out of this behavior.
+
+import {err} from "./Constants";
 
 const isLocalhost = Boolean(
     window.location.hostname === 'localhost' ||
@@ -82,7 +83,7 @@ function registerValidSW(swUrl) {
         };
     })
     .catch(error => {
-        consoleError('Error during service worker registration:', error);
+        err&&console.error('Error during service worker registration:', error);
     });
 }
 
