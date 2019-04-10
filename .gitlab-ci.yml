@@ -7,6 +7,9 @@
 # Uses NodeJS V 9.4.0
 image: node:11.1.0
 
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
 # And to cache them as well.
 cache:
   paths:
@@ -18,6 +21,8 @@ cache:
 # Docker images come with yarn preinstalled
 before_script:  
   - apt-get update -qq && apt-get install
+  - git submodule sync --recursive
+  - git submodule update --init --recursive
 
 # You specify the stages. Those are the steps that GitLab will go through 
 # Order matters. 
@@ -30,8 +35,14 @@ Build:
   tags:
     - node
   before_script: 
+    # - npm install -g gulp
     - yarn config set cache-folder .yarn
     - yarn install 
+    - yarn add -D semantic-ui || true
+    - cd src/semantic/
+    # - npm link gulp
+    - gulp build
+    - cd ../..
   script:
     - yarn build
 
