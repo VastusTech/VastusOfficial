@@ -35,12 +35,12 @@ Build:
   tags:
     - node
   before_script: 
-    - npm install -g gulp
-    - yarn add -D semantic-ui || true
+    # - npm install -g gulp
     - yarn config set cache-folder .yarn
     - yarn install 
+    - yarn add -D semantic-ui || true
     - cd src/semantic/
-    - npm link gulp
+    # - npm link gulp
     - gulp build
     - cd ../..
   script:
