@@ -54,7 +54,7 @@ const AuthApp = (props) => {
         }
         return () => {
             // TODO Clean up?
-            alert("Cleaning up auth app");
+            // alert("Cleaning up auth app");
         }
     }, [props.user.id]);
 
