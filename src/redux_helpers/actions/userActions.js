@@ -1,6 +1,11 @@
 import {setIsNotLoading} from '../../vastuscomponents/redux_actions/infoActions';
-import { fetchItem, forceFetchItem } from "../../vastuscomponents/redux_actions/cacheActions";
-import {getItemTypeFromID} from "../../vastuscomponents/logic/ItemType";
+import {
+    addToItemAttribute,
+    fetchItem,
+    forceFetchItem, removeFromItemAttribute,
+    setItemAttribute, setItemAttributeIndex,
+    subscribeFetchItem
+} from "../../vastuscomponents/redux_actions/cacheActions";
 
 // TODO Cache the user into the clients so that we actually are getting from there
 export function setUser(user) {
@@ -21,7 +26,7 @@ export function forceFetchUserAttributes(variablesList, dataHandler) {
         // Just overwrite all the user attributes because we want to process them again
         const userID = getStore().user.id;
         if (userID) {
-            forceFetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+            forceFetchItem("Client", userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user);}
@@ -42,92 +47,74 @@ export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            fetchItem(getItemTypeFromID(userID), userID, variablesList, (client) => {
+            fetchItem(userID, "Client", variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
             })(dispatch, getStore);
-            // console.log("Filtering out results for fetch!");
-            // const userKeyList = Object.keys(user);
-            // // console.log("Originally asked for variablesList = " + JSON.stringify(variablesList));
-            // // console.log("UserKeyList = " + JSON.stringify(userKeyList));
-            // const filterVariablesList = variablesList.filter((v) => {
-            //     return !userKeyList.includes(v)
-            // });
-            // // console.log("Final filtered list is = " + JSON.stringify(filterVariablesList));
-            // overwriteFetchUserAttributes(user.id, filterVariablesList, dataHandler, dispatch, getStore);
         }
     }
 }
-
-// function overwriteFetchUserAttributes(id, variablesList, dataHandler, dispatch, getStore) {
-//     dispatch(setIsLoading());
-//     if (variablesList.length > 0) {
-//         const pictureIndex = variablesList.indexOf("profilePicture");
-//         if (pictureIndex !== -1) {
-//             variablesList.splice(pictureIndex, 1);
-//         }
-//         QL.getClient(id, variablesList, (data) => {
-//             if (pictureIndex !== -1) {
-//                 if (data.profileImagePath) {
-//                     Storage.get(data.profileImagePath).then((url) => {
-//                         data = {
-//                             ...data,
-//                             profilePicture: url
-//                         };
-//                         dispatch(setUser(data));
-//                         dispatch(setIsNotLoading());
-//                         if (dataHandler) { dataHandler(getStore().user);}
-//                     }, (error) => {
-//                         console.log("Failed to get profile image");
-//                         console.log(error);
-//                         dispatch(setUser(data));
-//                         dispatch(setIsNotLoading());
-//                         if (dataHandler) { dataHandler(getStore().user);}
-//                     });
-//                 }
-//                 else {
-//                     // Put the default image there
-//                     data = {
-//                         ...data,
-//                         profilePicture: defaultProfilePicture
-//                     };
-//                     dispatch(setUser(data));
-//                     dispatch(setIsNotLoading());
-//                     if (dataHandler) { dataHandler(getStore().user);}
-//                 }
-//             }
-//             else {
-//                 dispatch(setUser(data));
-//                 dispatch(setIsNotLoading());
-//                 if (dataHandler) { dataHandler(getStore().user);}
-//             }
-//         }, (error) => {
-//             console.log(JSON.stringify(error));
-//             dispatch(setError(error));
-//             dispatch(setIsNotLoading());
-//         });
-//     }
-//     else {
-//         dispatch(setIsNotLoading());
-//         if (dataHandler) { dataHandler(getStore().user);}
-//     }
-// }
-
-// export function fetchUser(username, successHandler, failureHandler) {
-//     return (dispatch) => {
-//         dispatch(setIsLoading());
-//         QL.getClientByUsername(username, ["id", "username"], (data) => {
-//             dispatch(setUser(data));
-//             dispatch(setIsNotLoading());
-//         }, (error) => {
-//             console.log(JSON.stringify(error));
-//             dispatch(setError(error));
-//             dispatch(setIsNotLoading());
-//         });
-//     }
-// }
-
+export function subscribeFetchUserAttributes(variablesList, dataHandler) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(subscribeFetchItem(userID, "Client", variablesList, (client) => {
+                dispatch(setUser(client));
+                dispatch(setIsNotLoading());
+                if (dataHandler) { dataHandler(getStore().user); }
+            }));
+        }
+    }
+}
+export function setUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function setUserAttributeAtIndex(attributeName, index, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setItemAttributeIndex(userID, attributeName, index, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function addToUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(addToItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function removeFromUserAttribute(attributeName, attributeValue) {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(removeFromItemAttribute(userID, attributeName, attributeValue));
+            dispatch(updateUserFromCache());
+            dispatch(setIsNotLoading());
+        }
+    }
+}
+export function updateUserFromCache() {
+    return (dispatch, getStore) => {
+        const userID = getStore().user.id;
+        if (userID) {
+            dispatch(setUser(getStore().cache.clients[userID]));
+        }
+    }
+}
 export function clearUser() {
     return {
         type: 'CLEAR_USER'

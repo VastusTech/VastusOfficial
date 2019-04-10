@@ -1,11 +1,12 @@
 import { Fragment } from 'react';
-import {Tab, Menu, Icon, Header } from "semantic-ui-react";
-import NotificationFeed from "./notifications_tab/NotificationBellFeed";
+import {Tab, Menu, Icon } from "semantic-ui-react";
 import ProfileTab from "./profile_tab/ProfileTab";
 import React from "react";
-import LeaderBoardTab from "./leaderboard_tab/LeaderBoardTab";
-import NotificationBellProp from "./notifications_tab/NotificationBell";
-import PostFeedProp from "./main_tab/PostFeed";
+import TrainerTab from "./trainer_tab/TrainerTab";
+import MainTab from "./main_tab/MainTab";
+import MessageTab from "./messaging_tab/MessageTab";
+import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
+import GroupFeed from "./trainer_tab/CommunityTab";
 
 /**
 * Tabs TODO Potentially clean this up
@@ -13,7 +14,7 @@ import PostFeedProp from "./main_tab/PostFeed";
 * The app is currently split up into three sections: home, profile, and notifications.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 4, size: "large", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -22,37 +23,46 @@ export default () => (
                     </Menu.Item>),
                 render: () =>
                     <Tab.Pane basic attached={false}>
-                        <PostFeedProp/>
+                        <MainTab/>
+                    </Tab.Pane>
+            },
+            {
+                menuItem:
+                    (<Menu.Item key={1}>
+                        <Icon name='group' size='large' />
+                    </Menu.Item>),
+                render: () =>
+                    <Tab.Pane basic attached={false}>
+                        <GroupFeed/>
                     </Tab.Pane>
             },
             {
                 menuItem: (
-                    <Menu.Item key={1}>
-                        <Icon name='user circle outline' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab/>
-                </Tab.Pane>
-            },
-            {
-                menuItem: (
                     <Menu.Item key={2}>
-                        <Icon name='winner' size='large' />
+                        <Icon name='stopwatch' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
-                    <LeaderBoardTab />
+                    <TrainerTab/>
                 </Tab.Pane>
             },
             {
                 menuItem: (
                     <Menu.Item key={3}>
-                        <NotificationBellProp/>
+                        <MessageIcon/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
                     <Fragment>
-                        <Header inverted textAlign={'center'}>Notification Feed</Header>
-                        <NotificationFeed/>
+                        <MessageTab/>
                     </Fragment>
+                </Tab.Pane>
+            },
+            {
+                menuItem: (
+                    <Menu.Item key={4}>
+                        <Icon name='user circle outline' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <ProfileTab/>
                 </Tab.Pane>
             },
         ]

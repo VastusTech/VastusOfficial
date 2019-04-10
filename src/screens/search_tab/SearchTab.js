@@ -7,6 +7,7 @@ import EventCard from "../../vastuscomponents/components/cards/EventCard";
 import ChallengeCard from "../../vastuscomponents/components/cards/ChallengeCard";
 import PostCard from "../../vastuscomponents/components/cards/PostCard";
 import {disableSearchBar, enableSearchBar} from "../../vastuscomponents/redux_actions/searchActions";
+import TrainerCard from "../../vastuscomponents/components/cards/TrainerCard";
 
 // This is going to be for every search functionality we really want.
 // We'll have a filter section and a search bar
@@ -85,15 +86,16 @@ class SearchTab extends Component {
             results.push(
                 <List.Item>
                     {switchReturnItemType(item_type,
-                    <ClientCard rank={i} clientID={result.id}/>,
+                    <ClientCard rank={i} client={result}/>,
+                    <TrainerCard rank={i} trainer={result}/>,
                     null,
                     null,
                     null,
-                    null,
-                    <EventCard eventID={result.id}/>,
-                    <ChallengeCard challengeID={result.id}/>,
+                    <EventCard event={result}/>,
+                    <ChallengeCard challenge={result}/>,
                     null,
                     <PostCard postID={result.id}/>,
+                    null,
                     null,
                     null,
                     null,
