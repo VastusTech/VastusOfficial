@@ -4,6 +4,13 @@ import MessageBoardFeed from "../../vastuscomponents/components/messaging/Messag
 import MessageSelectionScreen from "../../vastuscomponents/components/messaging/MessageSelectionScreen";
 import connect from "react-redux/es/connect/connect";
 
+/**
+ * Displays all of the current conversations the user has going and allows the user to start new ones with other users.
+ *
+ * @param {Props} props The given props to the component.
+ * @returns {*}
+ * @constructor
+ */
 const MessageTab = (props) => (
     <Grid centered>
         <Grid.Row>

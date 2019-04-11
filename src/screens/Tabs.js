@@ -9,9 +9,10 @@ import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
 import GroupFeed from "./trainer_tab/CommunityTab";
 
 /**
-* Tabs TODO Potentially clean this up
-*
-* The app is currently split up into three sections: home, profile, and notifications.
+ * A bottom menu for all of the tabs in the app.
+ * The app is currently split up into five sections: main, group, trainer, message and profile tabs.
+ *
+ * @returns {*}
  */
 export default () => (
     <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={

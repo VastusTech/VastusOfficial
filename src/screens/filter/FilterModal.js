@@ -7,6 +7,13 @@ type Props = {
     onClose: () => void
 };
 
+/**
+ * The modal that contains the search bar filtering controls.
+ *
+ * @param {Props} props The given props to the component.
+ * @returns {*}
+ * @constructor
+ */
 const FilterModal = (props: Props) => (
     <Modal size='huge' open={props.open} onClose={props.onClose} closeIcon>
         <FilterScreen/>

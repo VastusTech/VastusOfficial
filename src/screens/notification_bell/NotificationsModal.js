@@ -4,6 +4,12 @@
 import React from 'react';
 import NotificationsFeed from "src/screens/notification_bell/NotificationBellFeed";
 
+/**
+ * This is the modal that contains the feed of notifications
+ *
+ * @returns {*}
+ * @constructor
+ */
 const NotificationsModal = () => {
     return (
         <div>

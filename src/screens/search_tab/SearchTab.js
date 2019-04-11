@@ -1,3 +1,5 @@
+// TODO: Refactor search tab from a class to a component
+
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import {Popup, List, Divider, Grid, Form, Button} from "semantic-ui-react";
