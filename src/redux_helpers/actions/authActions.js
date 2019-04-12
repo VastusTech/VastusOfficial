@@ -5,7 +5,8 @@ import {setUser, forceSetUser} from "./userActions";
 import {removeAllHandlers} from "../../vastuscomponents/redux_actions/ablyActions";
 import QL from "../../vastuscomponents/api/GraphQL";
 import ClientFunctions from "../../vastuscomponents/database_functions/ClientFunctions";
-import {err, log} from "../../Constants";
+import {appUserItemType, err, log} from "../../Constants";
+import TrainerFunctions from "../../vastuscomponents/database_functions/TrainerFunctions";
 
 export function updateAuth() {
     return (dispatch) => {
@@ -20,7 +21,7 @@ export function updateAuth() {
             log&&console.log(JSON.stringify(user));
             if (user.username) {
                 // Regular sign in
-                QL.getClientByUsername(user.username, ["id", "username"], (user) => {
+                QL.getItemByUsername(appUserItemType, user.username, ["id", "username"], (user) => {
                     log&&console.log("REDUX: Successfully updated the authentication credentials");
                     dispatch(setUser(user));
                     // dispatch(addHandlerToNotifications((message) => {
@@ -36,7 +37,7 @@ export function updateAuth() {
             }
             else if (user.sub) {
                 // Federated Identities sign in
-                QL.getClientByFederatedID(user.sub, ["id", "username", "federatedID"], (user) => {
+                QL.getItemByFederatedID(appUserItemType, user.sub, ["id", "username", "federatedID"], (user) => {
                     log&&console.log("REDUX: Successfully updated the authentication credentials for federated identity");
                     dispatch(setUser(user));
                     // dispatch(addHandlerToNotifications((message) => {
@@ -61,7 +62,7 @@ export function logIn(username, password) {
     return (dispatch, getStore) => {
         dispatch(setIsLoading());
         Auth.signIn(username, password).then(() => {
-            QL.getClientByUsername(username, ["id", "username"], (user) => {
+            QL.getItemByUsername(appUserItemType, username, ["id", "username"], (user) => {
                 console.log("REDUX: Successfully logged in!");
                 dispatch(authLogIn());
                 if (getStore().user.id !== user.id) {
@@ -135,16 +136,16 @@ export function googleSignIn(googleUser) {
         ).then(() => {
             // The ID token you need to pass to your backend and the expires_at token:
             log&&console.log("Successfully federated sign in!");
-            QL.getClientByFederatedID(sub, ["id", "username", "federatedID"], (client) => {
-                if (client) {
+            QL.getItemByFederatedID(sub, ["id", "username", "federatedID"], (user) => {
+                if (user) {
                     // Then this user has already signed up
                     log&&console.log("REDUX: Successfully logged in!");
                     dispatch(federatedAuthLogIn());
-                    if (getStore().user.id !== client.id) {
-                        dispatch(forceSetUser(client));
+                    if (getStore().user.id !== user.id) {
+                        dispatch(forceSetUser(user));
                     }
                     else {
-                        dispatch(setUser(client));
+                        dispatch(setUser(user));
                     }
                     // dispatch(addHandlerToNotifications((message) => {
                     //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
@@ -156,10 +157,20 @@ export function googleSignIn(googleUser) {
                     log&&console.log("User hasn't signed up yet! Generating a new account!");
                     // Generate a google username using their name without any spaces
                     generateGoogleUsername(name.replace(/\s+/g, ''), (username) => {
-                        ClientFunctions.createFederatedClient("admin", name, email, username, sub, (data) => {
+                        let createFunction;
+                        if (appUserItemType === "Client") {
+                            createFunction = ClientFunctions.createFederatedClient;
+                        }
+                        else if (appUserItemType === "Trainer") {
+                            createFunction = TrainerFunctions.createFederatedTrainer;
+                        }
+                        else {
+                            throw new Error("Cannot generate correct app user without valid app user item type");
+                        }
+                        createFunction("admin", name, email, username, sub, (data) => {
                             // Then this user has already signed up
                             const id = data.data;
-                            client = {
+                            user = {
                                 id,
                                 username,
                                 name,
@@ -167,11 +178,11 @@ export function googleSignIn(googleUser) {
                             };
                             log&&console.log("REDUX: Successfully signed up!");
                             dispatch(federatedAuthLogIn());
-                            if (getStore().user.id !== client.id) {
-                                dispatch(forceSetUser(client));
+                            if (getStore().user.id !== user.id) {
+                                dispatch(forceSetUser(user));
                             }
                             else {
-                                dispatch(setUser(client));
+                                dispatch(setUser(user));
                             }
                             // dispatch(addHandlerToNotifications((message) => {
                             //     console.log("Received ABLY notification!!!!!\n" + JSON.stringify(message));
@@ -207,8 +218,8 @@ export function googleSignIn(googleUser) {
 function generateGoogleUsername(name, usernameHandler, failureHandler, depth=0) {
     const randomInt = Math.floor((Math.random() * 10000000) + 1);
     const randomGoogleUsername = name + randomInt;
-    QL.getClientByUsername(randomGoogleUsername, ["username"], (client) => {
-        if (client) {
+    QL.getItemByUsername(appUserItemType, randomGoogleUsername, ["username"], (user) => {
+        if (user) {
             // That means there's a conflict
             log&&console.log("Conflicting username = " + randomGoogleUsername);
             if (depth > 20) {
@@ -242,7 +253,17 @@ export function signUp(username, password, name, email, enterpriseID) {
             }
         };
         // TODO Check the enterprise ID and then use it in the Creation!
-        ClientFunctions.createClient("admin", name, email, username, (clientID) => {
+        let createFunction;
+        if (appUserItemType === "Client") {
+            createFunction = ClientFunctions.createClient;
+        }
+        else if (appUserItemType === "Trainer") {
+            createFunction = TrainerFunctions.createTrainer;
+        }
+        else {
+            throw new Error("Cannot generate correct app user without valid app user item type");
+        }
+        createFunction("admin", name, email, username, (userID) => {
             Auth.signUp(params).then((data) => {
                 log&&console.log("REDUX: Successfully signed up!");
                 dispatch(authSignUp());
@@ -251,8 +272,17 @@ export function signUp(username, password, name, email, enterpriseID) {
                 console.error("REDUX: Failed sign up...");
                 dispatch(setError(error));
                 dispatch(setIsNotLoading());
-                // TODO DELETE CLIENT THAT WAS CREATED!!!!
-                ClientFunctions.delete("admin", clientID);
+                let deleteFunction;
+                if (appUserItemType === "Client") {
+                    deleteFunction = ClientFunctions.delete;
+                }
+                else if (appUserItemType === "Trainer") {
+                    deleteFunction = TrainerFunctions.delete;
+                }
+                else {
+                    throw new Error("Cannot generate correct app user without valid app user item type");
+                }
+                deleteFunction("admin", userID);
             });
         }, (error) => {
             console.error("REDUX: Creating new client failed...");

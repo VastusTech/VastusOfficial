@@ -2,31 +2,18 @@ import {setIsNotLoading} from '../../vastuscomponents/redux_actions/infoActions'
 import {
     addToItemAttribute,
     fetchItem,
-    forceFetchItem, removeFromItemAttribute,
+    forceFetchItem, getCache, removeFromItemAttribute,
     setItemAttribute, setItemAttributeIndex,
     subscribeFetchItem
 } from "../../vastuscomponents/redux_actions/cacheActions";
-
-// TODO Cache the user into the clients so that we actually are getting from there
-export function setUser(user) {
-    return {
-        type: "SET_USER",
-        payload: user
-    };
-}
-export function forceSetUser(user) {
-    return {
-        type: "FORCE_SET_USER",
-        payload: user
-    };
-}
+import {appUserItemType} from "../../Constants";
 
 export function forceFetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         // Just overwrite all the user attributes because we want to process them again
         const userID = getStore().user.id;
         if (userID) {
-            forceFetchItem("Client", userID, variablesList, (client) => {
+            forceFetchItem(appUserItemType, userID, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user);}
@@ -47,11 +34,11 @@ export function fetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            fetchItem(userID, "Client", variablesList, (client) => {
+            dispatch(fetchItem(userID, appUserItemType, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
-            })(dispatch, getStore);
+            }));
         }
     }
 }
@@ -59,7 +46,7 @@ export function subscribeFetchUserAttributes(variablesList, dataHandler) {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            dispatch(subscribeFetchItem(userID, "Client", variablesList, (client) => {
+            dispatch(subscribeFetchItem(userID, appUserItemType, variablesList, (client) => {
                 dispatch(setUser(client));
                 dispatch(setIsNotLoading());
                 if (dataHandler) { dataHandler(getStore().user); }
@@ -111,9 +98,23 @@ export function updateUserFromCache() {
     return (dispatch, getStore) => {
         const userID = getStore().user.id;
         if (userID) {
-            dispatch(setUser(getStore().cache.clients[userID]));
+            dispatch(setUser(getCache(appUserItemType, getStore)[userID]));
         }
     }
+}
+
+
+export function setUser(user) {
+    return {
+        type: "SET_USER",
+        payload: user
+    };
+}
+export function forceSetUser(user) {
+    return {
+        type: "FORCE_SET_USER",
+        payload: user
+    };
 }
 export function clearUser() {
     return {
