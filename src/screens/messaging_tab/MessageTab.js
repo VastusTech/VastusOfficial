@@ -8,7 +8,7 @@ import connect from "react-redux/es/connect/connect";
  * Displays all of the current conversations the user has going and allows the user to start new ones with other users.
  *
  * @param {Props} props The given props to the component.
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const MessageTab = (props) => (

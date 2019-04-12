@@ -12,7 +12,7 @@ import GroupFeed from "./trainer_tab/CommunityTab";
  * A bottom menu for all of the tabs in the app.
  * The app is currently split up into five sections: main, group, trainer, message and profile tabs.
  *
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  */
 export default () => (
     <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={

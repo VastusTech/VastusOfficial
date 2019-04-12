@@ -11,7 +11,7 @@ type Props = {
  * The modal that contains the search bar filtering controls.
  *
  * @param {Props} props The given props to the component.
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const FilterModal = (props: Props) => (

@@ -4,7 +4,7 @@ import TrainerFeed from "../../vastuscomponents/components/feeds/TrainerFeed";
 /**
  * Tab that contains a feed with all of the trainers
  *
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const CommunityTab = () => (

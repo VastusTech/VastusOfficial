@@ -5,7 +5,8 @@ import GroupFeed from "../../vastuscomponents/components/feeds/GroupFeed";
 
 /**
  * Tab that contains a feed of all groups that the user can see.
- * @returns {*}
+ *
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const CommunityTab = () => (

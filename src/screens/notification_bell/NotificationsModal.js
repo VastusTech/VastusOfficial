@@ -7,7 +7,7 @@ import NotificationsFeed from "src/screens/notification_bell/NotificationBellFee
 /**
  * This is the modal that contains the feed of notifications
  *
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const NotificationsModal = () => {

@@ -7,7 +7,7 @@ import QL from "../../vastuscomponents/api/GraphQL";
 /**
  * Displays a feed of all posts visible to the current user.
  *
- * @returns {*}
+ * @returns {*} The React JSX used to display the component.
  * @constructor
  */
 const MainTab = () => {
