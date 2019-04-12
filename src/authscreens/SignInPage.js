@@ -4,8 +4,8 @@ import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../vastuscomponents/img/vt_new.svg';
-import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
-import {setError} from "../vastuscomponents/redux_actions/infoActions";
+import {logIn, openForgotPasswordModal, openSignUpModal} from "../vastuscomponents/redux/actions/authActions";
+import {setError} from "../vastuscomponents/redux/actions/infoActions";
 import GoogleSignUp from "./GoogleSignUp";
 
 const changeStateText = (key, value, setStates) => {

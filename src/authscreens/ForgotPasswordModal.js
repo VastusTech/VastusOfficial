@@ -4,9 +4,9 @@ import {
     closeForgotPasswordModal,
     confirmForgotPassword,
     forgotPassword, openForgotPasswordModal,
-} from "../redux_helpers/actions/authActions";
+} from "../vastuscomponents/redux/actions/authActions";
 import { connect } from "react-redux";
-import {setError} from "../vastuscomponents/redux_actions/infoActions";
+import {setError} from "../vastuscomponents/redux/actions/infoActions";
 import Spinner from "../vastuscomponents/components/props/Spinner";
 
 const changeStateText = (key, value, setStates) => {

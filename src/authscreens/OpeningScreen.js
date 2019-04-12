@@ -13,7 +13,7 @@ import {
     Icon
 } from 'semantic-ui-react';
 import { connect } from "react-redux";
-import {logOut} from "../redux_helpers/actions/authActions";
+import {logOut} from "../vastuscomponents/redux/actions/authActions";
 import SignInPage from './SignInPage';
 import Logo from '../vastuscomponents/img/the_logo.svg';
 import ReactSwipe from "react-swipe";

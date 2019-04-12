@@ -4,7 +4,7 @@ import './video-react-copy.css';
 import { connect } from 'react-redux';
 // import FirebaseTokenHandler from "./FirebaseTokenHandler";
 // import { ServiceWorker } from 'aws-amplify';
-import { updateAuth } from "./redux_helpers/actions/authActions";
+import { updateAuth } from "./vastuscomponents/redux/actions/authActions";
 import AuthApp from './AuthApp';
 import UnauthApp from './UnauthApp';
 // import AWSConfig from './AppConfig';

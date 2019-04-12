@@ -3,9 +3,9 @@ import { Modal, Button, Form, Message, Dimmer, Loader, Popup, Divider } from 'se
 // import Amplify, { Auth } from 'aws-amplify';
 // import Lambda from '../Lambda';
 // import appConfig from '../AppConfig';
-import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../redux_helpers/actions/authActions";
+import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../vastuscomponents/redux/actions/authActions";
 import { connect } from "react-redux";
-import {clearError, setError} from "../vastuscomponents/redux_actions/infoActions";
+import {clearError, setError} from "../vastuscomponents/redux/actions/infoActions";
 import {err} from "../Constants";
 
 const setStateText = (key, value, setStates) => {
