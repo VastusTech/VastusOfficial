@@ -1,8 +1,9 @@
-import { Auth } from 'aws-amplify';
-import React, { Component } from 'react';
-import Semantic, { Button, List, Icon } from 'semantic-ui-react';
+import React  from 'react';
+import { Button, Icon } from 'semantic-ui-react';
 import { connect } from 'react-redux';
 import {googleSignIn} from "../vastuscomponents/redux/actions/authActions";
+
+// TODO Refactor to functional?
 
 // To federated sign in from Google
 /*

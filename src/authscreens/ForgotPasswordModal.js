@@ -9,16 +9,39 @@ import { connect } from "react-redux";
 import {setError} from "../vastuscomponents/redux/actions/infoActions";
 import Spinner from "../vastuscomponents/components/props/Spinner";
 
+/**
+ * Changes the text of the state for the component.
+ *
+ * @param {string} key The attribute name of the part of the state to update.
+ * @param {{target: {value: string}}} value The value object from the input.
+ * @param {{}} setStates The setState functions mapped from the attribute names they update.
+ */
 const changeStateText = (key, value, setStates) => {
     // TODO Sanitize this input?
-    // inspect(value);
     setStates[key](value.target.value);
 };
 
+/**
+ * Submits the forgot password Auth function and continues the auth flow.
+ *
+ * @param {string} username The inputted username to reset the password for.
+ * @param {function(string)} forgotPassword The function to submit the forgot password call.
+ */
 const handleSubmitButton = (username, forgotPassword) => {
     forgotPassword(username);
 };
 
+/**
+ * Handles the confirm button after the User received the confirmation code. Checks the inputs as well to make sure that
+ * the passwords are the same.
+ *
+ * @param {string} username The username for the User.
+ * @param {string} confirmationCode The confirmation code that the User received from their email.
+ * @param {string} newPassword The new password they want to reset their account to.
+ * @param {string} confirmNewPassword The new password again, to confirm correct input.
+ * @param {function(error)} setError Sets the error for the component.
+ * @param {function(string, string, string)} confirmForgotPassword Completes the forgot password reset.
+ */
 const handleConfirmButton = (username, confirmationCode, newPassword, confirmNewPassword, setError, confirmForgotPassword) => {
     if (newPassword !== confirmNewPassword) {
         console.log("Failed to make a new password :(");
@@ -33,12 +56,23 @@ const handleConfirmButton = (username, confirmationCode, newPassword, confirmNew
     }
 };
 
+/**
+ * Handles the cancel button and navigates away from modal.
+ *
+ * @param {function()} closeForgotPasswordModal Closes the forgot password modal.
+ */
 const handleCancelButton = (closeForgotPasswordModal) => {
     // TODO Have a are you sure? thing attached to this
     // this.setState({error: null, isConfirming: false});
     closeForgotPasswordModal();
 };
 
+/**
+ * Generates an error message based on the current error state of the component.
+ *
+ * @param error The error object of the component.
+ * @return {*} The React JSX to display the error message.
+ */
 function errorMessage(error) {
     if (error) {
         return (
@@ -51,6 +85,13 @@ function errorMessage(error) {
         );
     }
 }
+
+/**
+ * Generates a loading graphic based on the current loading state of the component.
+ *
+ * @param {boolean} isLoading Whether the app is loading or not.
+ * @return {*} The React JSX to display the loading component.
+ */
 function loadingProp(isLoading) {
     if (isLoading) {
         return (
@@ -62,6 +103,14 @@ function loadingProp(isLoading) {
     return null;
 }
 
+/**
+ * The Modal responsible for handling the resetting of passwords if a User forgets their password. Inputs a username
+ * and sends an email to the User which then they use to reset their password.
+ *
+ * @param {{}} props The given props to the component.
+ * @return {*} The React JSX to display this component.
+ * @constructor
+ */
 const ForgotPasswordModal = (props) => {
     const [username, setUsername] = useState("");
     const [confirmationCode, setConfirmationCode] = useState("");

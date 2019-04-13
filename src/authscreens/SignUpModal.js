@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import { Modal, Button, Form, Message, Dimmer, Loader, Popup, Divider } from 'semantic-ui-react';
-// import Amplify, { Auth } from 'aws-amplify';
-// import Lambda from '../Lambda';
-// import appConfig from '../AppConfig';
 import {closeSignUpModal, confirmSignUp, openSignUpModal, signUp} from "../vastuscomponents/redux/actions/authActions";
 import { connect } from "react-redux";
 import {clearError, setError} from "../vastuscomponents/redux/actions/infoActions";
 import {err} from "../Constants";
 
+/**
+ * Changes the text of the state for the component.
+ *
+ * @param {string} key The attribute name of the part of the state to update.
+ * @param {{target: {value: string}}} value The value object from the input.
+ * @param {{}} setStates The setState functions mapped from the attribute names they update.
+ */
 const setStateText = (key, value, setStates) => {
     const setState = setStates[key];
     if (setState) {
@@ -18,6 +22,18 @@ const setStateText = (key, value, setStates) => {
     }
 };
 
+/**
+ * Handles what happens when the User tries to finish the sign up.
+ *
+ * @param {string} username The username the User has Chosen.
+ * @param {string} password The password the User wants.
+ * @param {string} confirmPassword The password confirmation.
+ * @param {string} name The display name for the user
+ * @param {string} email The email of the User.
+ * @param {string} enterpriseID The optional enterprise ID for the sign up.
+ * @param {function(error)} setError The function for setting the error of the component.
+ * @param {function(string, string, string, string, string)} signUp Auth flow function for signing up.
+ */
 const handleCreateButton = (username, password, confirmPassword, name, email, enterpriseID, setError, signUp) => {
     // console.log("Setting state with isConfirming is true");
     // TODO Do extra checking for the specifications of the account!
@@ -26,6 +42,14 @@ const handleCreateButton = (username, password, confirmPassword, name, email, en
     }
 };
 
+/**
+ * Handles the confirmation of the sign up, from a confirmation code sent through email.
+ *
+ * @param {string} username The username of the User.
+ * @param {string} confirmationCode The confirmation code received by the User.
+ * @param {function(string, string)} confirmSignUp The Auth Flow function to complete the sign up process.
+ * @param {function(error)} setError The function for setting the error of the component.
+ */
 const handleConfirmButton = (username, confirmationCode, confirmSignUp, setError) => {
     // TODO Is there a chance that the username could be lost here?
     if (confirmationCode) {
@@ -36,12 +60,29 @@ const handleConfirmButton = (username, confirmationCode, confirmSignUp, setError
     }
 };
 
+/**
+ * Cancels the sign up flow. Clears fields, but allows the User to continue the Sign up flow if confirming.
+ *
+ * @param {function()} clearError Clears the component state error.
+ * @param {function()} closeSignUpModal Closes the sign up modal.
+ */
 const handleCancelButton = (clearError, closeSignUpModal) => {
     // TODO Have a confirmation like are you sure ya wanna close?
     clearError();
     closeSignUpModal();
 };
 
+/**
+ * Checks all the values to ensure that they are filled correctly and can be sent through the Auth flow functions.
+ *
+ * @param {string} username The inputted username for the User.
+ * @param {string} password The inputted password for the User.
+ * @param {string} confirmPassword The confirmed inputted password for the User.
+ * @param {string} name The display name of the User.
+ * @param {string} email The email of the User.
+ * @param {function(error)} setError The function for setting the error of the component.
+ * @return {boolean} Whether or not the fields are filled correctly.
+ */
 const fieldsAreFilledCorrectly = (username, password, confirmPassword, name, email, setError) => {
     // console.log("Setting state with isConfirming is true");
     // TODO Do extra checking for the specifications of the account!
@@ -69,10 +110,22 @@ const fieldsAreFilledCorrectly = (username, password, confirmPassword, name, ema
     return false;
 };
 
+/**
+ * Ensures that the password is properly formatted for the Cognito User Pool.
+ *
+ * @param {string} password The inputted password from the User.
+ * @return {boolean} Whether the password is properly formed or not.
+ */
 const properlyFormedPassword = (password) => {
     return (password.length > 8 && /\d/.test(password) && (password.toUpperCase() !== password) && (password.toLowerCase() !== password));
 };
 
+/**
+ * Displays an error message for any potential component errors.
+ *
+ * @param {{message: string}} error The error object to display.
+ * @return {*} The React JSX for displaying the error message.
+ */
 const errorMessage = (error) => {
     if (error && error.message) {
         return (
@@ -86,6 +139,12 @@ const errorMessage = (error) => {
     }
 };
 
+/**
+ * Generates a loading graphic based on the current loading state of the component.
+ *
+ * @param {boolean} isLoading Whether the app is loading or not.
+ * @return {*} The React JSX to display the loading component.
+ */
 const loadingProp = (isLoading) => {
     if (isLoading) {
         return (
@@ -97,6 +156,13 @@ const loadingProp = (isLoading) => {
     return null;
 };
 
+/**
+ * The Sign Up Modal handles the whole signing up flow: inputting User info, then confirming the email.
+ *
+ * @param {{}} props The props passed into the component.
+ * @return {*} The React JSX to display the component.
+ * @constructor
+ */
 const SignUpModal = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
@@ -150,6 +216,7 @@ const SignUpModal = (props) => {
             {errorMessage(props.info.error)}
             <Modal.Actions style={{borderTop: 'none'}}>
                 <Form>
+                    {/* TODO WE SHOULD USE A QUERY TO FIND OUT IF THAT USERNAME HAS ALREADY BEEN TAKEN */}
                     <Form.Input type="text" iconPosition='left' icon='user' name="username" placeholder="Username" onChange={value => setStateText("username", value, setStates)}/>
                     <Popup position="left center" trigger={<Form.Input iconPosition='left' icon='lock' type="password" name="password" placeholder="Password" onChange={value => setStateText("password", value, setStates)}/>}>
                         Password must be at least 8 characters long, contains lower and upper case letters, contain at least one number.
@@ -164,10 +231,10 @@ const SignUpModal = (props) => {
                     {/*<Divider />*/}
                     {/*<Form.Input type="date" iconPosition='left' icon='calendar alternate outline' name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>*/}
                     <Form.Input type="text" iconPosition='left' icon='mail' name="email" placeholder="Email" onChange={value => setStateText("email", value, setStates)}/>
-                    <Divider />
-                    <Popup position="left center" trigger={<Form.Input type="text" iconPosition='left' icon='id card' name='enterprise code' placeHolder="Company ID" onChange={value => setStateText("enterpriseID", value, setStates)}/>}>
-                        If you are signing up with your company, input the given ID here.
-                    </Popup>
+                    {/*<Divider />*/}
+                    {/*<Popup position="left center" trigger={<Form.Input type="text" iconPosition='left' icon='id card' name='enterprise code' placeHolder="Company ID" onChange={value => setStateText("enterpriseID", value, setStates)}/>}>*/}
+                        {/*If you are signing up with your company, input the given ID here.*/}
+                    {/*</Popup>*/}
                     <div className="u-flex u-flex-justify--space-between u-padding-y--2 u-margin-top--2">
                         <Button negative onClick={() => handleCancelButton(props.clearError, props.closeSignUpModal)}>Cancel</Button>
                         <Button positive color='green' onClick={() => handleCreateButton(username, password, confirmPassword, name, email, enterpriseID, props.setError, props.signUp)}>Create</Button>
