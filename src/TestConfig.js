@@ -1,7 +1,7 @@
 import { configure } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import configureStore from 'redux-mock-store';
-import TestHelper from "./vastuscomponents/logic/TestHelper";
+import TestHelper from "./vastuscomponents/testing/TestHelper";
 
 export function store(initialState) {
     if (initialState) {
