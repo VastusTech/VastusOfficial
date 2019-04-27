@@ -10,7 +10,7 @@ import './index.css';
 import App from './App';
 import './semantic/dist/semantic.min.css'
 import registerServiceWorker from './registerServiceWorker';
-import store from './redux_helpers/store';
+import store from './vastuscomponents/redux/store';
 import AWSConfig from "./AppConfig";
 import {ifCallLambdaAtStart} from "./Constants";
 import Lambda from "./vastuscomponents/api/Lambda";

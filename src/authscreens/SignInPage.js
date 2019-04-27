@@ -1,18 +1,33 @@
 import React, { useState } from 'react';
-import { Input, Grid, Form, Header, Button, Image, Segment, Message, Modal, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
+import { Grid, Form, Header, Button, Image, Segment, Message, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
 import Logo from '../vastuscomponents/img/vt_new.svg';
-import {logIn, openForgotPasswordModal, openSignUpModal} from "../redux_helpers/actions/authActions";
-import {setError} from "../vastuscomponents/redux_actions/infoActions";
+import {logIn, openForgotPasswordModal, openSignUpModal} from "../vastuscomponents/redux/actions/authActions";
+import {setError} from "../vastuscomponents/redux/actions/infoActions";
 import GoogleSignUp from "./GoogleSignUp";
 
+/**
+ * Changes the text of the state for the component.
+ *
+ * @param {string} key The attribute name of the part of the state to update.
+ * @param {{target: {value: string}}} value The value object from the input.
+ * @param {{}} setStates The setState functions mapped from the attribute names they update.
+ */
 const changeStateText = (key, value, setStates) => {
     // inspect(value);
     setStates[key](value.target.value);
 };
 
+/**
+ * Inputs the User's sign in credentials and attempts to sign into the application.
+ *
+ * @param {string} username The inputted username by the User.
+ * @param {string} password The inputted password by the User.
+ * @param {function(string, string)} logIn The Auth Flow function to attempt the log in.
+ * @param {function(error)} setError Function to set the component's error state.
+ */
 const vastusSignIn = (username, password, logIn, setError) => {
     // TODO Check to see if the input fields are put in correctly
     if (username && password) {
@@ -23,6 +38,12 @@ const vastusSignIn = (username, password, logIn, setError) => {
     }
 };
 
+/**
+ * Displays an error message for any potential component errors.
+ *
+ * @param {{message: string}} error The error object to display.
+ * @return {*} The React JSX for displaying the error message.
+ */
 const errorMessage = (error) => {
     if (error) {
         return (
@@ -34,6 +55,12 @@ const errorMessage = (error) => {
     }
 };
 
+/**
+ * Generates a loading graphic based on the current loading state of the component.
+ *
+ * @param {boolean} isLoading Whether the app is loading or not.
+ * @return {*} The React JSX to display the loading component.
+ */
 const loadingProp = (isLoading) => {
     if (isLoading) {
         return (
@@ -45,6 +72,14 @@ const loadingProp = (isLoading) => {
     return null;
 };
 
+/**
+ * The Sign in page that displays the Logo and welcomes the User to the app. Handles all the signing in logic and
+ * contains the rest of the Auth Flow components.
+ *
+ * @param {{}} props The props passed into the component.
+ * @return {*} The React JSX to display the component.
+ * @constructor
+ */
 const SignInPage = (props) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");

@@ -4,6 +4,12 @@ import PostFeedProp from "../../vastuscomponents/components/feeds/PostFeed";
 import NextChallengeProp from "../../vastuscomponents/components/info/NextChallenge";
 import QL from "../../vastuscomponents/api/GraphQL";
 
+/**
+ * Displays a feed of all posts visible to the current user.
+ *
+ * @returns {*} The React JSX used to display the component.
+ * @constructor
+ */
 const MainTab = () => {
     return (
         <div>

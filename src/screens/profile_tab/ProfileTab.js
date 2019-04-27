@@ -6,6 +6,13 @@ import DatabaseObjectList from "../../vastuscomponents/components/lists/Database
 import ProfileImage from "../../vastuscomponents/components/props/ProfileImage";
 import LogOutButton from "../../vastuscomponents/components/manager/LogOutButton";
 
+/**
+ * Displays either the name or an input to change the name if the page is in an editing state.
+ *
+ * @param {boolean} isEditing If the profile is currently in the editing phase.
+ * @param {string} name The name of the user for the profile.
+ * @returns {*} The React JSX used to display the component.
+ */
 function displayName(isEditing, name) {
     if(!isEditing) {
         return (
@@ -19,6 +26,13 @@ function displayName(isEditing, name) {
     }
 }
 
+/**
+ * This function controls the state of the edit button depending on whether the page is currently being edited or not.
+ *
+ * @param {boolean} isEditing If the profile is being edited or not.
+ * @param {function(boolean)} setIsEditing {boolean} Function for setting the edit boolean.
+ * @returns {*} The React JSX used to display the component.
+ */
 function editButton(isEditing, setIsEditing) {
     if(!isEditing) {
         return (
@@ -42,9 +56,11 @@ function editButton(isEditing, setIsEditing) {
 }
 
 /**
-* ProfileTab
-*
-* This is the profile page which displays information about the current user.
+ * This is the profile page which displays information about the current user.
+ *
+ * @param {Props} props The given props to the component.
+ * @returns {*} The React JSX used to display the component.
+ * @constructor
  */
 const ProfileTab = (props) => {
     const [isEditing, setIsEditing] = useState(false);

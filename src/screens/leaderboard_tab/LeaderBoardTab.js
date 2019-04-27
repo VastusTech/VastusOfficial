@@ -1,10 +1,12 @@
+//TODO: Refactor from class to component or scrap this.
+
 import React, { Component, Fragment } from "react";
 import _ from "lodash";
 import { Visibility, Message } from "semantic-ui-react";
 import { connect } from "react-redux";
 import ClientCard from "../../vastuscomponents/components/cards/ClientCard";
-import {fetchUserAttributes} from "../../redux_helpers/actions/userActions";
-import {fetchClient} from "../../vastuscomponents/redux_actions/cacheActions";
+import {fetchUserAttributes} from "../../vastuscomponents/redux/actions/userActions";
+import {fetchClient} from "../../vastuscomponents/redux/actions/cacheActions";
 
 class LeaderBoardTab extends Component {
     state = {

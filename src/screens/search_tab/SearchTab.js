@@ -1,3 +1,5 @@
+// TODO: Refactor search tab from a class to a component
+
 import React, {Component, Fragment} from "react";
 import { connect } from "react-redux";
 import {Popup, List, Divider, Grid, Form, Button} from "semantic-ui-react";
@@ -6,7 +8,7 @@ import ClientCard from "../../vastuscomponents/components/cards/ClientCard";
 import EventCard from "../../vastuscomponents/components/cards/EventCard";
 import ChallengeCard from "../../vastuscomponents/components/cards/ChallengeCard";
 import PostCard from "../../vastuscomponents/components/cards/PostCard";
-import {disableSearchBar, enableSearchBar} from "../../vastuscomponents/redux_actions/searchActions";
+import {disableSearchBar, enableSearchBar} from "../../vastuscomponents/redux/actions/searchActions";
 import TrainerCard from "../../vastuscomponents/components/cards/TrainerCard";
 
 // This is going to be for every search functionality we really want.

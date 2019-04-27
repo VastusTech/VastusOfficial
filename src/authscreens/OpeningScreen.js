@@ -13,13 +13,15 @@ import {
     Icon
 } from 'semantic-ui-react';
 import { connect } from "react-redux";
-import {logOut} from "../redux_helpers/actions/authActions";
+import {logOut} from "../vastuscomponents/redux/actions/authActions";
 import SignInPage from './SignInPage';
 import Logo from '../vastuscomponents/img/the_logo.svg';
 import ReactSwipe from "react-swipe";
 import Breakpoint from "react-socks";
 
 const transition = 'browse';
+
+// TODO Get Blake to refactor this so he gets practice.
 
 class OpeningScreen extends Component {
  	state = {
