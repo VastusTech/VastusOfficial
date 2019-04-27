@@ -15,7 +15,7 @@ import {err} from "../Constants";
 const setStateText = (key, value, setStates) => {
     const setState = setStates[key];
     if (setState) {
-        setState(value);
+        setState(value.target.value);
     }
     else {
         err&&console.error("Setting non-handled set state case: " + key);
@@ -196,9 +196,9 @@ const SignUpModal = (props) => {
                         <div>
                             <Form>
                                 <label>Confirm Username!</label>
-                                <Form.Input type="text" name="username" placeholder=" Username " onChange={value => this.changeStateText("username", value)}/>
+                                <Form.Input type="text" name="username" placeholder=" Username " onChange={value => setStateText("username", value, setStates)}/>
                                 <label>Confirmation Code</label>
-                                <Form.Input type="text" name="confirmationCode" placeholder=" XXXXXX " onChange={value => this.changeStateText("confirmationCode", value)}/>
+                                <Form.Input type="text" name="confirmationCode" placeholder=" XXXXXX " onChange={value => setStateText("confirmationCode", value, setStates)}/>
                             </Form>
                         </div>
                         <div>
