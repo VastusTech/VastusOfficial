@@ -5,6 +5,7 @@ import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
 import ProfileImage from "../../vastuscomponents/components/props/ProfileImage";
 import LogOutButton from "../../vastuscomponents/components/manager/LogOutButton";
+import Calendar from "./Calendar.js";
 
 /**
  * Displays either the name or an input to change the name if the page is in an editing state.
@@ -85,10 +86,7 @@ const ProfileTab = (props) => {
                     position='bottom right'
                 />
                 <ProfileImage userID={props.user.id} profileImage={props.user.profileImage} profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages} editable={isEditing}/>
-                {displayName(isEditing, props.user.name)}
-                <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{props.user.name}</Card.Header>
-                <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
-                <Grid columns={2} celled>
+                <Grid columns={3}>
                     <Grid.Row>
                         <Grid.Column>
                             <Modal fluid size='large' closeIcon
@@ -107,7 +105,25 @@ const ProfileTab = (props) => {
                             </Modal>
                             <div>Buddy List</div>
                         </Grid.Column>
+                        <Grid.Column>
+                            {displayName(isEditing, props.user.name)}
+                            <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
+                        </Grid.Column>
+                        <Grid.Column>
+                            <Modal fluid size='large' closeIcon
+                                   trigger={<Button primary circular icon size="large"><Icon name="calendar view"/></Button>}>
+                                <Modal.Header>Scheduled Challenges</Modal.Header>
+                                <Modal.Content image>
+                                    <Modal.Description>
+                                        <Calendar/>
+                                    </Modal.Description>
+                                </Modal.Content>
+                            </Modal>
+                            <div>Calendar</div>
+                        </Grid.Column>
                     </Grid.Row>
+                </Grid>
+                <Grid columns={2}>
                     <Grid.Row>
                         <Grid.Column>
                             <Modal basic size='mini' closeIcon

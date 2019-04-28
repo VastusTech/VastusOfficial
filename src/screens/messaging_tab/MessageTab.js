@@ -17,6 +17,8 @@ const MessageTab = (props) => {
         <Grid centered>
             <Grid.Row>
                 <Button primary onClick={() => chatModalOpen||setChatModalOpen(true)}>Start New Chat</Button>
+            </Grid.Row>
+            <Grid.Row>
                 <StartChatModal open={chatModalOpen} onClose={() => setChatModalOpen(false)}/>
             </Grid.Row>
             <Grid.Row>

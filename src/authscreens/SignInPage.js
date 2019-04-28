@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Grid, Form, Header, Button, Image, Segment, Message, Dimmer, Loader, Divider, List, Container } from 'semantic-ui-react';
+import { Grid, Form, Header, Button, Image, Segment, Message, Dimmer, Loader, Divider, List, Container, Icon
+} from 'semantic-ui-react';
 import { connect } from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
@@ -95,6 +96,9 @@ const SignInPage = (props) => {
             {errorMessage(props.info.error)}
             <Grid centered textAlign='center'>
                 <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570, marginBottom: '-60px'}}>
+                    <Button floated='right' circular icon color={'purple'} onClick={()=> window.open("https://vastustech.com", "_blank")}>
+                        <Icon name='info'/>
+                    </Button>
                     <Segment basic>
                         <Image src={Logo} size="tiny" centered />
                         <Header as='h2' inverted textAlign='center'>
