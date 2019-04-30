@@ -90,7 +90,7 @@ const ProfileTab = (props) => {
                     <Grid.Row>
                         <Grid.Column>
                             <Modal fluid size='large' closeIcon
-                                   trigger={<Button primary circular icon size="large"><Icon name="users"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive"><Icon name="users"/></Button>}>
                                 <Modal.Header>Buddy List</Modal.Header>
                                 <Modal.Content image>
                                     <Modal.Description>
@@ -111,7 +111,7 @@ const ProfileTab = (props) => {
                         </Grid.Column>
                         <Grid.Column>
                             <Modal fluid size='large' closeIcon
-                                   trigger={<Button primary circular icon size="large"><Icon name="calendar view"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive"><Icon name="calendar view"/></Button>}>
                                 <Modal.Header>Scheduled Challenges</Modal.Header>
                                 <Modal.Content image>
                                     <Modal.Description>
@@ -127,7 +127,7 @@ const ProfileTab = (props) => {
                     <Grid.Row>
                         <Grid.Column>
                             <Modal basic size='mini' closeIcon
-                                   trigger={<Button primary circular icon size="large"><Icon name="trophy"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive"><Icon name="trophy"/></Button>}>
                                 <Modal.Content>
                                     <DatabaseObjectList
                                         ids={props.user.ownedChallenges}
@@ -141,7 +141,7 @@ const ProfileTab = (props) => {
                         </Grid.Column>
                         <Grid.Column>
                             <Modal basic size='mini' closeIcon
-                                   trigger={<Button circular icon size="large"><Icon name="bookmark outline"/></Button>}>
+                                   trigger={<Button circular icon size="massive"><Icon name="bookmark outline"/></Button>}>
                                 <Modal.Content>
                                     <ChallengeList challengeIDs={props.user.completedChallenges}
                                                    noChallengesMessage={"No completed challenges yet!"}/>

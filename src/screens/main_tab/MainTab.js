@@ -1,8 +1,10 @@
 import React from "react";
-import {Header} from "semantic-ui-react";
+import {Header, Modal, Button, Grid} from "semantic-ui-react";
 import PostFeedProp from "../../vastuscomponents/components/feeds/PostFeed";
 import NextChallengeProp from "../../vastuscomponents/components/info/NextChallenge";
 import QL from "../../vastuscomponents/api/GraphQL";
+import CreateChallengeProp from "../../vastuscomponents/components/manager/CreateChallenge";
+import CreatePostProp from "../../vastuscomponents/components/manager/CreatePost";
 
 /**
  * Displays a feed of all posts visible to the current user.
@@ -13,6 +15,11 @@ import QL from "../../vastuscomponents/api/GraphQL";
 const MainTab = () => {
     return (
         <div>
+            <Grid centered>
+                <Modal closeIcon trigger={<Button fluid primary>Create Challenge</Button>}>
+                    <CreateChallengeProp/>
+                </Modal>
+            </Grid>
             <Header sub>Your Next Challenge:</Header>
             <NextChallengeProp/>
             <Header sub>Upcoming Posts:</Header>

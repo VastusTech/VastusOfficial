@@ -16,6 +16,7 @@ type Props = {
  */
 const FilterModal = (props: Props) => (
     <Modal size='huge' open={props.open} onClose={props.onClose} closeIcon>
+        <Modal.Header align='center'>Filter</Modal.Header>
         <FilterScreen/>
     </Modal>
 );

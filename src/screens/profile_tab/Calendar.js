@@ -7,7 +7,7 @@ import {fetchUserAttributes, forceFetchUserAttributes} from "../../vastuscompone
 import { connect } from "react-redux";
 import calendarStyle from '../../Calendar.css';
 import CSSModules from 'react-css-modules';
-import propTypes from 'prop-types'
+import propTypes from 'prop-types';
 
 class Calendar extends React.Component {
   
