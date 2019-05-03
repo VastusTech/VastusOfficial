@@ -56,6 +56,10 @@ function editButton(isEditing, setIsEditing) {
     }
 }
 
+function saveChanges(setIsEditing, name) {
+    setIsEditing(p => !p);
+}
+
 /**
  * This is the profile page which displays information about the current user.
  *
@@ -127,7 +131,9 @@ const ProfileTab = (props) => {
                     <Grid.Row>
                         <Grid.Column>
                             <Modal basic size='mini' closeIcon
-                                   trigger={<Button primary circular icon size="massive"><Icon name="trophy"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive">
+                                                <Icon name="trophy"/>
+                                            </Button>}>
                                 <Modal.Content>
                                     <DatabaseObjectList
                                         ids={props.user.ownedChallenges}
@@ -141,7 +147,7 @@ const ProfileTab = (props) => {
                         </Grid.Column>
                         <Grid.Column>
                             <Modal basic size='mini' closeIcon
-                                   trigger={<Button circular icon size="massive"><Icon name="bookmark outline"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive"><Icon name="bookmark outline"/></Button>}>
                                 <Modal.Content>
                                     <ChallengeList challengeIDs={props.user.completedChallenges}
                                                    noChallengesMessage={"No completed challenges yet!"}/>
