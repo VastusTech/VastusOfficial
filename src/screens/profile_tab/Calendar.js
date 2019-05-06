@@ -247,7 +247,7 @@ class Calendar extends React.Component {
                 const cloneDay = day;
 
                 days.push(
-                    <Modal trigger={<div className={
+                    <Modal key={i} trigger={<div className={
                         `col cell ${
                             !dateFns.isSameMonth(day, monthStart)
                                 ? "disabled"

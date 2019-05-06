@@ -93,7 +93,7 @@ const ProfileTab = (props) => {
                 <Grid columns={3}>
                     <Grid.Row>
                         <Grid.Column>
-                            <Modal fluid size='large' closeIcon
+                            <Modal size='large' closeIcon
                                    trigger={<Button primary circular icon size="massive"><Icon name="users"/></Button>}>
                                 <Modal.Header>Buddy List</Modal.Header>
                                 <Modal.Content image>
@@ -114,8 +114,8 @@ const ProfileTab = (props) => {
                             <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
                         </Grid.Column>
                         <Grid.Column>
-                            <Modal fluid size='large' closeIcon
-                                   trigger={<Button primary circular icon size="massive"><Icon name="calendar view"/></Button>}>
+                            <Modal size='large' closeIcon
+                                   trigger={<Button primary circular icon size="massive"><Icon name="calendar"/></Button>}>
                                 <Modal.Header>Scheduled Challenges</Modal.Header>
                                 <Modal.Content image>
                                     <Modal.Description>

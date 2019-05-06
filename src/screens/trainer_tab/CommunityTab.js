@@ -10,7 +10,7 @@ import GroupFeed from "../../vastuscomponents/components/feeds/GroupFeed";
  * @constructor
  */
 const CommunityTab = () => (
-    <Grid fluid centered>
+    <Grid centered>
         <Grid.Row height={20} style={{marginBottom: '15px', marginTop: '15px'}}>
         <Modal trigger={<Grid centered><Button primary>Create New Group</Button></Grid>}>
             <CreateGroupProp/>
