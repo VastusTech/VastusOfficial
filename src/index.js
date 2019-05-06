@@ -14,6 +14,7 @@ import store from './vastuscomponents/redux/store';
 import AWSConfig from "./AppConfig";
 import {ifCallLambdaAtStart} from "./Constants";
 import Lambda from "./vastuscomponents/api/Lambda";
+import SplashScreen from "./authscreens/SplashScreen";
 
 // AWSConfig();
 // window.LOG_LEVEL='DEBUG';
@@ -26,7 +27,9 @@ if (ifCallLambdaAtStart) { Lambda.ping(); }
 ReactDOM.render(
     <BreakpointProvider>
         <Provider store={store}>
-            <App />
+            <SplashScreen>
+                <App />
+            </SplashScreen>
         </Provider>
     </BreakpointProvider>,
     document.getElementById('root')

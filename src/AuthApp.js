@@ -40,17 +40,17 @@ const getLoadingApp = (user, isLoading) => {
 * This file contains the general outline of the app in a grid based format.
  */
 const AuthApp = (props) => {
-    const [isLoading, setIsLoading] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
     const [filterModalOpen, setFilterModalOpen] = useState(false);
 
     useEffect(() => {
         if (props.user.id) {
-            props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
-                "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
-                "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
-                "invitedChallenges", "messageBoards", "streaks"], (data) => {
-                setIsLoading(false);
-            });
+            // props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
+            //     "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
+            //     "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
+            //     "invitedChallenges", "messageBoards", "streaks"], (data) => {
+            //     setIsLoading(false);
+            // });
         }
         return () => {
             // TODO Clean up?
