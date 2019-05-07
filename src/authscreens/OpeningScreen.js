@@ -1,25 +1,11 @@
 import React, { Component } from 'react';
-import _ from 'lodash';
-import {
-    Image,
-    Container,
-    Reveal,
-    Rail,
-    Segment,
-    Grid,
-    Divider,
-    Sticky,
-    Button,
-    Icon
-} from 'semantic-ui-react';
+import { Segment, Grid } from 'semantic-ui-react';
 import { connect } from "react-redux";
 import {logOut} from "../vastuscomponents/redux/actions/authActions";
 import SignInPage from './SignInPage';
-import Logo from '../vastuscomponents/img/the_logo.svg';
-import ReactSwipe from "react-swipe";
 import Breakpoint from "react-socks";
 
-const transition = 'browse';
+// const transition = 'browse';
 
 // TODO Get Blake to refactor this so he gets practice.
 
@@ -32,66 +18,66 @@ class OpeningScreen extends Component {
         active: true
  	};
 
- 	swipeRight = (reactSwipeEl) => {
- 	    if(this.state.slideNum === 0) {
- 	        this.setState({slideNum: this.state.slideNum + 1});
-            this.setState({circles: ['circle outline', 'circle', 'circle outline']});
-        }
-        if(this.state.slideNum === 1) {
-            this.setState({slideNum: this.state.slideNum + 1});
-            this.setState({circles: ['circle outline', 'circle outline', 'circle']});
-        }
-        reactSwipeEl.next();
-    }
-
-    swipeLeft = (reactSwipeEl) => {
-        if(this.state.slideNum === 2) {
-            this.setState({slideNum: this.state.slideNum - 1});
-            this.setState({circles: ['circle outline', 'circle', 'circle outline']});
-        }
-        if(this.state.slideNum === 1) {
-            this.setState({slideNum: this.state.slideNum - 1});
-            this.setState({circles: ['circle', 'circle outline', 'circle outline']});
-        }
-        reactSwipeEl.prev();
-    }
-
-    displayPage = () => {
-        return _.times(3, i => (
-            <Grid.Column width={1} key={i}>
-                <Icon name={this.state.circles[i]}/>
-            </Grid.Column>
-        ));
-    };
-
-    adjustCircles(index) {
- 	    if(0 <= index <= 2) {
-            this.setState({slideNum: index});
-        }
-
-        if(index === 0) {
-            this.setState({circles: ['circle', 'circle outline', 'circle outline']});
-        }
-        else if(index === 1) {
-            this.setState({circles: ['circle outline', 'circle', 'circle outline']});
-        }
-        else if(index === 2) {
-            this.setState({circles: ['circle outline', 'circle outline', 'circle']});
-        }
-        alert(index);
-    }
-
- 	toggleVisibility = () => this.setState({ visible: !this.state.visible });
-
-    handleContextRef = contextRef => this.setState({ contextRef });
-
-    handleToggle = () => this.setState({ active: !this.state.active });
+ 	// swipeRight = (reactSwipeEl) => {
+ 	//     if(this.state.slideNum === 0) {
+ 	//         this.setState({slideNum: this.state.slideNum + 1});
+    //         this.setState({circles: ['circle outline', 'circle', 'circle outline']});
+    //     }
+    //     if(this.state.slideNum === 1) {
+    //         this.setState({slideNum: this.state.slideNum + 1});
+    //         this.setState({circles: ['circle outline', 'circle outline', 'circle']});
+    //     }
+    //     reactSwipeEl.next();
+    // }
+    //
+    // swipeLeft = (reactSwipeEl) => {
+    //     if(this.state.slideNum === 2) {
+    //         this.setState({slideNum: this.state.slideNum - 1});
+    //         this.setState({circles: ['circle outline', 'circle', 'circle outline']});
+    //     }
+    //     if(this.state.slideNum === 1) {
+    //         this.setState({slideNum: this.state.slideNum - 1});
+    //         this.setState({circles: ['circle', 'circle outline', 'circle outline']});
+    //     }
+    //     reactSwipeEl.prev();
+    // }
+    //
+    // displayPage = () => {
+    //     return _.times(3, i => (
+    //         <Grid.Column width={1} key={i}>
+    //             <Icon name={this.state.circles[i]}/>
+    //         </Grid.Column>
+    //     ));
+    // };
+    //
+    // adjustCircles(index) {
+ 	//     if(0 <= index <= 2) {
+    //         this.setState({slideNum: index});
+    //     }
+    //
+    //     if(index === 0) {
+    //         this.setState({circles: ['circle', 'circle outline', 'circle outline']});
+    //     }
+    //     else if(index === 1) {
+    //         this.setState({circles: ['circle outline', 'circle', 'circle outline']});
+    //     }
+    //     else if(index === 2) {
+    //         this.setState({circles: ['circle outline', 'circle outline', 'circle']});
+    //     }
+    //     alert(index);
+    // }
+    //
+ 	// toggleVisibility = () => this.setState({ visible: !this.state.visible });
+    //
+    // handleContextRef = contextRef => this.setState({ contextRef });
+    //
+    // handleToggle = () => this.setState({ active: !this.state.active });
 
     render() {
-        const { active, contextRef } = this.state;
-        let reactSwipeEl;
-        let self = this;
-    	const { visible } = this.state;
+        // const { active, contextRef } = this.state;
+        // let reactSwipeEl;
+        // let self = this;
+    	// const { visible } = this.state;
 		return (
 		    <div>
 		    <Breakpoint small down>

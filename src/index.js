@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Breakpoint, { BreakpointProvider } from 'react-socks';
+import { BreakpointProvider } from 'react-socks';
 
 // Redux
 // import { createStore, applyMiddleware } from 'redux';

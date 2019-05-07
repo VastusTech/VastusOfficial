@@ -4,7 +4,6 @@ import PostFeedProp from "../../vastuscomponents/components/feeds/PostFeed";
 import NextChallengeProp from "../../vastuscomponents/components/info/NextChallenge";
 import QL from "../../vastuscomponents/api/GraphQL";
 import CreateChallengeProp from "../../vastuscomponents/components/manager/CreateChallenge";
-import CreatePostProp from "../../vastuscomponents/components/manager/CreatePost";
 
 /**
  * Displays a feed of all posts visible to the current user.

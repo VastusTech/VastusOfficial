@@ -56,9 +56,9 @@ function editButton(isEditing, setIsEditing) {
     }
 }
 
-function saveChanges(setIsEditing, name) {
-    setIsEditing(p => !p);
-}
+// function saveChanges(setIsEditing, name) {
+//     setIsEditing(p => !p);
+// }
 
 /**
  * This is the profile page which displays information about the current user.

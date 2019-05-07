@@ -1,38 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
-import {Menu, Container, Message, Icon, Grid, Modal, Input} from "semantic-ui-react";
+import {Menu, Container, Icon, Grid, Modal} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
 import { connect } from "react-redux";
-import {fetchUserAttributes, subscribeFetchUserAttributes} from "./vastuscomponents/redux/actions/userActions";
 import NotificationBellProp from "./vastuscomponents/components/info/NotificationBell";
 import NotificationFeed from "./screens/notification_bell/NotificationBellFeed";
 import Breakpoint from "react-socks";
 import FilterModal from "./screens/filter/FilterModal";
-
-//This displays the search bar, log out button, and tab system inside of the grid.
-// const { stickyRef } = this.state;
-const getLoadingApp = (user, isLoading) => {
-    if (isLoading) {
-        return (
-            <div>
-                <Message icon>
-                    <Icon name='spinner' size="small" loading />
-                    <Message.Content>
-                        <Message.Header>
-                            Loading...
-                        </Message.Header>
-                    </Message.Content>
-                </Message>
-            </div>
-        );
-    }
-    else {
-        return (
-            <Tabs user={user}/>
-        );
-    }
-};
 
 /**
 * Auth App
@@ -40,23 +15,7 @@ const getLoadingApp = (user, isLoading) => {
 * This file contains the general outline of the app in a grid based format.
  */
 const AuthApp = (props) => {
-    const [isLoading, setIsLoading] = useState(false);
     const [filterModalOpen, setFilterModalOpen] = useState(false);
-
-    useEffect(() => {
-        if (props.user.id) {
-            // props.subscribeFetchUserAttributes(["name", "username", "birthday", "profileImagePath",
-            //     "profileImagePaths", "challengesWon", "friends", "scheduledEvents", "ownedEvents", "completedEvents",
-            //     "challenges", "ownedChallenges", "completedChallenges", "groups", "ownedGroups", "receivedInvites",
-            //     "invitedChallenges", "messageBoards", "streaks"], (data) => {
-            //     setIsLoading(false);
-            // });
-        }
-        return () => {
-            // TODO Clean up?
-            // alert("Cleaning up auth app");
-        }
-    }, [props.user.id]);
 
     return (
         <div>
@@ -134,7 +93,7 @@ const AuthApp = (props) => {
                     </Menu.Item>
                 </Menu>
                 <FilterModal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}/>
-                {getLoadingApp(props.user, isLoading)}
+                <Tabs user={props.user}/>
             </div>
         </div>
     );
@@ -144,15 +103,4 @@ const mapStateToProps = (state) => ({
     user: state.user
 });
 
-const mapDispatchToProps = (dispatch) => {
-    return {
-        subscribeFetchUserAttributes: (variablesList, dataHandler) => {
-            dispatch(subscribeFetchUserAttributes(variablesList, dataHandler));
-        },
-        // fetchUserAttributes: (variablesList, dataHandler) => {
-        //     dispatch(fetchUserAttributes(variablesList, dataHandler));
-        // }
-    }
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(AuthApp);
+export default connect(mapStateToProps)(AuthApp);

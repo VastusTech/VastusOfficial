@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Segment, Image, Header, Grid, Container } from "semantic-ui-react";
+import { Segment, Image, Header, Grid } from "semantic-ui-react";
 import { connect } from "react-redux";
 import {updateAuth} from "../vastuscomponents/redux/actions/authActions";
 import Logo from '../vastuscomponents/img/vt_new.svg';
