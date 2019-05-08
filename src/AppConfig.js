@@ -90,7 +90,6 @@ function setupAWS() {
  * @returns {AWS}
  */
 export function getAWS() {
-    alert("Getting AWS");
     if (!process.env.NODE_ENV || process.env.NODE_ENV === "production") {
         AWS.config.update({region: 'us-east-1'});
         // AWS.config.update({credentials: new AWS.CognitoIdentityCredentials({IdentityPoolId: 'us-east-1:d9a16b98-4393-4ff6-9e4b-5e738fef1222'})});
