@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {Grid, Button} from "semantic-ui-react";
 import MessageBoardFeed from "../../vastuscomponents/components/messaging/MessageBoardFeed";
-import connect from "react-redux/es/connect/connect";
+import {connect} from "react-redux";
 import StartChatModal from "../../vastuscomponents/components/manager/StartChatModal";
 
 /**
