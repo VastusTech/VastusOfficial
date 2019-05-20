@@ -115,7 +115,8 @@ const ProfileTab = (props) => {
                         </Grid.Column>
                         <Grid.Column>
                             <Modal size='large' closeIcon
-                                   trigger={<Button primary circular icon size="massive"><Icon name="calendar"/></Button>}>
+                                   trigger={<Button primary circular icon size="massive">
+                                       <Icon name="calendar" style={{marginLeft: '-10px'}}/></Button>}>
                                 <Modal.Header>Scheduled Challenges</Modal.Header>
                                 <Modal.Content image>
                                     <Modal.Description>
