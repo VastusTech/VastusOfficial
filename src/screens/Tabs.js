@@ -10,7 +10,7 @@ import GroupFeed from "./trainer_tab/CommunityTab";
 
 /**
  * A bottom menu for all of the tabs in the app.
- * The app is currently split up into five sections: main, group, trainer, message and profile tabs.
+ * The app is currently split up into two sections: the main and profile tabs.
  *
  * @returns {*} The React JSX used to display the component.
  */
