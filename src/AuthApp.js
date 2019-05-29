@@ -23,29 +23,15 @@ const AuthApp = (props) => {
                 <Menu borderless inverted vertical fluid widths={1} fixed="top">
                     <Menu.Item>
                         <Container fluid>
-                            <Breakpoint large up>
+                            {/*<Breakpoint large up>*/}
                                 <Grid columns="equal" centered>
                                     <Grid.Row stretched>
-                                        <Grid.Column>
-                                            <Grid onClick={() => setFilterModalOpen(true)} style={{marginTop: "6px", marginLeft: "-40px"}} centered>
-                                                <Icon name="filter" size="big"/>
-                                            </Grid>
-                                        </Grid.Column>
                                         <Grid.Column width={13}>
                                             <SearchBarProp />
                                         </Grid.Column>
-                                        <Grid.Column>
-                                            <Modal trigger={<NotificationBellProp/>} closeIcon>
-                                                <Modal.Header align='center'>Notifications</Modal.Header>
-                                                <Modal.Content>
-                                                    <NotificationFeed/>
-                                                </Modal.Content>
-                                            </Modal>
-                                        </Grid.Column>
                                     </Grid.Row>
                                 </Grid>
-                            </Breakpoint>
-                            <Breakpoint medium>
+                            {/*<Breakpoint medium>
                                 <Grid columns="equal" centered>
                                     <Grid.Row stretched>
                                         <Grid.Column width={2}>
@@ -88,7 +74,7 @@ const AuthApp = (props) => {
                                         </Grid.Column>
                                     </Grid.Row>
                                 </Grid>
-                            </Breakpoint>
+                            </Breakpoint>*/}
                         </Container>
                     </Menu.Item>
                 </Menu>
