@@ -1,6 +1,6 @@
 import React, {useState} from 'react'
 import {connect} from "react-redux";
-import {Button, Card, Modal, Dimmer, Loader, Input, Icon, Grid, Popup} from 'semantic-ui-react'
+import {Button, Card, Modal, Dimmer, Loader, Input, Icon, Grid, Popup } from 'semantic-ui-react'
 import ChallengeList from "../../vastuscomponents/components/lists/ChallengeList";
 import DatabaseObjectList from "../../vastuscomponents/components/lists/DatabaseObjectList";
 import ProfileImage from "../../vastuscomponents/components/props/ProfileImage";
@@ -90,63 +90,12 @@ const ProfileTab = (props) => {
                     position='bottom right'
                 />
                 <ProfileImage userID={props.user.id} profileImage={props.user.profileImage} profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages} editable={isEditing}/>
-                <Grid columns={3}>
+                <Grid columns={1}>
                     <Grid.Row>
-                        <Grid.Column>
-                            <Modal size='large' closeIcon
-                                   trigger={<Button primary circular icon size="massive"><Icon name="users"/></Button>}>
-                                <Modal.Header>Buddy List</Modal.Header>
-                                <Modal.Content image>
-                                    <Modal.Description>
-                                        <DatabaseObjectList
-                                            ids={props.user.friends}
-                                            noObjectsMessage={"No friends yet!"}
-                                            acceptedItemTypes={["Client", "Trainer"]}
-                                            randomized
-                                        />
-                                    </Modal.Description>
-                                </Modal.Content>
-                            </Modal>
-                            <div>Buddy List</div>
-                        </Grid.Column>
                         <Grid.Column>
                             {displayName(isEditing, props.user.name)}
-                            <Card.Meta>Event Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
-                        </Grid.Column>
-                        <Grid.Column>
-                            <Modal size='large' closeIcon
-                                   trigger={<Button primary circular icon size="massive">
-                                       <Icon name="calendar" style={{marginLeft: '-10px'}}/></Button>}>
-                                <Modal.Header>Scheduled Challenges</Modal.Header>
-                                <Modal.Content image>
-                                    <Modal.Description>
-                                        <Calendar/>
-                                    </Modal.Description>
-                                </Modal.Content>
-                            </Modal>
-                            <div>Calendar</div>
-                        </Grid.Column>
-                    </Grid.Row>
-                </Grid>
-                <Grid columns={2}>
-                    <Grid.Row>
-                        <Grid.Column>
-                            <Modal basic size='mini' closeIcon
-                                   trigger={<Button primary circular icon size="massive">
-                                                <Icon name="trophy"/>
-                                            </Button>}>
-                                <Modal.Content>
-                                    <DatabaseObjectList
-                                        ids={props.user.ownedChallenges}
-                                        noObjectsMessage={"No Owned Challenges yet!"}
-                                        acceptedItemTypes={["Challenge"]}
-                                        randomized
-                                    />
-                                </Modal.Content>
-                            </Modal>
-                            <div>Owned Challenges</div>
-                        </Grid.Column>
-                        <Grid.Column>
+                            <Card.Meta>Challenge Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
+
                             <Modal basic size='mini' closeIcon
                                    trigger={<Button primary circular icon size="massive"><Icon name="bookmark outline"/></Button>}>
                                 <Modal.Content>
@@ -168,3 +117,50 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(ProfileTab);
+
+/*<Modal size='large' closeIcon
+       trigger={<Button primary circular icon size="massive"><Icon name="users"/></Button>}>
+    <Modal.Header>Buddy List</Modal.Header>
+    <Modal.Content image>
+        <Modal.Description>
+            <DatabaseObjectList
+                ids={props.user.friends}
+                noObjectsMessage={"No friends yet!"}
+                acceptedItemTypes={["Client", "Trainer"]}
+                randomized
+            />
+        </Modal.Description>
+    </Modal.Content>
+</Modal>
+<div>Buddy List</div>*/
+
+/*<Modal size='large' closeIcon
+       trigger={<Button primary circular icon size="massive">
+           <Icon name="calendar" style={{marginLeft: '-10px'}}/></Button>}>
+    <Modal.Header>Scheduled Challenges</Modal.Header>
+    <Modal.Content image>
+        <Modal.Description>
+            <Calendar/>
+        </Modal.Description>
+    </Modal.Content>
+</Modal>
+<div>Calendar</div>*/
+
+/*<Grid columns={2}>
+    <Grid.Row>
+        <Grid.Column>
+            <Modal basic size='mini' closeIcon
+                   trigger={<Button primary circular icon size="massive">
+                       <Icon name="trophy"/>
+                   </Button>}>
+                <Modal.Content>
+                    <DatabaseObjectList
+                        ids={props.user.ownedChallenges}
+                        noObjectsMessage={"No Owned Challenges yet!"}
+                        acceptedItemTypes={["Challenge"]}
+                        randomized
+                    />
+                </Modal.Content>
+            </Modal>
+            <div>Owned Challenges</div>
+        </Grid.Column>*/

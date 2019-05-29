@@ -10,12 +10,12 @@ import GroupFeed from "./trainer_tab/CommunityTab";
 
 /**
  * A bottom menu for all of the tabs in the app.
- * The app is currently split up into five sections: main, group, trainer, message and profile tabs.
+ * The app is currently split up into two sections: the main and profile tabs.
  *
  * @returns {*} The React JSX used to display the component.
  */
 export default () => (
-    <Tab menu={{fixed: "bottom", widths: 5, size: "large", inverted: true}} panes={
+    <Tab menu={{fixed: "bottom", widths: 2, size: "large", inverted: true}} panes={
         [
             {
                 menuItem:
@@ -28,8 +28,17 @@ export default () => (
                     </Tab.Pane>
             },
             {
+                menuItem: (
+                    <Menu.Item key={1}>
+                        <Icon name='user circle outline' size='large' />
+                    </Menu.Item>),
+                render: () => <Tab.Pane basic attached={false}>
+                    <ProfileTab/>
+                </Tab.Pane>
+            },
+            /*{
                 menuItem:
-                    (<Menu.Item key={1}>
+                    (<Menu.Item key={2}>
                         <Icon name='group' size='large' />
                     </Menu.Item>),
                 render: () =>
@@ -39,7 +48,7 @@ export default () => (
             },
             {
                 menuItem: (
-                    <Menu.Item key={2}>
+                    <Menu.Item key={3}>
                         <Icon name='stopwatch' size='large' />
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
@@ -48,7 +57,7 @@ export default () => (
             },
             {
                 menuItem: (
-                    <Menu.Item key={3}>
+                    <Menu.Item key={4}>
                         <MessageIcon/>
                     </Menu.Item>),
                 render: () => <Tab.Pane basic attached={false}>
@@ -56,16 +65,8 @@ export default () => (
                         <MessageTab/>
                     </Fragment>
                 </Tab.Pane>
-            },
-            {
-                menuItem: (
-                    <Menu.Item key={4}>
-                        <Icon name='user circle outline' size='large' />
-                    </Menu.Item>),
-                render: () => <Tab.Pane basic attached={false}>
-                    <ProfileTab/>
-                </Tab.Pane>
-            },
+            },*/
+
         ]
     }/>
 );

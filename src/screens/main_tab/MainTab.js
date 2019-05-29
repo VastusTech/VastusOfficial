@@ -15,9 +15,7 @@ const MainTab = () => {
     return (
         <div>
             <Grid centered>
-                <Modal closeIcon trigger={<Button fluid primary>Create Challenge</Button>}>
-                    <CreateChallengeProp/>
-                </Modal>
+
             </Grid>
             <Header sub>Your Next Challenge:</Header>
             <NextChallengeProp/>
