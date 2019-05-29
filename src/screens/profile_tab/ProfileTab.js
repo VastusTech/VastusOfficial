@@ -94,7 +94,8 @@ const ProfileTab = (props) => {
                     <Grid.Row>
                         <Grid.Column>
                             {displayName(isEditing, props.user.name)}
-                            <Card.Meta>Challenge Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
+                            <Card.Meta style={{marginBottom: '20px'}}
+                            >Challenge Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
 
                             <Modal basic size='mini' closeIcon
                                    trigger={<Button primary circular icon size="massive"><Icon name="bookmark outline"/></Button>}>
@@ -103,7 +104,6 @@ const ProfileTab = (props) => {
                                                    noChallengesMessage={"No completed challenges yet!"}/>
                                 </Modal.Content>
                             </Modal>
-                            <div>Completed Challenges</div>
                         </Grid.Column>
                     </Grid.Row>
                 </Grid>
