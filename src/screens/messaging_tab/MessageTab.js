@@ -12,24 +12,24 @@ import StartChatModal from "../../vastuscomponents/components/manager/StartChatM
  * @constructor
  */
 const MessageTab = (props) => {
-    const [chatModalOpen, setChatModalOpen] = useState(false);
-    return (
-        <Grid centered>
-            <Grid.Row>
-                <Button primary onClick={() => chatModalOpen||setChatModalOpen(true)}>Start New Chat</Button>
-            </Grid.Row>
-            <Grid.Row>
-                <StartChatModal open={chatModalOpen} onClose={() => setChatModalOpen(false)}/>
-            </Grid.Row>
-            <Grid.Row>
-                <MessageBoardFeed userID={props.user.id}/>
-            </Grid.Row>
-        </Grid>
-    );
+  const [chatModalOpen, setChatModalOpen] = useState(false);
+  return (
+    <Grid centered>
+      <Grid.Row>
+        <Button primary onClick={() => chatModalOpen || setChatModalOpen(true)}>Start New Chat</Button>
+      </Grid.Row>
+      <Grid.Row>
+        <StartChatModal open={chatModalOpen} onClose={() => setChatModalOpen(false)}/>
+      </Grid.Row>
+      <Grid.Row>
+        <MessageBoardFeed userID={props.user.id}/>
+      </Grid.Row>
+    </Grid>
+  );
 };
 
 const mapStateToProps = (state) => ({
-    user: state.user
+  user: state.user
 });
 
 export default connect(mapStateToProps)(MessageTab);

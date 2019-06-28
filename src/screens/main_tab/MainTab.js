@@ -12,34 +12,35 @@ import CreateChallengeProp from "../../vastuscomponents/components/manager/Creat
  * @constructor
  */
 const MainTab = () => {
-    return (
-        <div>
-            <Grid centered>
+  return (
+    <div>
+      <Grid centered>
 
-            </Grid>
-            <Header sub>Your Next Challenge:</Header>
-            <NextChallengeProp/>
-            <Header sub>Upcoming Posts:</Header>
-            <PostFeedProp filter={
-                QL.generateFilter({
-                    and: [{
-                        or: [{
-                            postType: {
-                                eq: "$postType1"
-                            }
-                        }, {
-                            postType: {
-                                eq: "$postType2"
-                            }
-                        }]
-                    }
-                ]}, {
-                    postType1: "Challenge",
-                    postType2: "newChallenge",
-                })
-            }/>
-        </div>
-    );
+      </Grid>
+      <Header sub>Your Next Challenge:</Header>
+      <NextChallengeProp/>
+      <Header sub>Upcoming Posts:</Header>
+      <PostFeedProp filter={
+        QL.generateFilter({
+          and: [{
+            or: [{
+              postType: {
+                eq: "$postType1"
+              }
+            }, {
+              postType: {
+                eq: "$postType2"
+              }
+            }]
+          }
+          ]
+        }, {
+          postType1: "Challenge",
+          postType2: "newChallenge",
+        })
+      }/>
+    </div>
+  );
 };
 
 export default MainTab;

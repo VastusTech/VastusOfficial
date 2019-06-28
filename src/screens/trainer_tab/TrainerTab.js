@@ -8,7 +8,7 @@ import TrainerFeed from "../../vastuscomponents/components/feeds/TrainerFeed";
  * @constructor
  */
 const CommunityTab = () => (
-    <TrainerFeed/>
+  <TrainerFeed/>
 );
 
 export default CommunityTab;

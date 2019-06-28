@@ -8,7 +8,7 @@ import InviteFeed from "../../vastuscomponents/components/feeds/InviteFeed";
  * @constructor
  */
 const NotificationFeed = () => (
-    <InviteFeed/>
+  <InviteFeed/>
 );
 
 export default NotificationFeed;

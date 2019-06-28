@@ -11,11 +11,11 @@ import NotificationsFeed from "src/screens/notification_bell/NotificationBellFee
  * @constructor
  */
 const NotificationsModal = () => {
-    return (
-        <div>
-            <NotificationsFeed/>
-        </div>
-    );
+  return (
+    <div>
+      <NotificationsFeed/>
+    </div>
+  );
 };
 
 export default NotificationsModal;

@@ -1,37 +1,37 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import './App.css';
 import Tabs from './screens/Tabs.js';
 import {Menu, Container, Icon, Grid, Modal} from "semantic-ui-react";
 import SearchBarProp from "./vastuscomponents/components/props/SearchBar";
-import { connect } from "react-redux";
+import {connect} from "react-redux";
 import NotificationBellProp from "./vastuscomponents/components/info/NotificationBell";
 import NotificationFeed from "./screens/notification_bell/NotificationBellFeed";
 import Breakpoint from "react-socks";
 import FilterModal from "./screens/filter/FilterModal";
 
 /**
-* Auth App
-*
-* This file contains the general outline of the app in a grid based format.
+ * Auth App
+ *
+ * This file contains the general outline of the app in a grid based format.
  */
 const AuthApp = (props) => {
-    const [filterModalOpen, setFilterModalOpen] = useState(false);
+  const [filterModalOpen, setFilterModalOpen] = useState(false);
 
-    return (
-        <div>
-            <div className="App">
-                <Menu borderless inverted vertical fluid widths={1} fixed="top">
-                    <Menu.Item>
-                        <Container fluid>
-                            {/*<Breakpoint large up>*/}
-                                <Grid columns="equal" centered>
-                                    <Grid.Row stretched>
-                                        <Grid.Column width={13}>
-                                            <SearchBarProp />
-                                        </Grid.Column>
-                                    </Grid.Row>
-                                </Grid>
-                            {/*<Breakpoint medium>
+  return (
+    <div>
+      <div className="App">
+        <Menu borderless inverted vertical fluid widths={1} fixed="top">
+          <Menu.Item>
+            <Container fluid>
+              {/*<Breakpoint large up>*/}
+              <Grid columns="equal" centered>
+                <Grid.Row stretched>
+                  <Grid.Column width={13}>
+                    <SearchBarProp/>
+                  </Grid.Column>
+                </Grid.Row>
+              </Grid>
+              {/*<Breakpoint medium>
                                 <Grid columns="equal" centered>
                                     <Grid.Row stretched>
                                         <Grid.Column width={2}>
@@ -75,18 +75,18 @@ const AuthApp = (props) => {
                                     </Grid.Row>
                                 </Grid>
                             </Breakpoint>*/}
-                        </Container>
-                    </Menu.Item>
-                </Menu>
-                <FilterModal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}/>
-                <Tabs user={props.user}/>
-            </div>
-        </div>
-    );
+            </Container>
+          </Menu.Item>
+        </Menu>
+        <FilterModal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}/>
+        <Tabs user={props.user}/>
+      </div>
+    </div>
+  );
 };
 
 const mapStateToProps = (state) => ({
-    user: state.user
+  user: state.user
 });
 
 export default connect(mapStateToProps)(AuthApp);

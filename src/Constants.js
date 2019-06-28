@@ -12,6 +12,6 @@ export const setErr = e => err = e;
 export const appUserItemType = "Client";
 
 export const userInitialFetchList = ["name", "username", "birthday", "profileImagePath",
-                        "profileImagePaths", "challengesWon", "friends", "friendRequests", "scheduledEvents",
-                        "ownedEvents", "completedEvents", "challenges", "ownedChallenges", "completedChallenges",
-                        "groups", "ownedGroups", "receivedInvites", "invitedChallenges", "messageBoards", "streaks"];
+  "profileImagePaths", "challengesWon", "friends", "friendRequests", "scheduledEvents",
+  "ownedEvents", "completedEvents", "challenges", "ownedChallenges", "completedChallenges",
+  "groups", "ownedGroups", "receivedInvites", "invitedChallenges", "messageBoards", "streaks"];

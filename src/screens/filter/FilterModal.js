@@ -3,8 +3,8 @@ import {Modal} from "semantic-ui-react";
 import FilterScreen from "../../vastuscomponents/components/props/FilterScreen";
 
 type Props = {
-    open: boolean,
-    onClose: () => void
+  open: boolean,
+  onClose: () => void
 };
 
 /**
@@ -15,10 +15,10 @@ type Props = {
  * @constructor
  */
 const FilterModal = (props: Props) => (
-    <Modal size='large' open={props.open} onClose={props.onClose} closeIcon>
-        <Modal.Header align='center'>Filter</Modal.Header>
-        <FilterScreen/>
-    </Modal>
+  <Modal size='large' open={props.open} onClose={props.onClose} closeIcon>
+    <Modal.Header align='center'>Filter</Modal.Header>
+    <FilterScreen/>
+  </Modal>
 );
 
 export default FilterModal;
