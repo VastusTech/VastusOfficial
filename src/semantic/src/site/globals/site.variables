@@ -5,7 +5,8 @@
 // Out of scope vars (not in Semantic)
 
 @primaryGradient: linear-gradient(135deg, #7F47AE, #7D82B8);
-@bgColor: #49465f;
+@bgColor: #FFFFFF;
+@veryLightGrey: rgba(231, 231, 231, 0.97);
 
 /** In-scope Vars
   * Inverted state is poorly supported in Semantic UI React,
@@ -19,15 +20,16 @@
 @fontSize : 15px;
 
 @primaryColor        : #7F47AE;
-@secondaryColor      : @black;
+@secondaryColor      : @white;
 
 @lightPrimaryColor   : #7F47AE;
-@lightSecondaryColor : @lightBlack;
+@lightSecondaryColor : @lightGrey;
 
 @white      : #ffffff;
 @darkBlack  : #1F1F27;
 @black      : #25252f;
 @lightBlack : #323441;
+@lightGrey : rgba(124, 123, 128, 0.33);
 
 @textColor         : @white;
 @lightTextColor    : darken(@textColor, 28%);

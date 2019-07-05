@@ -17,14 +17,12 @@ import FilterModal from "./screens/filter/FilterModal";
 const AuthApp = (props) => {
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
-  return (
-    <div>
-      <div className="App">
-        <Menu borderless inverted vertical fluid widths={1} fixed="top">
-          <Menu.Item>
+  return [
+    <Menu borderless inverted vertical fluid widths={1} fixed="top" style={{background: 'rgba(240, 240, 240, 0.7)'}}>
+          <Menu.Item style={{background: 'rgba(240, 240, 240, 0.7)'}}>
             <Container fluid>
               {/*<Breakpoint large up>*/}
-              <Grid columns="equal" centered>
+              <Grid columns="equal" centered style={{background: 'rgba(240, 240, 240, 0.7)', border: '1px solid purple'}}>
                 <Grid.Row stretched>
                   <Grid.Column width={13}>
                     <SearchBarProp/>
@@ -77,12 +75,10 @@ const AuthApp = (props) => {
                             </Breakpoint>*/}
             </Container>
           </Menu.Item>
-        </Menu>
-        <FilterModal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}/>
+        </Menu>,
+        <FilterModal open={filterModalOpen} onClose={() => setFilterModalOpen(false)}/>,
         <Tabs user={props.user}/>
-      </div>
-    </div>
-  );
+  ];
 };
 
 const mapStateToProps = (state) => ({

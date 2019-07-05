@@ -2,8 +2,8 @@
     User Variable Overrides
 *******************************/
 
-@background: @black;
-@linkHoverBackground: lighten(@black, 2%);
+@background: #FFFFFF;
+@linkHoverBackground: darken(@background, 2%);
 
 @borderWidth: 0;
 

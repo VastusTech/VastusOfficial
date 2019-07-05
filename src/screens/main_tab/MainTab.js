@@ -17,9 +17,9 @@ const MainTab = () => {
       <Grid centered>
 
       </Grid>
-      <Header sub>Your Next Challenge:</Header>
+      <Header sub style={{color: 'purple', marginTop: '50px'}}>Your Next Challenge:</Header>
       <NextChallengeProp/>
-      <Header sub>Upcoming Posts:</Header>
+      <Header sub style={{color: 'purple', marginBottom: '20px'}}>Upcoming Posts:</Header>
       <PostFeedProp filter={
         QL.generateFilter({
           and: [{
