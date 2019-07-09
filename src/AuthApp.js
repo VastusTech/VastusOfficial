@@ -18,11 +18,11 @@ const AuthApp = (props) => {
   const [filterModalOpen, setFilterModalOpen] = useState(false);
 
   return [
-    <Menu borderless inverted vertical fluid widths={1} fixed="top" style={{background: 'rgba(240, 240, 240, 0.7)'}}>
-          <Menu.Item style={{background: 'rgba(240, 240, 240, 0.7)'}}>
+    <Menu borderless inverted vertical fluid widths={1} fixed="top" style={{background: 'rgba(200, 172, 229, 0.7)'}}>
+          <Menu.Item style={{background: 'rgba(200, 172, 229, 0.7)'}}>
             <Container fluid>
               {/*<Breakpoint large up>*/}
-              <Grid columns="equal" centered style={{background: 'rgba(240, 240, 240, 0.7)', border: '1px solid purple'}}>
+              <Grid columns="equal" centered style={{background: 'rgba(200, 172, 229, 0.7)', border: '2px solid rebeccapurple'}}>
                 <Grid.Row stretched>
                   <Grid.Column width={13}>
                     <SearchBarProp/>

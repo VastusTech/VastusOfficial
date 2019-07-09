@@ -5,6 +5,8 @@
 @background: #FFFFFF;
 @linkHoverBackground: darken(@background, 2%);
 
+@gradient: linear-gradient(135deg, #7F47AE, #7D82B8);
+
 @borderWidth: 0;
 
 /* Header */
