@@ -4,10 +4,18 @@
 
 .ui.cards > .card,
 .ui.card {
-    background: @black;
+    background: #FFFFFF;
+    border: 1px solid rebeccapurple;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    transition: -webkit-transform 0.1s ease;
+    transition: transform 0.1s ease;
+    transition: transform 0.1s ease, -webkit-transform 0.1s ease;
 }
 
 .ui.card .ui.card .extra {
     padding-left: .25em;
     padding-right: .25em;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }

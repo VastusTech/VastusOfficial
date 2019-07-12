@@ -5,7 +5,7 @@ import {
 import {connect} from "react-redux";
 import SignUpModal from './SignUpModal';
 import ForgotPasswordModal from "./ForgotPasswordModal";
-import Logo from '../vastuscomponents/img/vt_new.svg';
+import Logo from '../vastuscomponents/img/vt_gold_even_thicker_border.svg';
 import {logIn, openForgotPasswordModal, openSignUpModal} from "../vastuscomponents/redux/actions/authActions";
 import {setError} from "../vastuscomponents/redux/actions/infoActions";
 import GoogleSignUp from "./GoogleSignUp";
@@ -91,18 +91,19 @@ const SignInPage = (props) => {
   };
 
   return (
-    <Container className='login-form'>
+    <Container className='login-form' style={{color: "#FFFFFF"}}>
       {loadingProp(props.info.isLoading)}
       {errorMessage(props.info.error)}
       <Grid centered textAlign='center'>
-        <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570, marginBottom: '-60px'}}>
+        <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570, marginBottom: '-60px',
+            background: "#ebebeb", border: '1px solid purple'}}>
           <Button floated='right' circular icon color={'purple'}
                   onClick={() => window.open("https://vastustech.com", "_blank")}>
             <Icon name='info'/>
           </Button>
           <Segment basic>
-            <Image src={Logo} size="tiny" centered/>
-            <Header as='h2' inverted textAlign='center'>
+            <Image src={Logo} size="small" centered/>
+            <Header as='h2' inverted textAlign='center' style={{color: 'purple'}}>
               Join Below
             </Header>
           </Segment>

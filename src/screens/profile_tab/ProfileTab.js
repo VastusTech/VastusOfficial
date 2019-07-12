@@ -17,7 +17,7 @@ import Calendar from "./Calendar.js";
 function displayName(isEditing, name) {
   if (!isEditing) {
     return (
-      <Card.Header as="h2" style={{"margin": "12px 0 0"}}>{name}</Card.Header>
+      <Card.Header as="h2" style={{"margin": "12px 0 0", color: 'purple'}}>{name}</Card.Header>
     );
   } else {
     return (
@@ -76,11 +76,11 @@ const ProfileTab = (props) => {
     )
   }
   return (
-    <Card fluid raised className="u-margin-top--2">
+    <Card fluid raised style={{marginTop: '50px'}}>
       <Card.Content textAlign="center">
         {editButton(isEditing, setIsEditing)}
         <Popup
-          trigger={<Button floated='right' circular icon color={'purple'}>
+          trigger={<Button floated='right' circular icon color={'#7F47AE'}>
             <Icon name='cog'/>
           </Button>}
           content={<LogOutButton/>}
@@ -89,12 +89,12 @@ const ProfileTab = (props) => {
         />
         <ProfileImage userID={props.user.id} profileImage={props.user.profileImage}
                       profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages}
-                      editable={isEditing}/>
+                      editable={isEditing} />
         <Grid columns={1}>
           <Grid.Row>
             <Grid.Column>
               {displayName(isEditing, props.user.name)}
-              <Card.Meta style={{marginBottom: '20px'}}
+              <Card.Meta style={{marginBottom: '20px', color: '#D4AF37'}}
               >Challenge Wins: {props.user.challengesWon ? props.user.challengesWon.length : 0}</Card.Meta>
 
               <Modal basic size='mini' closeIcon

@@ -2,8 +2,8 @@
          Site Overrides
 *******************************/
 
-@background: @black;
-@headerColor: @textColor;
-@contentBackground: @black;
-@headerBackground: @black;
-@actionBackground: @black;
+@background: @bgcolor;
+@headerColor: @primaryColor;
+@contentBackground: @white;
+@headerBackground: @white;
+@actionBackground: @white;
