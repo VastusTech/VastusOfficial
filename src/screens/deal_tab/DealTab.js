@@ -13,25 +13,7 @@ const MainTab = () => {
   return (
     <div>
       <Header sub>Vastus Deals:</Header>
-      <DealFeed filter={
-        QL.generateFilter({
-          and: [{
-            or: [{
-              postType: {
-                eq: "$postType1"
-              }
-            }, {
-              postType: {
-                eq: "$postType2"
-              }
-            }]
-          }
-          ]
-        }, {
-          postType1: "Challenge",
-          postType2: "newChallenge",
-        })
-      }/>
+      <DealFeed/>
     </div>
   );
 };
