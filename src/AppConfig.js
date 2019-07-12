@@ -7,7 +7,6 @@ import * as AWS from "aws-sdk";
 function setupAWS() {
   // This switches between the production and development query APIs
 
-  // if (true) {
   if (!process.env.NODE_ENV || process.env.NODE_ENV === "production") {
     // =============================================================================================================
     // ==                                          PRODUCTION                                                     ==

@@ -7,6 +7,7 @@ import MainTab from "./main_tab/MainTab";
 import MessageTab from "./messaging_tab/MessageTab";
 import MessageIcon from "../vastuscomponents/components/messaging/MessageIcon";
 import GroupFeed from "./trainer_tab/CommunityTab";
+import DealTab from "./deal_tab/DealTab";
 
 /**
  * A bottom menu for all of the tabs in the app.
@@ -15,7 +16,7 @@ import GroupFeed from "./trainer_tab/CommunityTab";
  * @returns {*} The React JSX used to display the component.
  */
 export default () => (
-  <Tab menu={{fixed: "bottom", widths: 2, size: "large", inverted: true}} panes={
+  <Tab menu={{fixed: "bottom", widths: 3, size: "large", inverted: true}} panes={
     [
       {
         menuItem:
@@ -28,8 +29,18 @@ export default () => (
           </Tab.Pane>
       },
       {
+        menuItem:
+          (<Menu.Item key={1}>
+            <Icon name='money' size='large'/>
+          </Menu.Item>),
+        render: () =>
+          <Tab.Pane basic attached={false}>
+            <DealTab/>
+          </Tab.Pane>
+      },
+      {
         menuItem: (
-          <Menu.Item key={1}>
+          <Menu.Item key={2}>
             <Icon name='user circle outline' size='large'/>
           </Menu.Item>),
         render: () => <Tab.Pane basic attached={false}>
