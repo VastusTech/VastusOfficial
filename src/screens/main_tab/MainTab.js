@@ -14,7 +14,7 @@ import CreateChallengeProp from "../../vastuscomponents/components/manager/Creat
 const MainTab = () => {
   return (
     <div>
-      <Header sub style={{color: 'purple', marginBottom: '20px'}}>Upcoming Posts:</Header>
+      <Header sub style={{color: 'purple', marginBottom: '10px', marginTop: '10px'}}>Upcoming Posts:</Header>
       <PostFeedProp filter={
         QL.generateFilter({
           and: [{

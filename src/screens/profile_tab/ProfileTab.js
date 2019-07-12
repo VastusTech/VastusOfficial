@@ -76,7 +76,7 @@ const ProfileTab = (props) => {
     )
   }
   return (
-    <Card fluid raised className="u-margin-top--2">
+    <Card fluid raised style={{marginTop: '50px'}}>
       <Card.Content textAlign="center">
         {editButton(isEditing, setIsEditing)}
         <Popup
@@ -89,7 +89,7 @@ const ProfileTab = (props) => {
         />
         <ProfileImage userID={props.user.id} profileImage={props.user.profileImage}
                       profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages}
-                      editable={isEditing}/>
+                      editable={isEditing} />
         <Grid columns={1}>
           <Grid.Row>
             <Grid.Column>

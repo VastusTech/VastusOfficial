@@ -3,4 +3,4 @@
 *******************************/
 
 @invertedActiveBackground: @primaryGradient;
-@invertedActiveColor: @invertedSelectedTextColor;
+@invertedActiveColor: white;

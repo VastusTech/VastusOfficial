@@ -9,7 +9,7 @@
 .ui.menu .active.item,
 .ui.menu a.item:hover,
 .ui.menu .active.item:hover  {
-  color: @primaryColor;
+  color: white;
 }
 
 .ui.menu .item {
@@ -22,4 +22,6 @@
 
 .ui.menu.fixed.bottom {
   box-shadow: none;
+  border: 1px solid rebeccapurple;
+  background: white;
 }
