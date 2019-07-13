@@ -21,7 +21,7 @@ export default () => (
       {
         menuItem:
           (<Menu.Item key={0}>
-            <Icon name='home' color='purple' size='large'/>
+            <Icon name='home' color='violet' size='large'/>
           </Menu.Item>),
         render: () =>
           <Tab.Pane basic attached={false}>
@@ -31,7 +31,7 @@ export default () => (
       {
         menuItem:
           (<Menu.Item key={1}>
-            <Icon name='money' size='large'/>
+            <Icon name='payment' color='violet' size='large'/>
           </Menu.Item>),
         render: () =>
           <Tab.Pane basic attached={false}>
@@ -41,7 +41,7 @@ export default () => (
       {
         menuItem: (
           <Menu.Item key={2}>
-            <Icon name='user circle' color='purple' size='large'/>
+            <Icon name='user circle' color='violet' size='large'/>
           </Menu.Item>),
         render: () => <Tab.Pane basic attached={false}>
           <ProfileTab/>

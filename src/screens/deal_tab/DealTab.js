@@ -9,13 +9,13 @@ import DealFeed from "../../vastuscomponents/components/feeds/DealFeed";
  * @returns {*} The React JSX used to display the component.
  * @constructor
  */
-const MainTab = () => {
+const DealTab = () => {
   return (
     <div>
-      <Header sub>Vastus Deals:</Header>
+      <Header sub style={{color: 'purple', marginBottom: '10px', marginTop: '10px'}}>Vastus Deals:</Header>
       <DealFeed/>
     </div>
   );
 };
 
-export default MainTab;
+export default DealTab;

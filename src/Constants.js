@@ -4,6 +4,7 @@ export let err = true;
 export const ifAlert = false;
 export const reduxLog = true;
 export const ifCallLambdaAtStart = true;
+export const theme = "light";
 
 export const setLog = l => log = l;
 export const setErr = e => err = e;
