@@ -12,18 +12,19 @@ import AWSConfig from "./AppConfig";
 import {theme, ifCallLambdaAtStart} from "./Constants";
 import Lambda from "./vastuscomponents/api/Lambda";
 import SplashScreen from "./authscreens/SplashScreen";
+import lightTheme from "./vastuscomponents/semantic/semantic-light-theme/dist/semantic.min.css";
 
-switch (theme) {
-  case "light":
-    require('./vastuscomponents/semantic/semantic-light-theme/dist/semantic.min.css');
-    break;
-  case "dark":
-    require('./vastuscomponents/semantic/semantic-dark-theme/dist/semantic.min.css');
-    break;
-  default:
-    require('./vastuscomponents/semantic/semantic-light-theme/dist/semantic.min.css');
-    break;
-}
+// switch (theme) {
+//   case "light":
+//     require('./vastuscomponents/semantic/semantic-light-theme/dist/semantic.min.css');
+//     break;
+//   case "dark":
+//     require('./vastuscomponents/semantic/semantic-dark-theme/dist/semantic.min.css');
+//     break;
+//   default:
+//     require('./vastuscomponents/semantic/semantic-light-theme/dist/semantic.min.css');
+//     break;
+// }
 
 // window.LOG_LEVEL='DEBUG';
 
@@ -39,7 +40,9 @@ ReactDOM.render(
   <BreakpointProvider>
     <Provider store={store}>
       <SplashScreen>
-        <App/>
+        <div style={lightTheme}>
+          <App/>
+        </div>
       </SplashScreen>
     </Provider>
   </BreakpointProvider>,
