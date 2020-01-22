@@ -12,7 +12,7 @@
     "gulp-help": "^1.6.1",
     "handbrake-js": "^3.0.8",
     "jwt-decode": "^2.2.0",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.13",
     "re-carousel": "^2.3.0",
     "react": "next",
     "react-avatar-editor": "^11.0.4",
