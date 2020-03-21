@@ -21,7 +21,7 @@ function displayName(isEditing, name) {
     );
   } else {
     return (
-      <Input defaultValue={name}/>
+      <Input color='white' style={{color: 'white', background: 'white'}} defaultValue={name}/>
     );
   }
 }
@@ -79,13 +79,15 @@ const ProfileTab = (props) => {
     <Card fluid raised style={{marginTop: '50px'}}>
       <Card.Content textAlign="center">
         {editButton(isEditing, setIsEditing)}
-        <Popup
+        <Popup style={{marginTop: '-70px'}}
           trigger={<Button floated='right' circular icon color={'#7F47AE'}>
             <Icon name='cog'/>
           </Button>}
           content={<LogOutButton/>}
           on='click'
           position='bottom right'
+          basic
+          style={{background: 'white', color: 'white'}}
         />
         <ProfileImage userID={props.user.id} profileImage={props.user.profileImage}
                       profileImagePaths={props.user.profileImagePaths} profileImages={props.user.profileImages}

@@ -211,27 +211,30 @@ const SignUpModal = (props) => {
   }
   return (
     <Modal open={props.auth.signUpModalOpen}
-           trigger={<Button size="large" fluid inverted onClick={() => props.openSignUpModal()}> Sign Up </Button>}
-           size='tiny'>
+           trigger={<Button size="large" fluid inverted onClick={() => props.openSignUpModal()}
+           primary style={{color: 'white'}}> Sign Up </Button>}
+           size='tiny' style={{background: 'white'}}>
       {loadingProp(props.info.isLoading)}
-      <Modal.Header>Create Account to Join</Modal.Header>
+      <Modal.Header style={{background: 'white', color: 'purple'}}>Create Account to Join</Modal.Header>
       {errorMessage(props.info.error)}
-      <Modal.Actions style={{borderTop: 'none'}}>
-        <Form>
+      <Modal.Actions style={{borderTop: 'none', background: 'white'}}>
+        <Form style={{background: 'white'}}>
           {/* TODO WE SHOULD USE A QUERY TO FIND OUT IF THAT USERNAME HAS ALREADY BEEN TAKEN */}
           <Form.Input type="text" iconPosition='left' icon='user' name="username" placeholder="Username"
-                      onChange={value => setStateText("username", value, setStates)}/>
+                      onChange={value => setStateText("username", value, setStates)}
+                      style={{background: 'white', color: 'purple'}} color='white'/>
           <Popup position="left center"
                  trigger={<Form.Input iconPosition='left' icon='lock' type="password" name="password"
                                       placeholder="Password"
-                                      onChange={value => setStateText("password", value, setStates)}/>}>
+                                      onChange={value => setStateText("password", value, setStates)} color='white'/>}>
             Password must be at least 8 characters long, contains lower and upper case letters, contain at least one
             number.
           </Popup>
           {/* <Form.Input type="password" label="Password" name="password" placeholder="Password" onChange={value => this.changeStateText("password", value)}/> */}
           <Form.Input type="password" iconPosition='left' icon='lock' name="confirmPassword"
                       placeholder="Confirm Password"
-                      onChange={value => setStateText("confirmPassword", value, setStates)}/>
+                      onChange={value => setStateText("confirmPassword", value, setStates)}
+                      style={{background: 'white', color: 'purple'}}/>
           <Divider/>
           <Popup position="left center"
                  trigger={<Form.Input type="text" iconPosition='left' icon='user circle' name="name"
@@ -243,7 +246,8 @@ const SignUpModal = (props) => {
           {/*<Divider />*/}
           {/*<Form.Input type="date" iconPosition='left' icon='calendar alternate outline' name="birthdate" onChange={value => this.changeStateText("birthday", value)}/>*/}
           <Form.Input type="text" iconPosition='left' icon='mail' name="email" placeholder="Email"
-                      onChange={value => setStateText("email", value, setStates)}/>
+                      onChange={value => setStateText("email", value, setStates)}
+                      style={{background: 'white', color: 'purple'}}/>
           {/*<Divider />*/}
           {/*<Popup position="left center" trigger={<Form.Input type="text" iconPosition='left' icon='id card' name='enterprise code' placeHolder="Company ID" onChange={value => setStateText("enterpriseID", value, setStates)}/>}>*/}
           {/*If you are signing up with your company, input the given ID here.*/}

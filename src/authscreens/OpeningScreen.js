@@ -84,7 +84,7 @@ class OpeningScreen extends Component {
           <div>
             <Grid textAlign='center' centered
                   style={{marginLeft: '30px', marginRight: '30px', marginTop: '5px', height: 610}}>
-              <Segment inverted style={{maxWidth: 430}}>
+              <Segment inverted style={{maxWidth: 430, background: 'white'}}>
                 <SignInPage/>
               </Segment>
             </Grid>
@@ -95,7 +95,7 @@ class OpeningScreen extends Component {
           <div>
             <Grid textAlign='center' centered
                   style={{marginLeft: '30px', marginRight: '30px', marginTop: '5px', marginBottom: '50px'}}>
-              <Segment inverted style={{marginTop: '10px', maxWidth: 430, minHeight: 660}}>
+              <Segment inverted style={{marginTop: '10px', maxWidth: 430, minHeight: 660, background: 'white'}}>
                 <SignInPage/>
               </Segment>
             </Grid>

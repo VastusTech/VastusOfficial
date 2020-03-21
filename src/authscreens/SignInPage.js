@@ -48,7 +48,7 @@ const vastusSignIn = (username, password, logIn, setError) => {
 const errorMessage = (error) => {
   if (error) {
     return (
-      <Message color='red'>
+      <Message color='red' style={{marginTop: '100px'}}>
         <h1>Error!</h1>
         <p>{error.message}</p>
       </Message>
@@ -91,12 +91,11 @@ const SignInPage = (props) => {
   };
 
   return (
-    <Container className='login-form' style={{color: "#FFFFFF"}}>
+    <Container className='login-form' style={{color: "#FFFFFF", background: 'white'}}>
       {loadingProp(props.info.isLoading)}
-      {errorMessage(props.info.error)}
-      <Grid centered textAlign='center'>
+      <Grid centered textAlign='center' style={{background: 'white'}}>
         <Segment raised padded inverted style={{minWidth: 340, maxWidth: 570, marginBottom: '-60px',
-            background: "#ebebeb", border: '1px solid purple'}}>
+            background: "white", border: '1px solid purple'}}>
           <Button floated='right' circular icon color={'purple'}
                   onClick={() => window.open("https://vastustech.com", "_blank")}>
             <Icon name='info'/>
@@ -135,6 +134,7 @@ const SignInPage = (props) => {
           </List>
         </Segment>
       </Grid>
+        {errorMessage(props.info.error)}
     </Container>
   );
 };

@@ -16,7 +16,7 @@
     "lodash": "^4.17.11",
     "prop-types": "^15.7.2",
     "re-carousel": "^2.3.0",
-    "react": "next",
+    "react": "^16.8.6",
     "react-avatar-editor": "^11.0.4",
     "react-css-modules": "^4.7.9",
     "react-dom": "next",
@@ -32,7 +32,8 @@
     "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "semantic-ui-react": "^0.87.1",
-    "video-react": "^0.13.1"
+    "video-react": "^0.13.1",
+    "yarn": "^1.16.0"
   },
   "scripts": {
     "start": "react-scripts start",

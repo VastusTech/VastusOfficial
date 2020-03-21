@@ -16,7 +16,7 @@ import DealTab from "./deal_tab/DealTab";
  * @returns {*} The React JSX used to display the component.
  */
 export default () => (
-  <Tab menu={{color: "white", fixed: "bottom", widths: 3, size: "large", inverted: true}} panes={
+  <Tab menu={{color: "white", fixed: "bottom", widths: 2, size: "large", inverted: true}} panes={
     [
       {
         menuItem:
@@ -29,18 +29,8 @@ export default () => (
           </Tab.Pane>
       },
       {
-        menuItem:
-          (<Menu.Item key={1}>
-            <Icon name='payment' color='violet' size='large'/>
-          </Menu.Item>),
-        render: () =>
-          <Tab.Pane basic attached={false}>
-            <DealTab/>
-          </Tab.Pane>
-      },
-      {
         menuItem: (
-          <Menu.Item key={2}>
+          <Menu.Item key={1}>
             <Icon name='user circle' color='violet' size='large'/>
           </Menu.Item>),
         render: () => <Tab.Pane basic attached={false}>

@@ -126,7 +126,8 @@ const ForgotPasswordModal = (props) => {
   if (props.auth.confirmingForgotPassword) {
     return (
       <Modal open={props.auth.forgotPasswordModalOpen} onClose={() => (false)}
-             trigger={<Button onClick={() => props.openForgotPasswordModal()}>Forgot Password?</Button>} size='tiny'>
+             trigger={<Button onClick={() => props.openForgotPasswordModal()} primary style={{color: 'white'}}>
+                 Forgot Password?</Button>} size='tiny'>
         {loadingProp(props.info.isLoading)}
         <Modal.Header>Confirm your email and choose your new password!</Modal.Header>
         {errorMessage(props.info.error)}
@@ -153,15 +154,16 @@ const ForgotPasswordModal = (props) => {
   }
   return (
     <Modal open={props.auth.forgotPasswordModalOpen} onClose={() => (false)}
-           trigger={<Button size="large" fluid inverted onClick={() => props.openForgotPasswordModal()}>Forgot
+           trigger={<Button size="large" fluid inverted onClick={() => props.openForgotPasswordModal()} primary
+           style={{color: 'white'}}>Forgot
              Password?</Button>} size='tiny'>
       {loadingProp(props.info.isLoading)}
-      <Modal.Header style={{borderBottom: 'none'}}>Forgot Password?</Modal.Header>
+      <Modal.Header style={{borderBottom: 'none', color: 'purple', background: 'white'}}>Forgot Password?</Modal.Header>
       {errorMessage(props.info.error)}
-      <Modal.Content>
+      <Modal.Content style={{background: 'white', color: 'purple'}}>
         <p>Enter your username to retrieve your information</p>
       </Modal.Content>
-      <Modal.Actions style={{borderTop: 'none'}}>
+      <Modal.Actions style={{borderTop: 'none', background: 'white', color: 'purple'}}>
         <Form>
           <Form.Input type="text" name="username" placeholder="username"
                       onChange={value => changeStateText("username", value, setStates)}/>
