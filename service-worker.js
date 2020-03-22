@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.6.3/workbox-sw.js");
 
 importScripts(
-  "/VastusOfficial/precache-manifest.5accfdd95bf20370fd07c7032c2ced1a.js"
+  "/VastusOfficial/precache-manifest.f93683df62ecd668a41ab54eff7c38f8.js"
 );
 
 workbox.clientsClaim();
